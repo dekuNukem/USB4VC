@@ -1,0 +1,19 @@
+esc
+F2
+F5
+1
+2
+a
+b
+
+insert
+delete
+screenshot
+scrollock
+pause
+numpad
+
+numpad 0
+numpad 5
+numpad .
+
