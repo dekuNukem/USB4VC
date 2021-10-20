@@ -1,0 +1,16 @@
+very useful video:
+https://youtu.be/wdgULBpRoXk
+
+search for PID ACK for data packet
+
+from keypress to PID ACK on USB line: 10 to 20ms
+
+catting /dev/input/event0 in bash: 490us
+printing via python3: 1ms
+
+script below:
+
+fff = open("/dev/input/event0", "rb" )
+while 1:
+  data = fff.read(24)
+  print(data)
