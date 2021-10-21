@@ -14,3 +14,6 @@ fff = open("/dev/input/event0", "rb" )
 while 1:
   data = fff.read(24)
   print(data)
+
+using queue to despatch SPI on raspberry 3: 700 to 800us
+on lichee 3.5ms 
