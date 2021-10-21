@@ -1,0 +1,79 @@
+I: Bus=0003 Vendor=05ac Product=0250 Version=0111
+N: Name="Apple Inc. Apple Keyboard"
+P: Phys=usb-3f980000.usb-1.3.2/input0
+S: Sysfs=/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.0/0003:05AC:0250.0001/input/input0
+U: Uniq=
+H: Handlers=sysrq kbd leds event0
+B: PROP=0
+B: EV=120013
+B: KEY=10000 0 0 0 0 0 0 1007b 1007 ff9f207a c14057ff ffbeffdf ffefffff ffffffff fffffffe
+B: MSC=10
+B: LED=1f
+
+I: Bus=0003 Vendor=05ac Product=0250 Version=0111
+N: Name="Apple Inc. Apple Keyboard"
+P: Phys=usb-3f980000.usb-1.3.2/input1
+S: Sysfs=/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3/1-1.3.2/1-1.3.2:1.1/0003:05AC:0250.0002/input/input1
+U: Uniq=
+H: Handlers=kbd event1
+B: PROP=0
+B: EV=13
+B: KEY=3a 0 e0000 0 0 0
+B: MSC=10
+
+I: Bus=0003 Vendor=17ef Product=6039 Version=0111
+N: Name="Lenovo Laser Wireless Mouse"
+P: Phys=usb-3f980000.usb-1.4/input0
+S: Sysfs=/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.4/1-1.4:1.0/0003:17EF:6039.0004/input/input3
+U: Uniq=
+H: Handlers=mouse0 event3
+B: PROP=0
+B: EV=1f
+B: KEY=1f0000 0 0 0 0 0 0 0 0
+B: REL=1943
+B: ABS=100 0
+B: MSC=10
+
+I: Bus=0003 Vendor=0483 Product=d11c Version=0111
+N: Name="dekuNukem duckyPad(2020) Keyboard"
+P: Phys=usb-3f980000.usb-1.2/input0
+S: Sysfs=/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.2/1-1.2:1.0/0003:0483:D11C.0006/input/input5
+U: Uniq=DP20_774c6600
+H: Handlers=sysrq kbd event2
+B: PROP=0
+B: EV=100013
+B: KEY=7 ff800000 0 e0b0ffdf 1cfffff ffffffff fffffffe
+B: MSC=10
+
+I: Bus=0003 Vendor=0483 Product=d11c Version=0111
+N: Name="dekuNukem duckyPad(2020) Consumer Control"
+P: Phys=usb-3f980000.usb-1.2/input0
+S: Sysfs=/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.2/1-1.2:1.0/0003:0483:D11C.0006/input/input6
+U: Uniq=DP20_774c6600
+H: Handlers=kbd event4
+B: PROP=0
+B: EV=13
+B: KEY=7a 0 e0000 0 0 0
+B: MSC=10
+
+I: Bus=0003 Vendor=0483 Product=d11c Version=0111
+N: Name="dekuNukem duckyPad(2020) Mouse"
+P: Phys=usb-3f980000.usb-1.2/input0
+S: Sysfs=/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.2/1-1.2:1.0/0003:0483:D11C.0006/input/input7
+U: Uniq=DP20_774c6600
+H: Handlers=mouse1 event5
+B: PROP=0
+B: EV=17
+B: KEY=70000 0 0 0 0 0 0 0 0
+B: REL=903
+B: MSC=10
+
+I: Bus=0003 Vendor=0483 Product=d11c Version=0111
+N: Name="dekuNukem duckyPad(2020)"
+P: Phys=usb-3f980000.usb-1.2/input0
+S: Sysfs=/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.2/1-1.2:1.0/0003:0483:D11C.0006/input/input8
+U: Uniq=DP20_774c6600
+H: Handlers=event6
+B: PROP=0
+B: EV=9
+B: ABS=100 0
