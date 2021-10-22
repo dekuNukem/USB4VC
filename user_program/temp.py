@@ -49,3 +49,13 @@ while True:
             print('Left button event')
         elif e.matches(libevdev.EV_KEY.BTN_RIGHT):
             print('Right button event')
+
+print(struct.unpack('4IHHI', data))
+
+
+data = list(fff.read(16)[8:])
+        # https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/input-event-codes.h#L38
+        if data[0] == 1: # Keys
+            spi.xfer(data)
+            # print(data)
+            # print('----')

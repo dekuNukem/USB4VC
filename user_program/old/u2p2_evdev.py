@@ -1,6 +1,7 @@
+import sys
 import libevdev
 
-fd = open("/dev/input/event0", "rb" )
+fd = open(sys.argv[1], "rb" )
 
 d = libevdev.Device(fd)
 

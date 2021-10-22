@@ -1,5 +1,6 @@
+import sys
 import time
-import struct
+import libevdev
 import spidev
 import threading
 
@@ -15,18 +16,19 @@ else:
     spi = spidev.SpiDev(1, 0) # lichee
     print("I'm on custom board!")
 
-spi.max_speed_hz = 500000
+spi.max_speed_hz = 2000000
 
-fff = open("/dev/input/event0", "rb" )
+# fff = open("/dev/input/event1", "rb" )
+fff = open(sys.argv[1], "rb" )
+this_device = libevdev.Device(fff)
+# this_device.disable(libevdev.EV_MSC)
 
 def keyboard_worker():
     print("keyboard_thread started")
     while 1:
-        data = fff.read(24)
-        print(data)
-        print(struct.unpack('4IHHI', data))
-        # print(len(data))
-        print('------------')
+        for e in this_device.events():
+            spi.xfer([0x5]*32)
+            print(e)
 
 def mouse_worker():
     print("mouse_thread started")
