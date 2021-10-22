@@ -18,8 +18,6 @@ while 1:
 using queue to despatch SPI on raspberry 3: 700 to 800us
 on lichee 3.5ms 
 
+libevdev is SUPER SLOW! 20ms delay in parsing keyboard events. might write about it or do some more testing.
+
 hand parse raw dev/input: 470us on pi3, 1ms on lichee
-
-
-32 byte fixed
-
