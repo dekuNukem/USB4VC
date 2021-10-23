@@ -59,3 +59,6 @@ data = list(fff.read(16)[8:])
             spi.xfer(data)
             # print(data)
             # print('----')
+
+# example /dev/input/by-path/platform-3f980000.usb-usb-0:1.2.2:1.0-event-kbd
+                    # kb_index = int(item.split(':')[1].split('.')[1])

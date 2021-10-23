@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import spidev
@@ -17,8 +18,19 @@ else:
 
 spi.max_speed_hz = 2000000
 
-fff = open(sys.argv[1], "rb" )
+keyboard_opened_device_dict = {}
+mouse_opened_device_dict = {}
+gamepad_opened_device_dict = {}
 
+"""
+def send kb
+
+def send mouse
+
+def send js
+
+read data first, if exception, skip it
+"""
 
 """
 https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/input-event-codes.h#L38
@@ -38,30 +50,62 @@ SPI_MSG_KEYBOARD_EVENT = 1
 SPI_MSG_MOUSE_EVENT = 2
 SPI_MSG_GAMEPAD_EVENT = 3
 
-KEYBOARD_ID_PLACEHOLDER = 0
+keyboard_spi_msg_header = [0xde, 0, SPI_MSG_KEYBOARD_EVENT, 0]
 
-keyboard_spi_msg_header = [0xde, 0, SPI_MSG_KEYBOARD_EVENT, KEYBOARD_ID_PLACEHOLDER]
-
-def keyboard_worker():
-    print("keyboard_thread started")
+def raw_input_event_worker():
+    print("raw_input_event_parser_thread started")
+    to_delete = []
     while 1:
-        data = list(fff.read(16)[8:])
-        if data[0] == EV_KEY:
-            spi.xfer(keyboard_spi_msg_header + data)
-            # print(data)
-            # print('----')
+        for key in list(keyboard_opened_device_dict):
+            try:
+                data = keyboard_opened_device_dict[key][0].read(16)
+            except OSError:
+                keyboard_opened_device_dict[key][0].close()
+                del keyboard_opened_device_dict[key]
+                print("device disappeared:", key)
+            if data is None:
+                continue
+            data = list(data[8:])
+            if data[0] == EV_KEY:
+                to_transfer = keyboard_spi_msg_header + data
+                to_transfer[3] = keyboard_opened_device_dict[key][1]
+                spi.xfer(to_transfer)
+                # print(key)
+                # print(to_transfer)
+                # print('----')
 
-def mouse_worker():
-    print("mouse_thread started")
-    while 1:
-        time.sleep(0.2)
+raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)
+raw_input_event_parser_thread.start()
 
-keyboard_thread = threading.Thread(target=keyboard_worker, daemon=True)
-keyboard_thread.start()
-
-mouse_thread = threading.Thread(target=mouse_worker, daemon=True)
-mouse_thread.start()
+input_device_path = '/dev/input/by-path/'
 
 while 1:
-    # print("main loop")
-    time.sleep(1)
+    try:
+        device_file_list = os.listdir(input_device_path)
+    except Exception as e:
+        print('list input device exception:', e)
+        time.sleep(0.75)
+        continue
+    mouse_list = [os.path.join(input_device_path, x) for x in device_file_list if 'event-mouse' in x]
+    keyboard_list = [os.path.join(input_device_path, x) for x in device_file_list if 'event-kbd' in x]
+    gamepad_list = [os.path.join(input_device_path, x) for x in device_file_list if 'event-joystick' in x]
+    # print(mouse_list)
+    # print(keyboard_list)
+
+    for item in keyboard_list:
+        if item not in keyboard_opened_device_dict:
+            try:
+                this_file = open(item, "rb")
+                os.set_blocking(this_file.fileno(), False)
+                kb_index = 0
+                try:
+                    kb_index = sum([int(x) for x in item.split(':')[1].split('.')][:2])
+                except:
+                    pass
+                keyboard_opened_device_dict[item] = (this_file, kb_index)
+                print("opened keyboard", keyboard_opened_device_dict[item][1], ':' , item)
+            except Exception as e:
+                print("keyboard open exception:", e)
+                continue
+
+    time.sleep(0.75)
