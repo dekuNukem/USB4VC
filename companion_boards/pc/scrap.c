@@ -4,3 +4,6 @@
       printf("hh\n");
     // printf("%d\n", HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4));
     // HAL_Delay(200);
+
+  // printf("got!\n");
+  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
