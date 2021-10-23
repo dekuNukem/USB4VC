@@ -20,6 +20,7 @@
 "test\stm32f0xx_hal_flash_ex.o"
 "test\delay_us.o"
 "test\helpers.o"
+"test\ps2kb.o"
 "test\main.o"
 "test\stm32f0xx_it.o"
 "test\stm32f0xx_hal_msp.o"
