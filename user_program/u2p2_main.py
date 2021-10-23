@@ -70,6 +70,7 @@ def raw_input_event_worker():
                 to_transfer = keyboard_spi_msg_header + data
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
                 spi.xfer(to_transfer)
+                print('sent')
                 # print(key)
                 # print(to_transfer)
                 # print('----')
