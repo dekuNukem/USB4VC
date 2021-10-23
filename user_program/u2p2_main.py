@@ -67,10 +67,10 @@ def raw_input_event_worker():
                 continue
             data = list(data[8:])
             if data[0] == EV_KEY:
-                to_transfer = keyboard_spi_msg_header + data
+                to_transfer = keyboard_spi_msg_header + data + [0]*20
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
-                # spi.xfer(to_transfer)
-                spi.xfer([0x15]*32)
+                # print(len(to_transfer))
+                spi.xfer(to_transfer)
                 print('sent')
                 # print(key)
                 # print(to_transfer)

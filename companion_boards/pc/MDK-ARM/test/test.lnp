@@ -19,10 +19,10 @@
 "test\stm32f0xx_hal_flash.o"
 "test\stm32f0xx_hal_flash_ex.o"
 "test\delay_us.o"
+"test\helpers.o"
 "test\main.o"
 "test\stm32f0xx_it.o"
 "test\stm32f0xx_hal_msp.o"
-"test\helpers.o"
 "test\system_stm32f0xx.o"
 --library_type=microlib --strict --scatter "test\test.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
