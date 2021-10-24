@@ -71,7 +71,7 @@ def raw_input_event_worker():
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
                 # print(len(to_transfer))
                 spi.xfer(to_transfer)
-                print('sent')
+                print(time.time(), 'sent')
                 # print(key)
                 # print(to_transfer)
                 # print('----')

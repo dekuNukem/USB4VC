@@ -1,3 +1,10 @@
+    if(spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
+    {
+      printf("unknown command!\n");
+      goto parse_end;
+    }
+
+
 printf("waiting for host request...\n");
   // wait for data line to go low and clock line to go high (request to send)
   while(!(PS2KB_READ_DATA_PIN() == GPIO_PIN_RESET && PS2KB_READ_CLK_PIN() == GPIO_PIN_SET))

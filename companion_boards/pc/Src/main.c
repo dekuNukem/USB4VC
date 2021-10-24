@@ -133,7 +133,9 @@ int main(void)
   delay_us_init(&htim14);
   printf("hello world\n");
   ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
-  uint8_t temp, leds;
+  uint8_t ps2kb_host_cmd, ps2kb_leds, event_type, event_code, event_value;
+
+  ps2kb_buf_init(&my_ps2kb_buf, 16);
 
   while (1)
   {
@@ -150,14 +152,28 @@ int main(void)
     // for (int i = 0; i < SPI_BUF_SIZE; ++i)
     //   printf("0x%02x ", spi_recv_buf[i]);
     // printf("\n");
+
+    if(spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
+      goto parse_end;
+
+    if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
+    {
+      event_type = spi_recv_buf[4];
+      event_code = spi_recv_buf[6];
+      event_value = spi_recv_buf[8];
+      // printf("%02d %d\n", event_code, event_value);
+      ps2kb_press_key(event_code, event_value);
+    }
+
+    parse_end:
     spi_data_available = 0;
   }
 
   if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
   {
-    ps2kb_read(&temp, 10);
-    keyboard_reply(temp, &leds);
-    printf("0x%02x\n", temp);
+    ps2kb_read(&ps2kb_host_cmd, 10);
+    keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
+    // printf("0x%02x\n", ps2kb_host_cmd);
   }
 
   }
