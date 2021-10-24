@@ -16,7 +16,7 @@ else:
     spi = spidev.SpiDev(1, 0) # lichee
     print("I'm on custom board!")
 
-spi.max_speed_hz = 2000000
+spi.max_speed_hz = 500000
 
 keyboard_opened_device_dict = {}
 mouse_opened_device_dict = {}
@@ -67,7 +67,7 @@ def raw_input_event_worker():
                 continue
             data = list(data[8:])
             if data[0] == EV_KEY:
-                to_transfer = keyboard_spi_msg_header + data + [0]*20
+                to_transfer = keyboard_spi_msg_header + data + [0xff]*20
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
                 # print(len(to_transfer))
                 spi.xfer(to_transfer)

@@ -22,18 +22,22 @@
 
 typedef struct
 {
-  int8_t curr_index;
-  uint8_t buf_size;
+  uint8_t head;
+  uint8_t tail;
+  uint8_t size;
   uint8_t* keycode_buf;
   uint8_t* keyvalue_buf;
 } ps2kb_buf;
 
-extern uint8_t spi_recv_buf[SPI_BUF_SIZE];
-extern ps2kb_buf my_ps2kb_buf;
-
+extern volatile uint8_t spi_recv_buf[SPI_BUF_SIZE];
+extern volatile ps2kb_buf my_ps2kb_buf;
 
 void ps2kb_buf_reset(ps2kb_buf *lb);
 void ps2kb_buf_init(ps2kb_buf *lb, uint8_t size);
+uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value);
+uint8_t ps2kb_buf_get(ps2kb_buf *lb, uint8_t* code, uint8_t* value);
+uint8_t ps2kb_buf_is_empty(ps2kb_buf *lb);
+uint8_t ps2kb_buf_is_full(ps2kb_buf *lb);
 
 #ifdef __cplusplus
 }

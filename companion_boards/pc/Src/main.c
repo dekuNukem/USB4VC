@@ -85,6 +85,10 @@ int fputc(int ch, FILE *f)
 
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+      printf("0x%02x ", spi_recv_buf[i]);
+  printf("\n");
+
   if(spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
     goto parse_end;
 
@@ -93,12 +97,7 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
     // event_type = spi_recv_buf[4];
     // event_code = spi_recv_buf[6];
     // event_value = spi_recv_buf[8];
-    if(my_ps2kb_buf.curr_index >= my_ps2kb_buf.buf_size)
-      goto parse_end;
-    my_ps2kb_buf.curr_index++;
-    my_ps2kb_buf.keycode_buf[my_ps2kb_buf.curr_index] = spi_recv_buf[6];
-    my_ps2kb_buf.keyvalue_buf[my_ps2kb_buf.curr_index] = spi_recv_buf[8];
-    printf("%d\n", my_ps2kb_buf.curr_index);
+    ps2kb_buf_add(&my_ps2kb_buf, spi_recv_buf[6], spi_recv_buf[8]);
   }
 
   spi_data_available = 1;
@@ -166,9 +165,6 @@ int main(void)
 
   if(spi_data_available)
   {
-    // for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    //   printf("0x%02x ", spi_recv_buf[i]);
-    // printf("\n");
     spi_data_available = 0;
   }
 
@@ -179,22 +175,13 @@ int main(void)
     // printf("0x%02x\n", ps2kb_host_cmd);
   }
 
-  // if(my_ps2kb_buf.curr_index > 0)
-  // {
-  //   // ps2kb_press_key(event_code, event_value);
-  //   printf("main%d\n", my_ps2kb_buf.curr_index);
-  //   my_ps2kb_buf.curr_index--;
-  // }
-
-  printf("main%d\n", my_ps2kb_buf.curr_index);
-
-  if(my_ps2kb_buf.curr_index >= 0)
+  uint8_t buffered_code, buffered_value;
+  if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
   {
-    ps2kb_press_key(my_ps2kb_buf.keycode_buf[my_ps2kb_buf.curr_index], my_ps2kb_buf.keyvalue_buf[my_ps2kb_buf.curr_index]);
-    my_ps2kb_buf.curr_index--;
+    printf("\n---ps2kb_buf_get---\n%d %d\n", my_ps2kb_buf.tail, my_ps2kb_buf.head);
+    printf("%d %d---\n", buffered_code, buffered_value);
+    ps2kb_press_key(buffered_code, buffered_value);
   }
-
-  HAL_Delay(500);
 
   }
   /* USER CODE END 3 */
