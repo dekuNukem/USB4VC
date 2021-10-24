@@ -635,7 +635,6 @@ Section Cross References
     ps2kb.o(i.ps2kb_init) refers to stm32f0xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
     ps2kb.o(i.ps2kb_init) refers to ps2kb.o(.data) for .data
     ps2kb.o(i.ps2kb_press_key) refers to ps2kb.o(i.ps2kb_write) for ps2kb_write
-    ps2kb.o(i.ps2kb_press_key) refers to printfb.o(i.__0printf$bare) for __2printf
     ps2kb.o(i.ps2kb_press_key) refers to ps2kb.o(.constdata) for .constdata
     ps2kb.o(i.ps2kb_read) refers to stm32f0xx_hal.o(i.HAL_GetTick) for HAL_GetTick
     ps2kb.o(i.ps2kb_read) refers to ps2kb.o(i.ps2kb_get_bus_status) for ps2kb_get_bus_status
@@ -1700,11 +1699,11 @@ Image Symbol Table
     i.ps2kb_get_bus_status                   0x08001ec4   Section        0  ps2kb.o(i.ps2kb_get_bus_status)
     i.ps2kb_init                             0x08001f24   Section        0  ps2kb.o(i.ps2kb_init)
     i.ps2kb_press_key                        0x08001f48   Section        0  ps2kb.o(i.ps2kb_press_key)
-    i.ps2kb_read                             0x08001fe0   Section        0  ps2kb.o(i.ps2kb_read)
-    i.ps2kb_write                            0x080020b8   Section        0  ps2kb.o(i.ps2kb_write)
-    .constdata                               0x080021e4   Section      121  ps2kb.o(.constdata)
-    .constdata                               0x0800225d   Section       16  system_stm32f0xx.o(.constdata)
-    .constdata                               0x0800226d   Section        8  system_stm32f0xx.o(.constdata)
+    i.ps2kb_read                             0x08002078   Section        0  ps2kb.o(i.ps2kb_read)
+    i.ps2kb_write                            0x08002150   Section        0  ps2kb.o(i.ps2kb_write)
+    .constdata                               0x08002278   Section      121  ps2kb.o(.constdata)
+    .constdata                               0x080022f1   Section       16  system_stm32f0xx.o(.constdata)
+    .constdata                               0x08002301   Section        8  system_stm32f0xx.o(.constdata)
     .data                                    0x20000000   Section        4  stm32f0xx_hal.o(.data)
     .data                                    0x20000004   Section        8  delay_us.o(.data)
     .data                                    0x2000000c   Section       16  ps2kb.o(.data)
@@ -1859,15 +1858,15 @@ Image Symbol Table
     ps2kb_buf_reset                          0x08001ea7   Thumb Code    28  helpers.o(i.ps2kb_buf_reset)
     ps2kb_get_bus_status                     0x08001ec5   Thumb Code    92  ps2kb.o(i.ps2kb_get_bus_status)
     ps2kb_init                               0x08001f25   Thumb Code    30  ps2kb.o(i.ps2kb_init)
-    ps2kb_press_key                          0x08001f49   Thumb Code   124  ps2kb.o(i.ps2kb_press_key)
-    ps2kb_read                               0x08001fe1   Thumb Code   210  ps2kb.o(i.ps2kb_read)
-    ps2kb_write                              0x080020b9   Thumb Code   290  ps2kb.o(i.ps2kb_write)
-    linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2 0x080021e4   Data          89  ps2kb.o(.constdata)
-    linux_keycode_to_ps2_scancode_lookup_special_codeset2 0x0800223d   Data          32  ps2kb.o(.constdata)
-    AHBPrescTable                            0x0800225d   Data          16  system_stm32f0xx.o(.constdata)
-    APBPrescTable                            0x0800226d   Data           8  system_stm32f0xx.o(.constdata)
-    Region$$Table$$Base                      0x08002278   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08002298   Number         0  anon$$obj.o(Region$$Table)
+    ps2kb_press_key                          0x08001f49   Thumb Code   298  ps2kb.o(i.ps2kb_press_key)
+    ps2kb_read                               0x08002079   Thumb Code   210  ps2kb.o(i.ps2kb_read)
+    ps2kb_write                              0x08002151   Thumb Code   292  ps2kb.o(i.ps2kb_write)
+    linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2 0x08002278   Data          89  ps2kb.o(.constdata)
+    linux_keycode_to_ps2_scancode_lookup_special_codeset2 0x080022d1   Data          32  ps2kb.o(.constdata)
+    AHBPrescTable                            0x080022f1   Data          16  system_stm32f0xx.o(.constdata)
+    APBPrescTable                            0x08002301   Data           8  system_stm32f0xx.o(.constdata)
+    Region$$Table$$Base                      0x0800230c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x0800232c   Number         0  anon$$obj.o(Region$$Table)
     uwTick                                   0x20000000   Data           4  stm32f0xx_hal.o(.data)
     us_timer                                 0x20000004   Data           4  delay_us.o(.data)
     upper16                                  0x20000008   Data           4  delay_us.o(.data)
@@ -1900,9 +1899,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000b1
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000022c8, Max: 0x00004000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x0000235c, Max: 0x00004000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00002298, Max: 0x00004000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x0000232c, Max: 0x00004000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2031,34 +2030,34 @@ Memory Map of the image
     0x08001ec2   0x08001ec2   0x00000002   PAD
     0x08001ec4   0x08001ec4   0x00000060   Code   RO         3048    i.ps2kb_get_bus_status  ps2kb.o
     0x08001f24   0x08001f24   0x00000024   Code   RO         3049    i.ps2kb_init        ps2kb.o
-    0x08001f48   0x08001f48   0x00000098   Code   RO         3050    i.ps2kb_press_key   ps2kb.o
-    0x08001fe0   0x08001fe0   0x000000d8   Code   RO         3051    i.ps2kb_read        ps2kb.o
-    0x080020b8   0x080020b8   0x0000012c   Code   RO         3053    i.ps2kb_write       ps2kb.o
-    0x080021e4   0x080021e4   0x00000079   Data   RO         3054    .constdata          ps2kb.o
-    0x0800225d   0x0800225d   0x00000010   Data   RO         3299    .constdata          system_stm32f0xx.o
-    0x0800226d   0x0800226d   0x00000008   Data   RO         3300    .constdata          system_stm32f0xx.o
-    0x08002275   0x08002275   0x00000003   PAD
-    0x08002278   0x08002278   0x00000020   Data   RO         3670    Region$$Table       anon$$obj.o
+    0x08001f48   0x08001f48   0x00000130   Code   RO         3050    i.ps2kb_press_key   ps2kb.o
+    0x08002078   0x08002078   0x000000d8   Code   RO         3051    i.ps2kb_read        ps2kb.o
+    0x08002150   0x08002150   0x00000128   Code   RO         3053    i.ps2kb_write       ps2kb.o
+    0x08002278   0x08002278   0x00000079   Data   RO         3054    .constdata          ps2kb.o
+    0x080022f1   0x080022f1   0x00000010   Data   RO         3299    .constdata          system_stm32f0xx.o
+    0x08002301   0x08002301   0x00000008   Data   RO         3300    .constdata          system_stm32f0xx.o
+    0x08002309   0x08002309   0x00000003   PAD
+    0x0800230c   0x0800230c   0x00000020   Data   RO         3670    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08002298, Size: 0x000007d8, Max: 0x00001000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x0800232c, Size: 0x000007d8, Max: 0x00001000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08002298   0x00000004   Data   RW         1837    .data               stm32f0xx_hal.o
-    0x20000004   0x0800229c   0x00000008   Data   RW         2942    .data               delay_us.o
-    0x2000000c   0x080022a4   0x00000010   Data   RW         3055    .data               ps2kb.o
-    0x2000001c   0x080022b4   0x00000001   Data   RW         3123    .data               main.o
-    0x2000001d   0x080022b5   0x00000003   PAD
-    0x20000020   0x080022b8   0x00000004   Data   RW         3301    .data               system_stm32f0xx.o
-    0x20000024   0x080022bc   0x00000004   Data   RW         3644    .data               mc_p.l(stdout.o)
-    0x20000028   0x080022c0   0x00000004   Data   RW         3647    .data               mc_p.l(mvars.o)
-    0x2000002c   0x080022c4   0x00000004   Data   RW         3648    .data               mc_p.l(mvars.o)
+    0x20000000   0x0800232c   0x00000004   Data   RW         1837    .data               stm32f0xx_hal.o
+    0x20000004   0x08002330   0x00000008   Data   RW         2942    .data               delay_us.o
+    0x2000000c   0x08002338   0x00000010   Data   RW         3055    .data               ps2kb.o
+    0x2000001c   0x08002348   0x00000001   Data   RW         3123    .data               main.o
+    0x2000001d   0x08002349   0x00000003   PAD
+    0x20000020   0x0800234c   0x00000004   Data   RW         3301    .data               system_stm32f0xx.o
+    0x20000024   0x08002350   0x00000004   Data   RW         3644    .data               mc_p.l(stdout.o)
+    0x20000028   0x08002354   0x00000004   Data   RW         3647    .data               mc_p.l(mvars.o)
+    0x2000002c   0x08002358   0x00000004   Data   RW         3648    .data               mc_p.l(mvars.o)
     0x20000030        -       0x00000020   Zero   RW         2988    .bss                helpers.o
     0x20000050        -       0x0000000c   Zero   RW         2989    .bss                helpers.o
     0x2000005c        -       0x00000134   Zero   RW         3121    .bss                main.o
     0x20000190        -       0x00000044   Zero   RW         3122    .bss                main.o
-    0x200001d4   0x080022c8   0x00000004   PAD
+    0x200001d4   0x0800235c   0x00000004   PAD
     0x200001d8        -       0x00000200   Zero   RW            2    HEAP                startup_stm32f030x6.o
     0x200003d8        -       0x00000400   Zero   RW            1    STACK               startup_stm32f030x6.o
 
@@ -2073,7 +2072,7 @@ Image component sizes
         76         16          0          8          0       2479   delay_us.o
        202          0          0          0         44       4680   helpers.o
        620         92          0          1        376       5024   main.o
-       938         76        121         16          0       6065   ps2kb.o
+      1086         48        121         16          0       6253   ps2kb.o
         28          8        176          0       1536        632   startup_stm32f030x6.o
         94         18          0          4          0       3079   stm32f0xx_hal.o
        178         28          0          0          0      10559   stm32f0xx_hal_cortex.o
@@ -2090,7 +2089,7 @@ Image component sizes
         92         14         24          4          0       1147   system_stm32f0xx.o
 
     ----------------------------------------------------------------------
-      8140        566        356         36       1960     345050   Object Totals
+      8288        538        356         36       1960     345238   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         28          0          3          3          4          0   (incl. Padding)
 
@@ -2136,15 +2135,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      8500        606        356         48       1960     341674   Grand Totals
-      8500        606        356         48       1960     341674   ELF Image Totals
-      8500        606        356         48          0          0   ROM Totals
+      8648        578        356         48       1960     341862   Grand Totals
+      8648        578        356         48       1960     341862   ELF Image Totals
+      8648        578        356         48          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 8856 (   8.65kB)
+    Total RO  Size (Code + RO Data)                 9004 (   8.79kB)
     Total RW  Size (RW Data + ZI Data)              2008 (   1.96kB)
-    Total ROM Size (Code + RO Data + RW Data)       8904 (   8.70kB)
+    Total ROM Size (Code + RO Data + RW Data)       9052 (   8.84kB)
 
 ==============================================================================
 

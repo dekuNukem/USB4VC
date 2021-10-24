@@ -16,7 +16,7 @@ else:
     spi = spidev.SpiDev(1, 0) # lichee
     print("I'm on custom board!")
 
-spi.max_speed_hz = 500000
+spi.max_speed_hz = 2000000
 
 keyboard_opened_device_dict = {}
 mouse_opened_device_dict = {}

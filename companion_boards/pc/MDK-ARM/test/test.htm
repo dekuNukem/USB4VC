@@ -3,7 +3,7 @@
 <title>Static Call Graph - [test\test.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image test\test.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Oct 25 00:14:46 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Oct 25 00:48:20 2021
 <BR><P>
 <H3>Maximum Stack Usage =        204 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -639,7 +639,6 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
 </UL>
 
 <P><STRONG><a name="[6e]"></a>__ARM_common_switch8</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, stm32f0xx_hal_tim.o(i.__ARM_common_switch8))
@@ -788,11 +787,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[77]"></a>ps2kb_press_key</STRONG> (Thumb, 124 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key))
+<P><STRONG><a name="[77]"></a>ps2kb_press_key</STRONG> (Thumb, 298 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = ps2kb_press_key &rArr; ps2kb_write &rArr; ps2kb_get_bus_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -810,7 +808,7 @@ Global Symbols
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keyboard_reply
 </UL>
 
-<P><STRONG><a name="[6f]"></a>ps2kb_write</STRONG> (Thumb, 290 bytes, Stack size 32 bytes, ps2kb.o(i.ps2kb_write))
+<P><STRONG><a name="[6f]"></a>ps2kb_write</STRONG> (Thumb, 292 bytes, Stack size 32 bytes, ps2kb.o(i.ps2kb_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = ps2kb_write &rArr; ps2kb_get_bus_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick

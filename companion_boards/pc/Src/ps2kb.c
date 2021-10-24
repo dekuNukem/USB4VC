@@ -8,9 +8,11 @@
 
 #define CLKHALF 18
 #define CLKFULL 36
-#define BYTEWAIT 750
+#define BYTEWAIT 700
+#define BYTEWAIT_END 200
 #define PS2KB_BUS_TIMEOUT_MS 30
 #define CODE_UNUSED 0xff
+#define PS2KB_WRITE_DEFAULT_TIMEOUT_MS 20
 
 const uint8_t linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2[LINUX_KEYCODE_TO_PS2_SCANCODE_SINGLE_SIZE] = 
 {
@@ -158,7 +160,7 @@ uint32_t ps2kb_wait_start;
 #define PS2KB_READ_DATA_PIN() HAL_GPIO_ReadPin(ps2kb_data_port, ps2kb_data_pin)
 #define PS2KB_READ_CLK_PIN() HAL_GPIO_ReadPin(ps2kb_clk_port, ps2kb_clk_pin)
 
-#define PS2KB_SENDACK() ps2kb_write(0xFA, 1, 10)
+#define PS2KB_SENDACK() ps2kb_write(0xFA, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS)
 
 void ps2kb_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_port, uint16_t data_pin)
 {
@@ -291,7 +293,7 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   PS2KB_CLK_HI();
   delay_us(CLKHALF);
 
-  delay_us(100);
+  delay_us(BYTEWAIT_END);
 
   return 0;
 }
@@ -324,8 +326,8 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	    break;
 	  case 0xF2: //get device id
 	    PS2KB_SENDACK();
-	    ps2kb_write(0xAB, 0, 30);
-	    ps2kb_write(0x83, 0, 30);
+	    ps2kb_write(0xAB, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+	    ps2kb_write(0x83, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
 	  case 0xF0: //set scan code set
 	    PS2KB_SENDACK();
@@ -333,7 +335,7 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	    	PS2KB_SENDACK();
 	    break;
 	  case 0xEE: //echo
-	    ps2kb_write(0xEE, 1, 30);
+	    ps2kb_write(0xEE, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
 	  case 0xED: // set/reset LEDs
 	    PS2KB_SENDACK();
@@ -360,24 +362,46 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
     // printf("scan code is 0x%02x\n", lookup_result);
     if(linux_keyvalue)
     {
-      ps2kb_write(lookup_result, 0, 20);
+      ps2kb_write(lookup_result, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
     }
     else
     {
-      ps2kb_write(0xf0, 0, 20);
-      ps2kb_write(lookup_result, 1, 20);
+      ps2kb_write(0xf0, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(lookup_result, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
     }
     return 0;
   }
 
   if(linux_keycode == LINUX_KEYCODE_SYSRQ)
   {
-    printf("PRINT SCREEN\n");
+    if(linux_keyvalue)
+    {
+      ps2kb_write(0xe0, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0x12, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0xe0, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0x7c, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    }
+    else
+    {
+      ps2kb_write(0xe0, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0xf0, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0x7c, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0xe0, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0xf0, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0x12, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    }
     return 0;
   }
-  else if(linux_keycode == LINUX_KEYCODE_PAUSE)
+  else if(linux_keycode == LINUX_KEYCODE_PAUSE && linux_keyvalue)
   {
-    printf("PAUSE\n");
+    ps2kb_write(0xe1, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2kb_write(0x14, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2kb_write(0x77, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2kb_write(0xe1, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2kb_write(0xf0, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2kb_write(0x14, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2kb_write(0xf0, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2kb_write(0x77, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
     return 0;
   }
   else if(linux_keycode >= 96 && linux_keycode <= 127)
@@ -388,17 +412,17 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
     // printf("scan code is 0xe0%02x\n", lookup_result);
     if(linux_keyvalue)
     {
-      ps2kb_write(0xe0, 0, 20);
-      ps2kb_write(lookup_result, 1, 20);
+      ps2kb_write(0xe0, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(lookup_result, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
     }
     else
     {
-      ps2kb_write(0xe0, 0, 20);
-      ps2kb_write(0xf0, 1, 20);
-      ps2kb_write(lookup_result, 1, 20);
+      ps2kb_write(0xe0, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(0xf0, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2kb_write(lookup_result, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
     }
+    return 0;
   }
-
-  return 0;
+  return 1;
 }
 
