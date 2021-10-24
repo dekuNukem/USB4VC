@@ -4,8 +4,8 @@
 #include "helpers.h"
 #include "shared.h"
 
-volatile uint8_t spi_recv_buf[SPI_BUF_SIZE];
-volatile ps2kb_buf my_ps2kb_buf;
+uint8_t spi_recv_buf[SPI_BUF_SIZE];
+ps2kb_buf my_ps2kb_buf;
 
 void ps2kb_buf_reset(ps2kb_buf *lb)
 {

@@ -45,7 +45,7 @@
 #include "helpers.h"
 #include "delay_us.h"
 #include "ps2kb.h"
-
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -60,6 +60,8 @@ UART_HandleTypeDef huart1;
 /* Private variables ---------------------------------------------------------*/
 
 volatile uint8_t spi_data_available;
+
+volatile uint8_t backup_spi_recv_buf[SPI_BUF_SIZE];
 
 /* USER CODE END PV */
 
@@ -85,25 +87,25 @@ int fputc(int ch, FILE *f)
 
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-  for (int i = 0; i < SPI_BUF_SIZE; ++i)
-      printf("0x%02x ", spi_recv_buf[i]);
-  printf("\n");
+  memcpy(backup_spi_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
+  spi_data_available = 1;
+  HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 
-  if(spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
-    goto parse_end;
+  // for (int i = 0; i < SPI_BUF_SIZE; ++i)
+  //     printf("0x%02x ", backup_spi_recv_buf[i]);
+  // printf("\n\n");
 
-  if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
+  if(backup_spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
+    return;
+
+  if(backup_spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
   {
-    // event_type = spi_recv_buf[4];
-    // event_code = spi_recv_buf[6];
-    // event_value = spi_recv_buf[8];
-    ps2kb_buf_add(&my_ps2kb_buf, spi_recv_buf[6], spi_recv_buf[8]);
+    // event_type = backup_spi_recv_buf[4];
+    // event_code = backup_spi_recv_buf[6];
+    // event_value = backup_spi_recv_buf[8];
+    ps2kb_buf_add(&my_ps2kb_buf, backup_spi_recv_buf[6], backup_spi_recv_buf[8]);
   }
 
-  spi_data_available = 1;
-
-  parse_end:
-  HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 }
 
 /* USER CODE END 0 */
@@ -152,6 +154,7 @@ int main(void)
   ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
   uint8_t ps2kb_host_cmd, ps2kb_leds, event_type, event_code, event_value;
   ps2kb_buf_init(&my_ps2kb_buf, 16);
+  HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 
   while (1)
   {
@@ -160,8 +163,8 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-  if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_SET)
-    HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
+  // if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_SET)
+  //   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 
   if(spi_data_available)
   {
@@ -178,8 +181,6 @@ int main(void)
   uint8_t buffered_code, buffered_value;
   if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
   {
-    printf("\n---ps2kb_buf_get---\n%d %d\n", my_ps2kb_buf.tail, my_ps2kb_buf.head);
-    printf("%d %d---\n", buffered_code, buffered_value);
     ps2kb_press_key(buffered_code, buffered_value);
   }
 

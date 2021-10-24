@@ -4,6 +4,32 @@
       goto parse_end;
     }
 
+
+printf("\n---ps2kb_buf_get---\n%d %d\n", my_ps2kb_buf.tail, my_ps2kb_buf.head);
+    printf("%d %d---\n", buffered_code, buffered_value);
+    
+void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+      printf("0x%02x ", spi_recv_buf[i]);
+  printf("\n");
+
+  if(spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
+    goto parse_end;
+
+  if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
+  {
+    // event_type = spi_recv_buf[4];
+    // event_code = spi_recv_buf[6];
+    // event_value = spi_recv_buf[8];
+    ps2kb_buf_add(&my_ps2kb_buf, spi_recv_buf[6], spi_recv_buf[8]);
+  }
+
+  spi_data_available = 1;
+
+  parse_end:
+  HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
+}
 if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
   {
     event_type = spi_recv_buf[4];

@@ -29,8 +29,8 @@ typedef struct
   uint8_t* keyvalue_buf;
 } ps2kb_buf;
 
-extern volatile uint8_t spi_recv_buf[SPI_BUF_SIZE];
-extern volatile ps2kb_buf my_ps2kb_buf;
+extern uint8_t spi_recv_buf[SPI_BUF_SIZE];
+extern ps2kb_buf my_ps2kb_buf;
 
 void ps2kb_buf_reset(ps2kb_buf *lb);
 void ps2kb_buf_init(ps2kb_buf *lb, uint8_t size);

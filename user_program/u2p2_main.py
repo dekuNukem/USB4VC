@@ -51,7 +51,6 @@ SPI_MSG_MOUSE_EVENT = 2
 SPI_MSG_GAMEPAD_EVENT = 3
 
 keyboard_spi_msg_header = [0xde, 0, SPI_MSG_KEYBOARD_EVENT, 0]
-
 def raw_input_event_worker():
     print("raw_input_event_parser_thread started")
     to_delete = []
@@ -67,9 +66,8 @@ def raw_input_event_worker():
                 continue
             data = list(data[8:])
             if data[0] == EV_KEY:
-                to_transfer = keyboard_spi_msg_header + data + [0xff]*20
+                to_transfer = keyboard_spi_msg_header + data + [0]*20
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
-                # print(len(to_transfer))
                 spi.xfer(to_transfer)
                 print(time.time(), 'sent')
                 # print(key)

@@ -36,3 +36,4 @@ test\main.o: ../Inc/shared.h
 test\main.o: ../Inc/helpers.h
 test\main.o: ../Inc/delay_us.h
 test\main.o: ../Inc/ps2kb.h
+test\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

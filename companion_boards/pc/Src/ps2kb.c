@@ -357,7 +357,7 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
     lookup_result = linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2[linux_keycode];
     if(lookup_result == CODE_UNUSED)
       return 1;
-    printf("scan code is 0x%02x\n", lookup_result);
+    // printf("scan code is 0x%02x\n", lookup_result);
     if(linux_keyvalue)
     {
       ps2kb_write(lookup_result, 0, 20);
@@ -385,7 +385,7 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
     lookup_result = linux_keycode_to_ps2_scancode_lookup_special_codeset2[linux_keycode-96];
     if(lookup_result == CODE_UNUSED)
       return 1;
-    printf("scan code is 0xe0%02x\n", lookup_result);
+    // printf("scan code is 0xe0%02x\n", lookup_result);
     if(linux_keyvalue)
     {
       ps2kb_write(0xe0, 0, 20);
