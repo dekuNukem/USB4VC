@@ -35,3 +35,4 @@ test\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
 test\main.o: ../Inc/shared.h
 test\main.o: ../Inc/helpers.h
 test\main.o: ../Inc/delay_us.h
+test\main.o: ../Inc/ps2kb.h

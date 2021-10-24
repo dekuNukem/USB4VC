@@ -44,6 +44,8 @@
 #include "shared.h"
 #include "helpers.h"
 #include "delay_us.h"
+#include "ps2kb.h"
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -86,7 +88,6 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
   spi_data_available = 1;
   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 }
-
 
 /* USER CODE END 0 */
 
@@ -131,6 +132,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   delay_us_init(&htim14);
   printf("hello world\n");
+  ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+  uint8_t temp, leds;
+
   while (1)
   {
 
@@ -143,12 +147,17 @@ int main(void)
 
   if(spi_data_available)
   {
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
-    for (int i = 0; i < SPI_BUF_SIZE; ++i)
-      printf("0x%02x ", spi_recv_buf[i]);
-
-    printf("\n");
+    // for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    //   printf("0x%02x ", spi_recv_buf[i]);
+    // printf("\n");
     spi_data_available = 0;
+  }
+
+  if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
+  {
+    ps2kb_read(&temp, 10);
+    keyboard_reply(temp, &leds);
+    printf("0x%02x\n", temp);
   }
 
   }

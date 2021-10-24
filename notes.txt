@@ -21,3 +21,12 @@ on lichee 3.5ms
 libevdev is SUPER SLOW! 20ms delay in parsing keyboard events. might write about it or do some more testing.
 
 hand parse raw dev/input: 470us on pi3, 1ms on lichee
+
+black PS2 extension cable both male:
+
+purple clk
+black data
+brown GND
+
+ps2 driver based on https://github.com/Harvie/ps2dev
+no parity check for speed

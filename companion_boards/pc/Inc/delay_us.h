@@ -1,5 +1,5 @@
-#ifndef __DELAY_US_H
-#define __DELAY_US_H
+#ifndef __DELAYUS_H
+#define __DELAYUS_H
 
 #ifdef __cplusplus
  extern "C" {

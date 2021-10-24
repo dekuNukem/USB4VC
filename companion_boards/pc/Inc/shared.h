@@ -1,5 +1,5 @@
-#ifndef __shared_H
-#define __shared_H
+#ifndef __SHARED_H
+#define __SHARED_H
 
 #include "stm32f0xx_hal.h"
 #include "main.h"
