@@ -8,7 +8,7 @@
 
 #define CLKHALF 18
 #define CLKFULL 36
-#define BYTEWAIT 1000
+#define BYTEWAIT 750
 #define PS2KB_BUS_TIMEOUT_MS 30
 #define CODE_UNUSED 0xff
 
@@ -243,7 +243,7 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   }
 
   // if responding to host, wait a little while for it to get ready
-  if(1)
+  if(delay_start)
     delay_us(BYTEWAIT);
 
   PS2KB_DATA_LOW();
@@ -291,7 +291,7 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   PS2KB_CLK_HI();
   delay_us(CLKHALF);
 
-  delay_us(1000);
+  delay_us(100);
 
   return 0;
 }
@@ -357,7 +357,7 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
     lookup_result = linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2[linux_keycode];
     if(lookup_result == CODE_UNUSED)
       return 1;
-    // printf("scan code is 0x%02x\n", lookup_result);
+    printf("scan code is 0x%02x\n", lookup_result);
     if(linux_keyvalue)
     {
       ps2kb_write(lookup_result, 0, 20);
@@ -372,12 +372,12 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
 
   if(linux_keycode == LINUX_KEYCODE_SYSRQ)
   {
-    // printf("PRINT SCREEN\n");
+    printf("PRINT SCREEN\n");
     return 0;
   }
   else if(linux_keycode == LINUX_KEYCODE_PAUSE)
   {
-    // printf("PAUSE\n");
+    printf("PAUSE\n");
     return 0;
   }
   else if(linux_keycode >= 96 && linux_keycode <= 127)
@@ -385,7 +385,7 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
     lookup_result = linux_keycode_to_ps2_scancode_lookup_special_codeset2[linux_keycode-96];
     if(lookup_result == CODE_UNUSED)
       return 1;
-    // printf("scan code is 0xe0%02x\n", lookup_result);
+    printf("scan code is 0xe0%02x\n", lookup_result);
     if(linux_keyvalue)
     {
       ps2kb_write(0xe0, 0, 20);

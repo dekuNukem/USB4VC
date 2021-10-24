@@ -85,7 +85,25 @@ int fputc(int ch, FILE *f)
 
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
+  if(spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
+    goto parse_end;
+
+  if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
+  {
+    // event_type = spi_recv_buf[4];
+    // event_code = spi_recv_buf[6];
+    // event_value = spi_recv_buf[8];
+    if(my_ps2kb_buf.curr_index >= my_ps2kb_buf.buf_size)
+      goto parse_end;
+    my_ps2kb_buf.curr_index++;
+    my_ps2kb_buf.keycode_buf[my_ps2kb_buf.curr_index] = spi_recv_buf[6];
+    my_ps2kb_buf.keyvalue_buf[my_ps2kb_buf.curr_index] = spi_recv_buf[8];
+    printf("%d\n", my_ps2kb_buf.curr_index);
+  }
+
   spi_data_available = 1;
+
+  parse_end:
   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 }
 
@@ -134,7 +152,6 @@ int main(void)
   printf("hello world\n");
   ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
   uint8_t ps2kb_host_cmd, ps2kb_leds, event_type, event_code, event_value;
-
   ps2kb_buf_init(&my_ps2kb_buf, 16);
 
   while (1)
@@ -152,20 +169,6 @@ int main(void)
     // for (int i = 0; i < SPI_BUF_SIZE; ++i)
     //   printf("0x%02x ", spi_recv_buf[i]);
     // printf("\n");
-
-    if(spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
-      goto parse_end;
-
-    if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
-    {
-      event_type = spi_recv_buf[4];
-      event_code = spi_recv_buf[6];
-      event_value = spi_recv_buf[8];
-      // printf("%02d %d\n", event_code, event_value);
-      ps2kb_press_key(event_code, event_value);
-    }
-
-    parse_end:
     spi_data_available = 0;
   }
 
@@ -175,6 +178,23 @@ int main(void)
     keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
     // printf("0x%02x\n", ps2kb_host_cmd);
   }
+
+  // if(my_ps2kb_buf.curr_index > 0)
+  // {
+  //   // ps2kb_press_key(event_code, event_value);
+  //   printf("main%d\n", my_ps2kb_buf.curr_index);
+  //   my_ps2kb_buf.curr_index--;
+  // }
+
+  printf("main%d\n", my_ps2kb_buf.curr_index);
+
+  if(my_ps2kb_buf.curr_index >= 0)
+  {
+    ps2kb_press_key(my_ps2kb_buf.keycode_buf[my_ps2kb_buf.curr_index], my_ps2kb_buf.keyvalue_buf[my_ps2kb_buf.curr_index]);
+    my_ps2kb_buf.curr_index--;
+  }
+
+  HAL_Delay(500);
 
   }
   /* USER CODE END 3 */

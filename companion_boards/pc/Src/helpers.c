@@ -10,7 +10,7 @@ ps2kb_buf my_ps2kb_buf;
 
 void ps2kb_buf_reset(ps2kb_buf *lb)
 {
-  lb->curr_index = 0;
+  lb->curr_index = -1;
   memset(lb->keycode_buf, 0, lb->buf_size);
   memset(lb->keyvalue_buf, 0, lb->buf_size);
 }

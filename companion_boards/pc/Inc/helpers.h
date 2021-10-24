@@ -22,7 +22,7 @@
 
 typedef struct
 {
-  uint8_t curr_index;
+  int8_t curr_index;
   uint8_t buf_size;
   uint8_t* keycode_buf;
   uint8_t* keyvalue_buf;

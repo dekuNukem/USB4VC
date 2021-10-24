@@ -4,6 +4,15 @@
       goto parse_end;
     }
 
+if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
+  {
+    event_type = spi_recv_buf[4];
+    event_code = spi_recv_buf[6];
+    event_value = spi_recv_buf[8];
+    // printf("%02d %d\n", event_code, event_value);
+    ps2kb_press_key(event_code, event_value);
+  }
+
 
 printf("waiting for host request...\n");
   // wait for data line to go low and clock line to go high (request to send)
