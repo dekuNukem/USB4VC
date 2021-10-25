@@ -151,7 +151,6 @@ int main(void)
   uint8_t ps2kb_host_cmd, ps2kb_leds, event_type, event_code, event_value;
   ps2kb_buf_init(&my_ps2kb_buf, 16);
   memset(spi_transmit_buf, 0xab, SPI_BUF_SIZE);
-  // HAL_SPI_TransmitReceive_DMA(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 
   while (1)
@@ -173,8 +172,14 @@ int main(void)
 
   if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
   {
+    ps2kb_leds = 0xff;
     ps2kb_read(&ps2kb_host_cmd, 10);
     keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
+    if(ps2kb_leds != 0xff)
+    {
+      // printf("%d\n", );
+      // construct reply message here
+    }
     // printf("0x%02x\n", ps2kb_host_cmd);
   }
 
