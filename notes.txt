@@ -44,3 +44,6 @@ echo 131 > /sys/class/gpio/export
 echo in > /sys/class/gpio/gpio131/direction
 
 cat /sys/class/gpio/gpio131/value
+
+to see list of all interrupts
+cat /proc/interrupts
