@@ -60,7 +60,6 @@ UART_HandleTypeDef huart1;
 /* Private variables ---------------------------------------------------------*/
 
 volatile uint8_t spi_data_available;
-
 volatile uint8_t backup_spi_recv_buf[SPI_BUF_SIZE];
 
 /* USER CODE END PV */
@@ -90,10 +89,6 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
   memcpy(backup_spi_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
   spi_data_available = 1;
   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
-
-  // for (int i = 0; i < SPI_BUF_SIZE; ++i)
-  //     printf("0x%02x ", backup_spi_recv_buf[i]);
-  // printf("\n\n");
 
   if(backup_spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
     return;
@@ -163,11 +158,13 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-  // if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_SET)
-  //   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
-
   if(spi_data_available)
   {
+
+    // for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    //     printf("0x%02x ", backup_spi_recv_buf[i]);
+    // printf("\n\n");
+
     spi_data_available = 0;
   }
 

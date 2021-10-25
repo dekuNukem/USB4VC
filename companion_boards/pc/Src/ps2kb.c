@@ -340,7 +340,10 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	  case 0xED: // set/reset LEDs
 	    PS2KB_SENDACK();
 	    if(ps2kb_read(leds, 30) == 0)
+      {
 	    	PS2KB_SENDACK();
+        printf("LED REQ: %d\n", *leds);
+      }
 	    break;
   }
 }
