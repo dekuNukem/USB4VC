@@ -59,8 +59,8 @@ UART_HandleTypeDef huart1;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
-volatile uint8_t spi_data_available;
-volatile uint8_t backup_spi_recv_buf[SPI_BUF_SIZE];
+uint8_t spi_data_available;
+uint8_t backup_spi_recv_buf[SPI_BUF_SIZE];
 
 /* USER CODE END PV */
 
@@ -88,6 +88,7 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   memcpy(backup_spi_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
   spi_data_available = 1;
+  HAL_SPI_Transmit(&hspi1, spi_transmit_buf, SPI_BUF_SIZE, 2);
   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 
   if(backup_spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
@@ -149,6 +150,8 @@ int main(void)
   ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
   uint8_t ps2kb_host_cmd, ps2kb_leds, event_type, event_code, event_value;
   ps2kb_buf_init(&my_ps2kb_buf, 16);
+  memset(spi_transmit_buf, 0xab, SPI_BUF_SIZE);
+  // HAL_SPI_TransmitReceive_DMA(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 
   while (1)

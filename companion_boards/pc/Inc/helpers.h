@@ -30,6 +30,7 @@ typedef struct
 } ps2kb_buf;
 
 extern uint8_t spi_recv_buf[SPI_BUF_SIZE];
+extern uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 extern ps2kb_buf my_ps2kb_buf;
 
 void ps2kb_buf_reset(ps2kb_buf *lb);
