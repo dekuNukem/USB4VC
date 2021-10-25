@@ -30,3 +30,17 @@ brown GND
 
 ps2 driver based on https://github.com/Harvie/ps2dev
 no parity check for speed
+
+raspberry pi gpio linux pin numbers is BCM pin number, check use `gpio readall`
+
+in allwinner chips, linux gpio number = (position of letter in alphabet - 1) * 32 + pin number
+
+PA3 = (1-1) * 32 + 3 = gpio3
+
+PE3 = (5-1) * 32 + 3 = 128+3 = gpio131
+
+echo 131 > /sys/class/gpio/export
+
+echo in > /sys/class/gpio/gpio131/direction
+
+cat /sys/class/gpio/gpio131/value
