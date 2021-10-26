@@ -5,8 +5,11 @@
     }
   // if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_SET)
   //   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
+      // printf("ps2kb_leds: %d\n", ps2kb_leds);
+    // printf("0x%02x\n", ps2kb_host_cmd);
 
-
+memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+      HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 printf("\n---ps2kb_buf_get---\n%d %d\n", my_ps2kb_buf.tail, my_ps2kb_buf.head);
     printf("%d %d---\n", buffered_code, buffered_value);
     

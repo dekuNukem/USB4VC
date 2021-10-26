@@ -9,16 +9,22 @@
 
 #define SPI_BUF_SIZE 32
 
-#define SPI_MAGIC_NUM 0xde
+#define SPI_MOSI_MAGIC 0xde
+#define SPI_MISO_MAGIC 0xcd
 
 #define SPI_BUF_INDEX_MAGIC 0
 #define SPI_BUF_INDEX_SEQNUM 1
 #define SPI_BUF_INDEX_MSG_TYPE 2
 
-#define SPI_MSG_INFO_REQUEST 0
-#define SPI_MSG_KB_EVENT 1
-#define SPI_MSG_MOUSE_EVENT 2
-#define SPI_MSG_GAMEPAD_EVENT 3
+#define SPI_MOSI_MSG_INFO_REQUEST 0
+#define SPI_MOSI_MSG_KB_EVENT 1
+#define SPI_MOSI_MSG_MOUSE_EVENT 2
+#define SPI_MOSI_MSG_GAMEPAD_EVENT 3
+
+#define SPI_MISO_MSG_INFO_REPLY 0
+#define SPI_MISO_MSG_KB_LED_REQ 1
+
+
 
 typedef struct
 {
@@ -30,7 +36,7 @@ typedef struct
 } ps2kb_buf;
 
 extern uint8_t spi_recv_buf[SPI_BUF_SIZE];
-extern uint8_t spi_transmit_buf[SPI_BUF_SIZE];
+// extern uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 extern ps2kb_buf my_ps2kb_buf;
 
 void ps2kb_buf_reset(ps2kb_buf *lb);

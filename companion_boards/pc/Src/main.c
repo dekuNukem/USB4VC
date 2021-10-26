@@ -51,6 +51,7 @@
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef hdma_spi1_rx;
+DMA_HandleTypeDef hdma_spi1_tx;
 
 TIM_HandleTypeDef htim14;
 
@@ -58,9 +59,10 @@ UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 
 uint8_t spi_data_available;
-uint8_t backup_spi_recv_buf[SPI_BUF_SIZE];
+uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 
 /* USER CODE END PV */
 
@@ -84,24 +86,22 @@ int fputc(int ch, FILE *f)
     return ch;
 }
 
-void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-  memcpy(backup_spi_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
+  memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
   spi_data_available = 1;
-  // printf("%d\n", HAL_SPI_Transmit_IT(&hspi1, spi_transmit_buf, SPI_BUF_SIZE));
-  HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
+  HAL_SPI_TransmitReceive_DMA(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
-  if(backup_spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)
+  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MOSI_MAGIC)
     return;
 
-  if(backup_spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MSG_KB_EVENT)
+  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_KB_EVENT)
   {
-    // event_type = backup_spi_recv_buf[4];
-    // event_code = backup_spi_recv_buf[6];
-    // event_value = backup_spi_recv_buf[8];
-    ps2kb_buf_add(&my_ps2kb_buf, backup_spi_recv_buf[6], backup_spi_recv_buf[8]);
+    // event_type = backup_spi1_recv_buf[4];
+    // event_code = backup_spi1_recv_buf[6];
+    // event_value = backup_spi1_recv_buf[8];
+    ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[6], backup_spi1_recv_buf[8]);
   }
-
 }
 
 /* USER CODE END 0 */
@@ -146,13 +146,12 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   delay_us_init(&htim14);
-  printf("hello world\n");
   ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
-  uint8_t ps2kb_host_cmd, ps2kb_leds, event_type, event_code, event_value;
+  uint8_t ps2kb_host_cmd, ps2kb_leds;
   ps2kb_buf_init(&my_ps2kb_buf, 16);
-  memset(spi_transmit_buf, 0xab, SPI_BUF_SIZE);
-  // HAL_SPI_Transmit(&hspi1, spi_transmit_buf, SPI_BUF_SIZE, 10);
-  HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
+  memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+  HAL_SPI_TransmitReceive_DMA(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+  printf("hello world\n");
 
   while (1)
   {
@@ -165,7 +164,7 @@ int main(void)
   {
 
     // for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    //     printf("0x%02x ", backup_spi_recv_buf[i]);
+    //     printf("0x%02x ", backup_spi1_recv_buf[i]);
     // printf("\n\n");
 
     spi_data_available = 0;
@@ -178,14 +177,13 @@ int main(void)
     keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
     if(ps2kb_leds != 0xff)
     {
-      // printf("ps2kb_leds: %d\n", ps2kb_leds);
-      HAL_SPI_Abort(&hspi1);
-      HAL_SPI_Transmit(&hspi1, spi_transmit_buf, SPI_BUF_SIZE, 10);
-      HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
-      // printf("done\n");
-      // construct reply message here
+      memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+      spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+      spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+      spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
+      spi_transmit_buf[3] = ps2kb_leds;
+      HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
     }
-    // printf("0x%02x\n", ps2kb_host_cmd);
   }
 
   uint8_t buffered_code, buffered_value;
@@ -348,9 +346,13 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, PS2KB_CLK_Pin|PS2KB_DATA_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PS2KB_CLK_Pin PS2KB_DATA_Pin */
   GPIO_InitStruct.Pin = PS2KB_CLK_Pin|PS2KB_DATA_Pin;
@@ -358,6 +360,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : SLAVE_REQ_Pin */
+  GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
 
 }
 

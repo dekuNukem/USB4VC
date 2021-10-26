@@ -53,6 +53,8 @@
 #define PS2KB_CLK_GPIO_Port GPIOA
 #define PS2KB_DATA_Pin GPIO_PIN_1
 #define PS2KB_DATA_GPIO_Port GPIOA
+#define SLAVE_REQ_Pin GPIO_PIN_1
+#define SLAVE_REQ_GPIO_Port GPIOB
 
 /* ########################## Assert Selection ############################## */
 /**
