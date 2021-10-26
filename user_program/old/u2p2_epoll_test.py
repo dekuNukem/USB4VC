@@ -1,6 +1,6 @@
 import select
 
-gpio_path = "/sys/class/gpio/gpio16/value"
+gpio_path = "/sys/class/gpio/gpio131/value"
 
 gpio_file = open(gpio_path, 'rb')
 

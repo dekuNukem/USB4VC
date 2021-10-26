@@ -1,3 +1,21 @@
+    for item in scrolllock_list:
+        if ps2kb_led_byte & 0x1:
+            os.system("sudo bash -c 'echo 1 > " + os.path.join(item, 'brightness') + "'")
+        else:
+            os.system("sudo bash -c 'echo 0 > " + os.path.join(item, 'brightness') + "'")
+
+    for item in numlock_list:
+        if ps2kb_led_byte & 0x2:
+            os.system("sudo bash -c 'echo 1 > " + os.path.join(item, 'brightness') + "'")
+        else:
+            os.system("sudo bash -c 'echo 0 > " + os.path.join(item, 'brightness') + "'")
+
+    for item in capslock_list:
+        if ps2kb_led_byte & 0x4:
+            os.system("sudo bash -c 'echo 1 > " + os.path.join(item, 'brightness') + "'")
+        else:
+            os.system("sudo bash -c 'echo 0 > " + os.path.join(item, 'brightness') + "'")
+
 if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:
                     print("good!", slave_result[3])
                     for x in range(2):
