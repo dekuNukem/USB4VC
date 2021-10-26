@@ -93,13 +93,22 @@ def change_kb_led(ps2kb_led_byte):
     scrolllock_list = [os.path.join(led_device_path, x) for x in led_file_list if 'scrolllock' in x]
 
     for item in scrolllock_list:
-        os.system(f"echo {get_01(ps2kb_led_byte & 0x1)} > {os.path.join(item, 'brightness')}")
+        if is_on_raspberry_pi:
+            os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x1)} > {os.path.join(item, 'brightness')}'")
+        else:
+            os.system(f"echo {get_01(ps2kb_led_byte & 0x1)} > {os.path.join(item, 'brightness')}")
 
     for item in numlock_list:
-        os.system(f"echo {get_01(ps2kb_led_byte & 0x2)} > {os.path.join(item, 'brightness')}")
+        if is_on_raspberry_pi:
+            os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x2)} > {os.path.join(item, 'brightness')}'")
+        else:
+            os.system(f"echo {get_01(ps2kb_led_byte & 0x2)} > {os.path.join(item, 'brightness')}")
 
     for item in capslock_list:
-        os.system(f"echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}")
+        if is_on_raspberry_pi:
+            os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}'")
+        else:
+            os.system(f"echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}")
 
 def raw_input_event_worker():
     print("raw_input_event_parser_thread started")
