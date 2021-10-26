@@ -1,9 +1,20 @@
-
+if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:
+                    print("good!", slave_result[3])
+                    for x in range(2):
+                        change_kb_led(slave_result[3])
+                        # time.sleep(0.1)
 filler = [0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3]
                 # testttt = [0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f]
                 # time.sleep(0.01)
 
-
+                    # change_kb_led(slave_result[3])
+                    # if slave_result[3] & 0x1:
+                    #     print("SCROLL LOCK ON")
+                    # if slave_result[3] & 0x2:
+                    #     print("NUM LOCK ON")
+                    # if slave_result[3] & 0x4:
+                    #     print("CAP LOCK ON")
+                    # print('----')
 while current_line_num < max_lines:
 	this_line = file_content[current_line_num]
 

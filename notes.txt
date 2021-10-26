@@ -47,3 +47,6 @@ cat /sys/class/gpio/gpio131/value
 
 to see list of all interrupts
 cat /proc/interrupts
+
+change keyboard LED
+sudo bash -c 'echo 1 > /sys/class/leds/input5\:\:capslock/brightness'

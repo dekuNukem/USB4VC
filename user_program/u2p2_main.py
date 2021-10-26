@@ -56,18 +56,52 @@ EV_KEY = 0x01
 EV_REL = 0x02
 EV_ABS = 0x03
 
+SPI_BUF_INDEX_MAGIC = 0
+SPI_BUF_INDEX_SEQNUM = 1
+SPI_BUF_INDEX_MSG_TYPE = 2
+
 SPI_MOSI_MSG_KEYBOARD_EVENT = 1
 SPI_MOSI_MSG_MOUSE_EVENT = 2
 SPI_MOSI_MSG_GAMEPAD_EVENT = 3
 SPI_MOSI_MSG_REQ_ACK = 4
 
+SPI_MISO_MSG_INFO_REPLY = 0
+SPI_MISO_MSG_KB_LED_REQ = 1
+
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
+keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT, 0]
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_REQ_ACK] + [0]*29
 
-keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT, 0]
+led_device_path = '/sys/class/leds'
+
+def change_kb_led(ps2kb_led_byte):
+    led_file_list = os.listdir(led_device_path)
+    capslock_list = [os.path.join(led_device_path, x) for x in led_file_list if 'capslock' in x]
+    numlock_list = [os.path.join(led_device_path, x) for x in led_file_list if 'numlock' in x]
+    scrolllock_list = [os.path.join(led_device_path, x) for x in led_file_list if 'scrolllock' in x]
+
+    for item in scrolllock_list:
+        if ps2kb_led_byte & 0x1:
+            os.system("sudo bash -c 'echo 1 > " + os.path.join(item, 'brightness') + "'")
+        else:
+            os.system("sudo bash -c 'echo 0 > " + os.path.join(item, 'brightness') + "'")
+
+    for item in numlock_list:
+        if ps2kb_led_byte & 0x2:
+            os.system("sudo bash -c 'echo 1 > " + os.path.join(item, 'brightness') + "'")
+        else:
+            os.system("sudo bash -c 'echo 0 > " + os.path.join(item, 'brightness') + "'")
+
+    for item in capslock_list:
+        if ps2kb_led_byte & 0x4:
+            os.system("sudo bash -c 'echo 1 > " + os.path.join(item, 'brightness') + "'")
+        else:
+            os.system("sudo bash -c 'echo 0 > " + os.path.join(item, 'brightness') + "'")
+
+    # print(capslock_list, numlock_list, scrolllock_list)
 
 def raw_input_event_worker():
     print("raw_input_event_parser_thread started")
@@ -91,6 +125,7 @@ def raw_input_event_worker():
                 # print(key)
                 # print(to_transfer)
                 # print('----')
+
         events = epoll.poll(timeout=0)
         for df, event_type in events:
             if 0x8 & event_type:
@@ -98,8 +133,9 @@ def raw_input_event_worker():
                 for x in range(3):
                     slave_result = spi.xfer(make_spi_msg_ack())
                 print(slave_result)
-                if slave_result[0] == SPI_MISO_MAGIC:
-                    print("good!")
+                if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:
+                    change_kb_led(slave_result[3])
+                    change_kb_led(slave_result[3])
 
 raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)
 raw_input_event_parser_thread.start()
