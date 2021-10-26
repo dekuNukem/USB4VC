@@ -110,9 +110,10 @@ def change_kb_led(ps2kb_led_byte):
         else:
             os.system(f"echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}")
 
+
 def raw_input_event_worker():
     print("raw_input_event_parser_thread started")
-    to_delete = []
+    last_spi_tx = 0
     while 1:
         for key in list(keyboard_opened_device_dict):
             try:
@@ -127,8 +128,12 @@ def raw_input_event_worker():
             if data[0] == EV_KEY:
                 to_transfer = keyboard_spi_msg_header + data + [0]*20
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
+                if time.time_ns() - last_spi_tx <= 4000000:
+                    # print("too fast!")
+                    time.sleep(0.004)
                 spi.xfer(to_transfer)
-                # print(time.time(), 'sent')
+                last_spi_tx = time.time_ns()
+                # print(time.time_ns(), 'sent')
                 # print(key)
                 # print(to_transfer)
                 # print('----')

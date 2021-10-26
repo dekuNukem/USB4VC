@@ -50,8 +50,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
-DMA_HandleTypeDef hdma_spi1_rx;
-DMA_HandleTypeDef hdma_spi1_tx;
 
 TIM_HandleTypeDef htim14;
 
@@ -61,7 +59,7 @@ UART_HandleTypeDef huart1;
 /* Private variables ---------------------------------------------------------*/
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 
-uint8_t spi_data_available;
+uint8_t spi_out_of_sync;
 uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 
 /* USER CODE END PV */
@@ -69,7 +67,6 @@ uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM14_Init(void);
 static void MX_SPI1_Init(void);
@@ -89,24 +86,19 @@ int fputc(int ch, FILE *f)
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
-  spi_data_available = 1;
-  HAL_SPI_TransmitReceive_DMA(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MOSI_MAGIC)
+  {
+    spi_out_of_sync = 1;
     return;
+  }
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_KB_EVENT)
-  {
-    // event_type = backup_spi1_recv_buf[4];
-    // event_code = backup_spi1_recv_buf[6];
-    // event_value = backup_spi1_recv_buf[8];
     ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[6], backup_spi1_recv_buf[8]);
-  }
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_REQ_ACK)
-  {
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
-  }
 }
 
 /* USER CODE END 0 */
@@ -140,7 +132,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_TIM14_Init();
   MX_SPI1_Init();
@@ -155,7 +146,7 @@ int main(void)
   uint8_t ps2kb_host_cmd, ps2kb_leds;
   ps2kb_buf_init(&my_ps2kb_buf, 16);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
-  HAL_SPI_TransmitReceive_DMA(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   printf("hello world\n");
 
   while (1)
@@ -165,14 +156,13 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-  if(spi_data_available)
+  if(spi_out_of_sync)
   {
-
-    // for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    //     printf("0x%02x ", backup_spi1_recv_buf[i]);
-    // printf("\n\n");
-
-    spi_data_available = 0;
+    HAL_SPI_Abort(&hspi1);
+    while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_RESET);
+    HAL_Delay(2);
+    HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+    spi_out_of_sync = 0;
   }
 
   if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
@@ -194,7 +184,11 @@ int main(void)
   uint8_t buffered_code, buffered_value;
   if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
   {
+    // if SPI is active, wait for it to finish
+    while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_RESET);
+    HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
     ps2kb_press_key(buffered_code, buffered_value);
+    HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   }
 
   }
@@ -319,21 +313,6 @@ static void MX_USART1_UART_Init(void)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
-
-}
-
-/** 
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void) 
-{
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Channel2_3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
 
 }
 
