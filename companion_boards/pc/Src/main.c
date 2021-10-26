@@ -88,7 +88,7 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   memcpy(backup_spi_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
   spi_data_available = 1;
-  HAL_SPI_Transmit(&hspi1, spi_transmit_buf, SPI_BUF_SIZE, 2);
+  // printf("%d\n", HAL_SPI_Transmit_IT(&hspi1, spi_transmit_buf, SPI_BUF_SIZE));
   HAL_SPI_Receive_DMA(&hspi1, spi_recv_buf, SPI_BUF_SIZE);
 
   if(backup_spi_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MAGIC_NUM)

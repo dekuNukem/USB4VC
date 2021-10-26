@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-import select
 import spidev
 import threading
 
@@ -15,7 +14,6 @@ if is_on_raspberry_pi:
     print("I'm on Raspberry Pi!")
     os.system("echo 16 > /sys/class/gpio/export")
     os.system("echo in > /sys/class/gpio/gpio16/direction")
-    os.system("echo rising > /sys/class/gpio/gpio16/edge")
     print("GPIO init done")
 else:
     spi = spidev.SpiDev(1, 0) # lichee
@@ -27,10 +25,7 @@ keyboard_opened_device_dict = {}
 mouse_opened_device_dict = {}
 gamepad_opened_device_dict = {}
 
-gpio_file = open("/sys/class/gpio/gpio16/value", 'rb')
-
-epoll = select.epoll()
-epoll.register(gpio_file, select.EPOLLET)
+slave_ready_gpio_file = open("/sys/class/gpio/gpio16/value", 'rb')
 
 """
 def send kb
@@ -83,9 +78,6 @@ def raw_input_event_worker():
                 # print(key)
                 # print(to_transfer)
                 # print('----')
-        events = epoll.poll(timeout=0)
-        for df, event_type in events:
-            print(df, event_type)
 
 raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)
 raw_input_event_parser_thread.start()
