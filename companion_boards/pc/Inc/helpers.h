@@ -20,11 +20,10 @@
 #define SPI_MOSI_MSG_KB_EVENT 1
 #define SPI_MOSI_MSG_MOUSE_EVENT 2
 #define SPI_MOSI_MSG_GAMEPAD_EVENT 3
+#define SPI_MOSI_MSG_REQ_ACK 4
 
 #define SPI_MISO_MSG_INFO_REPLY 0
 #define SPI_MISO_MSG_KB_LED_REQ 1
-
-
 
 typedef struct
 {

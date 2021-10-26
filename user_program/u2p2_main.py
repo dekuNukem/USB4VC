@@ -56,11 +56,19 @@ EV_KEY = 0x01
 EV_REL = 0x02
 EV_ABS = 0x03
 
-SPI_MSG_KEYBOARD_EVENT = 1
-SPI_MSG_MOUSE_EVENT = 2
-SPI_MSG_GAMEPAD_EVENT = 3
+SPI_MOSI_MSG_KEYBOARD_EVENT = 1
+SPI_MOSI_MSG_MOUSE_EVENT = 2
+SPI_MOSI_MSG_GAMEPAD_EVENT = 3
+SPI_MOSI_MSG_REQ_ACK = 4
 
-keyboard_spi_msg_header = [0xde, 0, SPI_MSG_KEYBOARD_EVENT, 0]
+SPI_MOSI_MAGIC = 0xde
+SPI_MISO_MAGIC = 0xcd
+
+def make_spi_msg_ack():
+    return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_REQ_ACK] + [0]*29
+
+keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT, 0]
+
 def raw_input_event_worker():
     print("raw_input_event_parser_thread started")
     to_delete = []
@@ -85,7 +93,13 @@ def raw_input_event_worker():
                 # print('----')
         events = epoll.poll(timeout=0)
         for df, event_type in events:
-            print(df, event_type)
+            if 0x8 & event_type:
+                slave_result = None
+                for x in range(3):
+                    slave_result = spi.xfer(make_spi_msg_ack())
+                print(slave_result)
+                if slave_result[0] == SPI_MISO_MAGIC:
+                    print("good!")
 
 raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)
 raw_input_event_parser_thread.start()
