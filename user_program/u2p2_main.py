@@ -56,9 +56,10 @@ buttons: https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/input
 sticks: ABS_X, ABS_Y, ABS_RX, ABS_RY
 """
 
-EV_KEY = 0x01
-EV_REL = 0x02
-EV_ABS = 0x03
+EV_SYN = 0
+EV_KEY = 1
+EV_REL = 2
+EV_ABS = 3
 
 SPI_BUF_INDEX_MAGIC = 0
 SPI_BUF_INDEX_SEQNUM = 1
@@ -75,6 +76,7 @@ SPI_MISO_MSG_KB_LED_REQ = 1
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
 keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT, 0]
+mouse_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_MOUSE_EVENT, 0]
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_REQ_ACK] + [0]*29
@@ -110,10 +112,16 @@ def change_kb_led(ps2kb_led_byte):
         else:
             os.system(f"echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}")
 
+last_spi_tx = 0
+def spi_xfer_with_speedlimit(data):
+    global last_spi_tx
+    while time.time_ns() - last_spi_tx <= 5000000:
+        time.sleep(0.001)
+    spi.xfer(data)
+    last_spi_tx = time.time_ns()
 
 def raw_input_event_worker():
     print("raw_input_event_parser_thread started")
-    last_spi_tx = 0
     while 1:
         for key in list(keyboard_opened_device_dict):
             try:
@@ -121,18 +129,33 @@ def raw_input_event_worker():
             except OSError:
                 keyboard_opened_device_dict[key][0].close()
                 del keyboard_opened_device_dict[key]
-                print("device disappeared:", key)
+                print("keyboard disappeared:", key)
             if data is None:
                 continue
             data = list(data[8:])
             if data[0] == EV_KEY:
                 to_transfer = keyboard_spi_msg_header + data + [0]*20
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
-                if time.time_ns() - last_spi_tx <= 4000000:
-                    # print("too fast!")
-                    time.sleep(0.004)
-                spi.xfer(to_transfer)
-                last_spi_tx = time.time_ns()
+                spi_xfer_with_speedlimit(to_transfer)
+                # print(time.time_ns(), 'sent')
+                # print(key)
+                # print(to_transfer)
+                # print('----')
+
+        for key in list(mouse_opened_device_dict):
+            try:
+                data = mouse_opened_device_dict[key][0].read(16)
+            except OSError:
+                mouse_opened_device_dict[key][0].close()
+                del mouse_opened_device_dict[key]
+                print("mouse disappeared:", key)
+            if data is None:
+                continue
+            data = list(data[8:])
+            if data[0] == EV_KEY or data[0] == EV_REL:
+                to_transfer = mouse_spi_msg_header + data + [0]*20
+                to_transfer[3] = mouse_opened_device_dict[key][1]
+                spi_xfer_with_speedlimit(to_transfer)
                 # print(time.time_ns(), 'sent')
                 # print(key)
                 # print(to_transfer)
@@ -172,15 +195,31 @@ while 1:
             try:
                 this_file = open(item, "rb")
                 os.set_blocking(this_file.fileno(), False)
-                kb_index = 0
+                device_index = 0
                 try:
-                    kb_index = sum([int(x) for x in item.split(':')[1].split('.')][:2])
+                    device_index = sum([int(x) for x in item.split(':')[1].split('.')][:2])
                 except:
                     pass
-                keyboard_opened_device_dict[item] = (this_file, kb_index)
+                keyboard_opened_device_dict[item] = (this_file, device_index)
                 print("opened keyboard", keyboard_opened_device_dict[item][1], ':' , item)
             except Exception as e:
                 print("keyboard open exception:", e)
+                continue
+
+    for item in mouse_list:
+        if item not in mouse_opened_device_dict:
+            try:
+                this_file = open(item, "rb")
+                os.set_blocking(this_file.fileno(), False)
+                device_index = 0
+                try:
+                    device_index = sum([int(x) for x in item.split(':')[1].split('.')][:2])
+                except:
+                    pass
+                mouse_opened_device_dict[item] = (this_file, device_index)
+                print("opened mouse", mouse_opened_device_dict[item][1], ':' , item)
+            except Exception as e:
+                print("mouse open exception:", e)
                 continue
 
     time.sleep(0.75)

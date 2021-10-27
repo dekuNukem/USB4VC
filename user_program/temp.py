@@ -1,3 +1,52 @@
+while 1:
+    data = list(fff.read(48))
+    # mouse_movement_x = None
+    # mouse_movement_y = None
+    # mouse_wheel_movement_regular = None
+    # mouse_wheel_movement_hi_res = None
+    # mouse_button_event = None
+    # packet1 = data[:16]
+    # packet2 = data[16:32]
+    # packet3 = data[32:]
+    # print(len(packet1), len(packet2), len(packet3))
+
+    for x in range(3):
+        this_packet = data[x*16:x*16+16]
+        print(this_packet[8:])
+    print('----')
+    # data = list(data[8:])
+    # if data[0] == EV_KEY:
+    #     print(time.time(), data)
+    #     print('--------')
+    # if data[0] == EV_REL:
+    #     print(time.time(), data)
+    #     print('--------')
+    # spi.xfer(data)
+    spi.xfer(data)
+
+    # if data[0] == EV_KEY or data[0] == EV_REL:
+    #     spi.xfer(data)
+    
+
+fff = open(sys.argv[1], "rb" )
+while 1:
+    data = fff.read(48)
+    # data = list(data[8:])
+    # if data[0] == EV_KEY:
+    #     print(time.time(), data)
+    #     print('--------')
+    # if data[0] == EV_REL:
+    #     print(time.time(), data)
+    #     print('--------')
+    # spi.xfer(data)
+    spi.xfer(data)
+
+    # if data[0] == EV_KEY or data[0] == EV_REL:
+    #     spi.xfer(data)
+    
+
+
+    
     for item in scrolllock_list:
         if ps2kb_led_byte & 0x1:
             os.system("sudo bash -c 'echo 1 > " + os.path.join(item, 'brightness') + "'")

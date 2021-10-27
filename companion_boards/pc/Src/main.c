@@ -90,6 +90,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MOSI_MAGIC)
   {
+    printf("WRONG\n");
     spi_out_of_sync = 1;
     return;
   }
