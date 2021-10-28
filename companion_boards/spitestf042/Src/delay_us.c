@@ -7,7 +7,7 @@ TIM_HandleTypeDef* us_timer;
 void delay_us_init(TIM_HandleTypeDef* htim_base)
 {
 	us_timer = htim_base;
-	HAL_TIM_Base_Start_IT(us_timer);
+	HAL_TIM_Base_Start(us_timer);
 }
 
 // combine the upper 16 bit stored in upper16

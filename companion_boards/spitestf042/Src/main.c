@@ -59,6 +59,7 @@ UART_HandleTypeDef huart1;
 /* Private variables ---------------------------------------------------------*/
 #define SPI_BUF_SIZE 32
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
+uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -79,16 +80,20 @@ int fputc(int ch, FILE *f)
     HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
     return ch;
 }
+
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-  HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_SET);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-	HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_RESET);
+  memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
 
-  if(spi_recv_buf[0] != 0xde)
+  while(backup_spi1_recv_buf[0] != 0xde)
     HAL_GPIO_WritePin(ERROR_GPIO_Port, ERROR_Pin, GPIO_PIN_SET);
-  else
-    HAL_GPIO_WritePin(ERROR_GPIO_Port, ERROR_Pin, GPIO_PIN_RESET);
+
+  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_KB_EVENT)
+    ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[6], backup_spi1_recv_buf[8]);
+
+  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_REQ_ACK)
+    HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 }
 
 /* USER CODE END 0 */
@@ -127,8 +132,12 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 	delay_us_init(&htim2);
-  printf("hello world\n");
+  ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+  uint8_t ps2kb_host_cmd, ps2kb_leds, buffered_code, buffered_value;
+  ps2kb_buf_init(&my_ps2kb_buf, 16);
+  memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
 	HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+  printf("hello world\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -139,8 +148,24 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-		HAL_GPIO_TogglePin(ERROR_GPIO_Port, ERROR_Pin);
-		delay_us(40);
+		if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
+    {
+      ps2kb_leds = 0xff;
+      ps2kb_read(&ps2kb_host_cmd, 10);
+      keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
+      if(ps2kb_leds != 0xff)
+      {
+        memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+        spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+        spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+        spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
+        spi_transmit_buf[3] = ps2kb_leds;
+        HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
+      }
+    }
+
+    if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
+      ps2kb_press_key(buffered_code, buffered_value);
   }
   /* USER CODE END 3 */
 
