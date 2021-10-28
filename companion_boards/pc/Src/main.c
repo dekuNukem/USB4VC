@@ -88,20 +88,21 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_SET);
   memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+  HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_RESET);
 
-  // if(backup_spi1_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MOSI_MAGIC)
-  // {
-  //   printf("WRONG\n");
-  //   spi_out_of_sync = 1;
-  //   return;
-  // }
+  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MAGIC] != SPI_MOSI_MAGIC)
+  {
+    // printf("WRONG\n");
+    // spi_out_of_sync = 1;
+    HAL_GPIO_WritePin(ERROR_GPIO_Port, ERROR_Pin, GPIO_PIN_SET);
+    return;
+  }
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_KB_EVENT)
     ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[6], backup_spi1_recv_buf[8]);
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_REQ_ACK)
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_RESET);
 }
 
 /* USER CODE END 0 */

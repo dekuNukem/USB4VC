@@ -137,8 +137,8 @@ def raw_input_event_worker():
             if data[0] == EV_KEY:
                 to_transfer = keyboard_spi_msg_header + data + [0]*20
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
-                spi_xfer_with_speedlimit(list(range(32)))#to_transfer)
-                # spi_xfer_with_speedlimit(to_transfer)
+                # spi_xfer_with_speedlimit(list(range(32)))
+                spi_xfer_with_speedlimit(to_transfer)
                 # print(time.time_ns(), 'sent')
                 # print(key)
                 # print(to_transfer)
@@ -157,8 +157,8 @@ def raw_input_event_worker():
             if data[0] == EV_KEY or data[0] == EV_REL:
                 to_transfer = mouse_spi_msg_header + data + [0]*20
                 to_transfer[3] = mouse_opened_device_dict[key][1]
-                spi_xfer_with_speedlimit(list(range(32)))#to_transfer)
-                # spi_xfer_with_speedlimit(to_transfer)
+                # spi_xfer_with_speedlimit(list(range(32)))
+                spi_xfer_with_speedlimit(to_transfer)
                 # print(time.time_ns(), 'sent')
                 # print(key)
                 # print(to_transfer)
