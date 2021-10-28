@@ -53,6 +53,10 @@
 #define PS2KB_CLK_GPIO_Port GPIOA
 #define PS2KB_DATA_Pin GPIO_PIN_1
 #define PS2KB_DATA_GPIO_Port GPIOA
+#define ERROR_Pin GPIO_PIN_2
+#define ERROR_GPIO_Port GPIOA
+#define DEBUG_Pin GPIO_PIN_3
+#define DEBUG_GPIO_Port GPIOA
 #define SLAVE_REQ_Pin GPIO_PIN_1
 #define SLAVE_REQ_GPIO_Port GPIOB
 
