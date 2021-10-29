@@ -112,15 +112,6 @@ def change_kb_led(ps2kb_led_byte):
         else:
             os.system(f"echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}")
 
-last_spi_tx = 0
-def spi_xfer_with_speedlimit(data):
-    spi.xfer(data)
-    # global last_spi_tx
-    # while time.time_ns() - last_spi_tx <= 5000000:
-    #     time.sleep(0.001)
-    # spi.xfer(data)
-    # last_spi_tx = time.time_ns()
-
 def raw_input_event_worker():
     print("raw_input_event_parser_thread started")
     while 1:
@@ -137,12 +128,7 @@ def raw_input_event_worker():
             if data[0] == EV_KEY:
                 to_transfer = keyboard_spi_msg_header + data + [0]*20
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
-                # spi_xfer_with_speedlimit(list(range(32)))
-                spi_xfer_with_speedlimit(to_transfer)
-                # print(time.time_ns(), 'sent')
-                # print(key)
-                # print(to_transfer)
-                # print('----')
+                spi.xfer(to_transfer)
 
         for key in list(mouse_opened_device_dict):
             try:
@@ -157,18 +143,13 @@ def raw_input_event_worker():
             if data[0] == EV_KEY or data[0] == EV_REL:
                 to_transfer = mouse_spi_msg_header + data + [0]*20
                 to_transfer[3] = mouse_opened_device_dict[key][1]
-                # spi_xfer_with_speedlimit(list(range(32)))
-                spi_xfer_with_speedlimit(to_transfer)
-                # print(time.time_ns(), 'sent')
-                # print(key)
-                # print(to_transfer)
-                # print('----')
+                spi.xfer(to_transfer)
 
         events = epoll.poll(timeout=0)
         for df, event_type in events:
             if 0x8 & event_type:
                 slave_result = None
-                for x in range(3):
+                for x in range(2):
                     slave_result = spi.xfer(make_spi_msg_ack())
                 print(slave_result)
                 if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:

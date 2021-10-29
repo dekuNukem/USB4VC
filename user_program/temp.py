@@ -1,3 +1,20 @@
+                # print(time.time_ns(), 'sent')
+                # print(key)
+                # print(to_transfer)
+                # print('----')
+                # print(time.time_ns(), 'sent')
+                # print(key)
+                # print(to_transfer)
+                # print('----')
+last_spi_tx = 0
+def spi_xfer_with_speedlimit(data):
+    spi.xfer(data)
+    # global last_spi_tx
+    # while time.time_ns() - last_spi_tx <= 5000000:
+    #     time.sleep(0.001)
+    # spi.xfer(data)
+    # last_spi_tx = time.time_ns()
+
 while 1:
     data = list(fff.read(48))
     # mouse_movement_x = None
