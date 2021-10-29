@@ -3,7 +3,7 @@
 <title>Static Call Graph - [spitestf042\spitestf042.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image spitestf042\spitestf042.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Oct 29 06:42:57 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Oct 29 07:38:48 2021
 <BR><P>
 <H3>Maximum Stack Usage =        196 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -58,7 +58,7 @@ Function Pointers
  <LI><a href="#[20]">USB_IRQHandler</a> from startup_stm32f042x6.o(.text) referenced from startup_stm32f042x6.o(RESET)
  <LI><a href="#[6]">WWDG_IRQHandler</a> from startup_stm32f042x6.o(.text) referenced from startup_stm32f042x6.o(RESET)
  <LI><a href="#[23]">__main</a> from entry.o(.ARM.Collect$$$$00000000) referenced from startup_stm32f042x6.o(.text)
- <LI><a href="#[29]">fputc</a> from main.o(i.fputc) referenced from printfb.o(i.__0printf$bare)
+ <LI><a href="#[29]">fputc</a> from main.o(i.fputc) referenced from printf1.o(i.__0printf$1)
  <LI><a href="#[21]">main</a> from main.o(i.main) referenced from entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
 <P>
@@ -184,6 +184,7 @@ Global Symbols
 <LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_InitTick
 <LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetSysClockFreq
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_SetConfig
+<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
 <P><STRONG><a name="[46]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
@@ -601,17 +602,18 @@ Global Symbols
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_CheckIdleState
 </UL>
 
-<P><STRONG><a name="[69]"></a>__0printf$bare</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, printfb.o(i.__0printf$bare), UNUSED)
+<P><STRONG><a name="[69]"></a>__0printf$1</STRONG> (Thumb, 24 bytes, Stack size 24 bytes, printf1.o(i.__0printf$1), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
-<P><STRONG><a name="[88]"></a>__1printf$bare</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, printfb.o(i.__0printf$bare), UNUSED)
+<P><STRONG><a name="[88]"></a>__1printf$1</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf1.o(i.__0printf$1), UNUSED)
 
-<P><STRONG><a name="[47]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, printfb.o(i.__0printf$bare))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __2printf
+<P><STRONG><a name="[47]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf1.o(i.__0printf$1))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
+<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_reply
 </UL>
 
 <P><STRONG><a name="[89]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
@@ -642,7 +644,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
-<BR>[Address Reference Count : 1]<UL><LI> printfb.o(i.__0printf$bare)
+<BR>[Address Reference Count : 1]<UL><LI> printf1.o(i.__0printf$1)
 </UL>
 <P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 124 bytes, Stack size 8 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
@@ -676,11 +678,12 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 
-<P><STRONG><a name="[75]"></a>mouse_reply</STRONG> (Thumb, 230 bytes, Stack size 16 bytes, ps2mouse.o(i.mouse_reply))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = mouse_reply &rArr; ps2mouse_write &rArr; ps2mouse_get_bus_status
+<P><STRONG><a name="[75]"></a>mouse_reply</STRONG> (Thumb, 330 bytes, Stack size 24 bytes, ps2mouse.o(i.mouse_reply))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = mouse_reply &rArr; ps2mouse_write &rArr; ps2mouse_get_bus_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
+<LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -903,8 +906,10 @@ Local Symbols
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 </UL>
 
-<P><STRONG><a name="[6a]"></a>_printf_core</STRONG> (Thumb, 30 bytes, Stack size 24 bytes, printfb.o(i._printf_core), UNUSED)
-<BR><BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0printf$bare
+<P><STRONG><a name="[6a]"></a>_printf_core</STRONG> (Thumb, 332 bytes, Stack size 88 bytes, printf1.o(i._printf_core), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
+</UL>
+<BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0printf$1
 </UL>
 <P>
 <H3>

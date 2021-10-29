@@ -1,3 +1,15 @@
+      // for (int i = 0; i < SAMPLE_RATE_HISTORY_BUF_SIZE; ++i)
+      //   printf("%d ", sample_rate_history[i]);
+      // printf("\n");
+        sample_rate_history_index = (sample_rate_history_index + 1) % SAMPLE_RATE_HISTORY_BUF_SIZE;
+uint8_t get_prev(uint8_t index, uint8_t size)
+{
+  return (index + size - 1) % size;
+}
+
+      last = get_prev(sample_rate_history_index, SAMPLE_RATE_HISTORY_BUF_SIZE);
+      second_last = get_prev(last, SAMPLE_RATE_HISTORY_BUF_SIZE);
+      third_last = get_prev(second_last, SAMPLE_RATE_HISTORY_BUF_SIZE);
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
  //  HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_SET);

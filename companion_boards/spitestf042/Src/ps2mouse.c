@@ -26,6 +26,10 @@ uint8_t ps2mouse_data_reporting_enabled;
 uint8_t ps2mouse_sampling_rate;
 uint8_t ps2mouse_resolution;
 uint8_t ps2mouse_scale;
+#define SAMPLE_RATE_HISTORY_BUF_SIZE 8
+uint8_t sample_rate_history[SAMPLE_RATE_HISTORY_BUF_SIZE];
+uint8_t sample_rate_history_index;
+uint8_t mouse_device_id;
 
 #define PS2MOUSE_CLK_HI() HAL_GPIO_WritePin(ps2mouse_clk_port, ps2mouse_clk_pin, GPIO_PIN_SET)
 #define PS2MOUSE_CLK_LOW() HAL_GPIO_WritePin(ps2mouse_clk_port, ps2mouse_clk_pin, GPIO_PIN_RESET)
@@ -183,6 +187,8 @@ void mouse_reply(uint8_t cmd)
   switch (cmd)
   {
 	  case 0xFF: //reset
+      sample_rate_history_index = 0;
+      memset(sample_rate_history, 0, SAMPLE_RATE_HISTORY_BUF_SIZE);
 	    PS2MOUSE_SENDACK();
 	    ps2mouse_write(0xAA, 0, 250);
       ps2mouse_write(0, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
@@ -203,12 +209,23 @@ void mouse_reply(uint8_t cmd)
       break;
 	  case 0xF3: //set sampling rate
 	    PS2MOUSE_SENDACK();
-	    if(ps2mouse_read(&ps2mouse_sampling_rate, 30) == 0) 
+	    if(ps2mouse_read(&ps2mouse_sampling_rate, 30) == 0)
+      {
+        sample_rate_history[sample_rate_history_index] = ps2mouse_sampling_rate;
+        if(sample_rate_history_index < SAMPLE_RATE_HISTORY_BUF_SIZE-1)
+          sample_rate_history_index++;
 	    	PS2MOUSE_SENDACK();
+      }
 	    break;
 	  case 0xF2: //get device id
 	    PS2MOUSE_SENDACK();
-	    ps2mouse_write(0x03, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS); // mouse with scroll wheel
+      mouse_device_id = 0;
+      if (sample_rate_history_index > 2 && sample_rate_history[sample_rate_history_index-1] == 80 && sample_rate_history[sample_rate_history_index-2] == 100 && sample_rate_history[sample_rate_history_index-3] == 200)
+        mouse_device_id = 3;
+	    ps2mouse_write(mouse_device_id, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+      for (int i = 0; i < SAMPLE_RATE_HISTORY_BUF_SIZE; ++i)
+        printf("%d ", sample_rate_history[i]);
+      printf("idx %d\n", sample_rate_history_index);
 	    break;
 	  case 0xE8: // set resolution
 	    PS2MOUSE_SENDACK();
