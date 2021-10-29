@@ -345,11 +345,6 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
   }
 }
 
-uint8_t ps2kb_special_scancode_lookup(uint8_t linux_keycode)
-{
-  return 0;
-}
-
 uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
 {
   // linux_keyvalue: press 1 release 0 autorepeat 2

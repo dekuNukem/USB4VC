@@ -37,3 +37,4 @@ spitestf042\main.o: ../Inc/shared.h
 spitestf042\main.o: ../Inc/helpers.h
 spitestf042\main.o: ../Inc/ps2kb.h
 spitestf042\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+spitestf042\main.o: ../Inc/ps2mouse.h

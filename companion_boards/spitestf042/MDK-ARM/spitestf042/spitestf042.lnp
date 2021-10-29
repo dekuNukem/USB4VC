@@ -3,6 +3,7 @@
 "spitestf042\delay_us.o"
 "spitestf042\ps2kb.o"
 "spitestf042\helpers.o"
+"spitestf042\ps2mouse.o"
 "spitestf042\main.o"
 "spitestf042\stm32f0xx_it.o"
 "spitestf042\stm32f0xx_hal_msp.o"

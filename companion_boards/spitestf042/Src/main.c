@@ -46,6 +46,8 @@
 #include "helpers.h"
 #include "ps2kb.h"
 #include <string.h>
+#include "ps2mouse.h"
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -86,8 +88,12 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
 
-  while(backup_spi1_recv_buf[0] != 0xde)
-    HAL_GPIO_WritePin(ERROR_GPIO_Port, ERROR_Pin, GPIO_PIN_SET);
+  if(backup_spi1_recv_buf[0] != 0xde)
+  {
+    printf("WRONG");
+    while(1)
+      ;
+  }
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_KB_EVENT)
     ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[6], backup_spi1_recv_buf[8]);
@@ -133,7 +139,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	delay_us_init(&htim2);
   ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
-  uint8_t ps2kb_host_cmd, ps2kb_leds, buffered_code, buffered_value;
+  ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
+  uint8_t ps2kb_host_cmd, ps2kb_leds, ps2mouse_host_cmd, buffered_code, buffered_value;
   ps2kb_buf_init(&my_ps2kb_buf, 16);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
 	HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -148,24 +155,32 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-		if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
+
+    if(ps2mouse_get_bus_status() == PS2_BUS_REQ_TO_SEND)
     {
-      ps2kb_leds = 0xff;
-      ps2kb_read(&ps2kb_host_cmd, 10);
-      keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
-      if(ps2kb_leds != 0xff)
-      {
-        memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
-        spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
-        spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
-        spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
-        spi_transmit_buf[3] = ps2kb_leds;
-        HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
-      }
+      ps2mouse_read(&ps2mouse_host_cmd, 10);
+      // printf("mouse req: %d", ps2mouse_host_cmd);
+      mouse_reply(ps2mouse_host_cmd);
     }
 
-    if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
-      ps2kb_press_key(buffered_code, buffered_value);
+		// if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
+  //   {
+  //     ps2kb_leds = 0xff;
+  //     ps2kb_read(&ps2kb_host_cmd, 10);
+  //     keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
+  //     if(ps2kb_leds != 0xff)
+  //     {
+  //       memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+  //       spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+  //       spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+  //       spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
+  //       spi_transmit_buf[3] = ps2kb_leds;
+  //       HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
+  //     }
+  //   }
+
+    // if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
+    //   ps2kb_press_key(buffered_code, buffered_value);
   }
   /* USER CODE END 3 */
 
@@ -321,17 +336,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, ERROR_Pin|DEBUG_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOF, PS2MOUSE_CLK_Pin|PS2MOUSE_DATA_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, PS2KB_CLK_Pin|PS2KB_DATA_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, PS2KB_CLK_Pin|PS2KB_DATA_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : ERROR_Pin DEBUG_Pin */
-  GPIO_InitStruct.Pin = ERROR_Pin|DEBUG_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  /*Configure GPIO pins : PS2MOUSE_CLK_Pin PS2MOUSE_DATA_Pin */
+  GPIO_InitStruct.Pin = PS2MOUSE_CLK_Pin|PS2MOUSE_DATA_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
