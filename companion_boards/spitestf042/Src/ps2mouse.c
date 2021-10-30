@@ -46,6 +46,12 @@ uint8_t ps2mouse_out_buf[PS2MOUSE_PACKET_SIZE_INTELLIMOUSE];
 
 #define PS2MOUSE_SENDACK() ps2mouse_write(0xFA, 1, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS)
 
+void ps2mouse_release_lines(void)
+{
+  PS2MOUSE_CLK_HI();
+  PS2MOUSE_DATA_HI();
+}
+
 void ps2mouse_reset(void)
 {
   ps2mouse_data_reporting_enabled = 0;
@@ -64,8 +70,7 @@ void ps2mouse_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_
   ps2mouse_data_port = data_port;
   ps2mouse_data_pin = data_pin;
   ps2mouse_reset();
-	PS2MOUSE_CLK_HI();
-	PS2MOUSE_DATA_HI();
+	ps2mouse_release_lines();
 }
 
 uint8_t ps2mouse_get_bus_status(void)

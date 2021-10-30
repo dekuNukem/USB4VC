@@ -1,3 +1,8 @@
+      // printf("mouse req: %d", ps2mouse_host_cmd);
+
+
+
+
   // printf("add before: %d %d\n", lb->tail, lb->head);
   // printf("add after: %d %d\n", lb->tail, lb->head);
       if(this_mouse_event->button == BTN_LEFT)

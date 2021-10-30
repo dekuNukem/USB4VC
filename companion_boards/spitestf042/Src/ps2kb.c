@@ -162,6 +162,12 @@ uint32_t ps2kb_wait_start;
 
 #define PS2KB_SENDACK() ps2kb_write(0xFA, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS)
 
+void ps2kb_release_lines(void)
+{
+  PS2KB_CLK_HI();
+  PS2KB_DATA_HI();
+}
+
 void ps2kb_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_port, uint16_t data_pin)
 {
 	ps2kb_clk_port = clk_port;

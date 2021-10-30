@@ -64,7 +64,7 @@ uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
 ps2kb_buf my_ps2kb_buf;
 ps2mouse_buf my_ps2mouse_buf;
-uint8_t ps2kb_host_cmd, ps2kb_leds, ps2mouse_host_cmd, buffered_code, buffered_value;
+uint8_t ps2kb_host_cmd, ps2kb_leds, ps2mouse_host_cmd, buffered_code, buffered_value, ps2mouse_bus_status, ps2kb_bus_status;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -91,21 +91,19 @@ int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
   return (int16_t)((msb << 8) | lsb);
 }
 
-uint16_t byte_to_uint16_t(uint8_t lsb, uint8_t msb)
-{
-  return (uint16_t)((msb << 8) | lsb);
-}
-
+/*
+  This is called when a new SPI packet is received
+  This is part of an ISR, so better keep it short!
+*/
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
+  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
   if(backup_spi1_recv_buf[0] != 0xde)
   {
     printf("WRONG");
-    while(1)
-      ;
+    while(1);
   }
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_KB_EVENT)
@@ -184,10 +182,14 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-    if(ps2mouse_get_bus_status() == PS2_BUS_REQ_TO_SEND)
+    ps2mouse_bus_status = ps2mouse_get_bus_status();
+    if(ps2mouse_bus_status == PS2_BUS_INHIBIT)
+    {
+      ps2mouse_release_lines();
+    }
+    else if(ps2mouse_bus_status == PS2_BUS_REQ_TO_SEND)
     {
       ps2mouse_read(&ps2mouse_host_cmd, 10);
-      // printf("mouse req: %d", ps2mouse_host_cmd);
       ps2mouse_host_req_reply(ps2mouse_host_cmd);
     }
 
@@ -197,24 +199,29 @@ int main(void)
       ps2mouse_send_update(this_mouse_event);
     }
 
-		// if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
-  //   {
-  //     ps2kb_leds = 0xff;
-  //     ps2kb_read(&ps2kb_host_cmd, 10);
-  //     keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
-  //     if(ps2kb_leds != 0xff)
-  //     {
-  //       memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
-  //       spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
-  //       spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
-  //       spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
-  //       spi_transmit_buf[3] = ps2kb_leds;
-  //       HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
-  //     }
-  //   }
+    ps2kb_bus_status = ps2kb_get_bus_status();
+    if(ps2kb_bus_status == PS2_BUS_INHIBIT)
+    {
+      ps2kb_release_lines();
+    }
+		else if(ps2kb_bus_status == PS2_BUS_REQ_TO_SEND)
+    {
+      ps2kb_leds = 0xff;
+      ps2kb_read(&ps2kb_host_cmd, 10);
+      keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
+      if(ps2kb_leds != 0xff)
+      {
+        memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+        spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+        spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+        spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
+        spi_transmit_buf[3] = ps2kb_leds;
+        HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
+      }
+    }
 
-    // if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
-    //   ps2kb_press_key(buffered_code, buffered_value);
+    if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
+      ps2kb_press_key(buffered_code, buffered_value);
   }
   /* USER CODE END 3 */
 
