@@ -1,3 +1,10 @@
+           # print(data)
+            # if data[0] == EV_KEY or data[0] == EV_REL:
+            #     to_transfer = mouse_spi_msg_template + data + [0]*20
+            #     to_transfer[3] = mouse_opened_device_dict[key][1]
+            #     spi.xfer(to_transfer)
+
+
                 # print(time.time_ns(), 'sent')
                 # print(key)
                 # print(to_transfer)

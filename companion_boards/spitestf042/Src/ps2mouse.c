@@ -219,13 +219,10 @@ void mouse_reply(uint8_t cmd)
 	    break;
 	  case 0xF2: //get device id
 	    PS2MOUSE_SENDACK();
-      mouse_device_id = 0;
+      mouse_device_id = 0; // standard ps/2 mouse
       if (sample_rate_history_index > 2 && sample_rate_history[sample_rate_history_index-1] == 80 && sample_rate_history[sample_rate_history_index-2] == 100 && sample_rate_history[sample_rate_history_index-3] == 200)
-        mouse_device_id = 3;
+        mouse_device_id = 3; // intellimouse with scroll wheel
 	    ps2mouse_write(mouse_device_id, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
-      for (int i = 0; i < SAMPLE_RATE_HISTORY_BUF_SIZE; ++i)
-        printf("%d ", sample_rate_history[i]);
-      printf("idx %d\n", sample_rate_history_index);
 	    break;
 	  case 0xE8: // set resolution
 	    PS2MOUSE_SENDACK();

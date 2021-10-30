@@ -56,10 +56,17 @@ buttons: https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/input
 sticks: ABS_X, ABS_Y, ABS_RX, ABS_RY
 """
 
+# https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h
 EV_SYN = 0
 EV_KEY = 1
 EV_REL = 2
 EV_ABS = 3
+
+SYN_REPORT = 0
+
+REL_X = 0x00
+REL_Y = 0x01
+REL_WHEEL = 0x08
 
 SPI_BUF_INDEX_MAGIC = 0
 SPI_BUF_INDEX_SEQNUM = 1
@@ -76,7 +83,7 @@ SPI_MISO_MSG_KB_LED_REQ = 1
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
 keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT, 0]
-mouse_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_MOUSE_EVENT, 0]
+mouse_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_MOUSE_EVENT, 0] + [0]*28
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_REQ_ACK] + [0]*29
@@ -112,7 +119,9 @@ def change_kb_led(ps2kb_led_byte):
         else:
             os.system(f"echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}")
 
+
 def raw_input_event_worker():
+    mouse_spi_packet_dict = {}
     print("raw_input_event_parser_thread started")
     while 1:
         for key in list(keyboard_opened_device_dict):
@@ -140,10 +149,36 @@ def raw_input_event_worker():
             if data is None:
                 continue
             data = list(data[8:])
-            if data[0] == EV_KEY or data[0] == EV_REL:
-                to_transfer = mouse_spi_msg_header + data + [0]*20
+            if data[0] == EV_REL:
+                if data[2] == REL_X:
+                    mouse_spi_packet_dict["x"] = data[4:6]
+                if data[2] == REL_Y:
+                    mouse_spi_packet_dict["y"] = data[4:6]
+                if data[2] == REL_WHEEL:
+                    mouse_spi_packet_dict["scroll"] = data[4:6]
+            if data[0] == EV_KEY:
+                mouse_spi_packet_dict["button"] = data[2:6]
+
+            if data[0] == EV_SYN and data[2] == SYN_REPORT:
+                print(mouse_spi_packet_dict)
+                to_transfer = list(mouse_spi_msg_template)
+                if 'x' in mouse_spi_packet_dict:
+                    to_transfer[4:6] = mouse_spi_packet_dict['x']
+                if 'y' in mouse_spi_packet_dict:
+                    to_transfer[6:8] = mouse_spi_packet_dict['y']
+                if 'button' in mouse_spi_packet_dict:
+                    to_transfer[8:12] = mouse_spi_packet_dict['button']
+                if 'scroll' in mouse_spi_packet_dict:
+                    to_transfer[12:14] = mouse_spi_packet_dict['scroll']
                 to_transfer[3] = mouse_opened_device_dict[key][1]
+                print(to_transfer[:16])
+                mouse_spi_packet_dict.clear()
                 spi.xfer(to_transfer)
+
+            # if data[0] == EV_KEY or data[0] == EV_REL:
+            #     to_transfer = mouse_spi_msg_template + data + [0]*20
+            #     to_transfer[3] = mouse_opened_device_dict[key][1]
+            #     
 
         events = epoll.poll(timeout=0)
         for df, event_type in events:
