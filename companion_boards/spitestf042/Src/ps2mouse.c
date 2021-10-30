@@ -46,16 +46,24 @@ uint8_t ps2mouse_out_buf[PS2MOUSE_PACKET_SIZE_INTELLIMOUSE];
 
 #define PS2MOUSE_SENDACK() ps2mouse_write(0xFA, 1, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS)
 
-void ps2mouse_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_port, uint16_t data_pin)
+void ps2mouse_reset(void)
 {
-	ps2mouse_clk_port = clk_port;
-	ps2mouse_clk_pin = clk_pin;
-	ps2mouse_data_port = data_port;
-	ps2mouse_data_pin = data_pin;
   ps2mouse_data_reporting_enabled = 0;
   ps2mouse_sampling_rate = 100;
   ps2mouse_resolution = 3;
   ps2mouse_scale = 1;
+  sample_rate_history_index = 0;
+  memset(sample_rate_history, 0, SAMPLE_RATE_HISTORY_BUF_SIZE);
+  mouse_device_id = 0;
+}
+
+void ps2mouse_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_port, uint16_t data_pin)
+{
+  ps2mouse_clk_port = clk_port;
+  ps2mouse_clk_pin = clk_pin;
+  ps2mouse_data_port = data_port;
+  ps2mouse_data_pin = data_pin;
+  ps2mouse_reset();
 	PS2MOUSE_CLK_HI();
 	PS2MOUSE_DATA_HI();
 }
@@ -191,8 +199,7 @@ void ps2mouse_host_req_reply(uint8_t cmd)
   switch (cmd)
   {
 	  case 0xFF: //reset
-      sample_rate_history_index = 0;
-      memset(sample_rate_history, 0, SAMPLE_RATE_HISTORY_BUF_SIZE);
+      ps2mouse_reset();
 	    PS2MOUSE_SENDACK();
 	    ps2mouse_write(0xAA, 0, 250);
       ps2mouse_write(0, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
@@ -251,8 +258,10 @@ void ps2mouse_host_req_reply(uint8_t cmd)
 
 uint8_t ps2mouse_send_update(mouse_event* this_event)
 {
-  if(ps2mouse_data_reporting_enabled == 0)
+  while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
     return 1;
+  if(ps2mouse_data_reporting_enabled == 0)
+    return 2;
   memset(ps2mouse_out_buf, 0, PS2MOUSE_PACKET_SIZE_INTELLIMOUSE);
   ps2mouse_out_buf[0] = 0x8; // bit 3 is always 1
   // https://wiki.osdev.org/PS/2_Mouse
