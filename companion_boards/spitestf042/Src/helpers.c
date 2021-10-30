@@ -4,9 +4,6 @@
 #include "helpers.h"
 #include "shared.h"
 
-uint8_t spi_recv_buf[SPI_BUF_SIZE];
-ps2kb_buf my_ps2kb_buf;
-
 void ps2kb_buf_reset(ps2kb_buf *lb)
 {
   lb->head = 0;
@@ -27,13 +24,11 @@ uint8_t ps2kb_buf_is_empty(ps2kb_buf *lb)
 
 uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value)
 {
-	// printf("add before: %d %d\n", lb->tail, lb->head);
 	if(ps2kb_buf_is_full(lb))
 		return 1;
 	lb->keycode_buf[lb->head] = code;
 	lb->keyvalue_buf[lb->head] = value;
 	lb->head = (lb->head + 1) % lb->size;
-	// printf("add after: %d %d\n", lb->tail, lb->head);
 	return 0;
 }
 
@@ -41,11 +36,9 @@ uint8_t ps2kb_buf_get(ps2kb_buf *lb, uint8_t* code, uint8_t* value)
 {
 	if(ps2kb_buf_is_empty(lb))
 		return 1;
-	// printf("get before: %d %d\n", lb->tail, lb->head);
 	*code = lb->keycode_buf[lb->tail];
 	*value = lb->keyvalue_buf[lb->tail];
 	lb->tail = (lb->tail + 1) % lb->size;
-	// printf("get after: %d %d\n---\n", lb->tail, lb->head);
 	return 0;
 }
 
@@ -55,5 +48,50 @@ void ps2kb_buf_init(ps2kb_buf *lb, uint8_t size)
   lb->keycode_buf = malloc(size);
   lb->keyvalue_buf = malloc(size);
   ps2kb_buf_reset(lb);
+}
+
+// ----------------------------
+
+uint8_t ps2mouse_buf_is_full(ps2mouse_buf *lb)
+{
+	return lb->tail == (lb->head + 1) % lb->size;
+}
+
+uint8_t ps2mouse_buf_is_empty(ps2mouse_buf *lb)
+{
+	return lb->tail == lb->head;
+}
+
+uint8_t ps2mouse_buf_add(ps2mouse_buf *lb, mouse_event* event)
+{
+	if(ps2mouse_buf_is_full(lb))
+		return 1;
+	memcpy(&lb->mouse_events[lb->head], event, sizeof(mouse_event));
+	lb->head = (lb->head + 1) % lb->size;
+	return 0;
+}
+
+mouse_event* ps2mouse_buf_get(ps2mouse_buf *lb)
+{
+	mouse_event* to_return = NULL;
+	if(ps2mouse_buf_is_empty(lb))
+		return to_return;
+	to_return = &lb->mouse_events[lb->tail];
+	lb->tail = (lb->tail + 1) % lb->size;
+	return to_return;
+}
+
+void ps2mouse_buf_reset(ps2mouse_buf *lb)
+{
+  lb->head = 0;
+  lb->tail = 0;
+  memset(lb->mouse_events, 0, lb->size * sizeof(mouse_event));
+}
+
+void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size)
+{
+  lb->size = size;
+  lb->mouse_events = malloc(size * sizeof(mouse_event));
+  ps2mouse_buf_reset(lb);
 }
 

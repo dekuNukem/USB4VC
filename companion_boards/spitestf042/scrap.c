@@ -1,3 +1,7 @@
+  // printf("add before: %d %d\n", lb->tail, lb->head);
+  // printf("add after: %d %d\n", lb->tail, lb->head);
+
+
       // for (int i = 0; i < SAMPLE_RATE_HISTORY_BUF_SIZE; ++i)
       //   printf("%d ", sample_rate_history[i]);
       // printf("\n");

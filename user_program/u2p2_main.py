@@ -175,11 +175,6 @@ def raw_input_event_worker():
                 mouse_spi_packet_dict.clear()
                 spi.xfer(to_transfer)
 
-            # if data[0] == EV_KEY or data[0] == EV_REL:
-            #     to_transfer = mouse_spi_msg_template + data + [0]*20
-            #     to_transfer[3] = mouse_opened_device_dict[key][1]
-            #     
-
         events = epoll.poll(timeout=0)
         for df, event_type in events:
             if 0x8 & event_type:

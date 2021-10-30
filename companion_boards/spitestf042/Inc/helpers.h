@@ -34,16 +34,30 @@ typedef struct
   uint8_t* keyvalue_buf;
 } ps2kb_buf;
 
-extern uint8_t spi_recv_buf[SPI_BUF_SIZE];
-// extern uint8_t spi_transmit_buf[SPI_BUF_SIZE];
-extern ps2kb_buf my_ps2kb_buf;
+typedef struct
+{
+  int16_t movement_x;
+  int16_t movement_y;
+  int16_t scroll_vertical;
+  uint16_t button;
+  uint8_t button_state;
+} mouse_event;
 
-void ps2kb_buf_reset(ps2kb_buf *lb);
+typedef struct
+{
+  uint8_t head;
+  uint8_t tail;
+  uint8_t size;
+  mouse_event* mouse_events;
+} ps2mouse_buf;
+
 void ps2kb_buf_init(ps2kb_buf *lb, uint8_t size);
 uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value);
 uint8_t ps2kb_buf_get(ps2kb_buf *lb, uint8_t* code, uint8_t* value);
-uint8_t ps2kb_buf_is_empty(ps2kb_buf *lb);
-uint8_t ps2kb_buf_is_full(ps2kb_buf *lb);
+
+void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size);
+uint8_t ps2mouse_buf_add(ps2mouse_buf *lb, mouse_event* event);
+mouse_event* ps2mouse_buf_get(ps2mouse_buf *lb);
 
 #ifdef __cplusplus
 }
