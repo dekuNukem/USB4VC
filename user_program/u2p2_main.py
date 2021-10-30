@@ -175,6 +175,7 @@ def raw_input_event_worker():
                     to_transfer[6:8] = mouse_spi_packet_dict['y']
                 if 'scroll' in mouse_spi_packet_dict:
                     to_transfer[8:10] = mouse_spi_packet_dict['scroll']
+                to_transfer[13:18] = mouse_button_state_list[:]
                 to_transfer[3] = mouse_opened_device_dict[key][1]
                 mouse_spi_packet_dict.clear()
                 spi.xfer(to_transfer)

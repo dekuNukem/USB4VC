@@ -9,7 +9,10 @@
       for (int i = 0; i < MOUSE_BUTTONS_SIZE; ++i)
         printf("%d ", mouse_status[i]);
       printf("\n");
-
+// printf("%d %d %d %d %d\n", this_event->movement_x, this_event->movement_y, this_event->scroll_vertical);
+  // printf("%d %d %d %d %d\n-------\n\n", this_event->button_left, this_event->button_middle, this_event->button_right, this_event->button_side, this_event->button_extra);
+  // printf("%d %d\n",this_event->movement_y, ps2mouse_out_buf[2]);
+  // return 0;
       // for (int i = 0; i < SAMPLE_RATE_HISTORY_BUF_SIZE; ++i)
       //   printf("%d ", sample_rate_history[i]);
       // printf("\n");

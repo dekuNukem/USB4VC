@@ -65,7 +65,6 @@ uint8_t spi_recv_buf[SPI_BUF_SIZE];
 ps2kb_buf my_ps2kb_buf;
 ps2mouse_buf my_ps2mouse_buf;
 uint8_t ps2kb_host_cmd, ps2kb_leds, ps2mouse_host_cmd, buffered_code, buffered_value;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -116,8 +115,8 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   {
     mouse_event this_event;
     this_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
-    this_event.movement_y = byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
-    this_event.scroll_vertical = byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
+    this_event.movement_y = -1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
+    this_event.scroll_vertical = -1 * byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
     this_event.button_left = backup_spi1_recv_buf[13];
     this_event.button_right = backup_spi1_recv_buf[14];
     this_event.button_middle = backup_spi1_recv_buf[15];
@@ -189,14 +188,13 @@ int main(void)
     {
       ps2mouse_read(&ps2mouse_host_cmd, 10);
       // printf("mouse req: %d", ps2mouse_host_cmd);
-      mouse_reply(ps2mouse_host_cmd);
+      ps2mouse_host_req_reply(ps2mouse_host_cmd);
     }
 
     this_mouse_event = ps2mouse_buf_get(&my_ps2mouse_buf);
     if(this_mouse_event != NULL)
     {
-      // printf("%d %d %d %d %d\n", this_mouse_event->movement_x, this_mouse_event->movement_y, this_mouse_event->scroll_vertical, this_mouse_event->button, this_mouse_event->button_state);
-      printf("%d %d %d %d %d\n", this_mouse_event->button_left, this_mouse_event->button_middle, this_mouse_event->button_right, this_mouse_event->button_side, this_mouse_event->button_extra);
+      ps2mouse_send_update(this_mouse_event);
     }
 
 		// if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)
