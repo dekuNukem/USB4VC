@@ -1,6 +1,14 @@
   // printf("add before: %d %d\n", lb->tail, lb->head);
   // printf("add after: %d %d\n", lb->tail, lb->head);
-
+      if(this_mouse_event->button == BTN_LEFT)
+        mouse_status[MOUSE_LEFT] = this_mouse_event->button_state;
+      else if(this_mouse_event->button == BTN_RIGHT)
+        mouse_status[MOUSE_RIGHT] = this_mouse_event->button_state;
+      else if(this_mouse_event->button == BTN_MIDDLE)
+        mouse_status[MOUSE_MIDDLE] = this_mouse_event->button_state;
+      for (int i = 0; i < MOUSE_BUTTONS_SIZE; ++i)
+        printf("%d ", mouse_status[i]);
+      printf("\n");
 
       // for (int i = 0; i < SAMPLE_RATE_HISTORY_BUF_SIZE; ++i)
       //   printf("%d ", sample_rate_history[i]);

@@ -82,6 +82,7 @@ SPI_MISO_MSG_KB_LED_REQ = 1
 
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
+
 keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT, 0]
 mouse_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_MOUSE_EVENT, 0] + [0]*28
 
@@ -122,6 +123,7 @@ def change_kb_led(ps2kb_led_byte):
 
 def raw_input_event_worker():
     mouse_spi_packet_dict = {}
+    mouse_button_state_list = [0] * 5
     print("raw_input_event_parser_thread started")
     while 1:
         for key in list(keyboard_opened_device_dict):
@@ -149,6 +151,7 @@ def raw_input_event_worker():
             if data is None:
                 continue
             data = list(data[8:])
+            # print(data)
             if data[0] == EV_REL:
                 if data[2] == REL_X:
                     mouse_spi_packet_dict["x"] = data[4:6]
@@ -157,21 +160,22 @@ def raw_input_event_worker():
                 if data[2] == REL_WHEEL:
                     mouse_spi_packet_dict["scroll"] = data[4:6]
             if data[0] == EV_KEY:
-                mouse_spi_packet_dict["button"] = data[2:6]
+                mouse_button_state_list[data[2]-16] = data[4]
+                to_transfer = list(mouse_spi_msg_template)
+                to_transfer[10:13] = data[2:5]
+                to_transfer[13:18] = mouse_button_state_list[:]
+                to_transfer[3] = mouse_opened_device_dict[key][1]
+                spi.xfer(to_transfer)
 
-            if data[0] == EV_SYN and data[2] == SYN_REPORT:
-                print(mouse_spi_packet_dict)
+            if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_spi_packet_dict) > 0:
                 to_transfer = list(mouse_spi_msg_template)
                 if 'x' in mouse_spi_packet_dict:
                     to_transfer[4:6] = mouse_spi_packet_dict['x']
                 if 'y' in mouse_spi_packet_dict:
                     to_transfer[6:8] = mouse_spi_packet_dict['y']
-                if 'button' in mouse_spi_packet_dict:
-                    to_transfer[8:12] = mouse_spi_packet_dict['button']
                 if 'scroll' in mouse_spi_packet_dict:
-                    to_transfer[12:14] = mouse_spi_packet_dict['scroll']
+                    to_transfer[8:10] = mouse_spi_packet_dict['scroll']
                 to_transfer[3] = mouse_opened_device_dict[key][1]
-                print(to_transfer[:16])
                 mouse_spi_packet_dict.clear()
                 spi.xfer(to_transfer)
 

@@ -64,6 +64,7 @@ uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
 ps2kb_buf my_ps2kb_buf;
 ps2mouse_buf my_ps2mouse_buf;
+uint8_t ps2kb_host_cmd, ps2kb_leds, ps2mouse_host_cmd, buffered_code, buffered_value;
 
 /* USER CODE END PV */
 
@@ -116,9 +117,12 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     mouse_event this_event;
     this_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
     this_event.movement_y = byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
-    this_event.button = byte_to_uint16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
-    this_event.button_state = backup_spi1_recv_buf[10];
-    this_event.scroll_vertical = byte_to_int16_t(backup_spi1_recv_buf[12], backup_spi1_recv_buf[13]);
+    this_event.scroll_vertical = byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
+    this_event.button_left = backup_spi1_recv_buf[13];
+    this_event.button_right = backup_spi1_recv_buf[14];
+    this_event.button_middle = backup_spi1_recv_buf[15];
+    this_event.button_side = backup_spi1_recv_buf[16];
+    this_event.button_extra = backup_spi1_recv_buf[17];
     ps2mouse_buf_add(&my_ps2mouse_buf, &this_event);
   }
 
@@ -164,7 +168,6 @@ int main(void)
 	delay_us_init(&htim2);
   ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
   ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
-  uint8_t ps2kb_host_cmd, ps2kb_leds, ps2mouse_host_cmd, buffered_code, buffered_value;
   ps2kb_buf_init(&my_ps2kb_buf, 16);
   ps2mouse_buf_init(&my_ps2mouse_buf, 16);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
@@ -192,7 +195,8 @@ int main(void)
     this_mouse_event = ps2mouse_buf_get(&my_ps2mouse_buf);
     if(this_mouse_event != NULL)
     {
-      printf("%d %d %d %d %d\n", this_mouse_event->movement_x, this_mouse_event->movement_y, this_mouse_event->scroll_vertical, this_mouse_event->button, this_mouse_event->button_state);
+      // printf("%d %d %d %d %d\n", this_mouse_event->movement_x, this_mouse_event->movement_y, this_mouse_event->scroll_vertical, this_mouse_event->button, this_mouse_event->button_state);
+      printf("%d %d %d %d %d\n", this_mouse_event->button_left, this_mouse_event->button_middle, this_mouse_event->button_right, this_mouse_event->button_side, this_mouse_event->button_extra);
     }
 
 		// if(ps2kb_get_bus_status() == PS2_BUS_REQ_TO_SEND)

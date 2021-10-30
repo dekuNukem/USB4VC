@@ -1,4 +1,6 @@
+import sys
 import spidev
+import time
 
 is_on_raspberry_pi = False
 
@@ -13,12 +15,16 @@ else:
     spi = spidev.SpiDev(1, 0) # lichee
     print("I'm on custom board!")
 
-spi.max_speed_hz = 500000
+spi.max_speed_hz = 2000000
 
-fff = open("/dev/input/event0", "rb" )
+EV_SYN = 0
+EV_KEY = 1
+EV_REL = 2
+EV_ABS = 3
+
+fff = open(sys.argv[1], "rb" )
 while 1:
-    data = fff.read(24)
-    data = list(data)
+    data = list(fff.read(16))
     print(data)
-    spi.xfer(data)
+
     

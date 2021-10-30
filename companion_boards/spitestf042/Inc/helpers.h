@@ -25,6 +25,12 @@
 #define SPI_MISO_MSG_INFO_REPLY 0
 #define SPI_MISO_MSG_KB_LED_REQ 1
 
+#define BTN_LEFT    0x110
+#define BTN_RIGHT   0x111
+#define BTN_MIDDLE    0x112
+#define BTN_SIDE    0x113
+#define BTN_EXTRA   0x114
+
 typedef struct
 {
   uint8_t head;
@@ -39,8 +45,11 @@ typedef struct
   int16_t movement_x;
   int16_t movement_y;
   int16_t scroll_vertical;
-  uint16_t button;
-  uint8_t button_state;
+  uint8_t button_left;
+  uint8_t button_middle;
+  uint8_t button_right;
+  uint8_t button_side;
+  uint8_t button_extra;
 } mouse_event;
 
 typedef struct
