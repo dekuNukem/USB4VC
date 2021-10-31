@@ -331,106 +331,6 @@ by exp-lbrs.ulp</description>
 </package>
 </packages>
 </library>
-<library name="SparkFun-IC-Microcontroller">
-<description>&lt;h3&gt;SparkFun Microcontrollers&lt;/h3&gt;
-This library contains microcontrollers.
-&lt;br&gt;
-&lt;br&gt;
-We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
-&lt;br&gt;
-&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
-&lt;br&gt;
-&lt;br&gt;
-&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
-&lt;br&gt;
-&lt;br&gt;
-You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
-<packages>
-<package name="QFN-68">
-<wire x1="-4" y1="-4" x2="4" y2="-4" width="0.127" layer="21"/>
-<wire x1="4" y1="-4" x2="4" y2="4" width="0.127" layer="21"/>
-<wire x1="4" y1="4" x2="-4" y2="4" width="0.127" layer="21"/>
-<wire x1="-4" y1="4" x2="-4" y2="-4" width="0.127" layer="21"/>
-<smd name="1" x="-3.9" y="3.2" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="2" x="-3.9" y="2.8" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="3" x="-3.9" y="2.4" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="4" x="-3.9" y="2" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="5" x="-3.9" y="1.6" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="6" x="-3.9" y="1.2" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="7" x="-3.9" y="0.8" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="8" x="-3.9" y="0.4" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="9" x="-3.9" y="0" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="10" x="-3.9" y="-0.4" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="11" x="-3.9" y="-0.8" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="12" x="-3.9" y="-1.2" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="13" x="-3.9" y="-1.6" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="14" x="-3.9" y="-2" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="15" x="-3.9" y="-2.4" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="16" x="-3.9" y="-2.8" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="17" x="-3.9" y="-3.2" dx="0.6" dy="0.2" layer="1" rot="R180"/>
-<smd name="18" x="-3.2" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="19" x="-2.8" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="20" x="-2.4" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="21" x="-2" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="22" x="-1.6" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="23" x="-1.2" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="24" x="-0.8" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="25" x="-0.4" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="26" x="0" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="27" x="0.4" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="28" x="0.8" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="29" x="1.2" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="30" x="1.6" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="31" x="2" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="32" x="2.4" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="33" x="2.8" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="34" x="3.2" y="-3.9" dx="0.6" dy="0.2" layer="1" rot="R270"/>
-<smd name="35" x="3.9" y="-3.2" dx="0.6" dy="0.2" layer="1"/>
-<smd name="36" x="3.9" y="-2.8" dx="0.6" dy="0.2" layer="1"/>
-<smd name="37" x="3.9" y="-2.4" dx="0.6" dy="0.2" layer="1"/>
-<smd name="38" x="3.9" y="-2" dx="0.6" dy="0.2" layer="1"/>
-<smd name="39" x="3.9" y="-1.6" dx="0.6" dy="0.2" layer="1"/>
-<smd name="40" x="3.9" y="-1.2" dx="0.6" dy="0.2" layer="1"/>
-<smd name="41" x="3.9" y="-0.8" dx="0.6" dy="0.2" layer="1"/>
-<smd name="42" x="3.9" y="-0.4" dx="0.6" dy="0.2" layer="1"/>
-<smd name="43" x="3.9" y="0" dx="0.6" dy="0.2" layer="1"/>
-<smd name="44" x="3.9" y="0.4" dx="0.6" dy="0.2" layer="1"/>
-<smd name="45" x="3.9" y="0.8" dx="0.6" dy="0.2" layer="1"/>
-<smd name="46" x="3.9" y="1.2" dx="0.6" dy="0.2" layer="1"/>
-<smd name="47" x="3.9" y="1.6" dx="0.6" dy="0.2" layer="1"/>
-<smd name="48" x="3.9" y="2" dx="0.6" dy="0.2" layer="1"/>
-<smd name="49" x="3.9" y="2.4" dx="0.6" dy="0.2" layer="1"/>
-<smd name="50" x="3.9" y="2.8" dx="0.6" dy="0.2" layer="1"/>
-<smd name="51" x="3.9" y="3.2" dx="0.6" dy="0.2" layer="1"/>
-<smd name="52" x="3.2" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="53" x="2.8" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="54" x="2.4" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="55" x="2" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="56" x="1.6" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="57" x="1.2" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="58" x="0.8" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="59" x="0.4" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="60" x="0" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="61" x="-0.4" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="62" x="-0.8" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="63" x="-1.2" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="64" x="-1.6" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="65" x="-2" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="66" x="-2.4" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="67" x="-2.8" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="68" x="-3.2" y="3.9" dx="0.6" dy="0.2" layer="1" rot="R90"/>
-<smd name="69" x="0" y="0" dx="5.7" dy="5.7" layer="1" cream="no"/>
-<rectangle x1="-0.5" y1="1.5" x2="0.5" y2="2.5" layer="31"/>
-<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" layer="31"/>
-<rectangle x1="-0.5" y1="-2.5" x2="0.5" y2="-1.5" layer="31"/>
-<rectangle x1="1.5" y1="-0.5" x2="2.5" y2="0.5" layer="31"/>
-<rectangle x1="-2.5" y1="-0.5" x2="-1.5" y2="0.5" layer="31"/>
-<circle x="-4.3" y="3.75" radius="0.111803125" width="0.127" layer="21"/>
-<text x="0" y="4.445" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-5.08" size="0.6096" layer="27" font="vector" ratio="20" align="bottom-center">&gt;VALUE</text>
-</package>
-</packages>
-</library>
 <library name="adafruit_changed">
 <packages>
 <package name="2X20-BIG">
@@ -734,6 +634,102 @@ Source: http://www.cypressindustries.com/pdf/85-32003-00x-1.pdf</description>
 </package>
 </packages>
 </library>
+<library name="f1c100s">
+<packages>
+<package name="MQFN88">
+<smd name="P$1" x="-5" y="4.2" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$2" x="-5" y="3.8" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$3" x="-5" y="3.4" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$4" x="-5" y="3" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$5" x="-5" y="2.6" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$6" x="-5" y="2.2" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$7" x="-5" y="1.8" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$8" x="-5" y="1.4" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$9" x="-5" y="1" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$10" x="-5" y="0.6" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$11" x="-5" y="0.2" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$12" x="-5" y="-0.2" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$13" x="-5" y="-0.6" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$14" x="-5" y="-1" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$15" x="-5" y="-1.4" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$16" x="-5" y="-1.8" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$17" x="-5" y="-2.2" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$18" x="-5" y="-2.6" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$19" x="-5" y="-3" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$20" x="-5" y="-3.4" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$21" x="-5" y="-3.8" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$22" x="-5" y="-4.2" dx="0.2" dy="0.7" layer="1" rot="R90"/>
+<smd name="P$89" x="0" y="0" dx="6.74" dy="6.74" layer="1"/>
+<circle x="-5.8" y="5.4" radius="0.4" width="0" layer="25"/>
+<smd name="P$23" x="-4.2" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$24" x="-3.8" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$25" x="-3.4" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$26" x="-3" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$27" x="-2.6" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$28" x="-2.2" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$29" x="-1.8" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$30" x="-1.4" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$31" x="-1" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$32" x="-0.6" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$33" x="-0.2" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$34" x="0.2" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$35" x="0.6" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$36" x="1" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$37" x="1.4" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$38" x="1.8" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$39" x="2.2" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$40" x="2.6" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$41" x="3" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$42" x="3.4" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$43" x="3.8" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$44" x="4.2" y="-5" dx="0.2" dy="0.7" layer="1" rot="R180"/>
+<smd name="P$45" x="5" y="-4.2" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$46" x="5" y="-3.8" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$47" x="5" y="-3.4" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$48" x="5" y="-3" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$49" x="5" y="-2.6" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$50" x="5" y="-2.2" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$51" x="5" y="-1.8" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$52" x="5" y="-1.4" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$53" x="5" y="-1" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$54" x="5" y="-0.6" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$55" x="5" y="-0.2" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$56" x="5" y="0.2" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$57" x="5" y="0.6" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$58" x="5" y="1" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$59" x="5" y="1.4" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$60" x="5" y="1.8" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$61" x="5" y="2.2" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$62" x="5" y="2.6" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$63" x="5" y="3" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$64" x="5" y="3.4" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$65" x="5" y="3.8" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$66" x="5" y="4.2" dx="0.2" dy="0.7" layer="1" rot="R270"/>
+<smd name="P$67" x="4.2" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$68" x="3.8" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$69" x="3.4" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$70" x="3" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$71" x="2.6" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$72" x="2.2" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$73" x="1.8" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$74" x="1.4" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$75" x="1" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$76" x="0.6" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$77" x="0.2" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$78" x="-0.2" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$79" x="-0.6" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$80" x="-1" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$81" x="-1.4" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$82" x="-1.8" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$83" x="-2.2" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$84" x="-2.6" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$85" x="-3" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$86" x="-3.4" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$87" x="-3.8" y="5" dx="0.2" dy="0.7" layer="1"/>
+<smd name="P$88" x="-4.2" y="5" dx="0.2" dy="0.7" layer="1"/>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -942,11 +938,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="X3" library="bott" package="USB-A-H" value="" x="8.89" y="3.048" smashed="yes" rot="R90">
 <attribute name="NAME" x="5.08" y="8.763" size="1.27" layer="25" rot="R180"/>
 </element>
-<element name="U2" library="SparkFun-IC-Microcontroller" package="QFN-68" value="CY8C5868LTI-LP039" x="30.988" y="49.276" smashed="yes">
-<attribute name="NAME" x="30.988" y="53.721" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
-<attribute name="PROD_ID" value="IC-12391" x="30.988" y="49.276" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="30.988" y="44.196" size="0.6096" layer="27" font="vector" ratio="20" align="bottom-center"/>
-</element>
 <element name="JP1" library="adafruit_changed" package="2X20-BIG" value="" x="50.292" y="51.816" smashed="yes" rot="R90">
 <attribute name="NAME" x="47.117" y="26.416" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="VALUE" x="54.737" y="26.416" size="1.27" layer="27" rot="R90"/>
@@ -967,6 +958,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="OC_NEWARK" value="unknown" x="27.178" y="3.048" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="32.678" y="0.048" size="1.27" layer="27" rot="R180"/>
 </element>
+<element name="U$1" library="f1c100s" package="MQFN88" value="F1C100S_DEV" x="27.686" y="51.816" smashed="yes"/>
 </elements>
 <signals>
 <signal name="GND">
