@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="5" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="yes"/>
@@ -186,8 +186,8 @@ by exp-lbrs.ulp</description>
 <smd name="13" x="-2.5" y="0" dx="1.28" dy="0.31" layer="1" rot="R270"/>
 <smd name="14" x="-3" y="0" dx="1.28" dy="0.31" layer="1" rot="R270"/>
 <smd name="15" x="-3.5" y="0" dx="1.28" dy="0.31" layer="1" rot="R270"/>
-<text x="4.5" y="1" size="0.8128" layer="52" font="vector" rot="R90">1</text>
-<text x="-4.25" y="1" size="0.8128" layer="52" font="vector" rot="R90">15</text>
+<text x="6.278" y="-4.461" size="0.8128" layer="52" font="vector" rot="R90">1</text>
+<text x="-5.647" y="-4.969" size="0.8128" layer="52" font="vector" rot="R90">15</text>
 <smd name="17" x="-5.7" y="-2.24" dx="2.5" dy="3" layer="1" rot="R90"/>
 <smd name="16" x="5.75" y="-2.24" dx="2.5" dy="3" layer="1" rot="R90"/>
 <wire x1="-5" y1="-2" x2="5" y2="-2" width="0.1524" layer="51"/>
