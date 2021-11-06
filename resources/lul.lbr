@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="5" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="yes"/>
@@ -192,11 +192,11 @@ by exp-lbrs.ulp</description>
 <smd name="16" x="5.75" y="-2.24" dx="2.5" dy="3" layer="1" rot="R90"/>
 <wire x1="-5" y1="-2" x2="5" y2="-2" width="0.1524" layer="51"/>
 <wire x1="5" y1="-2" x2="5" y2="-14" width="0.1524" layer="51"/>
-<wire x1="5" y1="-14" x2="5" y2="-44" width="0.1524" layer="51"/>
-<wire x1="5" y1="-44" x2="-5" y2="-44" width="0.1524" layer="51"/>
-<wire x1="-5" y1="-44" x2="-5" y2="-14" width="0.1524" layer="51"/>
+<wire x1="5" y1="-14" x2="5" y2="-44" width="0.1524" layer="25"/>
+<wire x1="5" y1="-44" x2="-5" y2="-44" width="0.1524" layer="25"/>
+<wire x1="-5" y1="-44" x2="-5" y2="-14" width="0.1524" layer="25"/>
 <wire x1="-5" y1="-14" x2="-5" y2="-2" width="0.1524" layer="51"/>
-<wire x1="-5" y1="-14" x2="5" y2="-14" width="0.1524" layer="51"/>
+<wire x1="-5" y1="-14" x2="5" y2="-14" width="0.1524" layer="25"/>
 </package>
 </packages>
 <symbols>

@@ -3886,8 +3886,8 @@ Source: www.cypressindustries.com</description>
 </package>
 <package name="M2.5HOLE">
 <hole x="0" y="0" drill="2.8"/>
-<circle x="0" y="0" radius="2.5" width="0" layer="41"/>
-<circle x="0" y="0" radius="2.5" width="0" layer="42"/>
+<circle x="0" y="0" radius="3" width="0" layer="41"/>
+<circle x="0" y="0" radius="3" width="0" layer="42"/>
 </package>
 </packages>
 <symbols>
@@ -4441,11 +4441,11 @@ by exp-lbrs.ulp</description>
 <smd name="16" x="5.75" y="-2.24" dx="2.5" dy="3" layer="1" rot="R90"/>
 <wire x1="-5" y1="-2" x2="5" y2="-2" width="0.1524" layer="51"/>
 <wire x1="5" y1="-2" x2="5" y2="-14" width="0.1524" layer="51"/>
-<wire x1="5" y1="-14" x2="5" y2="-44" width="0.1524" layer="51"/>
-<wire x1="5" y1="-44" x2="-5" y2="-44" width="0.1524" layer="51"/>
-<wire x1="-5" y1="-44" x2="-5" y2="-14" width="0.1524" layer="51"/>
+<wire x1="5" y1="-14" x2="5" y2="-44" width="0.1524" layer="25"/>
+<wire x1="5" y1="-44" x2="-5" y2="-44" width="0.1524" layer="25"/>
+<wire x1="-5" y1="-44" x2="-5" y2="-14" width="0.1524" layer="25"/>
 <wire x1="-5" y1="-14" x2="-5" y2="-2" width="0.1524" layer="51"/>
-<wire x1="-5" y1="-14" x2="5" y2="-14" width="0.1524" layer="51"/>
+<wire x1="-5" y1="-14" x2="5" y2="-14" width="0.1524" layer="25"/>
 </package>
 </packages>
 <symbols>
