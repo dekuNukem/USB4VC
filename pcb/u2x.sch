@@ -7946,6 +7946,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="C24" library="clock" deviceset="CAP" device="0805" value="1uF"/>
 <part name="C25" library="clock" deviceset="CAP" device="0805" value="1uF"/>
 <part name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
+<part name="R8" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
+<part name="GND30" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -8290,8 +8292,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="+3V13" gate="G$1" x="444.5" y="101.6" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="447.04" y="96.52" size="1.778" layer="96" rot="MR90"/>
 </instance>
-<instance part="GND26" gate="1" x="396.24" y="279.4" smashed="yes">
-<attribute name="VALUE" x="393.7" y="276.86" size="1.778" layer="96"/>
+<instance part="GND26" gate="1" x="393.7" y="279.4" smashed="yes">
+<attribute name="VALUE" x="391.16" y="276.86" size="1.778" layer="96"/>
 </instance>
 <instance part="+3V14" gate="G$1" x="304.8" y="289.56" smashed="yes">
 <attribute name="VALUE" x="302.26" y="284.48" size="1.778" layer="96" rot="R90"/>
@@ -8340,6 +8342,13 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="JP3" gate="G$1" x="436.88" y="53.34" smashed="yes" rot="R270">
 <attribute name="NAME" x="442.595" y="59.69" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="431.8" y="59.69" size="1.778" layer="96" rot="R270"/>
+</instance>
+<instance part="R8" gate="G$1" x="406.4" y="271.78" smashed="yes" rot="MR270">
+<attribute name="NAME" x="404.9014" y="273.05" size="1.778" layer="95" rot="MR270"/>
+<attribute name="VALUE" x="404.622" y="267.97" size="1.778" layer="96" rot="MR270"/>
+</instance>
+<instance part="GND30" gate="1" x="406.4" y="264.16" smashed="yes">
+<attribute name="VALUE" x="403.86" y="261.62" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -8577,8 +8586,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <segment>
 <pinref part="U2" gate="G$1" pin="VSS"/>
 <pinref part="GND26" gate="1" pin="GND"/>
-<wire x1="345.44" y1="284.48" x2="396.24" y2="284.48" width="0.1524" layer="91"/>
-<wire x1="396.24" y1="284.48" x2="396.24" y2="281.94" width="0.1524" layer="91"/>
+<wire x1="345.44" y1="284.48" x2="393.7" y2="284.48" width="0.1524" layer="91"/>
+<wire x1="393.7" y1="284.48" x2="393.7" y2="281.94" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND27" gate="1" pin="GND"/>
@@ -8592,6 +8601,10 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <segment>
 <pinref part="C23" gate="G$1" pin="1"/>
 <pinref part="GND29" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="R8" gate="G$1" pin="2"/>
+<pinref part="GND30" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="+5V" class="0">
@@ -9389,6 +9402,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="JP2" gate="A" pin="2"/>
 <wire x1="154.94" y1="256.54" x2="132.08" y2="256.54" width="0.1524" layer="91"/>
 <junction x="154.94" y="256.54"/>
+<pinref part="R8" gate="G$1" pin="1"/>
+<wire x1="345.44" y1="276.86" x2="406.4" y2="276.86" width="0.1524" layer="91"/>
+<junction x="345.44" y="276.86"/>
 </segment>
 </net>
 <net name="N$44" class="0">
