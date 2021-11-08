@@ -197,7 +197,7 @@
 <wire x1="3" y1="65" x2="0" y2="62" width="0" layer="20" curve="90"/>
 <wire x1="0" y1="62" x2="0" y2="3" width="0" layer="20"/>
 <wire x1="0" y1="3" x2="3" y2="0" width="0" layer="20" curve="90"/>
-<text x="50.6476" y="47.8536" size="1.778" layer="25" rot="R90" align="center">U2R PS2 PT1 Nov21
+<text x="49.9364" y="46.8376" size="1.778" layer="25" rot="R90" align="center">U2R PS2 PT1 Nov21
 dekuNukem
 </text>
 <text x="47.0916" y="7.4676" size="1.143" layer="25" rot="R180" align="center">GND</text>
@@ -1557,10 +1557,10 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="7.3406" y1="24.892" x2="16.3322" y2="24.892" width="0.2032" layer="16"/>
 <wire x1="6.0586" y1="23.61" x2="7.3406" y2="24.892" width="0.2032" layer="16"/>
 <wire x1="27.025" y1="29.5822" x2="27.025" y2="28.7268" width="0.2032" layer="1"/>
-<wire x1="27.025" y1="28.7268" x2="26.8478" y2="28.5496" width="0.2032" layer="1"/>
-<wire x1="26.8478" y1="28.5496" x2="21.7932" y2="28.5496" width="0.2032" layer="1"/>
+<wire x1="27.025" y1="28.7268" x2="26.543" y2="28.2448" width="0.2032" layer="1"/>
+<wire x1="26.543" y1="28.2448" x2="21.4884" y2="28.2448" width="0.2032" layer="1"/>
 <wire x1="18.1356" y1="24.892" x2="16.3322" y2="24.892" width="0.2032" layer="1"/>
-<wire x1="21.7932" y1="28.5496" x2="18.1356" y2="24.892" width="0.2032" layer="1"/>
+<wire x1="21.4884" y1="28.2448" x2="18.1356" y2="24.892" width="0.2032" layer="1"/>
 </signal>
 <signal name="N$2">
 <contactref element="LED1" pad="C"/>
