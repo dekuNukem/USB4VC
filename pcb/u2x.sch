@@ -8620,13 +8620,13 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="U5" library="SparkFun-IC-Comms" deviceset="CH340C" device=""/>
 <part name="LED1" library="adafruit" deviceset="LED" device="CHIP-LED0805"/>
-<part name="R4" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="1K"/>
+<part name="R4" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
 <part name="LED3" library="adafruit" deviceset="LED" device="CHIP-LED0805"/>
-<part name="R3" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="1K"/>
+<part name="R3" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
 <part name="J2" library="SparkFun-Connectors" deviceset="USB_C" device="16PIN"/>
 <part name="GND9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="C4" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C4" library="clock" deviceset="CAP" device="0805" value="10uF"/>
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="+3V2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
@@ -8654,33 +8654,33 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="U$11" library="my_supply" deviceset="+2V5" device=""/>
 <part name="+3V9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="U$12" library="my_supply" deviceset="+1V2" device=""/>
-<part name="R2" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="10K"/>
-<part name="R5" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="10K"/>
+<part name="R2" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="12K"/>
+<part name="R5" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
 <part name="U$13" library="my_supply" deviceset="+2V5" device=""/>
-<part name="R6" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="10K"/>
+<part name="R6" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
 <part name="GND20" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND21" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="C5" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C5" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="GND22" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C6" library="clock" deviceset="CAP" device="0805" value="1uF"/>
 <part name="GND23" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C7" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C7" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="GND24" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="U$14" library="my_supply" deviceset="+2V5" device=""/>
 <part name="U$15" library="my_supply" deviceset="+1V2" device=""/>
-<part name="C10" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C10" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C11" library="clock" deviceset="CAP" device="0805" value="1uF"/>
-<part name="C12" library="clock" deviceset="CAP" device="0805" value="1uF"/>
-<part name="C13" library="clock" deviceset="CAP" device="0805" value="1uF"/>
-<part name="C14" library="clock" deviceset="CAP" device="0805" value="1uF"/>
-<part name="C15" library="clock" deviceset="CAP" device="0805" value="1uF"/>
-<part name="C16" library="clock" deviceset="CAP" device="0805" value="1uF"/>
-<part name="C17" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C12" library="clock" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C13" library="clock" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C14" library="clock" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C15" library="clock" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C16" library="clock" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C17" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C18" library="clock" deviceset="CAP" device="0805" value="1uF"/>
 <part name="+3V11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND25" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C19" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C19" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="+3V12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND26" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -8689,15 +8689,15 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="C20" library="clock" deviceset="CAP" device="0805" value="1uF"/>
 <part name="C21" library="clock" deviceset="CAP" device="0805" value="1uF"/>
 <part name="GND27" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C22" library="clock" deviceset="CAP" device="0805" value="1uF"/>
-<part name="C23" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C22" library="clock" deviceset="CAP" device="0805" value="2.2uF"/>
+<part name="C23" library="clock" deviceset="CAP" device="0805" value="2.2uF"/>
 <part name="GND28" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND29" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="JP2" library="adafruit_changed" deviceset="PINHD-1X3" device="CB"/>
-<part name="C24" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C24" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C25" library="clock" deviceset="CAP" device="0805" value="1uF"/>
 <part name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
-<part name="R8" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
+<part name="R8" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="12K"/>
 <part name="GND30" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="U1" library="Microchip" deviceset="USB251X" device="B"/>
 <part name="GND31" library="supply1" deviceset="GND" device=""/>
@@ -8706,25 +8706,25 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND32" library="supply1" deviceset="GND" device=""/>
 <part name="GND33" library="supply1" deviceset="GND" device=""/>
 <part name="U$16" library="SparkFun-FreqCtrl" deviceset="CRYSTAL-GROUNDED" device=""/>
-<part name="C26" library="joyAnalog" deviceset="CAP" device="0805" value="33pF"/>
-<part name="C28" library="joyAnalog" deviceset="CAP" device="0805" value="33pF"/>
+<part name="C26" library="joyAnalog" deviceset="CAP" device="0805" value="18pF"/>
+<part name="C28" library="joyAnalog" deviceset="CAP" device="0805" value="18pF"/>
 <part name="C30" library="joyAnalog" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C31" library="joyAnalog" deviceset="CAP" device="0805" value="100nF"/>
 <part name="GND34" library="supply1" deviceset="GND" device=""/>
 <part name="GND35" library="supply1" deviceset="GND" device=""/>
-<part name="R22" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="10K"/>
+<part name="R22" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="12K"/>
 <part name="GND37" library="supply1" deviceset="GND" device=""/>
 <part name="+3V17" library="supply1" deviceset="+3V3" device=""/>
-<part name="R16" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="10K"/>
-<part name="R23" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="10K"/>
-<part name="R25" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="10K"/>
+<part name="R16" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="12K"/>
+<part name="R23" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="12K"/>
+<part name="R25" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="12K"/>
 <part name="C32" library="joyAnalog" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C33" library="joyAnalog" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C34" library="joyAnalog" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C36" library="joyAnalog" deviceset="CAP" device="0805" value="100nF"/>
 <part name="+3V16" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND36" library="supply1" deviceset="GND" device=""/>
-<part name="C35" library="clock" deviceset="CAP" device="0805" value="1uF"/>
+<part name="C35" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="GND38" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND39" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
@@ -8739,7 +8739,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="+3V18" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="P+5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="LED2" library="adafruit" deviceset="LED" device="CHIP-LED0805"/>
-<part name="R10" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="1K"/>
+<part name="R10" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
 <part name="+3V19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND43" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
