@@ -225,7 +225,7 @@ dekuNukem
 <text x="16.5354" y="46.2788" size="1.143" layer="25" rot="R180" align="center">C</text>
 <text x="39.4208" y="46.0248" size="1.143" layer="25" rot="R180" align="center">D</text>
 <text x="36.7792" y="46.0248" size="1.143" layer="25" rot="R180" align="center">C</text>
-<text x="12.0142" y="15.7734" size="1.143" layer="25" rot="R180" align="center">POWER</text>
+<text x="7.6454" y="13.0302" size="1.143" layer="25" rot="R270" align="center">POWER</text>
 <text x="37.0078" y="40.8178" size="1.143" layer="25" rot="R180" align="center">STM32
 RST</text>
 <text x="42.672" y="30.1752" size="1.143" layer="25" rot="R270" align="center">T1IN</text>
@@ -239,6 +239,9 @@ RST</text>
 <text x="10.2616" y="7.3152" size="1.143" layer="25" rot="R180" align="center">3V3</text>
 <text x="12.2428" y="37.973" size="1.143" layer="25" rot="R180" align="center">STM32
 RST</text>
+<text x="20.5486" y="15.3416" size="1.4224" layer="25" rot="R180" align="center">USE STRAIGHT-THROUGH
+DB9 RS232 CABLE
+</text>
 </plain>
 <libraries>
 <library name="f1c100s">
@@ -1249,7 +1252,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="VALUE" x="10.668" y="11.176" size="1.27" layer="27"/>
 </element>
 <element name="R6" library="SparkFun-Passives" package="0805" value="2K" x="16.002" y="13.716" smashed="yes" rot="R180">
-<attribute name="NAME" x="18.923" y="14.0843" size="0.8128" layer="25" rot="R180"/>
+<attribute name="NAME" x="16.6878" y="12.6365" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="C1" library="clock" package="0805@1" value="100nF" x="27.432" y="26.924" smashed="yes">
 <attribute name="NAME" x="24.511" y="26.5811" size="0.8128" layer="25"/>
