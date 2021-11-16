@@ -161,6 +161,9 @@ int main(void)
 	delay_us_init(&htim2);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
 	// HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+
+  adb_init(ADB_DATA_GPIO_Port, ADB_DATA_Pin, ADB_PSW_GPIO_Port, ADB_PSW_Pin);
+
   printf("hello world\n");
   /* USER CODE END 2 */
 
@@ -173,8 +176,9 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-    printf("hello\n");
-    HAL_Delay(500);
+    adb_recv_cmd();
+    adb_recv_cmd();
+    HAL_Delay(50);
   }
   /* USER CODE END 3 */
 
