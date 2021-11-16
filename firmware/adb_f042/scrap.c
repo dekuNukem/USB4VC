@@ -20,3 +20,10 @@ void adb_recv_cmd(void)
       return ADB_LINE_STATUS_IDLE;
   }
   printf("%d %d\n", lo_time, hi_time);
+
+
+    HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
+    // parse_adb_cmd(adb_data);
+    printf("%d 0x%x\n", adb_status, adb_data);
+    HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
+    // HAL_Delay(4);
