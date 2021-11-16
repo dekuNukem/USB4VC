@@ -165,6 +165,9 @@ int main(void)
   adb_init(ADB_DATA_GPIO_Port, ADB_DATA_Pin, ADB_PSW_GPIO_Port, ADB_PSW_Pin);
 
   printf("hello world\n");
+  uint8_t adb_data = 0;
+  uint8_t adb_status;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -175,11 +178,13 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    adb_status = adb_recv_cmd(&adb_data, 0);
+    
     HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
-
-    adb_recv_cmd(0);    HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
-
-    HAL_Delay(6);
+    // parse_adb_cmd(adb_data);
+    printf("%d 0x%x\n", adb_status, adb_data);
+    HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
+    // HAL_Delay(4);
   }
   /* USER CODE END 3 */
 

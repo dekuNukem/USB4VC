@@ -8,7 +8,8 @@
 #include "stm32f0xx_hal.h"
 
 void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port, uint16_t psw_pin);
-uint8_t adb_recv_cmd(uint8_t srq);
+uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq);
+void parse_adb_cmd(uint8_t data);
 
 #ifdef __cplusplus
 }

@@ -49,12 +49,11 @@ void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port
 #define ADB_LINE_STATUS_IDLE 2
 #define ADB_LINE_STATUS_RESET 3
 #define ADB_LINE_STATUS_BUSY 4
+#define ADB_LINE_STATUS_ERROR 5
 
 #define ADB_OK 0
 #define ADB_TIMEOUT -1
-#define ADB_LINE_STATUS_ERROR -2
 #define ADB_ERROR ADB_LINE_STATUS_ERROR
-
 
 int32_t wait_until_change(int32_t timeout_us)
 {
@@ -70,7 +69,7 @@ int32_t wait_until_change(int32_t timeout_us)
   return duration;
 }
 
-int8_t look_for_atten(void)
+uint8_t look_for_atten(void)
 {
   // if ADB data line is high
   if(ADB_READ_DATA_PIN() == GPIO_PIN_SET)
@@ -96,24 +95,35 @@ uint8_t adb_read_bit(void)
   return hi_time > lo_time;
 }
 
-uint8_t adb_recv_cmd(uint8_t srq)
+uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq)
 {
-  int8_t atten_result = look_for_atten();
+  uint8_t atten_result = look_for_atten();
   if(atten_result != ADB_LINE_STATUS_ATTEN)
     return atten_result;
   int32_t sync_duration = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
   if(sync_duration > 90 || sync_duration < 50)
     return ADB_ERROR;
   
+  uint8_t temp = 0;
   for (int i = 0; i < 8; ++i)
   {
     uint8_t this_bit = adb_read_bit();
     if(this_bit == ADB_ERROR)
       return ADB_ERROR;
+    temp |= this_bit << i;
   }
 
   if(srq == 0)
     wait_until_change(ADB_DEFAULT_TIMEOUT_US);
 
+  *data = temp;
   return ADB_OK;
+}
+
+void parse_adb_cmd(uint8_t data)
+{
+  uint8_t dev_addr = data >> 4;
+  uint8_t cmd = (data >> 2) & 0x3;
+  uint8_t reg = data & 0x3;
+  printf("0x%x %d %d %d\n", data, dev_addr, cmd, reg);
 }
