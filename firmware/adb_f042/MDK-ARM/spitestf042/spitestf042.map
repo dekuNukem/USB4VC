@@ -1736,10 +1736,10 @@ Image Symbol Table
     i.fputc                                  0x08001b48   Section        0  main.o(i.fputc)
     i.look_for_atten                         0x08001b60   Section        0  adb.o(i.look_for_atten)
     i.main                                   0x08001ba4   Section        0  main.o(i.main)
-    i.micros                                 0x08001c3c   Section        0  delay_us.o(i.micros)
-    i.wait_until_change                      0x08001c4c   Section        0  adb.o(i.wait_until_change)
-    .constdata                               0x08001c90   Section       16  system_stm32f0xx.o(.constdata)
-    .constdata                               0x08001ca0   Section        8  system_stm32f0xx.o(.constdata)
+    i.micros                                 0x08001c38   Section        0  delay_us.o(i.micros)
+    i.wait_until_change                      0x08001c48   Section        0  adb.o(i.wait_until_change)
+    .constdata                               0x08001c8c   Section       16  system_stm32f0xx.o(.constdata)
+    .constdata                               0x08001c9c   Section        8  system_stm32f0xx.o(.constdata)
     .data                                    0x20000000   Section        4  delay_us.o(.data)
     .data                                    0x20000004   Section       12  adb.o(.data)
     .data                                    0x20000010   Section        4  stm32f0xx_hal.o(.data)
@@ -1915,13 +1915,13 @@ Image Symbol Table
     delay_us_init                            0x08001b39   Thumb Code    12  delay_us.o(i.delay_us_init)
     fputc                                    0x08001b49   Thumb Code    18  main.o(i.fputc)
     look_for_atten                           0x08001b61   Thumb Code    60  adb.o(i.look_for_atten)
-    main                                     0x08001ba5   Thumb Code   114  main.o(i.main)
-    micros                                   0x08001c3d   Thumb Code    10  delay_us.o(i.micros)
-    wait_until_change                        0x08001c4d   Thumb Code    62  adb.o(i.wait_until_change)
-    AHBPrescTable                            0x08001c90   Data          16  system_stm32f0xx.o(.constdata)
-    APBPrescTable                            0x08001ca0   Data           8  system_stm32f0xx.o(.constdata)
-    Region$$Table$$Base                      0x08001ca8   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08001cc8   Number         0  anon$$obj.o(Region$$Table)
+    main                                     0x08001ba5   Thumb Code   112  main.o(i.main)
+    micros                                   0x08001c39   Thumb Code    10  delay_us.o(i.micros)
+    wait_until_change                        0x08001c49   Thumb Code    62  adb.o(i.wait_until_change)
+    AHBPrescTable                            0x08001c8c   Data          16  system_stm32f0xx.o(.constdata)
+    APBPrescTable                            0x08001c9c   Data           8  system_stm32f0xx.o(.constdata)
+    Region$$Table$$Base                      0x08001ca4   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08001cc4   Number         0  anon$$obj.o(Region$$Table)
     us_timer                                 0x20000000   Data           4  delay_us.o(.data)
     adb_psw_pin                              0x20000004   Data           2  adb.o(.data)
     adb_data_pin                             0x20000006   Data           2  adb.o(.data)
@@ -1944,9 +1944,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000c1
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00001ce4, Max: 0x00008000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00001ce0, Max: 0x00008000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00001cc8, Max: 0x00008000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00001cc4, Max: 0x00008000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2047,23 +2047,23 @@ Memory Map of the image
     0x08001b38   0x08001b38   0x00000010   Code   RO           13    i.delay_us_init     delay_us.o
     0x08001b48   0x08001b48   0x00000018   Code   RO          253    i.fputc             main.o
     0x08001b60   0x08001b60   0x00000044   Code   RO          441    i.look_for_atten    adb.o
-    0x08001ba4   0x08001ba4   0x00000098   Code   RO          254    i.main              main.o
-    0x08001c3c   0x08001c3c   0x00000010   Code   RO           14    i.micros            delay_us.o
-    0x08001c4c   0x08001c4c   0x00000044   Code   RO          443    i.wait_until_change  adb.o
-    0x08001c90   0x08001c90   0x00000010   Data   RO         3486    .constdata          system_stm32f0xx.o
-    0x08001ca0   0x08001ca0   0x00000008   Data   RO         3487    .constdata          system_stm32f0xx.o
-    0x08001ca8   0x08001ca8   0x00000020   Data   RO         3858    Region$$Table       anon$$obj.o
+    0x08001ba4   0x08001ba4   0x00000094   Code   RO          254    i.main              main.o
+    0x08001c38   0x08001c38   0x00000010   Code   RO           14    i.micros            delay_us.o
+    0x08001c48   0x08001c48   0x00000044   Code   RO          443    i.wait_until_change  adb.o
+    0x08001c8c   0x08001c8c   0x00000010   Data   RO         3486    .constdata          system_stm32f0xx.o
+    0x08001c9c   0x08001c9c   0x00000008   Data   RO         3487    .constdata          system_stm32f0xx.o
+    0x08001ca4   0x08001ca4   0x00000020   Data   RO         3858    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08001cc8, Size: 0x00000550, Max: 0x00001800, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08001cc4, Size: 0x00000550, Max: 0x00001800, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08001cc8   0x00000004   Data   RW           15    .data               delay_us.o
-    0x20000004   0x08001ccc   0x0000000c   Data   RW          444    .data               adb.o
-    0x20000010   0x08001cd8   0x00000004   Data   RW         2317    .data               stm32f0xx_hal.o
-    0x20000014   0x08001cdc   0x00000004   Data   RW         3488    .data               system_stm32f0xx.o
-    0x20000018   0x08001ce0   0x00000004   Data   RW         3832    .data               mc_p.l(stdout.o)
+    0x20000000   0x08001cc4   0x00000004   Data   RW           15    .data               delay_us.o
+    0x20000004   0x08001cc8   0x0000000c   Data   RW          444    .data               adb.o
+    0x20000010   0x08001cd4   0x00000004   Data   RW         2317    .data               stm32f0xx_hal.o
+    0x20000014   0x08001cd8   0x00000004   Data   RW         3488    .data               system_stm32f0xx.o
+    0x20000018   0x08001cdc   0x00000004   Data   RW         3832    .data               mc_p.l(stdout.o)
     0x2000001c        -       0x00000134   Zero   RW          255    .bss                main.o
     0x20000150        -       0x00000400   Zero   RW            1    STACK               startup_stm32f042x6.o
 
@@ -2077,7 +2077,7 @@ Image component sizes
 
        332         40          0         12          0       5226   adb.o
         32         10          0          4          0     463068   delay_us.o
-       646         78          0          0        308       4977   main.o
+       642         76          0          0        308       4965   main.o
         88         38        192          0       1024        648   startup_stm32f042x6.o
         94         18          0          4          0       3059   stm32f0xx_hal.o
        178         28          0          0          0      10527   stm32f0xx_hal_cortex.o
@@ -2094,7 +2094,7 @@ Image component sizes
         92         14         24          4          0       1143   system_stm32f0xx.o
 
     ----------------------------------------------------------------------
-      6024        454        248         24       1332     521477   Object Totals
+      6020        452        248         24       1332     521465   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         20          0          0          0          0          0   (incl. Padding)
 
@@ -2140,15 +2140,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      7120        522        248         28       1332     519309   Grand Totals
-      7120        522        248         28       1332     519309   ELF Image Totals
-      7120        522        248         28          0          0   ROM Totals
+      7116        520        248         28       1332     519297   Grand Totals
+      7116        520        248         28       1332     519297   ELF Image Totals
+      7116        520        248         28          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 7368 (   7.20kB)
+    Total RO  Size (Code + RO Data)                 7364 (   7.19kB)
     Total RW  Size (RW Data + ZI Data)              1360 (   1.33kB)
-    Total ROM Size (Code + RO Data + RW Data)       7396 (   7.22kB)
+    Total ROM Size (Code + RO Data + RW Data)       7392 (   7.22kB)
 
 ==============================================================================
 

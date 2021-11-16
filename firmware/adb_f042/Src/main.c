@@ -165,8 +165,7 @@ int main(void)
   adb_init(ADB_DATA_GPIO_Port, ADB_DATA_Pin, ADB_PSW_GPIO_Port, ADB_PSW_Pin);
 
   printf("hello world\n");
-  uint8_t adb_data = 0;
-  uint8_t adb_status;
+  uint8_t adb_data, adb_status;
 
   /* USER CODE END 2 */
 
@@ -178,8 +177,10 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+
+    adb_data = 0;
     adb_status = adb_recv_cmd(&adb_data, 0);
-    
+
     HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
     // parse_adb_cmd(adb_data);
     printf("%d 0x%x\n", adb_status, adb_data);
