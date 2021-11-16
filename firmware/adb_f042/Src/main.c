@@ -178,10 +178,18 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-    adb_data = 0;
     adb_status = adb_recv_cmd(&adb_data, 0);
+
+    if(adb_status != ADB_OK)
+      continue
+
+    if(adb_status != 0)
+      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
+    else
+      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
+
     printf("%d 0x%x\n", adb_status, adb_data);
-    
+
   }
   /* USER CODE END 3 */
 

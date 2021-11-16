@@ -45,16 +45,6 @@ void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port
   adb_release_lines();
 }
 
-#define ADB_LINE_STATUS_ATTEN 1
-#define ADB_LINE_STATUS_IDLE 2
-#define ADB_LINE_STATUS_RESET 3
-#define ADB_LINE_STATUS_BUSY 4
-#define ADB_LINE_STATUS_ERROR 5
-
-#define ADB_OK 0
-#define ADB_TIMEOUT -1
-#define ADB_ERROR ADB_LINE_STATUS_ERROR
-
 int32_t wait_until_change(int32_t timeout_us)
 {
   uint32_t start_time = micros();
@@ -97,6 +87,7 @@ uint8_t adb_read_bit(void)
 
 uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq)
 {
+  *data = 0;
   uint8_t atten_result = look_for_atten();
   if(atten_result != ADB_LINE_STATUS_ATTEN)
     return atten_result;

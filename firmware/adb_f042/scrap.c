@@ -27,3 +27,74 @@ void adb_recv_cmd(void)
     printf("%d 0x%x\n", adb_status, adb_data);
     HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
     // HAL_Delay(4);
+
+    if(adb_status != 0)
+      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
+    else
+      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
+
+    if((adb_data & 0xf) == 0x4)
+      HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, GPIO_PIN_SET);
+    else
+      HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, GPIO_PIN_RESET);
+    // printf("%d 0x%x %x\n", adb_status, adb_data, adb_data & 0xf);
+
+
+default addr:
+2 = keyboard
+3 = mouse
+
+host: 0000 1111 = 0x0f addr 0 talk reg 3
+no response
+
+host: 0001 1111 = 0x1f addr 1 talk reg 3
+no response
+
+host: 0010 1111 = 0x2f addr 2 talk reg 3
+device: 0110 0000 0000 0101
+keyboard
+
+host: 0011 1111 = 0x3f addr 3 talk reg 3
+device: 0110 1010 0000 0001
+mouse
+
+host: 0100 1111 = 0x4f addr 4 talk reg 3
+no response
+
+...
+
+host: 1111 1111 = 0xff addr 15 talk reg 3
+no response
+
+----------
+
+host: 0010 1011 addr 2 listen reg 3
+0000 1111 1111 1110 change addr to 0xf
+
+host: 00101111 addr 2 talk reg 3
+no response
+
+host: 1111 1011 addr 0xf listen reg 3
+0000 0010 1111 1110 change addr to 0x2
+
+host: 1111 1111 addr 0xf talk reg 3
+no response
+
+-----------
+
+host: 0011 1011 addr 3 listen reg 3
+0000 1111 1111 1110  change addr to 0xf
+
+host: 0011 1111 addr 3 talk reg 3
+no response
+
+host: 1111 1011 addr 0xf listen reg 3
+0000 0011 1111 1110 change addr to 0x3
+
+
+host: 1111 1111 addr 0xf talk reg 3
+no response
+
+-----
+
+host: 0010 1011
