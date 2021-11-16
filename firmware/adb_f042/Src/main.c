@@ -175,10 +175,11 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
 
-    adb_recv_cmd();
-    adb_recv_cmd();
-    HAL_Delay(50);
+    adb_recv_cmd(0);    HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
+
+    HAL_Delay(6);
   }
   /* USER CODE END 3 */
 

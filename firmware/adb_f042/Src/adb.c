@@ -22,6 +22,8 @@ uint16_t adb_data_pin;
 #define ADB_READ_DATA_PIN() HAL_GPIO_ReadPin(adb_data_port, adb_data_pin)
 #define ADB_READ_CLK_PIN() HAL_GPIO_ReadPin(adb_psw_port, adb_psw_pin)
 
+#define ADB_DEFAULT_TIMEOUT_US 10000
+
 void adb_release_lines(void)
 {
   ADB_PSW_HI();
@@ -43,49 +45,75 @@ void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port
   adb_release_lines();
 }
 
-#define ADB_LINE_STATUS_ATTEN 0
-#define ADB_LINE_STATUS_IDLE 1
-#define ADB_LINE_STATUS_RESET 2
-#define ADB_LINE_STATUS_IN_PROGRESS 3
+#define ADB_LINE_STATUS_ATTEN 1
+#define ADB_LINE_STATUS_IDLE 2
+#define ADB_LINE_STATUS_RESET 3
+#define ADB_LINE_STATUS_BUSY 4
 
-void wait_until_line_low(void)
+#define ADB_OK 0
+#define ADB_TIMEOUT -1
+#define ADB_LINE_STATUS_ERROR -2
+#define ADB_ERROR ADB_LINE_STATUS_ERROR
+
+
+int32_t wait_until_change(int32_t timeout_us)
 {
-  
+  uint32_t start_time = micros();
+  uint8_t start_state = ADB_READ_DATA_PIN();
+  uint32_t duration;
+  while(ADB_READ_DATA_PIN() == start_state)
+  {
+    duration = micros() - start_time;
+    if(timeout_us != 0 && duration > timeout_us)
+      return ADB_TIMEOUT;
+  }
+  return duration;
 }
 
-uint8_t look_for_atten(uint8_t blocking)
+int8_t look_for_atten(void)
 {
   // if ADB data line is high
-  while(ADB_READ_DATA_PIN() == GPIO_PIN_SET)
-  {
-    if(blocking == 0)
-      return ADB_LINE_STATUS_IDLE;
-  }
+  if(ADB_READ_DATA_PIN() == GPIO_PIN_SET)
+    wait_until_change(0);
+
   // now data line is low
-  uint32_t atten_start = micros();
-
-  while(ADB_READ_DATA_PIN() == GPIO_PIN_RESET)
-  {
-    // reset condition
-    if(micros() - atten_start > 3000)
-      return ADB_LINE_STATUS_RESET;
-  }
-
-  uint32_t duration = micros() - atten_start;
-  
-  // not an attention signal
-  if(duration < 700)
-    return ADB_LINE_STATUS_IN_PROGRESS;
-  if(duration > 2000)
+  int32_t atten_duration = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
+  if(atten_duration > 2000 || atten_duration == ADB_TIMEOUT)
     return ADB_LINE_STATUS_RESET;
+  if(atten_duration < 600)
+    return ADB_LINE_STATUS_BUSY;  // not an attention signal
 	return ADB_LINE_STATUS_ATTEN;
 }
 
-void adb_recv_cmd(void)
+uint8_t adb_read_bit(void)
 {
+  if(ADB_READ_DATA_PIN() != GPIO_PIN_RESET)
+    return ADB_ERROR;
+  int32_t lo_time = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
+  int32_t hi_time = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
+  if(lo_time == ADB_TIMEOUT || hi_time == ADB_TIMEOUT)
+    return ADB_ERROR;
+  return hi_time > lo_time;
+}
 
-  HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
-  uint8_t result = look_for_atten(1);
-  HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
-  // printf("%d\n", result);
+uint8_t adb_recv_cmd(uint8_t srq)
+{
+  int8_t atten_result = look_for_atten();
+  if(atten_result != ADB_LINE_STATUS_ATTEN)
+    return atten_result;
+  int32_t sync_duration = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
+  if(sync_duration > 90 || sync_duration < 50)
+    return ADB_ERROR;
+  
+  for (int i = 0; i < 8; ++i)
+  {
+    uint8_t this_bit = adb_read_bit();
+    if(this_bit == ADB_ERROR)
+      return ADB_ERROR;
+  }
+
+  if(srq == 0)
+    wait_until_change(ADB_DEFAULT_TIMEOUT_US);
+
+  return ADB_OK;
 }
