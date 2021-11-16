@@ -110,7 +110,7 @@ uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq)
     uint8_t this_bit = adb_read_bit();
     if(this_bit == ADB_ERROR)
       return ADB_ERROR;
-    temp |= this_bit << i;
+    temp |= this_bit << (7 - i);
   }
 
   if(srq == 0)

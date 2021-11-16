@@ -180,11 +180,8 @@ int main(void)
 
     adb_data = 0;
     adb_status = adb_recv_cmd(&adb_data, 0);
-    if((adb_data & 0xf) == 0x4)
-      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
-    printf("%d 0x%x %x\n", adb_status, adb_data, adb_data & 0xf);
+    printf("%d 0x%x\n", adb_status, adb_data);
+    
   }
   /* USER CODE END 3 */
 

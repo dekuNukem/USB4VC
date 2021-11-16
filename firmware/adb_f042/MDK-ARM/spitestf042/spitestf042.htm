@@ -3,7 +3,7 @@
 <title>Static Call Graph - [spitestf042\spitestf042.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image spitestf042\spitestf042.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Nov 16 11:57:57 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Nov 16 12:18:56 2021
 <BR><P>
 <H3>Maximum Stack Usage =        196 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -252,7 +252,6 @@ Global Symbols
 
 <P><STRONG><a name="[55]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
-<LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 </UL>
 
@@ -608,8 +607,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 </UL>
 
-<P><STRONG><a name="[65]"></a>adb_recv_cmd</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, adb.o(i.adb_recv_cmd))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = adb_recv_cmd &rArr; adb_read_bit &rArr; wait_until_change
+<P><STRONG><a name="[65]"></a>adb_recv_cmd</STRONG> (Thumb, 76 bytes, Stack size 32 bytes, adb.o(i.adb_recv_cmd))
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = adb_recv_cmd &rArr; adb_read_bit &rArr; wait_until_change
 </UL>
 <BR>[Calls]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;look_for_atten
@@ -650,13 +649,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 </UL>
 
-<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 122 bytes, Stack size 8 bytes, main.o(i.main))
+<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 88 bytes, Stack size 8 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_init
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
-<LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM2_Init
