@@ -193,6 +193,12 @@ uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq)
 
   if(srq == 0)
     wait_until_change(ADB_DEFAULT_TIMEOUT_US);
+  else
+  {
+    ADB_DATA_LOW();
+    delay_us(300);
+    ADB_DATA_HI();
+  }
 
   *data = temp;
   return ADB_OK;
