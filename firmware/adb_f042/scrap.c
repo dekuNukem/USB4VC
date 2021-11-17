@@ -119,3 +119,22 @@ host: 0010 1011
 
   // if(cmd == ADB_CMD_TYPE_TALK && reg == 3)
   //   printf("0x%x %d %d %d\n", data, addr, cmd, reg);
+
+void write_test(void)
+{
+  // adb_mouse_reg[3] = 0x6001;
+  // uint16_t rand_id = (rand() % 0xf) << 8;
+  // adb_mouse_reg[3] |= rand_id;
+
+  // delay_us(200); // stop-to-start time
+  // TEST_ADB_DATA_LOW();
+  // delay_us(35);
+  // TEST_ADB_DATA_HI();
+  // delay_us(65);
+
+  // adb_write_16(adb_mouse_reg[3]);
+
+  // TEST_ADB_DATA_LOW();
+  // delay_us(65);
+  // TEST_ADB_DATA_HI();
+}

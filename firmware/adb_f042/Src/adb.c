@@ -213,6 +213,8 @@ uint8_t adb_write_byte(uint8_t data)
       ADB_DATA_LOW();
       delay_us(35);
       ADB_DATA_HI();
+      if(ADB_READ_DATA_PIN() != GPIO_PIN_SET)
+        return ADB_LINE_STATUS_COLLISION;
       delay_us(65);
     }
     else
@@ -220,6 +222,8 @@ uint8_t adb_write_byte(uint8_t data)
       ADB_DATA_LOW();
       delay_us(65);
       ADB_DATA_HI();
+      if(ADB_READ_DATA_PIN() != GPIO_PIN_SET)
+        return ADB_LINE_STATUS_COLLISION;
       delay_us(35);
     }
   }
@@ -228,41 +232,31 @@ uint8_t adb_write_byte(uint8_t data)
 
 uint8_t adb_write_16(uint16_t data)
 {
-  adb_write_byte((uint8_t)(data >> 8)); // MSB
-  adb_write_byte((uint8_t)(data & 0xff)); // LSB
+  if(adb_write_byte((uint8_t)(data >> 8)) == ADB_LINE_STATUS_COLLISION) // MSB
+    return ADB_LINE_STATUS_COLLISION;
+  if(adb_write_byte((uint8_t)(data & 0xff)) == ADB_LINE_STATUS_COLLISION) // LSB
+    return ADB_LINE_STATUS_COLLISION;
   return ADB_OK;
 }
 
 void write_test(void)
 {
-  // adb_mouse_reg[3] = 0x6001;
-  // uint16_t rand_id = (rand() % 0xf) << 8;
-  // adb_mouse_reg[3] |= rand_id;
-
-  // delay_us(200); // stop-to-start time
-  // TEST_ADB_DATA_LOW();
-  // delay_us(35);
-  // TEST_ADB_DATA_HI();
-  // delay_us(65);
-
-  // adb_write_16(adb_mouse_reg[3]);
-
-  // TEST_ADB_DATA_LOW();
-  // delay_us(65);
-  // TEST_ADB_DATA_HI();
+  ;
 }
 
-void adb_send_response_16b(uint16_t data)
+uint8_t adb_send_response_16b(uint16_t data)
 {
   delay_us(170); // stop-to-start time
   ADB_DATA_LOW();
   delay_us(35);
   ADB_DATA_HI();
   delay_us(65);
-  adb_write_16(data);
+  if(adb_write_16(data) == ADB_LINE_STATUS_COLLISION)
+    return ADB_LINE_STATUS_COLLISION;
   ADB_DATA_LOW();
   delay_us(65);
   ADB_DATA_HI();
+  return ADB_OK;
 }
 
 
