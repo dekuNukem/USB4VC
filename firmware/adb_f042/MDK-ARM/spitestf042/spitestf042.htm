@@ -3,7 +3,7 @@
 <title>Static Call Graph - [spitestf042\spitestf042.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image spitestf042\spitestf042.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Nov 17 09:14:22 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Nov 17 09:14:56 2021
 <BR><P>
 <H3>Maximum Stack Usage =        196 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -253,13 +253,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_byte
 <LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_adb_cmd
 <LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 </UL>
 
 <P><STRONG><a name="[36]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetTick))
-<BR><BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_adb_cmd
-<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
+<BR><BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
@@ -584,8 +582,7 @@ Global Symbols
 <P><STRONG><a name="[6f]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, printfb.o(i.__0printf$bare))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_adb_cmd
-<LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[80]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
@@ -733,14 +730,11 @@ Global Symbols
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 
-<P><STRONG><a name="[70]"></a>parse_adb_cmd</STRONG> (Thumb, 242 bytes, Stack size 24 bytes, adb.o(i.parse_adb_cmd))
+<P><STRONG><a name="[70]"></a>parse_adb_cmd</STRONG> (Thumb, 164 bytes, Stack size 24 bytes, adb.o(i.parse_adb_cmd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = parse_adb_cmd &rArr; adb_listen_16b &rArr; adb_read_bit &rArr; wait_until_change
 </UL>
-<BR>[Calls]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
+<BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
-<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand
 <LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>

@@ -187,8 +187,6 @@ int main(void)
       continue;
 
     parse_adb_cmd(adb_data);
-    // write_test();
-    // HAL_Delay(50);
 
   }
   /* USER CODE END 3 */

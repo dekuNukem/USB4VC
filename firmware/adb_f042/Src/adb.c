@@ -229,7 +229,6 @@ uint8_t adb_write_16(uint16_t data)
 
 void write_test(void)
 {
-
   // adb_mouse_reg[3] = 0x6001;
   // uint16_t rand_id = (rand() % 0xf) << 8;
   // adb_mouse_reg[3] |= rand_id;
@@ -348,15 +347,15 @@ uint8_t parse_adb_cmd(uint8_t data)
   //   DEBUG1_LOW();
   // }
 
-  if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_kb_current_addr && HAL_GetTick() - last_send > 500)
-  {
-    uint16_t response = 0x580;
-    DEBUG1_HI();
-    adb_send_response_16b(response);
-    last_send = HAL_GetTick();
-    printf("sending...\n");
-    DEBUG1_LOW();
-  }
+  // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_kb_current_addr && HAL_GetTick() - last_send > 500)
+  // {
+  //   uint16_t response = 0x580;
+  //   DEBUG1_HI();
+  //   adb_send_response_16b(response);
+  //   last_send = HAL_GetTick();
+  //   printf("sending...\n");
+  //   DEBUG1_LOW();
+  // }
 
   return ADB_OK;
 }
