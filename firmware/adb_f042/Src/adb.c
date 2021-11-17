@@ -310,7 +310,9 @@ uint8_t parse_adb_cmd(uint8_t data)
     uint16_t response = 0x6001; // 0110 0000 0000 0001, device handler 0x1, 100dps apple desktop bus mouse
     uint16_t rand_id = (rand() % 0xf) << 8;
     response |= rand_id;
+    DEBUG1_HI();
     adb_send_response_16b(response);
+    DEBUG1_LOW();
   }
 
   if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_kb_current_addr)
@@ -318,23 +320,35 @@ uint8_t parse_adb_cmd(uint8_t data)
     uint16_t response = 0x6005; // 0110 0000 0000 0101, device handler 0x5, appledesign keyboard
     uint16_t rand_id = (rand() % 0xf) << 8;
     response |= rand_id;
+    DEBUG1_HI();
     adb_send_response_16b(response);
+    DEBUG1_LOW();
   }
 
   if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_mouse_current_addr)
   {
     uint16_t host_cmd;
+    DEBUG0_HI();
     adb_listen_16b(&host_cmd);
+    DEBUG0_LOW();
     if((host_cmd & ADB_CHANGE_ADDR) == ADB_CHANGE_ADDR)
+    {
       adb_mouse_current_addr = (host_cmd & 0xf00) >> 8;
+      printf("m %x\n", adb_mouse_current_addr);
+    }
   }
 
   if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_kb_current_addr)
   {
     uint16_t host_cmd;
+    DEBUG0_HI();
     adb_listen_16b(&host_cmd);
+    DEBUG0_LOW();
     if((host_cmd & ADB_CHANGE_ADDR) == ADB_CHANGE_ADDR)
+    {
       adb_kb_current_addr = (host_cmd & 0xf00) >> 8;
+      printf("kb %x\n", adb_kb_current_addr);
+    }
   }
 
   // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
