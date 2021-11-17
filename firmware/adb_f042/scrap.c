@@ -111,7 +111,31 @@ no response
 
 host: 0010 1011
 
+if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_mouse_current_addr)
+  {
+    uint16_t host_cmd;
+    DEBUG0_HI();
+    adb_listen_16b(&host_cmd);
+    DEBUG0_LOW();
+    if((host_cmd & ADB_CHANGE_ADDR) == ADB_CHANGE_ADDR)
+    {
+      adb_mouse_current_addr = (host_cmd & 0xf00) >> 8;
+      printf("m %x\n", adb_mouse_current_addr);
+    }
+  }
 
+  if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_kb_current_addr)
+  {
+    uint16_t host_cmd;
+    DEBUG0_HI();
+    adb_listen_16b(&host_cmd);
+    DEBUG0_LOW();
+    if((host_cmd & ADB_CHANGE_ADDR) == ADB_CHANGE_ADDR)
+    {
+      adb_kb_current_addr = (host_cmd & 0xf00) >> 8;
+      printf("kb %x\n", adb_kb_current_addr);
+    }
+  }
 
  // printf("%x %x\n", host_cmd, adb_mouse_current_addr);
       printf("!\n");
