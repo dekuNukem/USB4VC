@@ -11,7 +11,7 @@ GPIO_TypeDef* adb_psw_port;
 uint16_t adb_psw_pin;
 GPIO_TypeDef* adb_data_port;
 uint16_t adb_data_pin;
-
+uint8_t adb_mouse_current_addr, adb_kb_current_addr;
 
 #define ADB_PSW_HI() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_SET)
 #define ADB_PSW_LOW() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_RESET)
@@ -20,7 +20,6 @@ uint16_t adb_data_pin;
 #define ADB_DATA_LOW() HAL_GPIO_WritePin(adb_data_port, adb_data_pin, GPIO_PIN_RESET)
 
 #define ADB_READ_DATA_PIN() HAL_GPIO_ReadPin(adb_data_port, adb_data_pin)
-#define ADB_READ_CLK_PIN() HAL_GPIO_ReadPin(adb_psw_port, adb_psw_pin)
 
 #define ADB_DEFAULT_TIMEOUT_US 10000
 
@@ -32,7 +31,9 @@ void adb_release_lines(void)
 
 void adb_reset(void)
 {
-  ;
+  adb_kb_current_addr = ADB_KB_DEFAULT_ADDR;
+  adb_mouse_current_addr = ADB_MOUSE_DEFAULT_ADDR;
+  adb_release_lines();
 }
 
 void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port, uint16_t psw_pin)
@@ -42,7 +43,6 @@ void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port
   adb_data_port = data_port;
   adb_data_pin = data_pin;
   adb_reset();
-  adb_release_lines();
 }
 
 int32_t wait_until_change(int32_t timeout_us)
@@ -111,10 +111,135 @@ uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq)
   return ADB_OK;
 }
 
-void parse_adb_cmd(uint8_t data)
+uint8_t adb_write_byte(uint8_t data)
 {
-  uint8_t dev_addr = data >> 4;
+  for (int i = 0; i < 8; ++i)
+  {
+    if((data >> (7-i)) & 0x1)
+    {
+      ADB_DATA_LOW();
+      delay_us(35);
+      ADB_DATA_HI();
+      delay_us(65);
+    }
+    else
+    {
+      ADB_DATA_LOW();
+      delay_us(65);
+      ADB_DATA_HI();
+      delay_us(35);
+    }
+  }
+  return ADB_OK;
+}
+
+uint8_t adb_write_16(uint16_t data)
+{
+  adb_write_byte((uint8_t)(data >> 8)); // MSB
+  adb_write_byte((uint8_t)(data & 0xff)); // LSB
+  return ADB_OK;
+}
+
+void write_test(void)
+{
+
+  // adb_mouse_reg[3] = 0x6001;
+  // uint16_t rand_id = (rand() % 0xf) << 8;
+  // adb_mouse_reg[3] |= rand_id;
+
+  // delay_us(200); // stop-to-start time
+  // TEST_ADB_DATA_LOW();
+  // delay_us(35);
+  // TEST_ADB_DATA_HI();
+  // delay_us(65);
+
+  // adb_write_16(adb_mouse_reg[3]);
+
+  // TEST_ADB_DATA_LOW();
+  // delay_us(65);
+  // TEST_ADB_DATA_HI();
+}
+
+void adb_send_response_16b(uint16_t data)
+{
+  delay_us(170); // stop-to-start time
+  ADB_DATA_LOW();
+  delay_us(35);
+  ADB_DATA_HI();
+  delay_us(65);
+  adb_write_16(data);
+  ADB_DATA_LOW();
+  delay_us(65);
+  ADB_DATA_HI();
+}
+
+
+uint8_t adb_listen_16b(uint16_t* data)
+{
+  *data = 0;
+  if(ADB_READ_DATA_PIN() != GPIO_PIN_SET)
+    return ADB_ERROR;
+  // stop-to-start
+  if(wait_until_change(ADB_DEFAULT_TIMEOUT_US) == ADB_TIMEOUT)
+    return ADB_ERROR;
+  // start pulse
+  if(wait_until_change(ADB_DEFAULT_TIMEOUT_US) == ADB_TIMEOUT)
+    return ADB_ERROR;
+  if(wait_until_change(ADB_DEFAULT_TIMEOUT_US) == ADB_TIMEOUT)
+    return ADB_ERROR;
+
+  uint16_t temp = 0;
+  for (int i = 0; i < 16; ++i)
+  {
+    uint8_t this_bit = adb_read_bit();
+    if(this_bit == ADB_ERROR)
+      return ADB_ERROR;
+    temp |= this_bit << (15 - i);
+  }
+  wait_until_change(ADB_DEFAULT_TIMEOUT_US);
+  *data = temp;
+  return ADB_OK;
+}
+
+#define ADB_CMD_TYPE_FLUSH 0
+#define ADB_CMD_TYPE_LISTEN 2
+#define ADB_CMD_TYPE_TALK 3
+// addr 2 keyboard, 3 mouse
+uint8_t parse_adb_cmd(uint8_t data)
+{
+  uint8_t addr = data >> 4;
   uint8_t cmd = (data >> 2) & 0x3;
   uint8_t reg = data & 0x3;
-  printf("0x%x %d %d %d\n", data, dev_addr, cmd, reg);
+
+  if(addr == 0)
+    return ADB_ERROR;
+
+  // if(cmd == ADB_CMD_TYPE_TALK && reg == 3)
+  //   printf("0x%x %d %d %d\n", data, addr, cmd, reg);
+
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_mouse_current_addr)
+  {
+    // send response here
+    uint16_t response = 0x6001; // 0110 0000 0000 0001
+    uint16_t rand_id = (rand() % 0xf) << 8;
+    response |= rand_id;
+    adb_send_response_16b(response);
+  }
+
+  if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_mouse_current_addr)
+  {
+    uint16_t host_cmd;
+    DEBUG1_HI();
+    adb_listen_16b(&host_cmd);
+    printf("%d\n", host_cmd);
+    DEBUG1_LOW();
+  }
+  
+  return ADB_OK;
 }
+
+
+
+
+
+

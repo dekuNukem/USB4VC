@@ -33,6 +33,7 @@ spitestf042\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h
 spitestf042\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h
 spitestf042\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
 spitestf042\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+spitestf042\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 spitestf042\main.o: ../Inc/delay_us.h
 spitestf042\main.o: ../Inc/shared.h
 spitestf042\main.o: ../Inc/helpers.h

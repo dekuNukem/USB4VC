@@ -42,6 +42,7 @@
 
 /* USER CODE BEGIN Includes */
 #include <string.h>
+#include <stdlib.h>
 #include "delay_us.h"
 #include "shared.h"
 #include "helpers.h"
@@ -180,15 +181,14 @@ int main(void)
 
     adb_status = adb_recv_cmd(&adb_data, 0);
 
-    if(adb_status != ADB_OK)
-      continue
+    if(adb_status == ADB_LINE_STATUS_RESET)
+      adb_reset();
+    else if(adb_status != ADB_OK)
+      continue;
 
-    if(adb_status != 0)
-      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
-    else
-      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
-
-    printf("%d 0x%x\n", adb_status, adb_data);
+    parse_adb_cmd(adb_data);
+    // write_test();
+    // HAL_Delay(50);
 
   }
   /* USER CODE END 3 */

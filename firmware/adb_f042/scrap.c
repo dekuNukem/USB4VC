@@ -40,6 +40,18 @@ void adb_recv_cmd(void)
     // printf("%d 0x%x %x\n", adb_status, adb_data, adb_data & 0xf);
 
 
+    if(adb_status != 0)
+      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET);
+    else
+      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET);
+
+    printf("%d 0x%x\n", adb_status, adb_data);
+
+uint16_t adb_mouse_reg[ADB_REG_SIZE];
+uint16_t adb_kb_reg[ADB_REG_SIZE];
+#define ADB_REG_SIZE 4
+
+
 default addr:
 2 = keyboard
 3 = mouse
