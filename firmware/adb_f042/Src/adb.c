@@ -23,6 +23,93 @@ uint8_t adb_mouse_current_addr, adb_kb_current_addr;
 
 #define ADB_DEFAULT_TIMEOUT_US 10000
 
+uint8_t adb_kb_scancode[] = 
+{
+    0x00, // A
+    0x0B, // B
+    0x08, // C
+    0x02, // D
+    0x0E, // E
+    0x03, // F
+    0x05, // G
+    0x04, // H
+    0x22, // I
+    0x26, // J
+    0x28, // K
+    0x25, // L
+    0x2E, // M
+    0x2D, // N
+    0x1F, // O
+    0x23, // P
+    0x0C, // Q
+    0x0F, // R
+    0x01, // S
+    0x11, // T
+    0x20, // U
+    0x09, // V
+    0x0D, // W
+    0x07, // X
+    0x10, // Y
+    0x06, // Z
+    0x1D, // 0
+    0x12, // 1
+    0x13, // 2
+    0x14, // 3
+    0x15, // 4
+    0x17, // 5
+    0x16, // 6
+    0x1A, // 7
+    0x1C, // 8
+    0x19, // 9
+    0x32, // `
+    0x1B, // -
+    0x18, // =
+    0x2A, // backslash
+    0x33, // bkspc
+    0x31, // space
+    0x30, // tab
+    0x39, // caps
+    0x38, // left shift
+    0x7B, // right shift
+    0x3A, // left alt = opt
+    0x24, // enter
+    0x2B, // ,
+    0x2F, // .
+    0x2C, // /
+    0x36, // L control
+    0x35, // ESC
+    0x27, // '
+    0x29, // ;
+    0x43, // keypad *
+    0x4E, // keypad -
+    0x45, // keypad +
+    0x41, // keypad .
+    0x52, // keypad 0
+    0x53, // keypad 1
+    0x54, // keypad 2
+    0x55, // keypad 3
+    0x56, // keypad 4
+    0x57, // keypad 5
+    0x58, // keypad 6
+    0x59, // keypad 7
+    0x5B, // keypad 8
+    0x5C, // keypad 9
+    0x7A, // F1
+    0x78, // F2
+    0x63, // F3
+    0x76, // F4
+    0x60, // F5
+    0x61, // F6
+    0x62, // F7
+    0x64, // F8
+    0x65, // F9
+    0x6D, // F10
+    0x67, // F11
+    0x6F, // F12
+    0x21, // [
+    0x1E, // ]
+};
+
 void adb_release_lines(void)
 {
   ADB_PSW_HI();
