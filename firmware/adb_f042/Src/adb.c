@@ -205,6 +205,11 @@ uint8_t adb_listen_16b(uint16_t* data)
 #define ADB_CMD_TYPE_LISTEN 2
 #define ADB_CMD_TYPE_TALK 3
 // addr 2 keyboard, 3 mouse
+
+#define ADB_CHANGE_ADDR 0xFE
+
+uint32_t last_send;
+
 uint8_t parse_adb_cmd(uint8_t data)
 {
   uint8_t addr = data >> 4;
@@ -214,12 +219,8 @@ uint8_t parse_adb_cmd(uint8_t data)
   if(addr == 0)
     return ADB_ERROR;
 
-  // if(cmd == ADB_CMD_TYPE_TALK && reg == 3)
-  //   printf("0x%x %d %d %d\n", data, addr, cmd, reg);
-
   if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_mouse_current_addr)
   {
-    // send response here
     uint16_t response = 0x6001; // 0110 0000 0000 0001
     uint16_t rand_id = (rand() % 0xf) << 8;
     response |= rand_id;
@@ -229,12 +230,21 @@ uint8_t parse_adb_cmd(uint8_t data)
   if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_mouse_current_addr)
   {
     uint16_t host_cmd;
-    DEBUG1_HI();
     adb_listen_16b(&host_cmd);
-    printf("%d\n", host_cmd);
+    if((host_cmd & ADB_CHANGE_ADDR) == ADB_CHANGE_ADDR)
+      adb_mouse_current_addr = (host_cmd & 0xf00) >> 8;
+  }
+
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
+  {
+    uint16_t response = 0x80fc;
+    DEBUG1_HI();
+    adb_send_response_16b(response);
+    last_send = HAL_GetTick();
+    printf("sending...\n");
     DEBUG1_LOW();
   }
-  
+
   return ADB_OK;
 }
 

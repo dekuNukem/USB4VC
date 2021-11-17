@@ -110,3 +110,12 @@ no response
 -----
 
 host: 0010 1011
+
+
+
+ // printf("%x %x\n", host_cmd, adb_mouse_current_addr);
+      printf("!\n");
+    printf("%x %x\n", host_cmd, host_cmd & ADB_CHANGE_ADDR);
+
+  // if(cmd == ADB_CMD_TYPE_TALK && reg == 3)
+  //   printf("0x%x %d %d %d\n", data, addr, cmd, reg);
