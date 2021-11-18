@@ -213,7 +213,8 @@ uint8_t adb_write_byte(uint8_t data)
       ADB_DATA_LOW();
       delay_us(35);
       ADB_DATA_HI();
-      if(ADB_READ_DATA_PIN() != GPIO_PIN_SET)
+      // if the line doesnt actually go high, then there has been a bus collision
+      if(ADB_READ_DATA_PIN() != GPIO_PIN_SET) 
         return ADB_LINE_STATUS_COLLISION;
       delay_us(65);
     }
@@ -244,6 +245,7 @@ void write_test(void)
   ;
 }
 
+// to be called right after a LISTEN command from host
 uint8_t adb_send_response_16b(uint16_t data)
 {
   delay_us(170); // stop-to-start time
