@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mil" unit="mm" style="lines" multiple="1" display="no" altdistance="10" altunitdist="mil" altunit="mil"/>
+<grid distance="1" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="10" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -23,19 +23,19 @@
 <layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
 <layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
 <layer number="15" name="Route15" color="23" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
@@ -47,9 +47,9 @@
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
@@ -59,7 +59,7 @@
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="1" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="7" fill="1" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -1864,8 +1864,8 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="C2" library="clock" package="0805" value="10uF" x="10.795" y="56.515" smashed="yes" rot="R270">
 <attribute name="NAME" x="10.287" y="58.2295" size="0.8128" layer="25"/>
 </element>
-<element name="C3" library="clock" package="0805" value="10uF" x="6.477" y="40.259" smashed="yes">
-<attribute name="NAME" x="8.128" y="42.0243" size="0.8128" layer="25" rot="R180"/>
+<element name="C3" library="clock" package="0805" value="10uF" x="11.3538" y="44.3484" smashed="yes" rot="R270">
+<attribute name="NAME" x="11.9126" y="42.6847" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="U5" library="SparkFun-IC-Comms" package="SO016" value="CH340C" x="25.7556" y="69.0118" smashed="yes" rot="R90">
 <attribute name="PROD_ID" value="IC-14038" x="25.7556" y="69.0118" size="1.778" layer="27" rot="R90" display="off"/>
@@ -1889,10 +1889,10 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="C4" library="clock" package="0805" value="10uF" x="3.683" y="39.5622" smashed="yes" rot="R90">
 <attribute name="NAME" x="2.6797" y="38.9526" size="0.8128" layer="25" rot="R90"/>
 </element>
-<element name="C8" library="clock" package="0805" value="18pF" x="34.1122" y="42.7482" smashed="yes" rot="R180">
+<element name="C8" library="clock" package="0805" value="20pF" x="34.1122" y="42.7482" smashed="yes" rot="R180">
 <attribute name="NAME" x="34.4932" y="41.7957" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="C9" library="clock" package="0805" value="18pF" x="34.1122" y="48.8442" smashed="yes">
+<element name="C9" library="clock" package="0805" value="20pF" x="34.1122" y="48.8442" smashed="yes">
 <attribute name="NAME" x="33.5788" y="50.0253" size="0.8128" layer="25"/>
 </element>
 <element name="Y1" library="SparkFun-Clocks" package="CRYSTAL-SMD-3.2X2.5MM" value="24MHz" x="34.1122" y="45.7962" smashed="yes" rot="R90">
@@ -1919,10 +1919,10 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="C10" library="clock" package="0805" value="100nF" x="20.8788" y="41.402" smashed="yes">
 <attribute name="NAME" x="17.3482" y="40.9829" size="0.8128" layer="25"/>
 </element>
-<element name="C11" library="clock" package="0805" value="1uF" x="24.765" y="38.354" smashed="yes" rot="R180">
+<element name="C11" library="clock" package="0805" value="100nF" x="24.765" y="38.354" smashed="yes" rot="R180">
 <attribute name="NAME" x="28.3464" y="38.8239" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="C12" library="clock" package="0805" value="100nF" x="24.765" y="36.576" smashed="yes" rot="R180">
+<element name="C12" library="clock" package="0805" value="1uF" x="24.765" y="36.576" smashed="yes" rot="R180">
 <attribute name="NAME" x="28.194" y="36.9697" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="C13" library="clock" package="0805" value="100nF" x="24.765" y="40.5892" smashed="yes" rot="R180">
@@ -1932,7 +1932,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="NAME" x="14.4272" y="53.9877" size="0.8128" layer="25"/>
 </element>
 <element name="C15" library="clock" package="0805" value="100nF" x="15.1892" y="45.974" smashed="yes" rot="R270">
-<attribute name="NAME" x="12.2428" y="45.8851" size="0.8128" layer="25"/>
+<attribute name="NAME" x="16.9291" y="46.736" size="0.8128" layer="25" rot="R90"/>
 </element>
 <element name="C16" library="clock" package="0805" value="100nF" x="15.494" y="42.545" smashed="yes" rot="R90">
 <attribute name="NAME" x="13.7795" y="43.561" size="0.8128" layer="25" rot="R270"/>
@@ -2222,7 +2222,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="22.8346" y1="55.2196" x2="23.3172" y2="54.737" width="0.1524" layer="1"/>
 <wire x1="24.26" y1="54.1498" x2="24.26" y2="53.514" width="0.1524" layer="1"/>
 <contactref element="R10" pad="1"/>
-<wire x1="21.7" y1="10.62" x2="21.7" y2="16.3" width="0" layer="19" extent="1-1"/>
+<wire x1="21.7" y1="16.3" x2="21.7" y2="10.62" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="+3V3">
 <polygon width="0.1524" layer="16" isolate="0.2794" rank="2">
@@ -2669,11 +2669,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="23.46" y1="40.9942" x2="23.865" y2="40.5892" width="0.2032" layer="1"/>
 <contactref element="C16" pad="2"/>
 <via x="17.399" y="43.053" extent="1-16" drill="0.55"/>
-<wire x1="8.103" y1="44.831" x2="7.377" y2="44.105" width="0.508" layer="1"/>
-<wire x1="7.377" y1="44.105" x2="7.377" y2="40.259" width="0.508" layer="1"/>
-<wire x1="7.377" y1="40.259" x2="8.7376" y2="40.259" width="0.508" layer="1"/>
-<wire x1="11.9236" y1="43.445" x2="15.494" y2="43.445" width="0.508" layer="1"/>
-<wire x1="8.7376" y1="40.259" x2="11.9236" y2="43.445" width="0.508" layer="1"/>
 <wire x1="15.494" y1="43.445" x2="17.007" y2="43.445" width="0.508" layer="1"/>
 <wire x1="17.007" y1="43.445" x2="17.399" y2="43.053" width="0.508" layer="1"/>
 <wire x1="17.399" y1="43.053" x2="20.193" y2="40.259" width="0.508" layer="16"/>
@@ -2690,6 +2685,10 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="17.606" y1="44.06" x2="17.606" y2="43.7172" width="0.2032" layer="1"/>
 <wire x1="17.606" y1="43.7172" x2="17.399" y2="43.5102" width="0.2032" layer="1"/>
 <wire x1="17.399" y1="43.5102" x2="17.399" y2="43.053" width="0.2032" layer="1"/>
+<wire x1="8.103" y1="44.831" x2="9.4856" y2="43.4484" width="0.508" layer="1"/>
+<wire x1="9.4856" y1="43.4484" x2="11.3538" y2="43.4484" width="0.508" layer="1"/>
+<wire x1="11.3538" y1="43.4484" x2="11.3572" y2="43.445" width="0.508" layer="1"/>
+<wire x1="11.3572" y1="43.445" x2="15.494" y2="43.445" width="0.508" layer="1"/>
 </signal>
 <signal name="+2V5">
 <contactref element="IC2" pad="4"/>

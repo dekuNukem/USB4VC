@@ -8640,9 +8640,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND17" library="clock" deviceset="GND" device=""/>
-<part name="C8" library="clock" deviceset="CAP" device="0805" value="18pF"/>
+<part name="C8" library="clock" deviceset="CAP" device="0805" value="20pF"/>
 <part name="GND18" library="clock" deviceset="GND" device=""/>
-<part name="C9" library="clock" deviceset="CAP" device="0805" value="18pF"/>
+<part name="C9" library="clock" deviceset="CAP" device="0805" value="20pF"/>
 <part name="GND19" library="clock" deviceset="GND" device=""/>
 <part name="Y1" library="SparkFun-Clocks" deviceset="CRYSTAL-26MHZ" device="SMD-3.2X2.5" value="24MHz"/>
 <part name="+3V6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
@@ -8670,8 +8670,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="U$14" library="my_supply" deviceset="+2V5" device=""/>
 <part name="U$15" library="my_supply" deviceset="+1V2" device=""/>
 <part name="C10" library="clock" deviceset="CAP" device="0805" value="100nF"/>
-<part name="C11" library="clock" deviceset="CAP" device="0805" value="1uF"/>
-<part name="C12" library="clock" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C11" library="clock" deviceset="CAP" device="0805" value="100nF"/>
+<part name="C12" library="clock" deviceset="CAP" device="0805" value="1uF"/>
 <part name="C13" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C14" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="C15" library="clock" deviceset="CAP" device="0805" value="100nF"/>
