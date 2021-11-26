@@ -3046,7 +3046,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="49.022" y1="47.4472" x2="52.4728" y2="47.4472" width="0.1524" layer="16"/>
 <wire x1="52.4728" y1="47.4472" x2="53.77" y2="46.15" width="0.1524" layer="16"/>
 </signal>
-<signal name="N$20">
+<signal name="SLAVE_REQ">
 <contactref element="U$1" pad="P$46"/>
 <contactref element="JP1" pad="28"/>
 <wire x1="28.5242" y1="43.2308" x2="30.6324" y2="41.1226" width="0.1524" layer="1"/>

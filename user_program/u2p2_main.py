@@ -21,7 +21,7 @@ if is_on_raspberry_pi:
     gpio_file = open("/sys/class/gpio/gpio16/value", 'rb')
     print("GPIO init done")
 else:
-    spi = spidev.SpiDev(1, 0) # lichee
+    spi = spidev.SpiDev(0, 0) # lichee
     print("I'm on custom board!")
     print("DONT FORGET TO RUN gpio_setup.sh!")
     gpio_file = open("/sys/class/gpio/gpio131/value", 'rb')
