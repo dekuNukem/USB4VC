@@ -1351,7 +1351,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <contactref element="SW4" pad="P$1"/>
 <contactref element="R6" pad="1"/>
 <contactref element="C1" pad="1"/>
-<contactref element="R1" pad="2"/>
 <contactref element="C2" pad="1"/>
 <contactref element="C3" pad="1"/>
 <contactref element="JP5" pad="1"/>
@@ -1427,6 +1426,8 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <contactref element="JP11" pad="1"/>
 <wire x1="9.906" y1="10.16" x2="9.906" y2="12.734" width="0.2032" layer="1"/>
 <wire x1="9.906" y1="12.734" x2="10.888" y2="13.716" width="0.2032" layer="1"/>
+<contactref element="R1" pad="2"/>
+<wire x1="28.325" y1="29.5822" x2="33.4264" y2="31.6" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$1">
 <contactref element="IC3" pad="4"/>

@@ -4574,7 +4574,6 @@ Very common IC. This is generically called 'MAX232', but works with the 3V equiv
 <part name="C1" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="R1" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="12K"/>
-<part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="JP4" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X8" device="" package3d_urn="urn:adsk.eagle:package:22409/2"/>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
@@ -4612,6 +4611,7 @@ Very common IC. This is generically called 'MAX232', but works with the 3V equiv
 <part name="JP10" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-2X4" device="" package3d_urn="urn:adsk.eagle:package:22461/2"/>
 <part name="JP11" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X4" device="" package3d_urn="urn:adsk.eagle:package:22407/2"/>
 <part name="+3V9" library="backplane" deviceset="+3V3" device=""/>
+<part name="+3V10" library="backplane" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -4703,12 +4703,9 @@ Very common IC. This is generically called 'MAX232', but works with the 3V equiv
 <instance part="GND8" gate="1" x="213.36" y="-33.02" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="215.9" y="-35.56" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="R1" gate="G$1" x="254" y="22.86" smashed="yes" rot="R270">
-<attribute name="NAME" x="255.4986" y="26.67" size="1.778" layer="95" rot="R270"/>
-<attribute name="VALUE" x="250.698" y="26.67" size="1.778" layer="96" rot="R270"/>
-</instance>
-<instance part="GND4" gate="1" x="254" y="15.24" smashed="yes">
-<attribute name="VALUE" x="251.46" y="12.7" size="1.778" layer="96"/>
+<instance part="R1" gate="G$1" x="259.08" y="33.02" smashed="yes" rot="R90">
+<attribute name="NAME" x="257.5814" y="29.21" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="262.382" y="29.21" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="JP4" gate="A" x="111.76" y="-43.18" smashed="yes" rot="MR270">
 <attribute name="NAME" x="103.505" y="-36.83" size="1.778" layer="95" rot="MR270"/>
@@ -4835,6 +4832,9 @@ Very common IC. This is generically called 'MAX232', but works with the 3V equiv
 <instance part="+3V9" gate="G$1" x="248.92" y="134.62" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="251.46" y="129.54" size="1.778" layer="96" rot="MR90"/>
 </instance>
+<instance part="+3V10" gate="G$1" x="259.08" y="40.64" smashed="yes" rot="MR0">
+<attribute name="VALUE" x="261.62" y="35.56" size="1.778" layer="96" rot="MR90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -4911,6 +4911,10 @@ Very common IC. This is generically called 'MAX232', but works with the 3V equiv
 <wire x1="251.46" y1="124.46" x2="254" y2="124.46" width="0.1524" layer="91"/>
 <junction x="251.46" y="124.46"/>
 </segment>
+<segment>
+<pinref part="R1" gate="G$1" pin="2"/>
+<pinref part="+3V10" gate="G$1" pin="+3V3"/>
+</segment>
 </net>
 <net name="GND" class="0">
 <segment>
@@ -4975,10 +4979,6 @@ Very common IC. This is generically called 'MAX232', but works with the 3V equiv
 <wire x1="223.52" y1="-30.48" x2="236.22" y2="-30.48" width="0.1524" layer="91"/>
 <junction x="223.52" y="-30.48"/>
 <pinref part="C3" gate="G$1" pin="1"/>
-</segment>
-<segment>
-<pinref part="R1" gate="G$1" pin="2"/>
-<pinref part="GND4" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="GND6" gate="1" pin="GND"/>
@@ -5072,14 +5072,14 @@ Very common IC. This is generically called 'MAX232', but works with the 3V equiv
 <pinref part="IC3" gate="G$1" pin="NRST"/>
 <pinref part="SW4" gate="G$1" pin="2"/>
 <wire x1="208.28" y1="27.94" x2="238.76" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="238.76" y1="27.94" x2="254" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="254" y1="27.94" x2="274.32" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="238.76" y1="27.94" x2="259.08" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="259.08" y1="27.94" x2="274.32" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="274.32" y1="27.94" x2="274.32" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="SW4" gate="G$1" pin="3"/>
 <wire x1="274.32" y1="27.94" x2="274.32" y2="7.62" width="0.1524" layer="91"/>
 <junction x="274.32" y="27.94"/>
 <pinref part="R1" gate="G$1" pin="1"/>
-<junction x="254" y="27.94"/>
+<junction x="259.08" y="27.94"/>
 <wire x1="238.76" y1="27.94" x2="238.76" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="238.76" y1="50.8" x2="60.96" y2="50.8" width="0.1524" layer="91"/>
 <junction x="238.76" y="27.94"/>
