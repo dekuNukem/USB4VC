@@ -6,9 +6,9 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="5" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="50" altunitdist="mil" altunit="mil"/>
+<grid distance="1" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="50" altunitdist="mil" altunit="mil"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
 <layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
 <layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
@@ -23,7 +23,7 @@
 <layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
 <layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
 <layer number="15" name="Route15" color="23" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
@@ -1731,7 +1731,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <contactref element="JP1" pad="7"/>
 <wire x1="67.2318" y1="15.9766" x2="68.5018" y2="14.7066" width="0.2032" layer="16"/>
 <wire x1="68.5018" y1="14.7066" x2="76.2254" y2="14.7066" width="0.2032" layer="16"/>
-<wire x1="76.2254" y1="14.7066" x2="77.47" y2="15.9512" width="0.2032" layer="16"/>
+<wire x1="77.47" y1="15.9512" x2="76.2254" y2="14.7066" width="0.2032" layer="16"/>
 <wire x1="77.47" y1="15.9512" x2="77.47" y2="15.9766" width="0.2032" layer="16"/>
 <contactref element="JP2" pad="7"/>
 <wire x1="77.47" y1="15.9766" x2="78.74" y2="17.2466" width="0.2032" layer="1"/>
@@ -1852,7 +1852,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <signal name="N$19">
 <contactref element="PCB1" pad="P$33"/>
 <contactref element="JP1" pad="33"/>
-<wire x1="67.2318" y1="48.9966" x2="68.5018" y2="50.2666" width="0.2032" layer="1"/>
+<wire x1="68.5018" y1="50.2666" x2="67.2318" y2="48.9966" width="0.2032" layer="1"/>
 <wire x1="76.2" y1="50.2666" x2="77.47" y2="48.9966" width="0.2032" layer="1"/>
 <wire x1="68.5018" y1="50.2666" x2="76.2" y2="50.2666" width="0.2032" layer="1"/>
 <contactref element="JP2" pad="33"/>
