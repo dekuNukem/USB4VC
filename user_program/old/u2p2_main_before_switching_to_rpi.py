@@ -5,22 +5,33 @@ import select
 import spidev
 import threading
 
+is_on_raspberry_pi = False
+with open('/etc/os-release') as os_version_file:
+    is_on_raspberry_pi = 'raspbian' in os_version_file.read().lower()
+
 spi = None
 gpio_file = None
 
-spi = spidev.SpiDev(0, 0) # rasp
-print("I'm on Raspberry Pi!")
-os.system("echo 16 > /sys/class/gpio/export")
-os.system("echo in > /sys/class/gpio/gpio16/direction")
-os.system("echo rising > /sys/class/gpio/gpio16/edge")
-gpio_file = open("/sys/class/gpio/gpio16/value", 'rb')
-print("GPIO init done")
+if is_on_raspberry_pi:
+    spi = spidev.SpiDev(0, 0) # rasp
+    print("I'm on Raspberry Pi!")
+    os.system("echo 16 > /sys/class/gpio/export")
+    os.system("echo in > /sys/class/gpio/gpio16/direction")
+    os.system("echo rising > /sys/class/gpio/gpio16/edge")
+    gpio_file = open("/sys/class/gpio/gpio16/value", 'rb')
+    print("GPIO init done")
+else:
+    spi = spidev.SpiDev(0, 0) # lichee
+    print("I'm on custom board!")
+    print("DONT FORGET TO RUN gpio_setup.sh!")
+    gpio_file = open("/sys/class/gpio/gpio131/value", 'rb')
 
 spi.max_speed_hz = 2000000
 
 keyboard_opened_device_dict = {}
 mouse_opened_device_dict = {}
 gamepad_opened_device_dict = {}
+
 
 epoll = select.epoll()
 epoll.register(gpio_file, select.EPOLLET)
@@ -92,13 +103,23 @@ def change_kb_led(ps2kb_led_byte):
     scrolllock_list = [os.path.join(led_device_path, x) for x in led_file_list if 'scrolllock' in x]
 
     for item in scrolllock_list:
-        os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x1)} > {os.path.join(item, 'brightness')}'")
+        if is_on_raspberry_pi:
+            os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x1)} > {os.path.join(item, 'brightness')}'")
+        else:
+            os.system(f"echo {get_01(ps2kb_led_byte & 0x1)} > {os.path.join(item, 'brightness')}")
 
     for item in numlock_list:
-        os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x2)} > {os.path.join(item, 'brightness')}'")
+        if is_on_raspberry_pi:
+            os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x2)} > {os.path.join(item, 'brightness')}'")
+        else:
+            os.system(f"echo {get_01(ps2kb_led_byte & 0x2)} > {os.path.join(item, 'brightness')}")
 
     for item in capslock_list:
-        os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}'")
+        if is_on_raspberry_pi:
+            os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}'")
+        else:
+            os.system(f"echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}")
+
 
 def raw_input_event_worker():
     mouse_spi_packet_dict = {}
