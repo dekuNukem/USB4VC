@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# "><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>
+mouse: serial mouse interface - Linux Man Pages (4)</title>
+
+<meta name="description" content="Introduction The pinout of the usual 9 pin plug as used for serial mice is: pinnameused for 2RXData 3TX-12 V, Imax = 10 mA 4DTR+12 V, Imax = 10 mA 7RTS+12 V, Imax">
+<meta property="og:title" content="mouse: serial mouse interface - Linux Man Pages (4)">
+<meta property="og:type" content="website">
+<meta property="og:url" content="//www.systutorials.com/docs/linux/man/docs/linux/man/4-mouse/">
+<meta property="og:image" content="//www.systutorials.com/docs/linux/man/content/tux.png">
+<meta property="og:image:secure_url" content="https://www.systutorials.com/docs/linux/man/content/tux.png">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="mouse%20serial%20mouse%20interface%20-%20Linux%20Man%20Pages%20(4)_files/style.css" media="">
+<script type="text/javascript" src="mouse%20serial%20mouse%20interface%20-%20Linux%20Man%20Pages%20(4)_files/5673.js"></script>
+</head>
+
+<body>
+<a name="top"></a>
+
+<div id="menu-bar-container">
+<div id="menu-bar">
+<li class="first"><a class="site-title" href="https://www.systutorials.com/">SysTutorials</a></li>
+<li><a class="site-title" href="https://www.systutorials.com/docs/linux/man/">Linux Manual Pages</a></li>
+<div id="menu-bar-sep"></div>
+<li class="sub-first"><a href="https://www.systutorials.com/docs/linux/man/4/">Session 4</a></li>
+<li><a href="https://www.systutorials.com/docs/linux/man/4=m/">Starting with m</a></li>
+<li class="search"><a href="https://www.systutorials.com/search/">Search</a></li>
+</div>
+</div>
+
+<div class="content">
+
+<div class="main-content">
+
+
+<h1 style="margin-bottom:0;">
+
+mouse (4) - Linux Man Pages</h1>
+<h2 class="sub-title">mouse: serial mouse interface</h2>
+
+
+<div id="nav-after-title">
+<p style="margin:0;">
+Command to display <code style="font-size: 0.9em;">mouse</code> manual in Linux: <code style="font-size: 0.9em;">$ man 4 mouse</code>
+</p>
+</div>
+
+
+
+<a name="lbAB"></a>
+<h2 class="name">NAME</h2>
+<p>
+
+mouse - serial mouse interface
+</p>
+<a name="lbAC"></a>
+<h2>CONFIGURATION</h2>
+
+Serial mice are connected to a serial RS232/V24 dialout line, see
+<b><a href="https://www.systutorials.com/docs/linux/man/4-ttyS/">ttyS</a></b>(4)
+
+for a description.
+<a name="lbAD"></a>
+<h2>DESCRIPTION</h2>
+
+
+<a name="lbAE"></a>
+<h3>Introduction</h3>
+
+The pinout of the usual 9 pin plug as used for serial mice is:
+
+<div style="display:block; margin:25px auto 40px auto; text-align: center; width: 100%; min-height: 250px;">
+<!-- 300x250 -->
+<div id="waldo-tag-5680"></div>
+<div id="carbon-block"></div>
+</div>
+
+
+<style type="text/css">
+
+.carbon-img {float:left; padding-right: 10px;}
+
+#carbonads {
+  text-align: left;
+}
+
+#carbonads a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#carbonads a:hover {
+  color: inherit;
+}
+
+#carbonads span {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+#carbonads .carbon-wrap {
+  border-bottom: none;
+  padding: 1rem 6px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.carbon-img {
+  display: block;
+  margin: 0;
+  line-height: 1;
+}
+
+.carbon-img img {
+  display: block;
+}
+
+.carbon-text {
+  line-height: 1.5;
+  text-align: left;
+}
+
+.carbon-poweredby {
+  display: block;
+  padding: 0 1rem .5em 1rem;
+  text-align: right;
+  letter-spacing: .5px;
+  font-size: 9px;
+}
+
+a.carbon-poweredby {
+  font-size: 9px;
+}
+</style>
+
+<script>
+try {
+  fetch(new Request("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js", { method: 'HEAD', mode: 'no-cors' })).then(function(response) {
+    return true;
+  }).catch(function(e) {
+    var carbonScript = document.createElement("script");
+    carbonScript.src = "//cdn.carbonads.com/carbon.js?serve=CE7D62QE&placement=wwwsystutorialscom";
+    carbonScript.id = "_carbonads_js";
+    document.getElementById("carbon-block").appendChild(carbonScript);
+  });
+} catch (error) {
+  console.log(error);
+}
+</script>
+
+<p>
+
+</p><center><table>
+<tbody><tr valign="top"><td align="right">pin</td><td align="center">name</td><td>used for<br></td></tr>
+<tr valign="top"><td align="right">2</td><td align="center">RX</td><td>Data<br></td></tr>
+<tr valign="top"><td align="right">3</td><td align="center">TX</td><td>-12 V, Imax = 10 mA<br></td></tr>
+<tr valign="top"><td align="right">4</td><td align="center">DTR</td><td>+12 V, Imax = 10 mA<br></td></tr>
+<tr valign="top"><td align="right">7</td><td align="center">RTS</td><td>+12 V, Imax = 10 mA<br></td></tr>
+<tr valign="top"><td align="right">5</td><td align="center">GND</td><td>Ground<br></td></tr>
+</tbody></table></center>
+
+<p>
+
+This is the specification, in fact 9 V suffices with most mice.
+</p><p>
+
+The mouse driver can recognize a mouse by dropping RTS to low and raising
+it again.
+About 14 ms later the mouse will send 0x4D ('M') on the data line.
+After a further 63 ms, a Microsoft-compatible 3-button mouse will send
+0x33 ('3').
+</p><p>
+
+The relative mouse movement is sent as
+<i>dx</i>
+
+(positive means right)
+and
+<i>dy</i>
+
+(positive means down).
+Various mice can operate at different speeds.
+To select speeds, cycle through the
+speeds 9600, 4800, 2400, and 1200 bit/s, each time writing the two characters
+from the table below and waiting 0.1 seconds.
+The following table shows available speeds and the strings that select them:
+</p><p>
+
+</p><center><table>
+<tbody><tr valign="top"><td>bit/s</td><td>string<br></td></tr>
+<tr valign="top"><td>9600</td><td>*q<br></td></tr>
+<tr valign="top"><td>4800</td><td>*p<br></td></tr>
+<tr valign="top"><td>2400</td><td>*o<br></td></tr>
+<tr valign="top"><td>1200</td><td>*n<br></td></tr>
+</tbody></table></center>
+
+<p>
+
+The first byte of a data packet can be used for synchronization purposes.
+<a name="lbAF"></a>
+</p><h3>Microsoft protocol</h3>
+
+The
+<b>Microsoft</b>
+
+protocol uses 1 start bit, 7 data bits, no parity
+and one stop bit at the speed of 1200 bits/sec.
+Data is sent to RxD in 3-byte packets.
+The
+<i>dx</i>
+
+and
+<i>dy</i>
+
+movements are sent as
+two's-complement,
+<i>lb</i>
+
+(<i>rb</i>)
+
+are set when the left (right)
+button is pressed:
+<p>
+
+</p><center><table>
+<tbody><tr valign="top"><td align="right">byte</td><td align="center">d6</td><td align="center">d5</td><td align="center">d4</td><td align="center">d3</td><td align="center">d2</td><td align="center">d1</td><td align="center">d0<br></td></tr>
+<tr valign="top"><td align="right">1</td><td align="center">1</td><td align="center">lb</td><td align="center">rb</td><td align="center">dy7</td><td align="center">dy6</td><td align="center">dx7</td><td align="center">dx6<br></td></tr>
+<tr valign="top"><td align="right">2</td><td align="center">0</td><td align="center">dx5</td><td align="center">dx4</td><td align="center">dx3</td><td align="center">dx2</td><td align="center">dx1</td><td align="center">dx0<br></td></tr>
+<tr valign="top"><td align="right">3</td><td align="center">0</td><td align="center">dy5</td><td align="center">dy4</td><td align="center">dy3</td><td align="center">dy2</td><td align="center">dy1</td><td align="center">dy0<br></td></tr>
+</tbody></table></center>
+
+<a name="lbAG"></a>
+<h3>3-button Microsoft protocol</h3>
+
+Original Microsoft mice only have two buttons.
+However, there are some
+three button mice which also use the Microsoft protocol.
+Pressing or
+releasing the middle button is reported by sending a packet with zero
+movement and no buttons pressed.
+(Thus, unlike for the other two buttons, the status of the middle
+button is not reported in each packet.)
+<a name="lbAH"></a>
+<h3>Logitech protocol</h3>
+
+Logitech serial 3-button mice use a different extension of the
+Microsoft protocol: when the middle button is up, the above 3-byte
+packet is sent.
+When the middle button is down a 4-byte packet is
+sent, where the 4th byte has value 0x20 (or at least has the 0x20
+bit set).
+In particular, a press of the middle button is reported
+as 0,0,0,0x20 when no other buttons are down.
+<a name="lbAI"></a>
+<h3>Mousesystems protocol</h3>
+
+The
+<b>Mousesystems</b>
+
+protocol uses 1 start bit, 8 data bits, no parity
+and two stop bits at the speed of 1200 bits/sec.
+Data is sent to RxD in
+5-byte packets.
+<i>dx</i>
+
+is sent as the sum of the two two's-complement
+values,
+<i>dy</i>
+
+is send as negated sum of the two two's-complement
+values.
+<i>lb</i>
+
+(<i>mb</i>,
+
+<i>rb</i>)
+
+are cleared when the left (middle,
+right) button is pressed:
+<p>
+
+</p><center><table>
+<tbody><tr valign="top"><td align="right">byte</td><td align="center">d7</td><td align="center">d6</td><td align="center">d5</td><td align="center">d4</td><td align="center">d3</td><td align="center">d2</td><td align="center">d1</td><td align="center">d0<br></td></tr>
+<tr valign="top"><td align="right">1</td><td align="center">1</td><td align="center">0</td><td align="center">0</td><td align="center">0</td><td align="center">0</td><td align="center">lb</td><td align="center">mb</td><td align="center">rb<br></td></tr>
+<tr valign="top"><td align="right">2</td><td align="center">0</td><td align="center">dxa6</td><td align="center">dxa5</td><td align="center">dxa4</td><td align="center">dxa3</td><td align="center">dxa2</td><td align="center">dxa1</td><td align="center">dxa0<br></td></tr>
+<tr valign="top"><td align="right">3</td><td align="center">0</td><td align="center">dya6</td><td align="center">dya5</td><td align="center">dya4</td><td align="center">dya3</td><td align="center">dya2</td><td align="center">dya1</td><td align="center">dya0<br></td></tr>
+<tr valign="top"><td align="right">4</td><td align="center">0</td><td align="center">dxb6</td><td align="center">dxb5</td><td align="center">dxb4</td><td align="center">dxb3</td><td align="center">dxb2</td><td align="center">dxb1</td><td align="center">dxb0<br></td></tr>
+<tr valign="top"><td align="right">5</td><td align="center">0</td><td align="center">dyb6</td><td align="center">dyb5</td><td align="center">dyb4</td><td align="center">dyb3</td><td align="center">dyb2</td><td align="center">dyb1</td><td align="center">dyb0<br></td></tr>
+</tbody></table></center>
+
+<p>
+
+Bytes 4 and 5 describe the change that occurred since bytes 2 and 3
+were transmitted.
+<a name="lbAJ"></a>
+</p><h3>Sun protocol</h3>
+
+The
+<b>Sun</b>
+
+protocol is the 3-byte version of the above 5-byte
+Mousesystems protocol: the last two bytes are not sent.
+<a name="lbAK"></a>
+<h3>MM protocol</h3>
+
+The
+<b>MM</b>
+
+protocol uses 1 start bit, 8 data bits, odd parity and one
+stop bit at the speed of 1200 bits/sec.
+Data is sent to RxD in 3-byte
+packets.
+<i>dx</i>
+
+and
+<i>dy</i>
+
+are sent as single signed values, the
+sign bit indicating a negative value.
+<i>lb</i>
+
+(<i>mb</i>,
+
+<i>rb</i>)
+
+are
+set when the left (middle, right) button is pressed:
+<p>
+
+</p><center><table>
+<tbody><tr valign="top"><td align="right">byte</td><td align="center">d7</td><td align="center">d6</td><td align="center">d5</td><td align="center">d4</td><td align="center">d3</td><td align="center">d2</td><td align="center">d1</td><td align="center">d0<br></td></tr>
+<tr valign="top"><td align="right">1</td><td align="center">1</td><td align="center">0</td><td align="center">0</td><td align="center">dxs</td><td align="center">dys</td><td align="center">lb</td><td align="center">mb</td><td align="center">rb<br></td></tr>
+<tr valign="top"><td align="right">2</td><td align="center">0</td><td align="center">dx6</td><td align="center">dx5</td><td align="center">dx4</td><td align="center">dx3</td><td align="center">dx2</td><td align="center">dx1</td><td align="center">dx0<br></td></tr>
+<tr valign="top"><td align="right">3</td><td align="center">0</td><td align="center">dy6</td><td align="center">dy5</td><td align="center">dy4</td><td align="center">dy3</td><td align="center">dy2</td><td align="center">dy1</td><td align="center">dy0<br></td></tr>
+</tbody></table></center>
+
+<a name="lbAL"></a>
+<h2>FILES</h2>
+
+<dl compact="compact">
+<dt><i>/dev/mouse</i>
+
+</dt><dd>
+A commonly used symbolic link pointing to a mouse device.
+</dd></dl>
+<a name="lbAM"></a>
+<h2>COLOPHON</h2>
+
+This page is part of release 5.05 of the Linux
+<i>man-pages</i>
+
+project.
+A description of the project,
+information about reporting bugs,
+and the latest version of this page,
+can be found at
+<a rel="nofollow" href="https://www.kernel.org/doc/man-pages/">https://www.kernel.org/doc/man-pages/.</a>
+<p>
+
+
+
+</p><div style="display:block; margin:25px auto 40px auto; width: 100%; min-height: 250px;">
+<!-- 300x250 -->
+<div id="waldo-tag-5682"></div>
+</div>
+
+<div class="man-seealso "><h2>SEE ALSO</h2>
+
+<b><a href="https://www.systutorials.com/docs/linux/man/4-ttyS/">ttyS</a></b>(4),
+
+<b><a href="https://www.systutorials.com/docs/linux/man/8-gpm/">gpm</a></b>(8)
+
+<a name="lbAN"></a>
+</div><div class="related-pages"><h2>Pages related to mouse</h2><ul><li><a href="https://www.systutorials.com/docs/linux/man/4-mousedrv/">mousedrv (4)</a> - Xorg mouse input driver</li><li><a href="https://www.systutorials.com/docs/linux/man/4-modesetting/">modesetting (4)</a> - video driver for framebuffer device</li><li><a href="https://www.systutorials.com/docs/linux/man/4-modulefile/">modulefile (4)</a> - files containing Tcl code for the Modules package</li><li><a href="https://www.systutorials.com/docs/linux/man/4-vmmouse/">vmmouse (4)</a> - VMware Mouse input driver</li></ul></div>
+<div style="display: block; margin: 25px 0 40px 0;"></div>
+
+</div>
+
+<div class="sidebar">
+
+      <div class="sidebar-item" style="min-height: 600px;">
+      <!-- 300x250/300x600/160x600 -->
+      <div id="waldo-tag-5674"></div>
+      </div>
+
+      
+<div class="man-index sidebar-item"><a name="index"></a><h2>Index</h2>
+
+<dl>
+<dt><a href="#lbAB">NAME</a></dt><dd>
+</dd><dt><a href="#lbAC">CONFIGURATION</a></dt><dd>
+</dd><dt><a href="#lbAD">DESCRIPTION</a></dt><dd>
+<dl>
+<dt><a href="#lbAE">Introduction</a></dt><dd>
+</dd><dt><a href="#lbAF">Microsoft protocol</a></dt><dd>
+</dd><dt><a href="#lbAG">3-button Microsoft protocol</a></dt><dd>
+</dd><dt><a href="#lbAH">Logitech protocol</a></dt><dd>
+</dd><dt><a href="#lbAI">Mousesystems protocol</a></dt><dd>
+</dd><dt><a href="#lbAJ">Sun protocol</a></dt><dd>
+</dd><dt><a href="#lbAK">MM protocol</a></dt><dd>
+</dd></dl>
+</dd><dt><a href="#lbAL">FILES</a></dt><dd>
+</dd><dt><a href="#lbAM">SEE ALSO</a></dt><dd>
+</dd><dt><a href="#lbAN">COLOPHON</a></dt><dd>
+</dd></dl>
+</div>
+<div class="sidebar-item" style="min-height: 600px;">
+<!-- 300x250/300x600/160x600 -->
+<div id="waldo-tag-5676"></div>
+</div>
+
+<div class="man-seealso sidebar-item"><h2>SEE ALSO</h2>
+
+<b><a href="https://www.systutorials.com/docs/linux/man/4-ttyS/">ttyS</a></b>(4),
+
+<b><a href="https://www.systutorials.com/docs/linux/man/8-gpm/">gpm</a></b>(8)
+
+<a name="lbAN"></a>
+</div>
+<div class="sidebar-item" style="min-height: 600px;">
+<!-- 300x250/300x600/160x600 -->
+<div id="waldo-tag-5678"></div>
+</div>
+
+<div class="sidebar-item"><h2>Pages related to mouse</h2><ul><li><a href="https://www.systutorials.com/docs/linux/man/4-mousedrv/">mousedrv (4)</a> - Xorg mouse input driver</li><li><a href="https://www.systutorials.com/docs/linux/man/4-modesetting/">modesetting (4)</a> - video driver for framebuffer device</li><li><a href="https://www.systutorials.com/docs/linux/man/4-modulefile/">modulefile (4)</a> - files containing Tcl code for the Modules package</li><li><a href="https://www.systutorials.com/docs/linux/man/4-vmmouse/">vmmouse (4)</a> - VMware Mouse input driver</li></ul></div>
+<div class="sidebar-item" style="">
+<!-- code from Primis - systutorials.com - systutorials.com -->
+<script type="text/javascript" language="javascript" src="mouse%20serial%20mouse%20interface%20-%20Linux%20Man%20Pages%20(4)_files/liveView"></script>
+<!-- code from Primis -->
+</div>
+
+
+</div>
+
+<div class="page-footer">
+<a href="https://www.systutorials.com/docs/linux/man/">Linux man pages</a> generated by: <a href="https://www.systutorials.com/">SysTutorials</a>. Linux Man Pages Copyright Respective Owners. Site Copyright © <a href="https://www.systutorials.com/">SysTutorials</a>. All Rights Reserved.</div>
+
+</div>
+
+<!-- begine code highlighter -->
+<script source="//www.systutorials.com/docs/linux/man/content/bundle.js" async=""></script><link rel="stylesheet" href="mouse%20serial%20mouse%20interface%20-%20Linux%20Man%20Pages%20(4)_files/atom-one-light.css"><!-- end code highlighter -->
+
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=6390640;
+var sc_invisible=1;
+var sc_security="4c9e244b";
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' async src='" +
+scJsHost+
+"statcounter.com/counter/counter_xhtml.js'></"+"script>");
+</script>
+<!-- End of StatCounter Code for Default Guide -->
+
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34520918-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+</body></html>

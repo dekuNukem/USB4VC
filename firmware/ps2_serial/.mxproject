@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/allen/Desktop/repos/usb2ps2/companion_boards/pc/Inc
+HeaderPath=C:/Users/allen/Desktop/repos/usb2ps2/firmware/ps2_serial/Inc
 HeaderFiles=stm32f0xx_it.h;stm32f0xx_hal_conf.h;main.h;
-SourcePath=C:/Users/allen/Desktop/repos/usb2ps2/companion_boards/pc/Src
+SourcePath=C:/Users/allen/Desktop/repos/usb2ps2/firmware/ps2_serial/Src
 SourceFiles=stm32f0xx_it.c;stm32f0xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]

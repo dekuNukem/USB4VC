@@ -3,7 +3,7 @@
 <title>Static Call Graph - [test\test.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image test\test.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Oct 28 12:37:16 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Nov 28 20:14:59 2021
 <BR><P>
 <H3>Maximum Stack Usage =        172 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -151,8 +151,6 @@ Global Symbols
 <LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetSysClockFreq
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_SetConfig
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_is_full
-<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_add
 </UL>
 
 <P><STRONG><a name="[3f]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
@@ -178,7 +176,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_reset
 </UL>
 
-<P><STRONG><a name="[68]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
+<P><STRONG><a name="[6a]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -213,7 +211,7 @@ Global Symbols
 <P><STRONG><a name="[3e]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
-<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_init
+<LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_init
 </UL>
 
 <P><STRONG><a name="[32]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetTick))
@@ -271,10 +269,10 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_SetPriority
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_InitTick
+<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_MspInit
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_MspInit
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
-<LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_MspInit
 </UL>
 
 <P><STRONG><a name="[31]"></a>HAL_RCCEx_PeriphCLKConfig</STRONG> (Thumb, 222 bytes, Stack size 24 bytes, stm32f0xx_hal_rcc_ex.o(i.HAL_RCCEx_PeriphCLKConfig))
@@ -365,12 +363,12 @@ Global Symbols
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 </UL>
 
-<P><STRONG><a name="[3d]"></a>HAL_SPI_TxRxCpltCallback</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, main.o(i.HAL_SPI_TxRxCpltCallback))
-<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = HAL_SPI_TxRxCpltCallback &rArr; ps2kb_buf_add &rArr; ps2kb_buf_is_full &rArr; __aeabi_uidivmod
+<P><STRONG><a name="[3d]"></a>HAL_SPI_TxRxCpltCallback</STRONG> (Thumb, 68 bytes, Stack size 8 bytes, main.o(i.HAL_SPI_TxRxCpltCallback))
+<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = HAL_SPI_TxRxCpltCallback &rArr; HAL_SPI_TransmitReceive_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
 <LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_add
+<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
@@ -427,8 +425,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 </UL>
 
-<P><STRONG><a name="[65]"></a>HAL_TIM_Base_Start_IT</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_Base_Start_IT))
-<BR><BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us_init
+<P><STRONG><a name="[67]"></a>HAL_TIM_Base_Start_IT</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_Base_Start_IT))
+<BR><BR>[Called By]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us_init
 </UL>
 
 <P><STRONG><a name="[48]"></a>HAL_TIM_IC_CaptureCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_IC_CaptureCallback))
@@ -589,10 +587,11 @@ Global Symbols
 
 <P><STRONG><a name="[7a]"></a>__1printf$bare</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, printfb.o(i.__0printf$bare), UNUSED)
 
-<P><STRONG><a name="[69]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, printfb.o(i.__0printf$bare))
+<P><STRONG><a name="[41]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, printfb.o(i.__0printf$bare))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 </UL>
 
 <P><STRONG><a name="[7b]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
@@ -601,10 +600,18 @@ Global Symbols
 
 <P><STRONG><a name="[7d]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[64]"></a>delay_us_init</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, delay_us.o(i.delay_us_init))
+<P><STRONG><a name="[64]"></a>delay_us</STRONG> (Thumb, 20 bytes, Stack size 4 bytes, delay_us.o(i.delay_us))
+<BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = delay_us
+</UL>
+<BR>[Calls]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
+</UL>
+<BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[66]"></a>delay_us_init</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, delay_us.o(i.delay_us_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = delay_us_init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
+<BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -616,7 +623,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> printfb.o(i.__0printf$bare)
 </UL>
-<P><STRONG><a name="[1a]"></a>main</STRONG> (Thumb, 114 bytes, Stack size 0 bytes, main.o(i.main))
+<P><STRONG><a name="[1a]"></a>main</STRONG> (Thumb, 120 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 172<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
@@ -626,30 +633,26 @@ Global Symbols
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_SPI1_Init
 <LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
-<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_init
-<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_init
-<LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us_init
-<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
-<LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_init
+<LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_init
+<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us_init
+<LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
+<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
 <P><STRONG><a name="[6b]"></a>malloc</STRONG> (Thumb, 92 bytes, Stack size 20 bytes, malloc.o(i.malloc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = malloc
 </UL>
-<BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_init
+<BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_init
 </UL>
 
-<P><STRONG><a name="[41]"></a>ps2kb_buf_add</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, helpers.o(i.ps2kb_buf_add))
-<BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = ps2kb_buf_add &rArr; ps2kb_buf_is_full &rArr; __aeabi_uidivmod
-</UL>
-<BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_is_full
-<LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
-</UL>
-<BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
+<P><STRONG><a name="[65]"></a>micros</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, delay_us.o(i.micros))
+<BR><BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 
-<P><STRONG><a name="[67]"></a>ps2kb_buf_init</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, helpers.o(i.ps2kb_buf_init))
+<P><STRONG><a name="[69]"></a>ps2kb_buf_init</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, helpers.o(i.ps2kb_buf_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = ps2kb_buf_init &rArr; malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_reset
@@ -658,23 +661,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[6a]"></a>ps2kb_buf_is_full</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.ps2kb_buf_is_full))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = ps2kb_buf_is_full &rArr; __aeabi_uidivmod
-</UL>
-<BR>[Calls]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
-</UL>
-<BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_add
-</UL>
-
 <P><STRONG><a name="[6c]"></a>ps2kb_buf_reset</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.ps2kb_buf_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ps2kb_buf_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
-<BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_init
+<BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_buf_init
 </UL>
 
-<P><STRONG><a name="[66]"></a>ps2kb_init</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_init))
+<P><STRONG><a name="[68]"></a>ps2kb_init</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ps2kb_init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -686,35 +681,35 @@ Global Symbols
 Local Symbols
 </H3>
 <P><STRONG><a name="[1e]"></a>SPI_2linesRxISR_16BIT</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesRxISR_16BIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = SPI_2linesRxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; ps2kb_buf_add &rArr; ps2kb_buf_is_full &rArr; __aeabi_uidivmod
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = SPI_2linesRxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> stm32f0xx_hal_spi.o(i.HAL_SPI_TransmitReceive_IT)
 </UL>
 <P><STRONG><a name="[20]"></a>SPI_2linesRxISR_8BIT</STRONG> (Thumb, 94 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesRxISR_8BIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = SPI_2linesRxISR_8BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; ps2kb_buf_add &rArr; ps2kb_buf_is_full &rArr; __aeabi_uidivmod
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = SPI_2linesRxISR_8BIT &rArr; SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> stm32f0xx_hal_spi.o(i.HAL_SPI_TransmitReceive_IT)
 </UL>
 <P><STRONG><a name="[1f]"></a>SPI_2linesTxISR_16BIT</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesTxISR_16BIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = SPI_2linesTxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; ps2kb_buf_add &rArr; ps2kb_buf_is_full &rArr; __aeabi_uidivmod
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = SPI_2linesTxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> stm32f0xx_hal_spi.o(i.HAL_SPI_TransmitReceive_IT)
 </UL>
 <P><STRONG><a name="[21]"></a>SPI_2linesTxISR_8BIT</STRONG> (Thumb, 72 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesTxISR_8BIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = SPI_2linesTxISR_8BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; ps2kb_buf_add &rArr; ps2kb_buf_is_full &rArr; __aeabi_uidivmod
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = SPI_2linesTxISR_8BIT &rArr; SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> stm32f0xx_hal_spi.o(i.HAL_SPI_TransmitReceive_IT)
 </UL>
 <P><STRONG><a name="[59]"></a>SPI_CloseRxTx_ISR</STRONG> (Thumb, 82 bytes, Stack size 16 bytes, stm32f0xx_hal_spi.o(i.SPI_CloseRxTx_ISR))
-<BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; ps2kb_buf_add &rArr; ps2kb_buf_is_full &rArr; __aeabi_uidivmod
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_RxCpltCallback
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_ErrorCallback
@@ -765,7 +760,7 @@ Local Symbols
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 </UL>
 
-<P><STRONG><a name="[56]"></a>MX_GPIO_Init</STRONG> (Thumb, 136 bytes, Stack size 48 bytes, main.o(i.MX_GPIO_Init))
+<P><STRONG><a name="[56]"></a>MX_GPIO_Init</STRONG> (Thumb, 180 bytes, Stack size 48 bytes, main.o(i.MX_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = MX_GPIO_Init &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin

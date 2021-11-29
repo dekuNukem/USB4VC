@@ -49,6 +49,10 @@
 
 /* Private define ------------------------------------------------------------*/
 
+#define PS2MOSE_CLK_Pin GPIO_PIN_0
+#define PS2MOSE_CLK_GPIO_Port GPIOF
+#define PS2MOUSE_DATA_Pin GPIO_PIN_1
+#define PS2MOUSE_DATA_GPIO_Port GPIOF
 #define PS2KB_CLK_Pin GPIO_PIN_0
 #define PS2KB_CLK_GPIO_Port GPIOA
 #define PS2KB_DATA_Pin GPIO_PIN_1
