@@ -445,8 +445,8 @@ Through-hole MiniDIN 7 connector. Commonly used with Roomba products. Don't conf
 <connect gate="G$1" pin="B2" pad="7"/>
 <connect gate="G$1" pin="B3" pad="10"/>
 <connect gate="G$1" pin="B4" pad="14"/>
-<connect gate="G$1" pin="GND_B1" pad="4"/>
-<connect gate="G$1" pin="GND_B2" pad="5"/>
+<connect gate="G$1" pin="GND_B1" pad="4 G1"/>
+<connect gate="G$1" pin="GND_B2" pad="5 G2"/>
 <connect gate="G$1" pin="GND_MIDIOUT" pad="12"/>
 <connect gate="G$1" pin="X1" pad="3"/>
 <connect gate="G$1" pin="X2" pad="11"/>
