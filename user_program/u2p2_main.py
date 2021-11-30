@@ -4,7 +4,18 @@ import time
 import select
 import spidev
 import threading
+"""
+sudo apt install stm32flash
 
+OPTIONAL
+git clone https://git.code.sf.net/p/stm32flash/code stm32flash-code
+cd stm32flash-code
+sudo make install
+
+HAVE TO ACTIVATE BOOT0 THE WHOLE TIME
+/usr/local/bin/stm32flash -r hhh -a 0x3b /dev/i2c-1
+
+"""
 spi = None
 gpio_file = None
 
