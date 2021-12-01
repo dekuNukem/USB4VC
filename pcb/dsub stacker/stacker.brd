@@ -197,7 +197,7 @@
 <wire x1="3" y1="65" x2="0" y2="62" width="0" layer="20" curve="90"/>
 <wire x1="0" y1="62" x2="0" y2="3" width="0" layer="20"/>
 <wire x1="0" y1="3" x2="3" y2="0" width="0" layer="20" curve="90"/>
-<text x="84.3788" y="31.5214" size="1.778" layer="25" rot="R180" align="center">USB4VC Protocol Board for
+<text x="28.4988" y="33.0454" size="1.778" layer="25" rot="R180" align="center">USB4VC Protocol Board for
 IBM PC Compatibles</text>
 </plain>
 <libraries>
