@@ -683,6 +683,14 @@
 <rectangle x1="-1.524" y1="-0.254" x2="-1.016" y2="0.254" layer="51"/>
 <rectangle x1="-4.064" y1="-0.254" x2="-3.556" y2="0.254" layer="51"/>
 </package>
+<package name="1X02">
+<pad name="1" x="-1.27" y="0" drill="1.016" diameter="1.6764" rot="R90"/>
+<pad name="2" x="1.27" y="0" drill="1.016" diameter="1.6764" rot="R90"/>
+<text x="-2.6162" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.81" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="1.016" y1="-0.254" x2="1.524" y2="0.254" layer="51"/>
+<rectangle x1="-1.524" y1="-0.254" x2="-1.016" y2="0.254" layer="51"/>
+</package>
 </packages>
 <symbols>
 <symbol name="PINH2X20">
@@ -744,6 +752,16 @@
 <pin name="2" x="-5.08" y="0" length="middle"/>
 <pin name="3" x="-5.08" y="-2.54" length="middle"/>
 <pin name="4" x="-5.08" y="-5.08" length="middle"/>
+</symbol>
+<symbol name="PINHD2">
+<wire x1="-6.35" y1="-2.54" x2="1.27" y2="-2.54" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="-2.54" x2="1.27" y2="5.08" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="5.08" x2="-6.35" y2="5.08" width="0.4064" layer="94"/>
+<wire x1="-6.35" y1="5.08" x2="-6.35" y2="-2.54" width="0.4064" layer="94"/>
+<text x="-6.35" y="5.715" size="1.778" layer="95">&gt;NAME</text>
+<text x="-6.35" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="1" x="-2.54" y="2.54" visible="pad" length="short" direction="pas" function="dot"/>
+<pin name="2" x="-2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -860,6 +878,22 @@
 <connect gate="1" pin="2" pad="2"/>
 <connect gate="1" pin="3" pad="3"/>
 <connect gate="1" pin="4" pad="4"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="PINHD1X2">
+<gates>
+<gate name="1" symbol="PINHD2" x="5.08" y="0"/>
+</gates>
+<devices>
+<device name="" package="1X02">
+<connects>
+<connect gate="1" pin="1" pad="1"/>
+<connect gate="1" pin="2" pad="2"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -5888,6 +5922,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
+<part name="U$10" library="adafruit_changed" deviceset="PINHD1X2" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -6257,6 +6292,10 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </instance>
 <instance part="+3V13" gate="G$1" x="-76.2" y="-43.18" smashed="yes">
 <attribute name="VALUE" x="-78.74" y="-48.26" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="U$10" gate="1" x="88.9" y="134.62" smashed="yes" rot="R180">
+<attribute name="NAME" x="95.25" y="128.905" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="95.25" y="139.7" size="1.778" layer="96" rot="R180"/>
 </instance>
 </instances>
 <busses>
@@ -7098,7 +7137,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="LED3" gate="G$1" pin="A"/>
 </segment>
 </net>
-<net name="N$30" class="0">
+<net name="PST_SDA" class="0">
 <segment>
 <pinref part="IC1" gate="PORTB_H" pin="PB14"/>
 <wire x1="119.38" y1="182.88" x2="121.92" y2="182.88" width="0.1524" layer="91"/>
@@ -7108,9 +7147,14 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="121.92" y1="129.54" x2="99.06" y2="129.54" width="0.1524" layer="91"/>
 <pinref part="R14" gate="G$1" pin="2"/>
 <junction x="121.92" y="167.64"/>
+<wire x1="99.06" y1="129.54" x2="96.52" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="129.54" x2="96.52" y2="132.08" width="0.1524" layer="91"/>
+<junction x="99.06" y="129.54"/>
+<pinref part="U$10" gate="1" pin="1"/>
+<wire x1="96.52" y1="132.08" x2="91.44" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$31" class="0">
+<net name="POT_SCL" class="0">
 <segment>
 <pinref part="IC1" gate="PORTB_H" pin="PB13"/>
 <wire x1="119.38" y1="185.42" x2="124.46" y2="185.42" width="0.1524" layer="91"/>
@@ -7120,6 +7164,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="124.46" y1="134.62" x2="99.06" y2="134.62" width="0.1524" layer="91"/>
 <pinref part="R13" gate="G$1" pin="2"/>
 <junction x="124.46" y="170.18"/>
+<pinref part="U$10" gate="1" pin="2"/>
+<wire x1="99.06" y1="134.62" x2="91.44" y2="134.62" width="0.1524" layer="91"/>
+<junction x="99.06" y="134.62"/>
 </segment>
 </net>
 <net name="N$32" class="0">
