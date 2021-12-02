@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="5" unitdist="mil" unit="mm" style="lines" multiple="1" display="no" altdistance="1" altunitdist="mil" altunit="mil"/>
+<grid distance="5" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="1" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
@@ -197,14 +197,14 @@
 <wire x1="2" y1="40" x2="0" y2="38" width="0" layer="20" curve="90"/>
 <wire x1="0" y1="38" x2="0" y2="2" width="0" layer="20"/>
 <wire x1="0" y1="2" x2="2" y2="0" width="0" layer="20" curve="90"/>
-<text x="13.847" y="27.535" size="1.016" layer="25" rot="R90" align="center">GND</text>
-<text x="11.307" y="27.535" size="1.016" layer="25" rot="R90" align="center">D+</text>
-<text x="8.64" y="27.535" size="1.016" layer="25" rot="R90" align="center">D-</text>
-<text x="6.227" y="27.535" size="1.016" layer="25" rot="R90" align="center">5V</text>
-<text x="13.847" y="21.566" size="1.016" layer="25" rot="R90" align="center">GND</text>
-<text x="11.307" y="21.566" size="1.016" layer="25" rot="R90" align="center">D+</text>
-<text x="8.64" y="21.566" size="1.016" layer="25" rot="R90" align="center">D-</text>
-<text x="6.227" y="21.566" size="1.016" layer="25" rot="R90" align="center">5V</text>
+<text x="13.847" y="20.677" size="0.8128" layer="25" rot="R90" align="center">GND</text>
+<text x="11.307" y="28.297" size="1.016" layer="25" rot="R90" align="center">D+</text>
+<text x="8.64" y="28.297" size="1.016" layer="25" rot="R90" align="center">D-</text>
+<text x="6.1" y="20.804" size="1.016" layer="25" rot="R90" align="center">5V</text>
+<text x="11.307" y="20.804" size="1.016" layer="25" rot="R90" align="center">D+</text>
+<text x="8.64" y="20.931" size="1.016" layer="25" rot="R90" align="center">D-</text>
+<text x="6.1" y="28.297" size="1.016" layer="25" rot="R90" align="center">5V</text>
+<text x="13.847" y="28.297" size="0.8128" layer="25" rot="R90" align="center">GND</text>
 </plain>
 <libraries>
 <library name="usb-connector">
@@ -254,6 +254,56 @@
 <description>&lt;b&gt;Pin Header Connectors&lt;/b&gt;&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
+<package name="2X04" urn="urn:adsk.eagle:footprint:22351/1" library_version="4">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<wire x1="-5.08" y1="-1.905" x2="-4.445" y2="-2.54" width="0.1524" layer="21"/>
+<wire x1="-3.175" y1="-2.54" x2="-2.54" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="-1.905" x2="-1.905" y2="-2.54" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="-2.54" x2="0" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="0" y1="-1.905" x2="0.635" y2="-2.54" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="-2.54" x2="2.54" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="-1.905" x2="-5.08" y2="1.905" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="1.905" x2="-4.445" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="-4.445" y1="2.54" x2="-3.175" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="-3.175" y1="2.54" x2="-2.54" y2="1.905" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="1.905" x2="-1.905" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="2.54" x2="-0.635" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="2.54" x2="0" y2="1.905" width="0.1524" layer="21"/>
+<wire x1="0" y1="1.905" x2="0.635" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="2.54" x2="1.905" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="2.54" x2="2.54" y2="1.905" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="1.905" x2="-2.54" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="0" y1="1.905" x2="0" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="1.905" x2="2.54" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="-2.54" x2="1.905" y2="-2.54" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-2.54" x2="-0.635" y2="-2.54" width="0.1524" layer="21"/>
+<wire x1="-4.445" y1="-2.54" x2="-3.175" y2="-2.54" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="-1.905" x2="3.175" y2="-2.54" width="0.1524" layer="21"/>
+<wire x1="4.445" y1="-2.54" x2="5.08" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="1.905" x2="3.175" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="2.54" x2="4.445" y2="2.54" width="0.1524" layer="21"/>
+<wire x1="4.445" y1="2.54" x2="5.08" y2="1.905" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="1.905" x2="5.08" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="-2.54" x2="4.445" y2="-2.54" width="0.1524" layer="21"/>
+<pad name="1" x="-3.81" y="-1.27" drill="1.016" shape="octagon"/>
+<pad name="2" x="-3.81" y="1.27" drill="1.016" shape="octagon"/>
+<pad name="3" x="-1.27" y="-1.27" drill="1.016" shape="octagon"/>
+<pad name="4" x="-1.27" y="1.27" drill="1.016" shape="octagon"/>
+<pad name="5" x="1.27" y="-1.27" drill="1.016" shape="octagon"/>
+<pad name="6" x="1.27" y="1.27" drill="1.016" shape="octagon"/>
+<pad name="7" x="3.81" y="-1.27" drill="1.016" shape="octagon"/>
+<pad name="8" x="3.81" y="1.27" drill="1.016" shape="octagon"/>
+<text x="-5.08" y="3.175" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-5.08" y="-4.445" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-4.064" y1="-1.524" x2="-3.556" y2="-1.016" layer="51"/>
+<rectangle x1="-4.064" y1="1.016" x2="-3.556" y2="1.524" layer="51"/>
+<rectangle x1="-1.524" y1="1.016" x2="-1.016" y2="1.524" layer="51"/>
+<rectangle x1="-1.524" y1="-1.524" x2="-1.016" y2="-1.016" layer="51"/>
+<rectangle x1="1.016" y1="1.016" x2="1.524" y2="1.524" layer="51"/>
+<rectangle x1="1.016" y1="-1.524" x2="1.524" y2="-1.016" layer="51"/>
+<rectangle x1="3.556" y1="1.016" x2="4.064" y2="1.524" layer="51"/>
+<rectangle x1="3.556" y1="-1.524" x2="4.064" y2="-1.016" layer="51"/>
+</package>
 <package name="1X04" urn="urn:adsk.eagle:footprint:22258/1" library_version="4">
 <description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
 <wire x1="0" y1="0.635" x2="0.635" y2="1.27" width="0.1524" layer="21"/>
@@ -298,6 +348,12 @@
 </package>
 </packages>
 <packages3d>
+<package3d name="2X04" urn="urn:adsk.eagle:package:22461/2" type="model" library_version="4">
+<description>PIN HEADER</description>
+<packageinstances>
+<packageinstance name="2X04"/>
+</packageinstances>
+</package3d>
 <package3d name="1X04" urn="urn:adsk.eagle:package:22407/2" type="model" library_version="4">
 <description>PIN HEADER</description>
 <packageinstances>
@@ -507,17 +563,17 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="OC_FARNELL" value="unknown" x="10" y="10" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="10" y="10" size="1.778" layer="27" display="off"/>
 </element>
-<element name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X04" package3d_urn="urn:adsk.eagle:package:22407/2" value="" x="10" y="30.5" smashed="yes">
-<attribute name="POPULARITY" value="91" x="10" y="30.5" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="4.92" y="27.325" size="1.27" layer="27"/>
+<element name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="2X04" package3d_urn="urn:adsk.eagle:package:22461/2" value="" x="10" y="24.5" smashed="yes" rot="MR180">
+<attribute name="POPULARITY" value="47" x="10" y="24.5" size="1.778" layer="28" rot="MR180" display="off"/>
+<attribute name="VALUE" x="4.92" y="28.945" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X04" package3d_urn="urn:adsk.eagle:package:22407/2" value="" x="10" y="24.5" smashed="yes">
-<attribute name="POPULARITY" value="91" x="10" y="24.5" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="4.92" y="21.325" size="1.27" layer="27"/>
+<element name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X04" package3d_urn="urn:adsk.eagle:package:22407/2" value="" x="10" y="31" smashed="yes">
+<attribute name="POPULARITY" value="91" x="10" y="31" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="4.92" y="27.825" size="1.27" layer="27"/>
 </element>
-<element name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X04" package3d_urn="urn:adsk.eagle:package:22407/2" value="" x="10" y="18.5" smashed="yes">
-<attribute name="POPULARITY" value="91" x="10" y="18.5" size="1.778" layer="27" display="off"/>
-<attribute name="VALUE" x="4.92" y="15.325" size="1.27" layer="27"/>
+<element name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X04" package3d_urn="urn:adsk.eagle:package:22407/2" value="" x="10" y="18" smashed="yes">
+<attribute name="POPULARITY" value="91" x="10" y="18" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="4.92" y="14.825" size="1.27" layer="27"/>
 </element>
 </elements>
 <signals>
@@ -535,10 +591,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <contactref element="USB2" pad="S2"/>
 <contactref element="USB2" pad="S1"/>
 <contactref element="USB1" pad="GND"/>
-<contactref element="USB2" pad="GND"/>
-<contactref element="JP1" pad="4"/>
-<contactref element="JP2" pad="4"/>
-<contactref element="JP3" pad="4"/>
 <contactref element="USB1" pad="SHEELD"/>
 <polygon width="0.1524" layer="16" isolate="0.2794" rank="2">
 <vertex x="2" y="40"/>
@@ -550,45 +602,66 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <vertex x="0" y="2"/>
 <vertex x="0" y="38" curve="-90"/>
 </polygon>
+<contactref element="JP2" pad="4"/>
+<contactref element="JP1" pad="7"/>
+<contactref element="JP1" pad="8"/>
+<contactref element="JP3" pad="4"/>
+<contactref element="USB2" pad="GND"/>
+<wire x1="13.5" y1="35" x2="13.5" y2="31.31" width="0.508" layer="1"/>
+<wire x1="13.5" y1="31.31" x2="13.81" y2="31" width="0.508" layer="1"/>
+<wire x1="13.81" y1="31" x2="13.81" y2="25.77" width="0.508" layer="1"/>
+<wire x1="13.81" y1="23.23" x2="13.81" y2="18" width="0.508" layer="1"/>
+<wire x1="13.81" y1="18" x2="13.81" y2="13.02" width="0.508" layer="1"/>
+<wire x1="13.81" y1="13.02" x2="13.5" y2="12.71" width="0.508" layer="1"/>
+<contactref element="USB1" pad="SHEELD2"/>
 </signal>
 <signal name="N$1">
 <contactref element="USB1" pad="VBUS"/>
-<contactref element="USB2" pad="VBUS"/>
-<contactref element="JP1" pad="1"/>
 <contactref element="JP2" pad="1"/>
-<contactref element="JP3" pad="1"/>
-<wire x1="6.5" y1="35" x2="6.5" y2="30.81" width="0.6096" layer="1"/>
-<wire x1="6.5" y1="30.81" x2="6.19" y2="30.5" width="0.6096" layer="1"/>
-<wire x1="6.19" y1="30.5" x2="6.19" y2="24.5" width="0.6096" layer="1"/>
-<wire x1="6.19" y1="24.5" x2="6.19" y2="18.5" width="0.6096" layer="1"/>
-<wire x1="6.19" y1="18.5" x2="6.19" y2="13.02" width="0.6096" layer="1"/>
-<wire x1="6.19" y1="13.02" x2="6.5" y2="12.71" width="0.6096" layer="1"/>
+<contactref element="JP1" pad="1"/>
+<wire x1="6.5" y1="35" x2="6.5" y2="31.31" width="0.508" layer="1"/>
+<wire x1="6.5" y1="31.31" x2="6.19" y2="31" width="0.508" layer="1"/>
+<wire x1="6.19" y1="31" x2="6.19" y2="25.77" width="0.508" layer="1"/>
 </signal>
 <signal name="N$2">
 <contactref element="USB1" pad="D-"/>
-<contactref element="USB2" pad="D-"/>
-<contactref element="JP1" pad="2"/>
 <contactref element="JP2" pad="2"/>
-<contactref element="JP3" pad="2"/>
-<wire x1="9" y1="35" x2="9" y2="30.77" width="0.6096" layer="1"/>
-<wire x1="9" y1="30.77" x2="8.73" y2="30.5" width="0.6096" layer="1"/>
-<wire x1="8.73" y1="30.5" x2="8.73" y2="24.5" width="0.6096" layer="1"/>
-<wire x1="8.73" y1="24.5" x2="8.73" y2="18.5" width="0.6096" layer="1"/>
-<wire x1="8.73" y1="18.5" x2="8.73" y2="12.98" width="0.6096" layer="1"/>
-<wire x1="8.73" y1="12.98" x2="9" y2="12.71" width="0.6096" layer="1"/>
+<contactref element="JP1" pad="3"/>
+<wire x1="9" y1="35" x2="8.73" y2="34.73" width="0.508" layer="1"/>
+<wire x1="8.73" y1="34.73" x2="8.73" y2="31" width="0.508" layer="1"/>
+<wire x1="8.73" y1="31" x2="8.73" y2="25.77" width="0.508" layer="1"/>
 </signal>
 <signal name="N$3">
 <contactref element="USB1" pad="D+"/>
-<contactref element="USB2" pad="D+"/>
-<contactref element="JP1" pad="3"/>
 <contactref element="JP2" pad="3"/>
+<contactref element="JP1" pad="5"/>
+<wire x1="11" y1="35" x2="11" y2="31.27" width="0.508" layer="1"/>
+<wire x1="11" y1="31.27" x2="11.27" y2="31" width="0.508" layer="1"/>
+<wire x1="11.27" y1="31" x2="11.27" y2="25.77" width="0.508" layer="1"/>
+</signal>
+<signal name="N$4">
+<contactref element="JP1" pad="2"/>
+<contactref element="JP3" pad="1"/>
+<contactref element="USB2" pad="VBUS"/>
+<wire x1="6.19" y1="23.23" x2="6.19" y2="18" width="0.508" layer="1"/>
+<wire x1="6.19" y1="18" x2="6.19" y2="13.02" width="0.508" layer="1"/>
+<wire x1="6.19" y1="13.02" x2="6.5" y2="12.71" width="0.508" layer="1"/>
+</signal>
+<signal name="N$5">
+<contactref element="JP1" pad="4"/>
+<contactref element="JP3" pad="2"/>
+<contactref element="USB2" pad="D-"/>
+<wire x1="8.73" y1="23.23" x2="8.73" y2="18" width="0.508" layer="1"/>
+<wire x1="8.73" y1="18" x2="8.73" y2="12.98" width="0.508" layer="1"/>
+<wire x1="8.73" y1="12.98" x2="9" y2="12.71" width="0.508" layer="1"/>
+</signal>
+<signal name="N$6">
+<contactref element="JP1" pad="6"/>
 <contactref element="JP3" pad="3"/>
-<wire x1="11" y1="35" x2="11.27" y2="34.73" width="0.6096" layer="1"/>
-<wire x1="11.27" y1="34.73" x2="11.27" y2="30.5" width="0.6096" layer="1"/>
-<wire x1="11.27" y1="30.5" x2="11.27" y2="24.5" width="0.6096" layer="1"/>
-<wire x1="11.27" y1="24.5" x2="11.27" y2="18.5" width="0.6096" layer="1"/>
-<wire x1="11.27" y1="18.5" x2="11.27" y2="12.98" width="0.6096" layer="1"/>
-<wire x1="11.27" y1="12.98" x2="11" y2="12.71" width="0.6096" layer="1"/>
+<contactref element="USB2" pad="D+"/>
+<wire x1="11.27" y1="23.23" x2="11.27" y2="18" width="0.508" layer="1"/>
+<wire x1="11.27" y1="18" x2="11.27" y2="12.98" width="0.508" layer="1"/>
+<wire x1="11.27" y1="12.98" x2="11" y2="12.71" width="0.508" layer="1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
