@@ -1,9 +1,10 @@
 import os
 import sys
 import time
-import select
 import spidev
 import threading
+import RPi.GPIO as GPIO
+
 """
 sudo apt install stm32flash
 
@@ -12,39 +13,22 @@ git clone https://git.code.sf.net/p/stm32flash/code stm32flash-code
 cd stm32flash-code
 sudo make install
 
-HAVE TO ACTIVATE BOOT0 THE WHOLE TIME
+HAVE TO ASSERT BOOT0 THE WHOLE TIME
 /usr/local/bin/stm32flash -r hhh -a 0x3b /dev/i2c-1
 
 """
-spi = None
-gpio_file = None
 
-spi = spidev.SpiDev(0, 0) # rasp
-print("I'm on Raspberry Pi!")
-os.system("echo 16 > /sys/class/gpio/export")
-os.system("echo in > /sys/class/gpio/gpio16/direction")
-os.system("echo rising > /sys/class/gpio/gpio16/edge")
-gpio_file = open("/sys/class/gpio/gpio16/value", 'rb')
-print("GPIO init done")
+SLAVE_REQ_PIN = 16
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(SLAVE_REQ_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.add_event_detect(SLAVE_REQ_PIN, GPIO.RISING)
 
-spi.max_speed_hz = 2000000
+pcard_spi = spidev.SpiDev(0, 0)
+pcard_spi.max_speed_hz = 2000000
 
 keyboard_opened_device_dict = {}
 mouse_opened_device_dict = {}
 gamepad_opened_device_dict = {}
-
-epoll = select.epoll()
-epoll.register(gpio_file, select.EPOLLET)
-
-"""
-def send kb
-
-def send mouse
-
-def send js
-
-read data first, if exception, skip it
-"""
 
 """
 https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/input-event-codes.h#L38
@@ -123,13 +107,14 @@ def raw_input_event_worker():
                 keyboard_opened_device_dict[key][0].close()
                 del keyboard_opened_device_dict[key]
                 print("keyboard disappeared:", key)
+                continue
             if data is None:
                 continue
             data = list(data[8:])
             if data[0] == EV_KEY:
                 to_transfer = keyboard_spi_msg_header + data + [0]*20
                 to_transfer[3] = keyboard_opened_device_dict[key][1]
-                spi.xfer(to_transfer)
+                pcard_spi.xfer(to_transfer)
 
         for key in list(mouse_opened_device_dict):
             try:
@@ -138,6 +123,7 @@ def raw_input_event_worker():
                 mouse_opened_device_dict[key][0].close()
                 del mouse_opened_device_dict[key]
                 print("mouse disappeared:", key)
+                continue
             if data is None:
                 continue
             data = list(data[8:])
@@ -155,7 +141,7 @@ def raw_input_event_worker():
                 to_transfer[10:13] = data[2:5]
                 to_transfer[13:18] = mouse_button_state_list[:]
                 to_transfer[3] = mouse_opened_device_dict[key][1]
-                spi.xfer(to_transfer)
+                pcard_spi.xfer(to_transfer)
 
             if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_spi_packet_dict) > 0:
                 to_transfer = list(mouse_spi_msg_template)
@@ -168,18 +154,16 @@ def raw_input_event_worker():
                 to_transfer[13:18] = mouse_button_state_list[:]
                 to_transfer[3] = mouse_opened_device_dict[key][1]
                 mouse_spi_packet_dict.clear()
-                spi.xfer(to_transfer)
+                pcard_spi.xfer(to_transfer)
 
-        events = epoll.poll(timeout=0)
-        for df, event_type in events:
-            if 0x8 & event_type:
-                slave_result = None
-                for x in range(2):
-                    slave_result = spi.xfer(make_spi_msg_ack())
-                print(slave_result)
-                if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:
-                    change_kb_led(slave_result[3])
-                    change_kb_led(slave_result[3])
+        if GPIO.event_detected(SLAVE_REQ_PIN):
+            slave_result = None
+            for x in range(2):
+                slave_result = pcard_spi.xfer(make_spi_msg_ack())
+            print(slave_result)
+            if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:
+                change_kb_led(slave_result[3])
+                change_kb_led(slave_result[3])
 
 raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)
 raw_input_event_parser_thread.start()
@@ -187,17 +171,18 @@ raw_input_event_parser_thread.start()
 input_device_path = '/dev/input/by-path/'
 
 while 1:
+    time.sleep(0.75)
     try:
         device_file_list = os.listdir(input_device_path)
+    except FileNotFoundError:
+        print("No input devices found")
+        continue
     except Exception as e:
         print('list input device exception:', e)
-        time.sleep(0.75)
         continue
     mouse_list = [os.path.join(input_device_path, x) for x in device_file_list if 'event-mouse' in x]
     keyboard_list = [os.path.join(input_device_path, x) for x in device_file_list if 'event-kbd' in x]
     gamepad_list = [os.path.join(input_device_path, x) for x in device_file_list if 'event-joystick' in x]
-    # print(mouse_list)
-    # print(keyboard_list)
 
     for item in keyboard_list:
         if item not in keyboard_opened_device_dict:
@@ -230,5 +215,3 @@ while 1:
             except Exception as e:
                 print("mouse open exception:", e)
                 continue
-
-    time.sleep(0.75)
