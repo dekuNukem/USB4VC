@@ -5,7 +5,9 @@ import time
 import usb4vc_usb_scan
 import usb4vc_oled
 
-usb4vc_oled.print_welcome_screen((0, 2, 3))
+RPI_APP_VERSION_TUPLE = (0, 0, 1)
+
+usb4vc_oled.print_welcome_screen(RPI_APP_VERSION_TUPLE)
 time.sleep(1)
 usb4vc_oled.oled_clear()
 
