@@ -18,12 +18,13 @@ up to 20 characters per line
 """
 
 font_path = "cc.ttf"
-font2 = ImageFont.truetype(font_path, 12)
+font2 = ImageFont.truetype(font_path, 24)
 
 while 1:
 	with canvas(device) as draw:
 		draw.rectangle(device.bounding_box, outline="white", fill="black")
-		draw.text((0, 0), "888888888877777777776666666666", font=font2, fill="white")
-		draw.text((0, 10), "ABCDEFGHIJ", font=font2, fill="white")
-		draw.text((0, 20), "abcdefghij", font=font2, fill="white")
+		draw.text((0, 0), "USB4VC", font=font2, fill="white")
+		# draw.text((0, 0), "888888888877777777776666666666", font=font2, fill="white")
+		# draw.text((0, 10), "ABCDEFGHIJ", font=font2, fill="white")
+		# draw.text((0, 20), "abcdefghij", font=font2, fill="white")
 	time.sleep(1)
