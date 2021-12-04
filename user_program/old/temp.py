@@ -189,3 +189,5 @@ while 1:
         # draw.text((0, 0), "123456789012345678901234567890", font=font_large, fill="white")
         # draw.text((0, 20), "123456789012345678901234567890", font=font_regular, fill="white")
     time.sleep(1)
+
+
