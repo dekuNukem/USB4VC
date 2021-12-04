@@ -12,19 +12,37 @@ device = get_device(my_arg)
 """
 OLED for USB4VC
 128*32
-command&conquer ttf font, 12 point
-3 lines, y=0, 10, 20
-up to 20 characters per line
+
+3 font sizes available, regular/large: ProggyTiny.ttf, medium: ChiKareGo2.ttf.
+
+regular ProggyTiny:
+16 point, 3 lines, y=0, 10, 20
+
+large type ProggyTiny
+32 point, 2 lines (1 large + 1 regular), y=0, 20
+
+medium type ChiKareGo2:
+16 point, 2 lines, y=0, 15 
+
+characters per line:
+regular font: 21 
+large font: 11
+
+int(sys.argv[1])
+ssh pi@192.168.1.56 "pkill python3;cd ~/usb4vc;python3 usb4vc_oled.py 16"
+
 """
 
-font_path = "cc.ttf"
-font2 = ImageFont.truetype(font_path, 24)
+font_regular = ImageFont.truetype("ProggyTiny.ttf", 16)
+font_medium = ImageFont.truetype("ChiKareGo2.ttf", int(sys.argv[1]))
+font_large = ImageFont.truetype("ProggyTiny.ttf", 32)
 
 while 1:
 	with canvas(device) as draw:
-		draw.rectangle(device.bounding_box, outline="white", fill="black")
-		draw.text((0, 0), "USB4VC", font=font2, fill="white")
-		# draw.text((0, 0), "888888888877777777776666666666", font=font2, fill="white")
-		# draw.text((0, 10), "ABCDEFGHIJ", font=font2, fill="white")
-		# draw.text((0, 20), "abcdefghij", font=font2, fill="white")
+		# draw.rectangle(device.bounding_box, outline="white", fill="black")
+		draw.text((0, 0), "No input devices", font=font_medium, fill="white")
+		draw.text((0, 16), "Connect via USB", font=font_regular, fill="white")
+		# draw.text((0, 0), "123456789012345678901234567890", font=font_regular, fill="white")
+		# draw.text((0, 10), "ABCDEFGHIJ", font=font_regular, fill="white")
+		# draw.text((0, 20), "abcdefghij", font=font_regular, fill="white")
 	time.sleep(1)
