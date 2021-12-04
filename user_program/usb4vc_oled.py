@@ -2,9 +2,25 @@
 
 import sys
 import time
+import queue
+import threading
 from demo_opts import get_device
 from luma.core.render import canvas
 from PIL import ImageFont
+
+oled_display_queue = queue.PriorityQueue()
+
+"""
+oled display object:
+
+text
+size
+font
+x, y
+duration
+afterwards
+
+"""
 
 OLED_WIDTH = 128
 OLED_HEIGHT = 32
@@ -44,21 +60,35 @@ max_char_per_line = {font_regular:21, font_medium:16, font_large:11}
 width_per_char = {font_regular:6, font_medium:8, font_large:12}
 
 def oled_print_centered(text, font, y, this_canvas):
-	text = text.strip()[:max_char_per_line[font]]
-	start_x = int((OLED_WIDTH - (len(text) * width_per_char[font]))/2)
-	if start_x < 0:
-		start_x = 0
-	this_canvas.text((start_x, y), text, font=font, fill="white")
+    text = text.strip()[:max_char_per_line[font]]
+    start_x = int((OLED_WIDTH - (len(text) * width_per_char[font]))/2)
+    if start_x < 0:
+        start_x = 0
+    this_canvas.text((start_x, y), text, font=font, fill="white")
+
+# persistent canvas, will need to clear areas before drawing new stuff
+oled_canvas = canvas(device)
 
 def print_welcome_screen(version_tuple):
-	with canvas(device) as draw:
-		oled_print_centered("USB4VC", font_large, 0, draw)
-		oled_print_centered(f"V{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]} dekuNukem", font_regular, 20, draw)
+    with oled_canvas as ocan:
+        oled_print_centered("USB4VC", font_large, 0, ocan)
+        oled_print_centered(f"V{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]} dekuNukem", font_regular, 20, ocan)
 
 def oled_clear():
-	device.clear()
+    device.clear()
 
-# print_welcome_screen((0, 2, 3))
+def oled_queue_worker():
+    print("oled_queue_worker started")
+    while 1:
+        print(oled_display_queue.qsize())
+        time.sleep(0.75)
+
+
+oled_queue_worker = threading.Thread(target=oled_queue_worker, daemon=True)
+
 
 # while 1:
-# 	time.sleep(1)
+#   with oled_canvas as ocan:
+#       ocan.rectangle((0, 0, device.width-1, device.height-1), outline=0, fill=0)
+#       oled_print_centered(f"{int(time.time())}", font_large, 0, ocan)
+#   time.sleep(1)
