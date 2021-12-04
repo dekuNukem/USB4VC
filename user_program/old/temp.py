@@ -170,3 +170,22 @@ data = list(fff.read(16)[8:])
 
 # example /dev/input/by-path/platform-3f980000.usb-usb-0:1.2.2:1.0-event-kbd
                     # kb_index = int(item.split(':')[1].split('.')[1])
+
+
+while 1:
+    with canvas(device) as draw:
+        # draw.rectangle(device.bounding_box, outline="white", fill="black")
+        
+        # regular font test
+        # draw.text((0, 0), "123456789012345678901234567890", font=font_regular, fill="white")
+        # draw.text((0, 10), "ABCDEFGHIJ", font=font_regular, fill="white")
+        # draw.text((0, 20), "abcdefghij", font=font_regular, fill="white")
+
+        # medium font test
+        # draw.text((0, 0), "123456789012345678901234567890", font=font_medium, fill="white")
+        # draw.text((0, 15), "123456789012345678901234567890", font=font_medium, fill="white")
+
+        # large font test
+        # draw.text((0, 0), "123456789012345678901234567890", font=font_large, fill="white")
+        # draw.text((0, 20), "123456789012345678901234567890", font=font_regular, fill="white")
+    time.sleep(1)

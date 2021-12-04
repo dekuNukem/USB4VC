@@ -18,7 +18,7 @@ OLED for USB4VC
 regular ProggyTiny:
 16 point, 3 lines, y=0, 10, 20
 
-large type ProggyTiny
+large type ProggyTiny:
 32 point, 2 lines (1 large + 1 regular), y=0, 20
 
 medium type ChiKareGo2:
@@ -26,10 +26,11 @@ medium type ChiKareGo2:
 
 characters per line:
 regular font: 21 
+medium font: 16
 large font: 11
 
 int(sys.argv[1])
-ssh pi@192.168.1.56 "pkill python3;cd ~/usb4vc;python3 usb4vc_oled.py 16"
+sh sync.sh; ssh pi@192.168.1.56 "pkill python3;cd ~/usb4vc;python3 usb4vc_oled.py 16"
 
 """
 
@@ -40,9 +41,17 @@ font_large = ImageFont.truetype("ProggyTiny.ttf", 32)
 while 1:
 	with canvas(device) as draw:
 		# draw.rectangle(device.bounding_box, outline="white", fill="black")
-		draw.text((0, 0), "No input devices", font=font_medium, fill="white")
-		draw.text((0, 16), "Connect via USB", font=font_regular, fill="white")
+		
+		# regular font test
 		# draw.text((0, 0), "123456789012345678901234567890", font=font_regular, fill="white")
 		# draw.text((0, 10), "ABCDEFGHIJ", font=font_regular, fill="white")
 		# draw.text((0, 20), "abcdefghij", font=font_regular, fill="white")
+
+		# medium font test
+		# draw.text((0, 0), "123456789012345678901234567890", font=font_medium, fill="white")
+		# draw.text((0, 15), "123456789012345678901234567890", font=font_medium, fill="white")
+
+		# large font test
+		# draw.text((0, 0), "123456789012345678901234567890", font=font_large, fill="white")
+		# draw.text((0, 20), "123456789012345678901234567890", font=font_regular, fill="white")
 	time.sleep(1)
