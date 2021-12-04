@@ -43,17 +43,22 @@ font_large = ImageFont.truetype("ProggyTiny.ttf", 32)
 max_char_per_line = {font_regular:21, font_medium:16, font_large:11}
 width_per_char = {font_regular:6, font_medium:8, font_large:12}
 
-def oled_print_centered(text, font, y):
+def oled_print_centered(text, font, y, this_canvas):
 	text = text.strip()[:max_char_per_line[font]]
 	start_x = int((OLED_WIDTH - (len(text) * width_per_char[font]))/2)
 	if start_x < 0:
 		start_x = 0
-	print(start_x)
-	draw.text((start_x, y), text, font=font, fill="white")
+	this_canvas.text((start_x, y), text, font=font, fill="white")
 
-while 1:
+def print_welcome_screen(version_tuple):
 	with canvas(device) as draw:
-		# draw.rectangle(device.bounding_box, outline="white", fill="black")
-		oled_print_centered("USB4VC", font_large, 0)
-		oled_print_centered("V0.0.1 dekuNukem", font_regular, 20)
-	time.sleep(10)
+		oled_print_centered("USB4VC", font_large, 0, draw)
+		oled_print_centered(f"V{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]} dekuNukem", font_regular, 20, draw)
+
+def oled_clear():
+	device.clear()
+
+# print_welcome_screen((0, 2, 3))
+
+# while 1:
+# 	time.sleep(1)
