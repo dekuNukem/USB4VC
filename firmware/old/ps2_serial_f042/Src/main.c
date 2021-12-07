@@ -92,7 +92,7 @@ int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
 }
 
 /*
-  This is called when a new SPI packet is received
+  This is called when a new SPI message is received
   This is part of an ISR, so better keep it short!
 */
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)

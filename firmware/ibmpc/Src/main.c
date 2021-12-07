@@ -96,7 +96,7 @@ int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
 {
   return (int16_t)((msb << 8) | lsb);
 }
-/* USER CODE END 0 */
+
 
 /*
   This is called when a new SPI packet is received
@@ -110,7 +110,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 
   if(backup_spi1_recv_buf[0] != 0xde)
   {
-    for (int i = 0; i < 40; ++i)
+    for (int i = 0; i < 20; ++i)
     {
       HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
       HAL_Delay(100);
@@ -139,6 +139,8 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
 }
+
+/* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
@@ -461,8 +463,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOF, GAMEPAD_B3_Pin|GAMEPAD_B1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_CLK_Pin 
-                          |PS2KB_DATA_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_DATA_Pin 
+                          |PS2KB_CLK_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
@@ -511,8 +513,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ACT_LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PS2MOUSE_DATA_Pin PS2MOUSE_CLK_Pin PS2KB_CLK_Pin PS2KB_DATA_Pin */
-  GPIO_InitStruct.Pin = PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_CLK_Pin|PS2KB_DATA_Pin;
+  /*Configure GPIO pins : PS2MOUSE_DATA_Pin PS2MOUSE_CLK_Pin PS2KB_DATA_Pin PS2KB_CLK_Pin */
+  GPIO_InitStruct.Pin = PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_DATA_Pin|PS2KB_CLK_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
