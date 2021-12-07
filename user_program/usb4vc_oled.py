@@ -25,7 +25,7 @@ afterwards
 OLED_WIDTH = 128
 OLED_HEIGHT = 32
 
-my_arg = ['--display', 'sh1106', '--interface', 'spi', '--spi-port', '0', '--spi-device', '1', '--gpio-reset', '6', '--gpio-data-command', '5', '--width', str(OLED_WIDTH), '--height', str(OLED_HEIGHT), '--spi-bus-speed', '2000000']
+my_arg = ['--display', 'ssd1306', '--interface', 'spi', '--spi-port', '0', '--spi-device', '1', '--gpio-reset', '6', '--gpio-data-command', '5', '--width', str(OLED_WIDTH), '--height', str(OLED_HEIGHT), '--spi-bus-speed', '2000000']
 device = get_device(my_arg)
 
 """
@@ -92,3 +92,22 @@ oled_queue_worker = threading.Thread(target=oled_queue_worker, daemon=True)
 #       ocan.rectangle((0, 0, device.width-1, device.height-1), outline=0, fill=0)
 #       oled_print_centered(f"{int(time.time())}", font_large, 0, ocan)
 #   time.sleep(1)
+
+
+# while 1:
+#     with canvas(device) as draw:
+#         # draw.rectangle(device.bounding_box, outline="white", fill="black")
+        
+#         # regular font test
+#         draw.text((0, 0), "123456789012345678901234567890", font=font_regular, fill="white")
+#         draw.text((0, 10), "ABCDEFGHIJ", font=font_regular, fill="white")
+#         draw.text((0, 20), "abcdefghij", font=font_regular, fill="white")
+
+#         # medium font test
+#         # draw.text((0, 0), "123456789012345678901234567890", font=font_medium, fill="white")
+#         # draw.text((0, 15), "123456789012345678901234567890", font=font_medium, fill="white")
+
+#         # large font test
+#         # draw.text((0, 0), "123456789012345678901234567890", font=font_large, fill="white")
+#         # draw.text((0, 20), "123456789012345678901234567890", font=font_regular, fill="white")
+#     time.sleep(1)
