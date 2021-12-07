@@ -80,7 +80,7 @@ def oled_clear():
 def oled_queue_worker():
     print("oled_queue_worker started")
     while 1:
-        print(oled_display_queue.qsize())
+        # print(oled_display_queue.qsize())
         time.sleep(0.75)
 
 
