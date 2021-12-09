@@ -35,6 +35,7 @@ uint8_t sample_rate_history[SAMPLE_RATE_HISTORY_BUF_SIZE];
 uint8_t sample_rate_history_index;
 uint8_t mouse_device_id;
 uint8_t ps2mouse_current_mode;
+uint8_t ps2mouse_prev_mode;
 
 #define PS2MOUSE_PACKET_SIZE_GENERIC 3
 #define PS2MOUSE_PACKET_SIZE_INTELLIMOUSE 4
@@ -64,6 +65,7 @@ void ps2mouse_restore_defaults()
   ps2mouse_scale = 1;
   ps2mouse_data_reporting_enabled = 0;
   ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
+  ps2mouse_prev_mode = PS2MOUSE_MODE_STREAM;
 }
 
 void ps2mouse_reset(void)
@@ -253,18 +255,26 @@ void ps2mouse_host_req_reply(uint8_t cmd)
 	    ps2mouse_write(mouse_device_id, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
     case 0xF0: // set remote mode
+      ps2mouse_prev_mode = ps2mouse_current_mode;
+      ps2mouse_current_mode = PS2MOUSE_MODE_REMOTE;
       PS2MOUSE_SENDACK();
       break;
     case 0xEE: // set wrap mode
+      if(ps2mouse_current_mode != PS2MOUSE_MODE_WRAP)
+        ps2mouse_prev_mode = ps2mouse_current_mode;
+      ps2mouse_current_mode = PS2MOUSE_MODE_WRAP;
       PS2MOUSE_SENDACK();
       break;
     case 0xEC: // reset wrap mode
+      ps2mouse_current_mode = ps2mouse_prev_mode;
       PS2MOUSE_SENDACK();
       break;
     case 0xEB: // read data
       PS2MOUSE_SENDACK();
       break;
     case 0xEA: // set stream mode
+      ps2mouse_prev_mode = ps2mouse_current_mode;
+      ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
       PS2MOUSE_SENDACK();
       break;
     case 0xE9: // status request
