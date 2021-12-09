@@ -151,6 +151,9 @@ GPIO_TypeDef* ps2kb_data_port;
 uint16_t ps2kb_data_pin;
 uint32_t ps2kb_wait_start;
 
+uint8_t ps2kb_current_scancode_set = 2;
+uint8_t ps2kb_data_reporting_enabled = 1;
+
 #define PS2KB_CLK_HI() HAL_GPIO_WritePin(ps2kb_clk_port, ps2kb_clk_pin, GPIO_PIN_SET)
 #define PS2KB_CLK_LOW() HAL_GPIO_WritePin(ps2kb_clk_port, ps2kb_clk_pin, GPIO_PIN_RESET)
 
@@ -168,23 +171,32 @@ void ps2kb_release_lines(void)
   PS2KB_DATA_HI();
 }
 
+void ps2kb_reset()
+{
+  ps2kb_current_scancode_set = 2;
+  ps2kb_data_reporting_enabled = 1;
+}
+
+
 void ps2kb_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_port, uint16_t data_pin)
 {
 	ps2kb_clk_port = clk_port;
 	ps2kb_clk_pin = clk_pin;
 	ps2kb_data_port = data_port;
 	ps2kb_data_pin = data_pin;
-	PS2KB_CLK_HI();
-	PS2KB_DATA_HI();
+	ps2kb_release_lines();
+  ps2kb_reset();
 }
 
 uint8_t ps2kb_get_bus_status(void)
 {
-	if(PS2KB_READ_DATA_PIN() == GPIO_PIN_SET && PS2KB_READ_CLK_PIN() == GPIO_PIN_SET)
+  uint8_t clk_stat = PS2KB_READ_CLK_PIN();
+  uint8_t data_stat = PS2KB_READ_DATA_PIN();
+	if(data_stat == GPIO_PIN_SET && clk_stat == GPIO_PIN_SET)
 		return PS2_BUS_IDLE;
-	if(PS2KB_READ_DATA_PIN() == GPIO_PIN_SET && PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
+	if(data_stat == GPIO_PIN_SET && clk_stat == GPIO_PIN_RESET)
 		return PS2_BUS_INHIBIT;
-	if(PS2KB_READ_DATA_PIN() == GPIO_PIN_RESET && PS2KB_READ_CLK_PIN() == GPIO_PIN_SET)
+	if(data_stat == GPIO_PIN_RESET && clk_stat == GPIO_PIN_SET)
 		return PS2_BUS_REQ_TO_SEND;
 	return PS2_BUS_UNKNOWN;
 }
@@ -304,6 +316,11 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   return 0;
 }
 
+void ps2kb_change_scancode_set(uint8_t set_number)
+{
+  ;
+}
+
 void keyboard_reply(uint8_t cmd, uint8_t *leds)
 {
   uint8_t received;
@@ -311,6 +328,7 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
   {
 	  case 0xFF: //reset
 	    PS2KB_SENDACK();
+      ps2kb_reset();
 	    ps2kb_write(0xAA, 0, 250);
 	    break;
 	  case 0xFE: //resend
@@ -321,9 +339,11 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	    break;
 	  case 0xF5: //disable data reporting
 	    PS2KB_SENDACK();
+      ps2kb_data_reporting_enabled = 0;
 	    break;
 	  case 0xF4: //enable data reporting
 	    PS2KB_SENDACK();
+      ps2kb_data_reporting_enabled = 1;
 	    break;
 	  case 0xF3: //set typematic rate
 	    PS2KB_SENDACK();
@@ -338,7 +358,10 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	  case 0xF0: //set scan code set
 	    PS2KB_SENDACK();
 	    if(ps2kb_read(&received, 30) == 0)
+      {
 	    	PS2KB_SENDACK();
+        ps2kb_change_scancode_set(received);
+      }
 	    break;
 	  case 0xEE: //echo
 	    ps2kb_write(0xEE, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
@@ -353,13 +376,17 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 
 uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
 {
-  // linux_keyvalue: press 1 release 0 autorepeat 2
+  // linux_keyvalue: release 0 press 1 autorepeat 2
   uint8_t lookup_result;
+
+  if(ps2kb_data_reporting_enabled == 0)
+    return 1;
+
   if(linux_keycode < LINUX_KEYCODE_TO_PS2_SCANCODE_SINGLE_SIZE)
   {
     lookup_result = linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2[linux_keycode];
     if(lookup_result == CODE_UNUSED)
-      return 1;
+      return 2;
     // printf("scan code is 0x%02x\n", lookup_result);
     if(linux_keyvalue)
     {
@@ -409,7 +436,7 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
   {
     lookup_result = linux_keycode_to_ps2_scancode_lookup_special_codeset2[linux_keycode-96];
     if(lookup_result == CODE_UNUSED)
-      return 1;
+      return 2;
     // printf("scan code is 0xe0%02x\n", lookup_result);
     if(linux_keyvalue)
     {
@@ -424,6 +451,6 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
     }
     return 0;
   }
-  return 1;
+  return 3;
 }
 

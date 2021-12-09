@@ -16,6 +16,10 @@
 #define CODE_UNUSED 0xff
 #define PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS 20
 
+#define PS2MOUSE_MODE_STREAM 0
+#define PS2MOUSE_MODE_REMOTE 1
+#define PS2MOUSE_MODE_WRAP 2
+
 GPIO_TypeDef* ps2mouse_clk_port;
 uint16_t ps2mouse_clk_pin;
 
@@ -30,6 +34,7 @@ uint8_t ps2mouse_scale;
 uint8_t sample_rate_history[SAMPLE_RATE_HISTORY_BUF_SIZE];
 uint8_t sample_rate_history_index;
 uint8_t mouse_device_id;
+uint8_t ps2mouse_current_mode;
 
 #define PS2MOUSE_PACKET_SIZE_GENERIC 3
 #define PS2MOUSE_PACKET_SIZE_INTELLIMOUSE 4
@@ -52,12 +57,18 @@ void ps2mouse_release_lines(void)
   PS2MOUSE_DATA_HI();
 }
 
+void ps2mouse_restore_defaults()
+{
+  ps2mouse_sampling_rate = 100;
+  ps2mouse_resolution = 2;
+  ps2mouse_scale = 1;
+  ps2mouse_data_reporting_enabled = 0;
+  ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
+}
+
 void ps2mouse_reset(void)
 {
-  ps2mouse_data_reporting_enabled = 0;
-  ps2mouse_sampling_rate = 100;
-  ps2mouse_resolution = 3;
-  ps2mouse_scale = 1;
+  ps2mouse_restore_defaults();
   sample_rate_history_index = 0;
   memset(sample_rate_history, 0, SAMPLE_RATE_HISTORY_BUF_SIZE);
   mouse_device_id = 0;
@@ -213,15 +224,16 @@ void ps2mouse_host_req_reply(uint8_t cmd)
 	    PS2MOUSE_SENDACK();
 	    break;
 	  case 0xF6: //set defaults
+      ps2mouse_restore_defaults();
 	    PS2MOUSE_SENDACK();
 	    break;
 	  case 0xF5: //disable data reporting
-	    PS2MOUSE_SENDACK();
       ps2mouse_data_reporting_enabled = 0;
+	    PS2MOUSE_SENDACK();
 	    break;
     case 0xF4: //enable data reporting
-      PS2MOUSE_SENDACK();
       ps2mouse_data_reporting_enabled = 1;
+      PS2MOUSE_SENDACK();
       break;
 	  case 0xF3: //set sampling rate
 	    PS2MOUSE_SENDACK();
@@ -240,6 +252,24 @@ void ps2mouse_host_req_reply(uint8_t cmd)
         mouse_device_id = 3; // intellimouse with scroll wheel
 	    ps2mouse_write(mouse_device_id, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
+    case 0xF0: // set remote mode
+      PS2MOUSE_SENDACK();
+      break;
+    case 0xEE: // set wrap mode
+      PS2MOUSE_SENDACK();
+      break;
+    case 0xEC: // reset wrap mode
+      PS2MOUSE_SENDACK();
+      break;
+    case 0xEB: // read data
+      PS2MOUSE_SENDACK();
+      break;
+    case 0xEA: // set stream mode
+      PS2MOUSE_SENDACK();
+      break;
+    case 0xE9: // status request
+      PS2MOUSE_SENDACK();
+      break;
 	  case 0xE8: // set resolution
 	    PS2MOUSE_SENDACK();
 	    if(ps2mouse_read(&ps2mouse_resolution, 30) == 0)
@@ -253,9 +283,9 @@ void ps2mouse_host_req_reply(uint8_t cmd)
       PS2MOUSE_SENDACK();
       ps2mouse_scale = 2;
       break;
-	  case 0xEE: //echo
-	    ps2mouse_write(0xEE, 1, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
-	    break;
+	  // case 0xEE: //echo
+	  //   ps2mouse_write(0xEE, 1, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+	  //   break;
     default:
       PS2MOUSE_SENDACK();
   }
