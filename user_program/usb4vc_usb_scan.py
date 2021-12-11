@@ -3,7 +3,7 @@ import sys
 import time
 import spidev
 import threading
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 from usb4vc_oled import oled_display_queue
 
@@ -21,9 +21,9 @@ HAVE TO ASSERT BOOT0 THE WHOLE TIME
 """
 
 SLAVE_REQ_PIN = 16
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(SLAVE_REQ_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-# GPIO.add_event_detect(SLAVE_REQ_PIN, GPIO.RISING)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(SLAVE_REQ_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.add_event_detect(SLAVE_REQ_PIN, GPIO.RISING)
 
 pcard_spi = spidev.SpiDev(0, 0)
 pcard_spi.max_speed_hz = 2000000
@@ -90,13 +90,16 @@ def change_kb_led(ps2kb_led_byte):
     scrolllock_list = [os.path.join(led_device_path, x) for x in led_file_list if 'scrolllock' in x]
 
     for item in scrolllock_list:
-        os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x1)} > {os.path.join(item, 'brightness')}'")
+        with open(os.path.join(item, 'brightness'), 'w') as led_file:
+            led_file.write(str(get_01(ps2kb_led_byte & 0x1)))
 
     for item in numlock_list:
-        os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x2)} > {os.path.join(item, 'brightness')}'")
+        with open(os.path.join(item, 'brightness'), 'w') as led_file:
+            led_file.write(str(get_01(ps2kb_led_byte & 0x2)))
 
     for item in capslock_list:
-        os.system(f"sudo bash -c 'echo {get_01(ps2kb_led_byte & 0x4)} > {os.path.join(item, 'brightness')}'")
+        with open(os.path.join(item, 'brightness'), 'w') as led_file:
+            led_file.write(str(get_01(ps2kb_led_byte & 0x4)))
 
 def raw_input_event_worker():
     mouse_spi_packet_dict = {}
@@ -159,14 +162,14 @@ def raw_input_event_worker():
                 mouse_spi_packet_dict.clear()
                 pcard_spi.xfer(to_transfer)
 
-        # if GPIO.event_detected(SLAVE_REQ_PIN):
-        #     slave_result = None
-        #     for x in range(2):
-        #         slave_result = pcard_spi.xfer(make_spi_msg_ack())
-        #     print(slave_result)
-        #     if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:
-        #         change_kb_led(slave_result[3])
-        #         change_kb_led(slave_result[3])
+        if GPIO.event_detected(SLAVE_REQ_PIN):
+            slave_result = None
+            for x in range(2):
+                slave_result = pcard_spi.xfer(make_spi_msg_ack())
+            print(int(time.time()), slave_result)
+            if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:
+                change_kb_led(slave_result[3])
+                change_kb_led(slave_result[3])
 
 def usb_device_scan_worker():
     print("usb_device_scan_worker started")
