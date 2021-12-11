@@ -40,7 +40,6 @@ uint8_t x_accumulator, y_accumulator, scroll_accumulator;
 
 #define PS2MOUSE_PACKET_SIZE_GENERIC 3
 #define PS2MOUSE_PACKET_SIZE_INTELLIMOUSE 4
-uint8_t ps2mouse_out_buf[PS2MOUSE_PACKET_SIZE_INTELLIMOUSE];
 
 #define PS2MOUSE_CLK_HI() HAL_GPIO_WritePin(ps2mouse_clk_port, ps2mouse_clk_pin, GPIO_PIN_SET)
 #define PS2MOUSE_CLK_LOW() HAL_GPIO_WritePin(ps2mouse_clk_port, ps2mouse_clk_pin, GPIO_PIN_RESET)
@@ -344,41 +343,104 @@ void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent)
   }
 }
 
-uint8_t ps2mouse_send_update(mouse_event* this_event)
+uint8_t ps2mouse_get_outgoing_data(mouse_event* this_event, ps2_outgoing_buf* pbuf)
 {
   if(ps2mouse_current_mode == PS2MOUSE_MODE_REMOTE)
   {
     x_accumulator += (uint8_t)(this_event->movement_x);
     y_accumulator += (uint8_t)(this_event->movement_y);
     scroll_accumulator += (uint8_t)(this_event->scroll_vertical);
-    return 0;
+    return 1;
   }
   if(ps2mouse_current_mode == PS2MOUSE_MODE_WRAP)
-    return 1;
-  if(ps2mouse_data_reporting_enabled == 0)
     return 2;
-  if(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
+  if(ps2mouse_data_reporting_enabled == 0)
     return 3;
-  memset(ps2mouse_out_buf, 0, PS2MOUSE_PACKET_SIZE_INTELLIMOUSE);
-  ps2mouse_out_buf[0] = 0x8; // bit 3 is always 1
+
+  memset(pbuf->data, 0, PS2_OUT_BUF_MAXSIZE);
+  pbuf->size = PS2MOUSE_PACKET_SIZE_GENERIC;
+  pbuf->data[0] = 0x8; // bit 3 is always 1
   // https://wiki.osdev.org/PS/2_Mouse
   if(this_event->button_left)
-    ps2mouse_out_buf[0] = ps2mouse_out_buf[0] | 0x1;
+    pbuf->data[0] = pbuf->data[0] | 0x1;
   if(this_event->button_right)
-    ps2mouse_out_buf[0] = ps2mouse_out_buf[0] | 0x2;
+    pbuf->data[0] = pbuf->data[0] | 0x2;
   if(this_event->button_middle)
-    ps2mouse_out_buf[0] = ps2mouse_out_buf[0] | 0x4;
+    pbuf->data[0] = pbuf->data[0] | 0x4;
   if(this_event->movement_x < 0)
-    ps2mouse_out_buf[0] = ps2mouse_out_buf[0] | 0x10;
+    pbuf->data[0] = pbuf->data[0] | 0x10;
   if(this_event->movement_y < 0)
-    ps2mouse_out_buf[0] = ps2mouse_out_buf[0] | 0x20;
-  ps2mouse_out_buf[1] = (uint8_t)(this_event->movement_x);
-  ps2mouse_out_buf[2] = (uint8_t)(this_event->movement_y);
-  ps2mouse_out_buf[3] = (uint8_t)(this_event->scroll_vertical);
-  for (int i = 0; i < PS2MOUSE_PACKET_SIZE_GENERIC; ++i)
-    ps2mouse_write(ps2mouse_out_buf[i], 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+    pbuf->data[0] = pbuf->data[0] | 0x20;
+  pbuf->data[1] = (uint8_t)(this_event->movement_x);
+  pbuf->data[2] = (uint8_t)(this_event->movement_y);
+  pbuf->data[3] = (uint8_t)(this_event->scroll_vertical);
   if(mouse_device_id != 0)
-    ps2mouse_write(ps2mouse_out_buf[3], 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+    pbuf->size = PS2MOUSE_PACKET_SIZE_INTELLIMOUSE;
   return 0;
 }
 
+uint8_t ps2mouse_write_nowait(uint8_t data)
+{
+  uint8_t parity = 1;
+
+  PS2MOUSE_DATA_LOW();
+  delay_us(CLKHALF);
+  // device sends on falling clock
+  PS2MOUSE_CLK_LOW(); // start bit
+  delay_us(CLKFULL);
+  PS2MOUSE_CLK_HI();
+  delay_us(CLKHALF);
+
+  for (int i=0; i < 8; i++)
+  {
+    if (data & 0x01)
+      PS2MOUSE_DATA_HI();
+    else
+      PS2MOUSE_DATA_LOW();
+
+    delay_us(CLKHALF);
+    PS2MOUSE_CLK_LOW();
+    delay_us(CLKFULL);
+    PS2MOUSE_CLK_HI();
+    delay_us(CLKHALF);
+
+    parity = parity ^ (data & 0x01);
+    data = data >> 1;
+  }
+
+  // parity bit
+  if (parity)
+    PS2MOUSE_DATA_HI();
+  else
+    PS2MOUSE_DATA_LOW();
+
+  delay_us(CLKHALF);
+  PS2MOUSE_CLK_LOW();
+  delay_us(CLKFULL);
+  PS2MOUSE_CLK_HI();
+  delay_us(CLKHALF);
+
+  // stop bit
+  PS2MOUSE_DATA_HI();
+  delay_us(CLKHALF);
+  PS2MOUSE_CLK_LOW();
+  delay_us(CLKFULL);
+  PS2MOUSE_CLK_HI();
+  delay_us(CLKHALF);
+
+  delay_us(BYTEWAIT_END);
+
+  return 0;
+}
+
+
+uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf)
+{
+  for (int i = 0; i < pbuf->size; ++i)
+  {
+    if(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
+      return 1;
+    ps2mouse_write_nowait(pbuf->data[i]);
+  }
+  return 0;
+}

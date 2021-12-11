@@ -60,11 +60,18 @@ typedef struct
   mouse_event* mouse_events;
 } ps2mouse_buf;
 
+#define PS2_OUT_BUF_MAXSIZE 8
+
+typedef struct
+{
+  uint8_t size;
+  uint8_t data[PS2_OUT_BUF_MAXSIZE];
+} ps2_outgoing_buf;
+
 void ps2kb_buf_init(ps2kb_buf *lb, uint8_t size);
 uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value);
 uint8_t ps2kb_buf_peek(ps2kb_buf *lb, uint8_t* code, uint8_t* value);
 void ps2kb_buf_pop(ps2kb_buf *lb);
-
 
 void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size);
 uint8_t ps2mouse_buf_add(ps2mouse_buf *lb, mouse_event* event);

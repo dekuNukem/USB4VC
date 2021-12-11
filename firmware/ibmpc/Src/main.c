@@ -69,6 +69,7 @@ ps2kb_buf my_ps2kb_buf;
 ps2mouse_buf my_ps2mouse_buf;
 uint8_t ps2kb_host_cmd, ps2mouse_host_cmd, buffered_code, buffered_value, ps2mouse_bus_status, ps2kb_bus_status;
 mouse_event latest_mouse_event;
+ps2_outgoing_buf my_ps2_outbuf;
 
 /* USER CODE END PV */
 
@@ -97,7 +98,6 @@ int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
 {
   return (int16_t)((msb << 8) | lsb);
 }
-
 
 /*
   This is called when a new SPI packet is received
@@ -153,10 +153,19 @@ void ps2mouse_update(void)
     ps2mouse_read(&ps2mouse_host_cmd, 10);
     ps2mouse_host_req_reply(ps2mouse_host_cmd, &latest_mouse_event);
   }
+
   mouse_event* this_mouse_event = ps2mouse_buf_peek(&my_ps2mouse_buf);
-  if(this_mouse_event != NULL)
+  if(this_mouse_event == NULL)
+    return;
+
+  if(ps2mouse_get_outgoing_data(this_mouse_event, &my_ps2_outbuf))
   {
-    ps2mouse_send_update(this_mouse_event);
+    // no need to send out packets
+    ps2mouse_buf_pop(&my_ps2mouse_buf);
+    return;
+  }
+  if(ps2mouse_send_update(&my_ps2_outbuf) == 0)
+  {
     ps2mouse_buf_pop(&my_ps2mouse_buf);
   }
 }
