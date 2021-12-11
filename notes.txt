@@ -50,3 +50,14 @@ cat /proc/interrupts
 
 change keyboard LED
 sudo bash -c 'echo 1 > /sys/class/leds/input5\:\:capslock/brightness'
+
+
+run script on launch:
+
+https://raspberrypi-guide.github.io/programming/run-script-on-boot
+
+sudo nano /etc/rc.local
+
+cd /home/pi/usb4vc; sudo python3 usb4vc_main.py &
+
+kill -SIGINT pid

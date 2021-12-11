@@ -161,10 +161,11 @@ void ps2mouse_update(void)
 
   if(ps2mouse_get_outgoing_data(this_mouse_event, &my_ps2_outbuf))
   {
-    // no need to send out packets
+    // if return value is not 0, no need to send out packets
     ps2mouse_buf_pop(&my_ps2mouse_buf);
     return;
   }
+  // only pop the item if sending is complete
   if(ps2mouse_send_update(&my_ps2_outbuf) == 0)
     ps2mouse_buf_pop(&my_ps2mouse_buf);
 }

@@ -42,7 +42,7 @@ typedef struct
 
 typedef struct
 {
-  int16_t movement_x;
+  int16_t movement_x;=x
   int16_t movement_y;
   int16_t scroll_vertical;
   uint8_t button_left;
