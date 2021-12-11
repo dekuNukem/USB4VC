@@ -394,6 +394,7 @@ uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf)
 {
   for (int i = 0; i < pbuf->size; ++i)
   {
+    // return error if inhibited or interrupted while transmitting
     if(ps2mouse_get_bus_status() != PS2_BUS_IDLE || ps2mouse_write_nowait(pbuf->data[i]) != 0)
       return 1;
   }
