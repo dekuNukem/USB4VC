@@ -311,7 +311,7 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   PS2KB_CLK_HI();
   delay_us(CLKHALF);
 
-  delay_us(BYTEWAIT_END);
+  // delay_us(BYTEWAIT_END);
 
   return 0;
 }

@@ -152,6 +152,7 @@ void ps2mouse_update(void)
   {
     ps2mouse_read(&ps2mouse_host_cmd, 10);
     ps2mouse_host_req_reply(ps2mouse_host_cmd, &latest_mouse_event);
+    return;
   }
 
   mouse_event* this_mouse_event = ps2mouse_buf_peek(&my_ps2mouse_buf);
@@ -165,9 +166,7 @@ void ps2mouse_update(void)
     return;
   }
   if(ps2mouse_send_update(&my_ps2_outbuf) == 0)
-  {
     ps2mouse_buf_pop(&my_ps2mouse_buf);
-  }
 }
 
 void ps2kb_update(void)

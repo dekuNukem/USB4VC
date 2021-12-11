@@ -156,8 +156,6 @@ uint8_t ps2mouse_read(uint8_t* result, uint8_t timeout_ms)
 
 uint8_t ps2mouse_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
 {
-  uint8_t parity = 1;
-
   ps2mouse_wait_start = HAL_GetTick();
   while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
   {
@@ -169,54 +167,7 @@ uint8_t ps2mouse_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   if(delay_start)
     delay_us(BYTEWAIT);
 
-  PS2MOUSE_DATA_LOW();
-  delay_us(CLKHALF);
-  // device sends on falling clock
-  PS2MOUSE_CLK_LOW();	// start bit
-  delay_us(CLKFULL);
-  PS2MOUSE_CLK_HI();
-  delay_us(CLKHALF);
-
-  for (int i=0; i < 8; i++)
-  {
-    if (data & 0x01)
-      PS2MOUSE_DATA_HI();
-    else
-      PS2MOUSE_DATA_LOW();
-
-    delay_us(CLKHALF);
-    PS2MOUSE_CLK_LOW();
-    delay_us(CLKFULL);
-    PS2MOUSE_CLK_HI();
-    delay_us(CLKHALF);
-
-    parity = parity ^ (data & 0x01);
-    data = data >> 1;
-  }
-
-  // parity bit
-  if (parity)
-    PS2MOUSE_DATA_HI();
-  else
-    PS2MOUSE_DATA_LOW();
-
-  delay_us(CLKHALF);
-  PS2MOUSE_CLK_LOW();
-  delay_us(CLKFULL);
-  PS2MOUSE_CLK_HI();
-  delay_us(CLKHALF);
-
-  // stop bit
-  PS2MOUSE_DATA_HI();
-  delay_us(CLKHALF);
-  PS2MOUSE_CLK_LOW();
-  delay_us(CLKFULL);
-  PS2MOUSE_CLK_HI();
-  delay_us(CLKHALF);
-
-  delay_us(BYTEWAIT_END);
-
-  return 0;
+  return ps2mouse_write_nowait(data);
 }
 
 void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent)
@@ -390,6 +341,8 @@ uint8_t ps2mouse_write_nowait(uint8_t data)
   delay_us(CLKFULL);
   PS2MOUSE_CLK_HI();
   delay_us(CLKHALF);
+  if(PS2MOUSE_READ_CLK_PIN() == GPIO_PIN_RESET)
+    return 1;
 
   for (int i=0; i < 8; i++)
   {
@@ -403,6 +356,8 @@ uint8_t ps2mouse_write_nowait(uint8_t data)
     delay_us(CLKFULL);
     PS2MOUSE_CLK_HI();
     delay_us(CLKHALF);
+    if(PS2MOUSE_READ_CLK_PIN() == GPIO_PIN_RESET)
+      return 1;
 
     parity = parity ^ (data & 0x01);
     data = data >> 1;
@@ -419,6 +374,8 @@ uint8_t ps2mouse_write_nowait(uint8_t data)
   delay_us(CLKFULL);
   PS2MOUSE_CLK_HI();
   delay_us(CLKHALF);
+  if(PS2MOUSE_READ_CLK_PIN() == GPIO_PIN_RESET)
+    return 1;
 
   // stop bit
   PS2MOUSE_DATA_HI();
@@ -432,7 +389,6 @@ uint8_t ps2mouse_write_nowait(uint8_t data)
 
   return 0;
 }
-
 
 uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf)
 {
