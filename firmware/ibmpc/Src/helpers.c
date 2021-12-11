@@ -34,14 +34,19 @@ uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value)
 	return 0;
 }
 
-uint8_t ps2kb_buf_get(ps2kb_buf *lb, uint8_t* code, uint8_t* value)
+uint8_t ps2kb_buf_peek(ps2kb_buf *lb, uint8_t* code, uint8_t* value)
 {
 	if(ps2kb_buf_is_empty(lb))
 		return 1;
 	*code = lb->keycode_buf[lb->tail];
 	*value = lb->keyvalue_buf[lb->tail];
-	lb->tail = (lb->tail + 1) % lb->size;
 	return 0;
+}
+
+void ps2kb_buf_pop(ps2kb_buf *lb)
+{
+	if(!ps2kb_buf_is_empty(lb))
+		lb->tail = (lb->tail + 1) % lb->size;;
 }
 
 void ps2kb_buf_init(ps2kb_buf *lb, uint8_t size)
@@ -73,14 +78,17 @@ uint8_t ps2mouse_buf_add(ps2mouse_buf *lb, mouse_event* event)
 	return 0;
 }
 
-mouse_event* ps2mouse_buf_get(ps2mouse_buf *lb)
+mouse_event* ps2mouse_buf_peek(ps2mouse_buf *lb)
 {
-	mouse_event* to_return = NULL;
 	if(ps2mouse_buf_is_empty(lb))
-		return to_return;
-	to_return = &lb->mouse_events[lb->tail];
-	lb->tail = (lb->tail + 1) % lb->size;
-	return to_return;
+		return NULL;
+	return &lb->mouse_events[lb->tail];
+}
+
+void ps2mouse_buf_pop(ps2mouse_buf *lb)
+{
+	if(!ps2mouse_buf_is_empty(lb))
+		lb->tail = (lb->tail + 1) % lb->size;
 }
 
 void ps2mouse_buf_reset(ps2mouse_buf *lb)

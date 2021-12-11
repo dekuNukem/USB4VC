@@ -71,7 +71,7 @@ void ps2mouse_restore_defaults()
   ps2mouse_sampling_rate = 100;
   ps2mouse_resolution = 2;
   ps2mouse_scale = 1;
-  ps2mouse_data_reporting_enabled = 0;
+  ps2mouse_data_reporting_enabled = 1;
   ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
   ps2mouse_prev_mode = PS2MOUSE_MODE_STREAM;
   reset_accumulators();
@@ -157,7 +157,6 @@ uint8_t ps2mouse_read(uint8_t* result, uint8_t timeout_ms)
 
 uint8_t ps2mouse_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
 {
-  uint8_t i;
   uint8_t parity = 1;
 
   ps2mouse_wait_start = HAL_GetTick();
@@ -179,7 +178,7 @@ uint8_t ps2mouse_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   PS2MOUSE_CLK_HI();
   delay_us(CLKHALF);
 
-  for (i=0; i < 8; i++)
+  for (int i=0; i < 8; i++)
   {
     if (data & 0x01)
       PS2MOUSE_DATA_HI();

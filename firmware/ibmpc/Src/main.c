@@ -153,9 +153,12 @@ void ps2mouse_update(void)
     ps2mouse_read(&ps2mouse_host_cmd, 10);
     ps2mouse_host_req_reply(ps2mouse_host_cmd, &latest_mouse_event);
   }
-  mouse_event* this_mouse_event = ps2mouse_buf_get(&my_ps2mouse_buf);
+  mouse_event* this_mouse_event = ps2mouse_buf_peek(&my_ps2mouse_buf);
   if(this_mouse_event != NULL)
+  {
     ps2mouse_send_update(this_mouse_event);
+    ps2mouse_buf_pop(&my_ps2mouse_buf);
+  }
 }
 
 void ps2kb_update(void)
@@ -182,8 +185,11 @@ void ps2kb_update(void)
     }
   }
 
-  if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
+  if(ps2kb_buf_peek(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
+  {
     ps2kb_press_key(buffered_code, buffered_value);
+    ps2kb_buf_pop(&my_ps2kb_buf);
+  }
 }
 
 /* USER CODE END 0 */

@@ -62,11 +62,14 @@ typedef struct
 
 void ps2kb_buf_init(ps2kb_buf *lb, uint8_t size);
 uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value);
-uint8_t ps2kb_buf_get(ps2kb_buf *lb, uint8_t* code, uint8_t* value);
+uint8_t ps2kb_buf_peek(ps2kb_buf *lb, uint8_t* code, uint8_t* value);
+void ps2kb_buf_pop(ps2kb_buf *lb);
+
 
 void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size);
 uint8_t ps2mouse_buf_add(ps2mouse_buf *lb, mouse_event* event);
-mouse_event* ps2mouse_buf_get(ps2mouse_buf *lb);
+mouse_event* ps2mouse_buf_peek(ps2mouse_buf *lb);
+void ps2mouse_buf_pop(ps2mouse_buf *lb);
 
 #ifdef __cplusplus
 }
