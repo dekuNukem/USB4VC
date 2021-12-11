@@ -73,6 +73,7 @@ def print_welcome_screen(version_tuple):
     with oled_canvas as ocan:
         oled_print_centered("USB4VC", font_large, 0, ocan)
         oled_print_centered(f"V{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]} dekuNukem", font_regular, 20, ocan)
+    device.contrast(1)
 
 def oled_clear():
     device.clear()
@@ -82,7 +83,6 @@ def oled_queue_worker():
     while 1:
         # print(oled_display_queue.qsize())
         time.sleep(0.75)
-
 
 oled_queue_worker = threading.Thread(target=oled_queue_worker, daemon=True)
 
