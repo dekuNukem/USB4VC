@@ -22,6 +22,8 @@ uint8_t ps2kb_buf_is_empty(ps2kb_buf *lb)
 	return lb->tail == lb->head;
 }
 
+// ring buffer magic!
+// I completely forgot how it works one month after I wrote this code!
 uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value)
 {
 	if(ps2kb_buf_is_full(lb))

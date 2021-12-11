@@ -67,7 +67,8 @@ uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
 ps2kb_buf my_ps2kb_buf;
 ps2mouse_buf my_ps2mouse_buf;
-uint8_t ps2kb_host_cmd, ps2kb_leds, ps2mouse_host_cmd, buffered_code, buffered_value, ps2mouse_bus_status, ps2kb_bus_status;
+uint8_t ps2kb_host_cmd, ps2mouse_host_cmd, buffered_code, buffered_value, ps2mouse_bus_status, ps2kb_bus_status;
+mouse_event latest_mouse_event;
 
 /* USER CODE END PV */
 
@@ -123,21 +124,66 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_MOUSE_EVENT)
   {
-    mouse_event this_event;
-    this_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
-    this_event.movement_y = -1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
-    this_event.scroll_vertical = -1 * byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
-    this_event.button_left = backup_spi1_recv_buf[13];
-    this_event.button_right = backup_spi1_recv_buf[14];
-    this_event.button_middle = backup_spi1_recv_buf[15];
-    this_event.button_side = backup_spi1_recv_buf[16];
-    this_event.button_extra = backup_spi1_recv_buf[17];
-    ps2mouse_buf_add(&my_ps2mouse_buf, &this_event);
+    latest_mouse_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
+    latest_mouse_event.movement_y = -1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
+    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
+    latest_mouse_event.button_left = backup_spi1_recv_buf[13];
+    latest_mouse_event.button_right = backup_spi1_recv_buf[14];
+    latest_mouse_event.button_middle = backup_spi1_recv_buf[15];
+    latest_mouse_event.button_side = backup_spi1_recv_buf[16];
+    latest_mouse_event.button_extra = backup_spi1_recv_buf[17];
+    ps2mouse_buf_add(&my_ps2mouse_buf, &latest_mouse_event);
   }
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_REQ_ACK)
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
+}
+
+void ps2mouse_update(void)
+{
+  ps2mouse_bus_status = ps2mouse_get_bus_status();
+  if(ps2mouse_bus_status == PS2_BUS_INHIBIT)
+  {
+    ps2mouse_release_lines();
+    return;
+  }
+  else if(ps2mouse_bus_status == PS2_BUS_REQ_TO_SEND)
+  {
+    ps2mouse_read(&ps2mouse_host_cmd, 10);
+    ps2mouse_host_req_reply(ps2mouse_host_cmd, &latest_mouse_event);
+  }
+  mouse_event* this_mouse_event = ps2mouse_buf_get(&my_ps2mouse_buf);
+  if(this_mouse_event != NULL)
+    ps2mouse_send_update(this_mouse_event);
+}
+
+void ps2kb_update(void)
+{
+  ps2kb_bus_status = ps2kb_get_bus_status();
+  if(ps2kb_bus_status == PS2_BUS_INHIBIT)
+  {
+    ps2kb_release_lines();
+    return;
+  }
+  else if(ps2kb_bus_status == PS2_BUS_REQ_TO_SEND)
+  {
+    uint8_t ps2kb_leds = 0xff;
+    ps2kb_read(&ps2kb_host_cmd, 10);
+    keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
+    if(ps2kb_leds != 0xff)
+    {
+      memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+      spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+      spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+      spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
+      spi_transmit_buf[3] = ps2kb_leds;
+      HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
+    }
+  }
+
+  if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
+    ps2kb_press_key(buffered_code, buffered_value);
 }
 
 /* USER CODE END 0 */
@@ -185,7 +231,6 @@ int main(void)
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   printf("hello world\n");
-  mouse_event* this_mouse_event;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -200,47 +245,8 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
-    ps2mouse_bus_status = ps2mouse_get_bus_status();
-    if(ps2mouse_bus_status == PS2_BUS_INHIBIT)
-    {
-      ps2mouse_release_lines();
-    }
-    else if(ps2mouse_bus_status == PS2_BUS_REQ_TO_SEND)
-    {
-      ps2mouse_read(&ps2mouse_host_cmd, 10);
-      ps2mouse_host_req_reply(ps2mouse_host_cmd);
-    }
-
-    this_mouse_event = ps2mouse_buf_get(&my_ps2mouse_buf);
-    if(this_mouse_event != NULL)
-    {
-      ps2mouse_send_update(this_mouse_event);
-    }
-
-    ps2kb_bus_status = ps2kb_get_bus_status();
-    if(ps2kb_bus_status == PS2_BUS_INHIBIT)
-    {
-      ps2kb_release_lines();
-    }
-    else if(ps2kb_bus_status == PS2_BUS_REQ_TO_SEND)
-    {
-      ps2kb_leds = 0xff;
-      ps2kb_read(&ps2kb_host_cmd, 10);
-      keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
-      if(ps2kb_leds != 0xff)
-      {
-        memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
-        spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
-        spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
-        spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
-        spi_transmit_buf[3] = ps2kb_leds;
-        HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
-      }
-    }
-
-    if(ps2kb_buf_get(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
-      ps2kb_press_key(buffered_code, buffered_value);
+    ps2kb_update();
+    ps2mouse_update();
   }
   /* USER CODE END 3 */
 

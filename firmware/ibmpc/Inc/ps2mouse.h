@@ -16,7 +16,7 @@ void ps2mouse_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_
 uint8_t ps2mouse_get_bus_status(void);
 uint8_t ps2mouse_read(uint8_t* result, uint8_t timeout_ms);
 uint8_t ps2mouse_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms);
-void ps2mouse_host_req_reply(uint8_t cmd);
+void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent);
 uint8_t ps2mouse_send_update(mouse_event* this_event);
 void ps2mouse_release_lines(void);
 

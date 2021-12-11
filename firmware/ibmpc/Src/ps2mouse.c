@@ -36,6 +36,7 @@ uint8_t sample_rate_history_index;
 uint8_t mouse_device_id;
 uint8_t ps2mouse_current_mode;
 uint8_t ps2mouse_prev_mode;
+uint8_t x_accumulator, y_accumulator, scroll_accumulator;
 
 #define PS2MOUSE_PACKET_SIZE_GENERIC 3
 #define PS2MOUSE_PACKET_SIZE_INTELLIMOUSE 4
@@ -58,6 +59,13 @@ void ps2mouse_release_lines(void)
   PS2MOUSE_DATA_HI();
 }
 
+void reset_accumulators(void)
+{
+  x_accumulator = 0;
+  y_accumulator = 0;
+  scroll_accumulator = 0;
+}
+
 void ps2mouse_restore_defaults()
 {
   ps2mouse_sampling_rate = 100;
@@ -66,6 +74,7 @@ void ps2mouse_restore_defaults()
   ps2mouse_data_reporting_enabled = 0;
   ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
   ps2mouse_prev_mode = PS2MOUSE_MODE_STREAM;
+  reset_accumulators();
 }
 
 void ps2mouse_reset(void)
@@ -142,7 +151,7 @@ uint8_t ps2mouse_read(uint8_t* result, uint8_t timeout_ms)
   delay_us(CLKHALF);
   PS2MOUSE_DATA_HI();
 
-  *result = data & 0x00FF;
+  *result = data & 0xFF;
   return 0;
 }
 
@@ -212,16 +221,32 @@ uint8_t ps2mouse_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   return 0;
 }
 
-void ps2mouse_host_req_reply(uint8_t cmd)
+void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent)
 {
+  uint8_t first_byte = 0;
+  if(cmd == 0xFF) // reset
+  {
+    ps2mouse_reset();
+    PS2MOUSE_SENDACK();
+    ps2mouse_write(0xAA, 0, 250);
+    ps2mouse_write(0, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+    return;
+  }
+  if(cmd == 0xEC) // reset wrap mode
+  {
+    ps2mouse_current_mode = ps2mouse_prev_mode;
+    reset_accumulators();
+    PS2MOUSE_SENDACK();
+    return;
+  }
+  if(ps2mouse_current_mode == PS2MOUSE_MODE_WRAP)
+  {
+    ps2mouse_write(cmd, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+    return;
+  }
+
   switch (cmd)
   {
-	  case 0xFF: //reset
-      ps2mouse_reset();
-	    PS2MOUSE_SENDACK();
-	    ps2mouse_write(0xAA, 0, 250);
-      ps2mouse_write(0, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
-	    break;
 	  case 0xFE: //resend
 	    PS2MOUSE_SENDACK();
 	    break;
@@ -231,14 +256,17 @@ void ps2mouse_host_req_reply(uint8_t cmd)
 	    break;
 	  case 0xF5: //disable data reporting
       ps2mouse_data_reporting_enabled = 0;
+      reset_accumulators();
 	    PS2MOUSE_SENDACK();
 	    break;
     case 0xF4: //enable data reporting
       ps2mouse_data_reporting_enabled = 1;
+      reset_accumulators();
       PS2MOUSE_SENDACK();
       break;
 	  case 0xF3: //set sampling rate
 	    PS2MOUSE_SENDACK();
+      reset_accumulators();
 	    if(ps2mouse_read(&ps2mouse_sampling_rate, 30) == 0)
       {
         sample_rate_history[sample_rate_history_index] = ps2mouse_sampling_rate;
@@ -248,6 +276,7 @@ void ps2mouse_host_req_reply(uint8_t cmd)
       }
 	    break;
 	  case 0xF2: //get device id
+      reset_accumulators();
 	    PS2MOUSE_SENDACK();
       mouse_device_id = 0; // standard ps/2 mouse
       if (sample_rate_history_index > 2 && sample_rate_history[sample_rate_history_index-1] == 80 && sample_rate_history[sample_rate_history_index-2] == 100 && sample_rate_history[sample_rate_history_index-3] == 200)
@@ -255,6 +284,7 @@ void ps2mouse_host_req_reply(uint8_t cmd)
 	    ps2mouse_write(mouse_device_id, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
     case 0xF0: // set remote mode
+      reset_accumulators();
       ps2mouse_prev_mode = ps2mouse_current_mode;
       ps2mouse_current_mode = PS2MOUSE_MODE_REMOTE;
       PS2MOUSE_SENDACK();
@@ -263,27 +293,44 @@ void ps2mouse_host_req_reply(uint8_t cmd)
       if(ps2mouse_current_mode != PS2MOUSE_MODE_WRAP)
         ps2mouse_prev_mode = ps2mouse_current_mode;
       ps2mouse_current_mode = PS2MOUSE_MODE_WRAP;
-      PS2MOUSE_SENDACK();
-      break;
-    case 0xEC: // reset wrap mode
-      ps2mouse_current_mode = ps2mouse_prev_mode;
+      reset_accumulators();
       PS2MOUSE_SENDACK();
       break;
     case 0xEB: // read data
       PS2MOUSE_SENDACK();
+      // do stuff
+      reset_accumulators();
       break;
     case 0xEA: // set stream mode
       ps2mouse_prev_mode = ps2mouse_current_mode;
       ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
+      reset_accumulators();
       PS2MOUSE_SENDACK();
       break;
     case 0xE9: // status request
       PS2MOUSE_SENDACK();
+      if(ps2mouse_current_mode == PS2MOUSE_MODE_REMOTE)
+        first_byte |= 0x40;
+      if(ps2mouse_data_reporting_enabled)
+        first_byte |= 0x20;
+      if(ps2mouse_scale == 2)
+        first_byte |= 0x10;
+      if(mevent->button_left)
+        first_byte |= 0x4;
+      if(mevent->button_middle)
+        first_byte |= 0x2;
+      if(mevent->button_right)
+        first_byte |= 0x1;
+      ps2mouse_write(first_byte, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2mouse_write(ps2mouse_resolution, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2mouse_write(ps2mouse_sampling_rate, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+      reset_accumulators();
       break;
 	  case 0xE8: // set resolution
 	    PS2MOUSE_SENDACK();
 	    if(ps2mouse_read(&ps2mouse_resolution, 30) == 0)
 	    	PS2MOUSE_SENDACK();
+      reset_accumulators();
 	    break;
     case 0xE6: // reset scale
       PS2MOUSE_SENDACK();
@@ -293,9 +340,6 @@ void ps2mouse_host_req_reply(uint8_t cmd)
       PS2MOUSE_SENDACK();
       ps2mouse_scale = 2;
       break;
-	  // case 0xEE: //echo
-	  //   ps2mouse_write(0xEE, 1, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
-	  //   break;
     default:
       PS2MOUSE_SENDACK();
   }
@@ -303,10 +347,19 @@ void ps2mouse_host_req_reply(uint8_t cmd)
 
 uint8_t ps2mouse_send_update(mouse_event* this_event)
 {
-  while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
+  if(ps2mouse_current_mode == PS2MOUSE_MODE_REMOTE)
+  {
+    x_accumulator += (uint8_t)(this_event->movement_x);
+    y_accumulator += (uint8_t)(this_event->movement_y);
+    scroll_accumulator += (uint8_t)(this_event->scroll_vertical);
+    return 0;
+  }
+  if(ps2mouse_current_mode == PS2MOUSE_MODE_WRAP)
     return 1;
   if(ps2mouse_data_reporting_enabled == 0)
     return 2;
+  if(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
+    return 3;
   memset(ps2mouse_out_buf, 0, PS2MOUSE_PACKET_SIZE_INTELLIMOUSE);
   ps2mouse_out_buf[0] = 0x8; // bit 3 is always 1
   // https://wiki.osdev.org/PS/2_Mouse
