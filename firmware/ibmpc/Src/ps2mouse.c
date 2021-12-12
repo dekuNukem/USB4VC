@@ -25,7 +25,6 @@ uint16_t ps2mouse_clk_pin;
 
 GPIO_TypeDef* ps2mouse_data_port;
 uint16_t ps2mouse_data_pin;
-uint32_t ps2mouse_wait_start;
 uint8_t ps2mouse_data_reporting_enabled;
 uint8_t ps2mouse_sampling_rate;
 uint8_t ps2mouse_resolution;
@@ -50,7 +49,7 @@ uint8_t x_accumulator, y_accumulator, scroll_accumulator;
 #define PS2MOUSE_READ_DATA_PIN() HAL_GPIO_ReadPin(ps2mouse_data_port, ps2mouse_data_pin)
 #define PS2MOUSE_READ_CLK_PIN() HAL_GPIO_ReadPin(ps2mouse_clk_port, ps2mouse_clk_pin)
 
-#define PS2MOUSE_SENDACK() ps2mouse_write(0xFA, 1, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS)
+#define PS2MOUSE_SENDACK() ps2mouse_write_delay_start(0xFA, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS)
 
 void ps2mouse_release_lines(void)
 {
@@ -110,7 +109,7 @@ uint8_t ps2mouse_read(uint8_t* result, uint8_t timeout_ms)
   uint16_t data = 0x00;
   uint16_t bit = 0x01;
 
-  ps2mouse_wait_start = HAL_GetTick();
+  uint32_t ps2mouse_wait_start = HAL_GetTick();
   while(ps2mouse_get_bus_status() != PS2_BUS_REQ_TO_SEND)
   {
   	if(HAL_GetTick() - ps2mouse_wait_start >= timeout_ms)
@@ -154,19 +153,29 @@ uint8_t ps2mouse_read(uint8_t* result, uint8_t timeout_ms)
   return 0;
 }
 
-uint8_t ps2mouse_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
+uint8_t ps2mouse_wait_for_idle(uint8_t timeout_ms)
 {
-  ps2mouse_wait_start = HAL_GetTick();
+  uint32_t ps2mouse_wait_start = HAL_GetTick();
   while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
   {
-  	if(HAL_GetTick() - ps2mouse_wait_start >= timeout_ms)
-  		return 1;
+    if(HAL_GetTick() - ps2mouse_wait_start >= timeout_ms)
+      return 1;
   }
+  return 0;
+}
 
-  // if responding to host, wait a little while for it to get ready
-  if(delay_start)
-    delay_us(BYTEWAIT);
+uint8_t ps2mouse_write_delay_start(uint8_t data, uint8_t timeout_ms)
+{
+  if(ps2mouse_wait_for_idle(timeout_ms) != 0)
+    return 1;
+  delay_us(BYTEWAIT);
+  return ps2mouse_write_nowait(data);
+}
 
+uint8_t ps2mouse_write(uint8_t data, uint8_t timeout_ms)
+{
+  if(ps2mouse_wait_for_idle(timeout_ms) != 0)
+    return 1;
   return ps2mouse_write_nowait(data);
 }
 
@@ -177,8 +186,8 @@ void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent)
   {
     ps2mouse_reset();
     PS2MOUSE_SENDACK();
-    ps2mouse_write(0xAA, 0, 250);
-    ps2mouse_write(0, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2mouse_write(0xAA, 250);
+    ps2mouse_write(0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
     return;
   }
   if(cmd == 0xEC) // reset wrap mode
@@ -190,7 +199,7 @@ void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent)
   }
   if(ps2mouse_current_mode == PS2MOUSE_MODE_WRAP)
   {
-    ps2mouse_write(cmd, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+    ps2mouse_write(cmd, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
     return;
   }
 
@@ -216,7 +225,7 @@ void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent)
 	  case 0xF3: //set sampling rate
 	    PS2MOUSE_SENDACK();
       reset_accumulators();
-	    if(ps2mouse_read(&ps2mouse_sampling_rate, 30) == 0)
+	    if(ps2mouse_read(&ps2mouse_sampling_rate, 150) == 0)
       {
         sample_rate_history[sample_rate_history_index] = ps2mouse_sampling_rate;
         if(sample_rate_history_index < SAMPLE_RATE_HISTORY_BUF_SIZE-1)
@@ -230,7 +239,7 @@ void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent)
       mouse_device_id = 0; // standard ps/2 mouse
       if (sample_rate_history_index > 2 && sample_rate_history[sample_rate_history_index-1] == 80 && sample_rate_history[sample_rate_history_index-2] == 100 && sample_rate_history[sample_rate_history_index-3] == 200)
         mouse_device_id = 3; // intellimouse with scroll wheel
-	    ps2mouse_write(mouse_device_id, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+	    ps2mouse_write(mouse_device_id, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
     case 0xF0: // set remote mode
       reset_accumulators();
@@ -270,14 +279,14 @@ void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent)
         first_byte |= 0x2;
       if(mevent->button_right)
         first_byte |= 0x1;
-      ps2mouse_write(first_byte, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
-      ps2mouse_write(ps2mouse_resolution, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
-      ps2mouse_write(ps2mouse_sampling_rate, 0, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2mouse_write(first_byte, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2mouse_write(ps2mouse_resolution, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
+      ps2mouse_write(ps2mouse_sampling_rate, PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS);
       reset_accumulators();
       break;
 	  case 0xE8: // set resolution
 	    PS2MOUSE_SENDACK();
-	    if(ps2mouse_read(&ps2mouse_resolution, 30) == 0)
+	    if(ps2mouse_read(&ps2mouse_resolution, 150) == 0)
 	    	PS2MOUSE_SENDACK();
       reset_accumulators();
 	    break;
@@ -395,7 +404,7 @@ uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf)
   for (int i = 0; i < pbuf->size; ++i)
   {
     // return error if inhibited or interrupted while transmitting
-    if(ps2mouse_write(pbuf->data[i], 0, 2) != 0)
+    if(ps2mouse_write(pbuf->data[i], 2) != 0)
       return 1;
   }
   return 0;

@@ -111,7 +111,7 @@ I (../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h)(0x5DFA0893)
 I (../Inc/shared.h)(0x617487BD)
 I (../Inc/ps2kb.h)(0x617D9759)
 I (../Inc/delay_us.h)(0x617487C7)
-F (..\Src\ps2mouse.c)(0x61B5C665)(--c99 -c --cpu Cortex-M0 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ibmpc-IC:\Users\allen\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\allen\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-D__UVISION_VERSION="529" -D_RTE_ -DSTM32F072xB -DUSE_HAL_DRIVER -DSTM32F072xB-o ibmpc\ps2mouse.o --omf_browse ibmpc\ps2mouse.crf --depend ibmpc\ps2mouse.d)
+F (..\Src\ps2mouse.c)(0x61B5CBC2)(--c99 -c --cpu Cortex-M0 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ibmpc-IC:\Users\allen\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\allen\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-D__UVISION_VERSION="529" -D_RTE_ -DSTM32F072xB -DUSE_HAL_DRIVER -DSTM32F072xB-o ibmpc\ps2mouse.o --omf_browse ibmpc\ps2mouse.crf --depend ibmpc\ps2mouse.d)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5D9B429A)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B4298)
 I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x5D9B429A)
@@ -148,14 +148,14 @@ I (../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h)(0x5DFA0893)
 I (../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h)(0x5DFA0893)
 I (../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h)(0x5DFA0893)
 I (../Inc/shared.h)(0x617487BD)
-I (../Inc/ps2mouse.h)(0x61B506EE)
+I (../Inc/ps2mouse.h)(0x61B5C97C)
 I (../Inc/delay_us.h)(0x617487C7)
 F (..\Inc\delay_us.h)(0x617487C7)()
 F (..\Inc\helpers.h)(0x61B52C42)()
 F (..\Inc\ps2kb.h)(0x617D9759)()
-F (..\Inc\ps2mouse.h)(0x61B506EE)()
+F (..\Inc\ps2mouse.h)(0x61B5C97C)()
 F (..\Inc\shared.h)(0x617487BD)()
-F (../Src/main.c)(0x61B5C793)(--c99 -c --cpu Cortex-M0 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ibmpc-IC:\Users\allen\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\allen\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-D__UVISION_VERSION="529" -D_RTE_ -DSTM32F072xB -DUSE_HAL_DRIVER -DSTM32F072xB-o ibmpc\main.o --omf_browse ibmpc\main.crf --depend ibmpc\main.d)
+F (../Src/main.c)(0x61B5CBD1)(--c99 -c --cpu Cortex-M0 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ibmpc-IC:\Users\allen\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\allen\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-D__UVISION_VERSION="529" -D_RTE_ -DSTM32F072xB -DUSE_HAL_DRIVER -DSTM32F072xB-o ibmpc\main.o --omf_browse ibmpc\main.crf --depend ibmpc\main.d)
 I (../Inc/main.h)(0x61AFDCDB)
 I (../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h)(0x5DFA0893)
 I (../Inc/stm32f0xx_hal_conf.h)(0x61AFDCDB)
@@ -193,7 +193,7 @@ I (../Inc/shared.h)(0x617487BD)
 I (../Inc/helpers.h)(0x61B52C42)
 I (../Inc/ps2kb.h)(0x617D9759)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x5D9B4298)
-I (../Inc/ps2mouse.h)(0x61B506EE)
+I (../Inc/ps2mouse.h)(0x61B5C97C)
 F (../Src/stm32f0xx_it.c)(0x61AFDCDA)(--c99 -c --cpu Cortex-M0 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc -I ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F0xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_ibmpc-IC:\Users\allen\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include-IC:\Users\allen\AppData\Local\Arm\Packs\Keil\STM32F0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32F0xx\Include-D__UVISION_VERSION="529" -D_RTE_ -DSTM32F072xB -DUSE_HAL_DRIVER -DSTM32F072xB-o ibmpc\stm32f0xx_it.o --omf_browse ibmpc\stm32f0xx_it.crf --depend ibmpc\stm32f0xx_it.d)
 I (../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h)(0x5DFA0893)
 I (../Inc/stm32f0xx_hal_conf.h)(0x61AFDCDB)
