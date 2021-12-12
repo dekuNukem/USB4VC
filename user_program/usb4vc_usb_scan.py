@@ -72,8 +72,9 @@ SPI_MISO_MSG_KB_LED_REQ = 1
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
 
-keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT, 0]
-mouse_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_MOUSE_EVENT, 0] + [0]*28
+keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT] + [0]*29
+mouse_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_MOUSE_EVENT] + [0]*29
+gamepad_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_GAMEPAD_EVENT] + [0]*29
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_REQ_ACK] + [0]*29
@@ -82,6 +83,14 @@ def get_01(value):
     if value:
         return 1
     return 0
+
+def make_keyboard_spi_packet(input_data, kbd_id):
+    result = list(keyboard_spi_msg_header)
+    result[3] = kbd_id
+    result[4] = input_data[2]
+    result[5] = input_data[3]
+    result[6] = input_data[4]
+    return result
 
 def change_kb_led(ps2kb_led_byte):
     led_file_list = os.listdir(led_device_path)
@@ -118,9 +127,7 @@ def raw_input_event_worker():
                 continue
             data = list(data[8:])
             if data[0] == EV_KEY:
-                to_transfer = keyboard_spi_msg_header + data + [0]*20
-                to_transfer[3] = keyboard_opened_device_dict[key][1]
-                pcard_spi.xfer(to_transfer)
+                pcard_spi.xfer(make_keyboard_spi_packet(data, keyboard_opened_device_dict[key][1]))
 
         for key in list(mouse_opened_device_dict):
             try:
@@ -138,7 +145,6 @@ def raw_input_event_worker():
             4 - 8 button status
             """
             data = list(data[8:])
-            # print(data)
             if data[0] == EV_REL:
                 if data[2] == REL_X:
                     mouse_spi_packet_dict["x"] = data[4:6]
@@ -149,6 +155,7 @@ def raw_input_event_worker():
             if data[0] == EV_KEY:
                 key_code = data[3] * 256 + data[2]
                 if 0x110 <= key_code <= 0x117:
+                    print(data)
                     mouse_button_state_list[data[2]-16] = data[4]
                     to_transfer = list(mouse_spi_msg_template)
                     to_transfer[10:13] = data[2:5]
@@ -160,9 +167,7 @@ def raw_input_event_worker():
                 so need to handle keyboard presses here too for compatibility
                 """
                 if 0x1 <= key_code <= 127:
-                    to_transfer = keyboard_spi_msg_header + data + [0]*20
-                    to_transfer[3] = mouse_opened_device_dict[key][1]
-                    pcard_spi.xfer(to_transfer)
+                    pcard_spi.xfer(make_keyboard_spi_packet(data, mouse_opened_device_dict[key][1]))
 
             if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_spi_packet_dict) > 0:
                 to_transfer = list(mouse_spi_msg_template)
@@ -176,6 +181,23 @@ def raw_input_event_worker():
                 to_transfer[3] = mouse_opened_device_dict[key][1]
                 mouse_spi_packet_dict.clear()
                 pcard_spi.xfer(to_transfer)
+
+        for key in list(gamepad_opened_device_dict):
+            try:
+                data = gamepad_opened_device_dict[key][0].read(16)
+            except OSError:
+                gamepad_opened_device_dict[key][0].close()
+                del gamepad_opened_device_dict[key]
+                print("gamepad disappeared:", key)
+                continue
+            if data is None:
+                continue
+            data = list(data[8:])
+            # print(data)
+            # if data[0] == EV_KEY:
+            #     to_transfer = keyboard_spi_msg_header + data + [0]*20
+            #     to_transfer[3] = gamepad_opened_device_dict[key][1]
+            #     pcard_spi.xfer(to_transfer)
 
         if GPIO.event_detected(SLAVE_REQ_PIN):
             slave_result = None
@@ -233,6 +255,22 @@ def usb_device_scan_worker():
                     print("opened mouse", mouse_opened_device_dict[item][1], ':' , item)
                 except Exception as e:
                     print("mouse open exception:", e)
+                    continue
+
+        for item in gamepad_list:
+            if item not in gamepad_opened_device_dict:
+                try:
+                    this_file = open(item, "rb")
+                    os.set_blocking(this_file.fileno(), False)
+                    device_index = 0
+                    try:
+                        device_index = sum([int(x) for x in item.split(':')[1].split('.')][:2])
+                    except:
+                        pass
+                    gamepad_opened_device_dict[item] = (this_file, device_index)
+                    print("opened gamepad", gamepad_opened_device_dict[item][1], ':' , item)
+                except Exception as e:
+                    print("gamepad open exception:", e)
                     continue
 
 raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)

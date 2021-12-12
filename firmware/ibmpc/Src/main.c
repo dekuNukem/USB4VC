@@ -125,7 +125,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   }
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_KB_EVENT)
-    ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[6], backup_spi1_recv_buf[8]);
+    ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
 
   if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_MOUSE_EVENT)
   {
@@ -318,11 +318,11 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    // ps2mouse_update();
+    ps2mouse_update();
     // serial_mouse_update();
-    // ps2kb_update();
-    printf("%d\n", mcp4451_write_wiper(3, 20));
-    HAL_Delay(500);
+    ps2kb_update();
+    // printf("%d\n", mcp4451_write_wiper(3, 20));
+    // HAL_Delay(500);
   }
   /* USER CODE END 3 */
 
