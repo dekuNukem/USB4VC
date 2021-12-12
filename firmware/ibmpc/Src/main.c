@@ -70,6 +70,9 @@ ps2mouse_buf my_ps2mouse_buf;
 uint8_t ps2kb_host_cmd, ps2mouse_host_cmd, buffered_code, buffered_value, ps2mouse_bus_status, ps2kb_bus_status;
 mouse_event latest_mouse_event;
 ps2_outgoing_buf my_ps2_outbuf;
+#define SERIAL_MOUSE_BUF_SIZE 3
+uint8_t serial_mouse_output_buf[SERIAL_MOUSE_BUF_SIZE];
+uint8_t serial_mouse_rts_response;
 
 /* USER CODE END PV */
 
@@ -216,6 +219,43 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
   // printf("txd\n");
 }
 
+//https://everything2.com/title/Mouse+protocol
+void serial_mouse_update(void)
+{
+  if(rts_active)
+  {
+    serial_mouse_rts_response = 0x4d; // 0x4d = 'M'
+    HAL_UART_Transmit_IT(&huart3, &serial_mouse_rts_response, 1);
+    rts_active = 0;
+  }
+
+  mouse_event* this_mouse_event = ps2mouse_buf_peek(&my_ps2mouse_buf);
+  if(this_mouse_event == NULL)
+    return;
+
+  memset(serial_mouse_output_buf, 0, SERIAL_MOUSE_BUF_SIZE);
+  serial_mouse_output_buf[0] = 0xc0;
+  if(this_mouse_event->button_left)
+    serial_mouse_output_buf[0] |= 0x20;
+  if(this_mouse_event->button_right)
+    serial_mouse_output_buf[0] |= 0x10;
+
+  uint8_t serial_y = -1 * this_mouse_event->movement_y;
+  if(serial_y & 0x80)
+    serial_mouse_output_buf[0] |= 0x8;
+  if(serial_y & 0x40)
+    serial_mouse_output_buf[0] |= 0x4;
+  if(this_mouse_event->movement_x & 0x80)
+    serial_mouse_output_buf[0] |= 0x2;
+  if(this_mouse_event->movement_x & 0x40)
+    serial_mouse_output_buf[0] |= 0x1;
+
+  serial_mouse_output_buf[1] = 0x3f & this_mouse_event->movement_x;
+  serial_mouse_output_buf[2] = 0x3f & serial_y;
+
+  ps2mouse_buf_pop(&my_ps2mouse_buf);
+  HAL_UART_Transmit_IT(&huart3, serial_mouse_output_buf, 3);
+}
 
 /* USER CODE END 0 */
 
@@ -276,51 +316,9 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    // ps2kb_update();
     // ps2mouse_update();
-
-    if(rts_active)
-    {
-      uint8_t to_send[1] = {0x4d}; // 0x4d = M
-      HAL_UART_Transmit_IT(&huart3, to_send, 1);
-      rts_active = 0;
-    }
-
-    mouse_event* this_mouse_event = ps2mouse_buf_peek(&my_ps2mouse_buf);
-    if(this_mouse_event == NULL)
-      continue;
-    uint8_t serial_mouse_output_buf[3] = {0, 0, 0};
-
-    serial_mouse_output_buf[0] = 0xc0;
-    if(this_mouse_event->button_left)
-      serial_mouse_output_buf[0] |= 0x20;
-    if(this_mouse_event->button_right)
-      serial_mouse_output_buf[0] |= 0x10;
-
-    uint8_t serial_y = -1 * this_mouse_event->movement_y;
-    if(serial_y & 0x80)
-      serial_mouse_output_buf[0] |= 0x8;
-    if(serial_y & 0x40)
-      serial_mouse_output_buf[0] |= 0x4;
-    if(this_mouse_event->movement_x & 0x80)
-      serial_mouse_output_buf[0] |= 0x2;
-    if(this_mouse_event->movement_x & 0x40)
-      serial_mouse_output_buf[0] |= 0x1;
-
-    serial_mouse_output_buf[1] = 0x3f & this_mouse_event->movement_x;
-    serial_mouse_output_buf[2] = 0x3f & serial_y;
-    ps2mouse_buf_pop(&my_ps2mouse_buf);
-
-    // printf("0x%x\n", this_mouse_event->button_left);
-    // printf("0x%x\n", this_mouse_event->button_right);
-    // printf("0x%x\n", this_mouse_event->movement_x);
-    // printf("0x%x\n", this_mouse_event->movement_y);
-    // printf("out 0x%x\n", serial_mouse_output_buf[0]);
-    // printf("out 0x%x\n", serial_mouse_output_buf[1]);
-    // printf("out 0x%x\n", serial_mouse_output_buf[2]);
-    // printf("-----\n");
-
-    HAL_UART_Transmit_IT(&huart3, serial_mouse_output_buf, 3);
+    serial_mouse_update();
+    ps2kb_update();
 
   }
   /* USER CODE END 3 */

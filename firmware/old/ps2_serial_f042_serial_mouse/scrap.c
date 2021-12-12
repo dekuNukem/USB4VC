@@ -2,6 +2,14 @@
 
 
 
+    // printf("0x%x\n", this_mouse_event->button_left);
+    // printf("0x%x\n", this_mouse_event->button_right);
+    // printf("0x%x\n", this_mouse_event->movement_x);
+    // printf("0x%x\n", this_mouse_event->movement_y);
+    // printf("out 0x%x\n", serial_mouse_output_buf[0]);
+    // printf("out 0x%x\n", serial_mouse_output_buf[1]);
+    // printf("out 0x%x\n", serial_mouse_output_buf[2]);
+    // printf("-----\n");
 
   // printf("add before: %d %d\n", lb->tail, lb->head);
   // printf("add after: %d %d\n", lb->tail, lb->head);
