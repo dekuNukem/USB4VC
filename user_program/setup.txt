@@ -1,9 +1,22 @@
 
 raspbi-config
-# enable SPI, I2C, Serial, auto login
+enable SPI, I2C, Serial, auto login
 
-# https://luma-oled.readthedocs.io/en/latest/software.html
+set up ssh:
+ssh-keygen
+copy PC pub key to rpi ~/.ssh/authorized_keys
+
+https://luma-oled.readthedocs.io/en/latest/software.html
 sudo apt-get update
 sudo apt-get install python3 python3-pip python3-pil libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5 -y
 sudo -H pip3 install luma.oled
 
+run script on launch:
+
+https://raspberrypi-guide.github.io/programming/run-script-on-boot
+
+sudo nano /etc/rc.local
+
+cd /home/pi/usb4vc; sudo python3 usb4vc_main.py &
+
+kill -SIGINT pid

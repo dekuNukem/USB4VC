@@ -11,7 +11,7 @@
 #define CLKHALF 18
 #define CLKFULL 36
 #define BYTEWAIT 700
-#define BYTEWAIT_END 200
+#define BYTEWAIT_END 250
 #define PS2MOUSE_BUS_TIMEOUT_MS 30
 #define CODE_UNUSED 0xff
 #define PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS 20
@@ -70,7 +70,7 @@ void ps2mouse_restore_defaults()
   ps2mouse_sampling_rate = 100;
   ps2mouse_resolution = 2;
   ps2mouse_scale = 1;
-  ps2mouse_data_reporting_enabled = 0;
+  ps2mouse_data_reporting_enabled = 1;
   ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
   ps2mouse_prev_mode = PS2MOUSE_MODE_STREAM;
   reset_accumulators();
@@ -395,7 +395,7 @@ uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf)
   for (int i = 0; i < pbuf->size; ++i)
   {
     // return error if inhibited or interrupted while transmitting
-    if(ps2mouse_get_bus_status() != PS2_BUS_IDLE || ps2mouse_write_nowait(pbuf->data[i]) != 0)
+    if(ps2mouse_write(pbuf->data[i], 0, 2) != 0)
       return 1;
   }
   return 0;
