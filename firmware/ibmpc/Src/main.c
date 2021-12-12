@@ -202,6 +202,21 @@ void ps2kb_update(void)
   }
 }
 
+volatile uint8_t rts_active;
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(GPIO_Pin == UART3_RTS_Pin)
+    rts_active = 1;
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+  ;
+  // printf("txd\n");
+}
+
+
 /* USER CODE END 0 */
 
 /**
@@ -261,8 +276,52 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    ps2kb_update();
-    ps2mouse_update();
+    // ps2kb_update();
+    // ps2mouse_update();
+
+    if(rts_active)
+    {
+      uint8_t to_send[1] = {0x4d}; // 0x4d = M
+      HAL_UART_Transmit_IT(&huart3, to_send, 1);
+      rts_active = 0;
+    }
+
+    mouse_event* this_mouse_event = ps2mouse_buf_peek(&my_ps2mouse_buf);
+    if(this_mouse_event == NULL)
+      continue;
+    uint8_t serial_mouse_output_buf[3] = {0, 0, 0};
+
+    serial_mouse_output_buf[0] = 0xc0;
+    if(this_mouse_event->button_left)
+      serial_mouse_output_buf[0] |= 0x20;
+    if(this_mouse_event->button_right)
+      serial_mouse_output_buf[0] |= 0x10;
+
+    uint8_t serial_y = -1 * this_mouse_event->movement_y;
+    if(serial_y & 0x80)
+      serial_mouse_output_buf[0] |= 0x8;
+    if(serial_y & 0x40)
+      serial_mouse_output_buf[0] |= 0x4;
+    if(this_mouse_event->movement_x & 0x80)
+      serial_mouse_output_buf[0] |= 0x2;
+    if(this_mouse_event->movement_x & 0x40)
+      serial_mouse_output_buf[0] |= 0x1;
+
+    serial_mouse_output_buf[1] = 0x3f & this_mouse_event->movement_x;
+    serial_mouse_output_buf[2] = 0x3f & serial_y;
+    ps2mouse_buf_pop(&my_ps2mouse_buf);
+
+    // printf("0x%x\n", this_mouse_event->button_left);
+    // printf("0x%x\n", this_mouse_event->button_right);
+    // printf("0x%x\n", this_mouse_event->movement_x);
+    // printf("0x%x\n", this_mouse_event->movement_y);
+    // printf("out 0x%x\n", serial_mouse_output_buf[0]);
+    // printf("out 0x%x\n", serial_mouse_output_buf[1]);
+    // printf("out 0x%x\n", serial_mouse_output_buf[2]);
+    // printf("-----\n");
+
+    HAL_UART_Transmit_IT(&huart3, serial_mouse_output_buf, 3);
+
   }
   /* USER CODE END 3 */
 
@@ -515,11 +574,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SERIAL_RTS_Pin */
-  GPIO_InitStruct.Pin = SERIAL_RTS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pin : UART3_RTS_Pin */
+  GPIO_InitStruct.Pin = UART3_RTS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(SERIAL_RTS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(UART3_RTS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : POT_RESET_Pin ERR_LED_Pin */
   GPIO_InitStruct.Pin = POT_RESET_Pin|ERR_LED_Pin;
@@ -541,6 +600,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
 }
 

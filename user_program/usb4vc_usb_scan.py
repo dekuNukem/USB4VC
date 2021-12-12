@@ -138,7 +138,7 @@ def raw_input_event_worker():
             4 - 8 button status
             """
             data = list(data[8:])
-            print(data)
+            # print(data)
             if data[0] == EV_REL:
                 if data[2] == REL_X:
                     mouse_spi_packet_dict["x"] = data[4:6]
