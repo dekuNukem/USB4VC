@@ -7,6 +7,7 @@
 "ibmpc\main.o"
 "ibmpc\stm32f0xx_it.o"
 "ibmpc\stm32f0xx_hal_msp.o"
+"ibmpc\mcp4451.o"
 "ibmpc\stm32f0xx_hal_i2c.o"
 "ibmpc\stm32f0xx_hal_i2c_ex.o"
 "ibmpc\stm32f0xx_hal_spi.o"

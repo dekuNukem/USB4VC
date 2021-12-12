@@ -104,4 +104,3 @@ void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size)
   lb->mouse_events = malloc(size * sizeof(mouse_event));
   ps2mouse_buf_reset(lb);
 }
-

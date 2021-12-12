@@ -47,6 +47,7 @@
 #include "ps2kb.h"
 #include <string.h>
 #include "ps2mouse.h"
+#include "mcp4451.h"
 
 /* USER CODE END Includes */
 
@@ -300,6 +301,7 @@ int main(void)
   ps2kb_buf_init(&my_ps2kb_buf, 16);
   ps2mouse_buf_init(&my_ps2mouse_buf, 16);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+  mcp4451_reset();
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   printf("hello world\n");
   /* USER CODE END 2 */
@@ -317,9 +319,10 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
     // ps2mouse_update();
-    serial_mouse_update();
-    ps2kb_update();
-
+    // serial_mouse_update();
+    // ps2kb_update();
+    printf("%d\n", mcp4451_write_wiper(3, 20));
+    HAL_Delay(500);
   }
   /* USER CODE END 3 */
 
