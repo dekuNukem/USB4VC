@@ -132,8 +132,13 @@ def raw_input_event_worker():
                 continue
             if data is None:
                 continue
+            """
+            0 - 1 event_type
+            2 - 3 key code
+            4 - 8 button status
+            """
             data = list(data[8:])
-            # print(data)
+            print(data)
             if data[0] == EV_REL:
                 if data[2] == REL_X:
                     mouse_spi_packet_dict["x"] = data[4:6]
@@ -142,12 +147,22 @@ def raw_input_event_worker():
                 if data[2] == REL_WHEEL:
                     mouse_spi_packet_dict["scroll"] = data[4:6]
             if data[0] == EV_KEY:
-                mouse_button_state_list[data[2]-16] = data[4]
-                to_transfer = list(mouse_spi_msg_template)
-                to_transfer[10:13] = data[2:5]
-                to_transfer[13:18] = mouse_button_state_list[:]
-                to_transfer[3] = mouse_opened_device_dict[key][1]
-                pcard_spi.xfer(to_transfer)
+                key_code = data[3] * 256 + data[2]
+                if 0x110 <= key_code <= 0x117:
+                    mouse_button_state_list[data[2]-16] = data[4]
+                    to_transfer = list(mouse_spi_msg_template)
+                    to_transfer[10:13] = data[2:5]
+                    to_transfer[13:18] = mouse_button_state_list[:]
+                    to_transfer[3] = mouse_opened_device_dict[key][1]
+                    pcard_spi.xfer(to_transfer)
+                """
+                Logitech unifying receiver identifies itself as a mouse,
+                so need to handle keyboard presses here too for compatibility
+                """
+                if 0x1 <= key_code <= 127:
+                    to_transfer = keyboard_spi_msg_header + data + [0]*20
+                    to_transfer[3] = mouse_opened_device_dict[key][1]
+                    pcard_spi.xfer(to_transfer)
 
             if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_spi_packet_dict) > 0:
                 to_transfer = list(mouse_spi_msg_template)
