@@ -67,3 +67,16 @@ ps2 mouse todo:
 add remote mode data report
 add scale/resolution change
 test remote/wrap mode
+
+
+supported protocols:
+
+PS/2 Keyboard:
+Scancode set 2
+
+PS/2 Mouse:
+generic id0
+MS intellimouse id3
+
+Serial Mouse:
+Microsoft serial mouse (3 byte 1200bps 7n1)

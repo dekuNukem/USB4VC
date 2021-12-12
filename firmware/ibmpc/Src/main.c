@@ -73,6 +73,7 @@ ps2_outgoing_buf my_ps2_outbuf;
 #define SERIAL_MOUSE_BUF_SIZE 3
 uint8_t serial_mouse_output_buf[SERIAL_MOUSE_BUF_SIZE];
 uint8_t serial_mouse_rts_response;
+volatile uint8_t rts_active;
 
 /* USER CODE END PV */
 
@@ -205,8 +206,8 @@ void ps2kb_update(void)
   }
 }
 
-volatile uint8_t rts_active;
 
+// GPIO external interrupt callback
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if(GPIO_Pin == UART3_RTS_Pin)
@@ -216,10 +217,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
   ;
-  // printf("txd\n");
 }
 
-//https://everything2.com/title/Mouse+protocol
+// https://everything2.com/title/Mouse+protocol
 void serial_mouse_update(void)
 {
   if(rts_active)
