@@ -61,10 +61,13 @@ SPI_BUF_INDEX_MAGIC = 0
 SPI_BUF_INDEX_SEQNUM = 1
 SPI_BUF_INDEX_MSG_TYPE = 2
 
-SPI_MOSI_MSG_KEYBOARD_EVENT = 1
-SPI_MOSI_MSG_MOUSE_EVENT = 2
-SPI_MOSI_MSG_GAMEPAD_EVENT = 3
-SPI_MOSI_MSG_REQ_ACK = 4
+SPI_MOSI_MSG_TYPE_NOP = 0
+SPI_MOSI_MSG_TYPE_INFO_REQUEST = 1
+SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT = 2
+SPI_MOSI_MSG_TYPE_MOUSE_EVENT = 3
+SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED = 4
+
+SPI_MOSI_MSG_TYPE_REQ_ACK = 255
 
 SPI_MISO_MSG_INFO_REPLY = 0
 SPI_MISO_MSG_KB_LED_REQ = 1
@@ -72,12 +75,12 @@ SPI_MISO_MSG_KB_LED_REQ = 1
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
 
-keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_KEYBOARD_EVENT] + [0]*29
-mouse_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_MOUSE_EVENT] + [0]*29
-gamepad_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_GAMEPAD_EVENT] + [0]*29
+keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
+mouse_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
+gamepad_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED] + [0]*29
 
 def make_spi_msg_ack():
-    return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_REQ_ACK] + [0]*29
+    return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_REQ_ACK] + [0]*29
 
 def get_01(value):
     if value:
@@ -142,9 +145,11 @@ def raw_input_event_worker():
             """
             0 - 1 event_type
             2 - 3 key code
-            4 - 8 button status
+            4 - 8 key status
             """
             data = list(data[8:])
+            # mouse movement and scrolling
+            # buffer those values until a SYNC event
             if data[0] == EV_REL:
                 if data[2] == REL_X:
                     mouse_spi_packet_dict["x"] = data[4:6]
@@ -152,10 +157,11 @@ def raw_input_event_worker():
                     mouse_spi_packet_dict["y"] = data[4:6]
                 if data[2] == REL_WHEEL:
                     mouse_spi_packet_dict["scroll"] = data[4:6]
+
+            # mouse button pressed, send it out immediately
             if data[0] == EV_KEY:
                 key_code = data[3] * 256 + data[2]
                 if 0x110 <= key_code <= 0x117:
-                    print(data)
                     mouse_button_state_list[data[2]-16] = data[4]
                     to_transfer = list(mouse_spi_msg_template)
                     to_transfer[10:13] = data[2:5]
@@ -169,6 +175,7 @@ def raw_input_event_worker():
                 if 0x1 <= key_code <= 127:
                     pcard_spi.xfer(make_keyboard_spi_packet(data, mouse_opened_device_dict[key][1]))
 
+            # SYNC event happened, send out an update
             if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_spi_packet_dict) > 0:
                 to_transfer = list(mouse_spi_msg_template)
                 if 'x' in mouse_spi_packet_dict:
@@ -193,7 +200,7 @@ def raw_input_event_worker():
             if data is None:
                 continue
             data = list(data[8:])
-            # print(data)
+            print(data)
             # if data[0] == EV_KEY:
             #     to_transfer = keyboard_spi_msg_header + data + [0]*20
             #     to_transfer[3] = gamepad_opened_device_dict[key][1]
