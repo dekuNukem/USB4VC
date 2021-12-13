@@ -63,6 +63,12 @@ UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+const uint8_t board_id = 1;
+const uint8_t version_major = 0;
+const uint8_t version_minor = 1;
+const uint8_t version_patch = 0;
+uint8_t hw_revision;
+
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
@@ -75,7 +81,7 @@ ps2_outgoing_buf my_ps2_outbuf;
 uint8_t serial_mouse_output_buf[SERIAL_MOUSE_BUF_SIZE];
 uint8_t serial_mouse_rts_response;
 volatile uint8_t rts_active;
-
+uint8_t spi_error_occured;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -112,22 +118,16 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_SET);
   memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
   if(backup_spi1_recv_buf[0] != 0xde)
   {
-    for (int i = 0; i < 20; ++i)
-    {
-      HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
-      HAL_Delay(100);
-    }
-    HAL_NVIC_SystemReset();
+    spi_error_occured = 1;
   }
-
-  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
+  {
     ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
-
-  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
   {
     latest_mouse_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
     latest_mouse_event.movement_y = -1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
@@ -139,9 +139,23 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     latest_mouse_event.button_extra = backup_spi1_recv_buf[17];
     ps2mouse_buf_add(&my_ps2mouse_buf, &latest_mouse_event);
   }
-
-  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
+  {
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
+  {
+    memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+    spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+    spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+    spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_INFO_REQUEST;
+    spi_transmit_buf[3] = board_id;
+    spi_transmit_buf[4] = hw_revision;
+    spi_transmit_buf[5] = version_major;
+    spi_transmit_buf[6] = version_minor;
+    spi_transmit_buf[7] = version_patch;
+  }
+  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
 }
 
@@ -194,7 +208,7 @@ void ps2kb_update(void)
       memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
       spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
       spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
-      spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_KB_LED_REQ;
+      spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_KB_LED_REQUEST;
       spi_transmit_buf[3] = ps2kb_leds;
       HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
     }
@@ -206,7 +220,6 @@ void ps2kb_update(void)
     ps2kb_buf_pop(&my_ps2kb_buf);
   }
 }
-
 
 // GPIO external interrupt callback
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -258,6 +271,22 @@ void serial_mouse_update(void)
   HAL_UART_Transmit_IT(&huart3, serial_mouse_output_buf, 3);
 }
 
+void spi_error_dump_reboot(void)
+{
+  printf("SPI ERROR\n");
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    printf("%d ", backup_spi1_recv_buf[i]);
+  printf("\nrebooting...\n");
+  for (int i = 0; i < 100; ++i)
+  {
+    HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
+    HAL_Delay(100);
+  }
+  NVIC_SystemReset();
+}
+
+const char boot_message[] = "USB4VC Protocol Board\nIBM PC Compatible\ndekuNukem 2022";
+
 /* USER CODE END 0 */
 
 /**
@@ -302,8 +331,10 @@ int main(void)
   ps2mouse_buf_init(&my_ps2mouse_buf, 16);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   mcp4451_reset();
+  if(mcp4451_is_available() == 0)
+    hw_revision = 1;
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  printf("hello world\n");
+  printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -321,8 +352,8 @@ int main(void)
     ps2mouse_update();
     // serial_mouse_update();
     ps2kb_update();
-    // printf("%d\n", mcp4451_write_wiper(3, 20));
-    // HAL_Delay(500);
+    if(spi_error_occured)
+      spi_error_dump_reboot();
   }
   /* USER CODE END 3 */
 

@@ -66,18 +66,19 @@ SPI_MOSI_MSG_TYPE_INFO_REQUEST = 1
 SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT = 2
 SPI_MOSI_MSG_TYPE_MOUSE_EVENT = 3
 SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED = 4
-
 SPI_MOSI_MSG_TYPE_REQ_ACK = 255
 
-SPI_MISO_MSG_INFO_REPLY = 0
-SPI_MISO_MSG_KB_LED_REQ = 1
+SPI_MISO_MSG_TYPE_INFO_REQUEST = 1
+SPI_MISO_MSG_TYPE_KB_LED_REQUEST = 2
 
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
 
-keyboard_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
-mouse_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
-gamepad_spi_msg_header = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED] + [0]*29
+nop_spi_msg_template = [SPI_MOSI_MAGIC] + [0]*31
+info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUEST] + [0]*29
+keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
+mouse_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
+gamepad_event_mapped_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED] + [0]*29
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_REQ_ACK] + [0]*29
@@ -88,7 +89,7 @@ def get_01(value):
     return 0
 
 def make_keyboard_spi_packet(input_data, kbd_id):
-    result = list(keyboard_spi_msg_header)
+    result = list(keyboard_event_spi_msg_template)
     result[3] = kbd_id
     result[4] = input_data[2]
     result[5] = input_data[3]
@@ -163,7 +164,7 @@ def raw_input_event_worker():
                 key_code = data[3] * 256 + data[2]
                 if 0x110 <= key_code <= 0x117:
                     mouse_button_state_list[data[2]-16] = data[4]
-                    to_transfer = list(mouse_spi_msg_template)
+                    to_transfer = list(mouse_event_spi_msg_template)
                     to_transfer[10:13] = data[2:5]
                     to_transfer[13:18] = mouse_button_state_list[:]
                     to_transfer[3] = mouse_opened_device_dict[key][1]
@@ -177,7 +178,7 @@ def raw_input_event_worker():
 
             # SYNC event happened, send out an update
             if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_spi_packet_dict) > 0:
-                to_transfer = list(mouse_spi_msg_template)
+                to_transfer = list(mouse_event_spi_msg_template)
                 if 'x' in mouse_spi_packet_dict:
                     to_transfer[4:6] = mouse_spi_packet_dict['x']
                 if 'y' in mouse_spi_packet_dict:
@@ -202,7 +203,7 @@ def raw_input_event_worker():
             data = list(data[8:])
             print(data)
             # if data[0] == EV_KEY:
-            #     to_transfer = keyboard_spi_msg_header + data + [0]*20
+            #     to_transfer = keyboard_event_spi_msg_template
             #     to_transfer[3] = gamepad_opened_device_dict[key][1]
             #     pcard_spi.xfer(to_transfer)
 
@@ -211,7 +212,7 @@ def raw_input_event_worker():
             for x in range(2):
                 slave_result = pcard_spi.xfer(make_spi_msg_ack())
             print(int(time.time()), slave_result)
-            if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_KB_LED_REQ:
+            if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_TYPE_KB_LED_REQUEST:
                 change_kb_led(slave_result[3])
                 change_kb_led(slave_result[3])
 
@@ -285,3 +286,9 @@ usb_device_scan_thread = threading.Thread(target=usb_device_scan_worker, daemon=
 
 # raw_input_event_parser_thread.start()
 # usb_device_scan_thread.start()
+
+def get_pboard_info():
+    print(pcard_spi.xfer(list(info_request_spi_msg_template)))
+    print(pcard_spi.xfer(list(info_request_spi_msg_template)))
+    print(pcard_spi.xfer(list(info_request_spi_msg_template)))
+
