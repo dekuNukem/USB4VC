@@ -63,10 +63,13 @@ SPI_BUF_INDEX_MSG_TYPE = 2
 
 SPI_MOSI_MSG_TYPE_NOP = 0
 SPI_MOSI_MSG_TYPE_INFO_REQUEST = 1
-SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT = 2
-SPI_MOSI_MSG_TYPE_MOUSE_EVENT = 3
-SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED = 4
-SPI_MOSI_MSG_TYPE_REQ_ACK = 255
+SPI_MOSI_MSG_TYPE_PROTOCOL_CONTROL = 2
+SPI_MOSI_MSG_TYPE_REQ_ACK = 3
+
+SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT = 8
+SPI_MOSI_MSG_TYPE_MOUSE_EVENT = 9
+SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW = 10
+SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED = 11
 
 SPI_MISO_MSG_TYPE_INFO_REQUEST = 1
 SPI_MISO_MSG_TYPE_KB_LED_REQUEST = 2
@@ -288,7 +291,9 @@ usb_device_scan_thread = threading.Thread(target=usb_device_scan_worker, daemon=
 # usb_device_scan_thread.start()
 
 def get_pboard_info():
-    print(pcard_spi.xfer(list(info_request_spi_msg_template)))
-    print(pcard_spi.xfer(list(info_request_spi_msg_template)))
-    print(pcard_spi.xfer(list(info_request_spi_msg_template)))
-
+    # send request
+    pcard_spi.xfer(list(info_request_spi_msg_template))
+    time.sleep(0.01)
+    # send an empty message to allow response to be shifted into RPi
+    response = pcard_spi.xfer(list(nop_spi_msg_template))
+    print(response)
