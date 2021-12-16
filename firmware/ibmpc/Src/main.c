@@ -209,7 +209,12 @@ void ps2kb_update(void)
       spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
       spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
       spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_KB_LED_REQUEST;
-      spi_transmit_buf[3] = ps2kb_leds;
+      if(ps2kb_leds & 0x1) // scroll lock LED
+        spi_transmit_buf[3] = 1;
+      if(ps2kb_leds & 0x2)  // num lock LED
+        spi_transmit_buf[4] = 1;
+      if(ps2kb_leds & 0x4)  // caps lock LED
+        spi_transmit_buf[5] = 1;
       HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
     }
   }

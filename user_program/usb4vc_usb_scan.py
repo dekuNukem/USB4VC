@@ -71,8 +71,9 @@ SPI_MOSI_MSG_TYPE_MOUSE_EVENT = 9
 SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW = 10
 SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED = 11
 
-SPI_MISO_MSG_TYPE_INFO_REQUEST = 1
-SPI_MISO_MSG_TYPE_KB_LED_REQUEST = 2
+SPI_MISO_MSG_TYPE_NOP = 0
+SPI_MISO_MSG_TYPE_INFO_REQUEST = 128
+SPI_MISO_MSG_TYPE_KB_LED_REQUEST = 129
 
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
@@ -86,11 +87,6 @@ gamepad_event_mapped_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GA
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_REQ_ACK] + [0]*29
 
-def get_01(value):
-    if value:
-        return 1
-    return 0
-
 def make_keyboard_spi_packet(input_data, kbd_id):
     result = list(keyboard_event_spi_msg_template)
     result[3] = kbd_id
@@ -99,7 +95,7 @@ def make_keyboard_spi_packet(input_data, kbd_id):
     result[6] = input_data[4]
     return result
 
-def change_kb_led(ps2kb_led_byte):
+def change_kb_led(scrolllock, numlock, capslock):
     led_file_list = os.listdir(led_device_path)
     capslock_list = [os.path.join(led_device_path, x) for x in led_file_list if 'capslock' in x]
     numlock_list = [os.path.join(led_device_path, x) for x in led_file_list if 'numlock' in x]
@@ -107,15 +103,15 @@ def change_kb_led(ps2kb_led_byte):
 
     for item in scrolllock_list:
         with open(os.path.join(item, 'brightness'), 'w') as led_file:
-            led_file.write(str(get_01(ps2kb_led_byte & 0x1)))
+            led_file.write(str(scrolllock))
 
     for item in numlock_list:
         with open(os.path.join(item, 'brightness'), 'w') as led_file:
-            led_file.write(str(get_01(ps2kb_led_byte & 0x2)))
+            led_file.write(str(numlock))
 
     for item in capslock_list:
         with open(os.path.join(item, 'brightness'), 'w') as led_file:
-            led_file.write(str(get_01(ps2kb_led_byte & 0x4)))
+            led_file.write(str(capslock))
 
 def raw_input_event_worker():
     mouse_spi_packet_dict = {}
@@ -216,8 +212,8 @@ def raw_input_event_worker():
                 slave_result = pcard_spi.xfer(make_spi_msg_ack())
             print(int(time.time()), slave_result)
             if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_TYPE_KB_LED_REQUEST:
-                change_kb_led(slave_result[3])
-                change_kb_led(slave_result[3])
+                change_kb_led(slave_result[3], slave_result[4], slave_result[5])
+                change_kb_led(slave_result[3], slave_result[4], slave_result[5])
 
 def usb_device_scan_worker():
     print("usb_device_scan_worker started")
