@@ -82,6 +82,17 @@ uint8_t serial_mouse_output_buf[SERIAL_MOUSE_BUF_SIZE];
 uint8_t serial_mouse_rts_response;
 volatile uint8_t rts_active;
 uint8_t spi_error_occured;
+
+#define SUPPORTED_PROTOCOL_SIZE 5
+uint8_t protocol_status[SUPPORTED_PROTOCOL_SIZE] = 
+{
+  PROTOCOL_AT_PS2_KB | 0x80,
+  PROTOCOL_XT_KB | 0x80,
+  PROTOCOL_PS2_MOUSE | 0x80,
+  PROTOCOL_MICROSOFT_SERIAL_MOUSE | 0x80,
+  PROTOCOL_GENERIC_GAMEPORT_GAMEPAD | 0x80,
+};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -154,6 +165,22 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     spi_transmit_buf[5] = version_major;
     spi_transmit_buf[6] = version_minor;
     spi_transmit_buf[7] = version_patch;
+    for (int i = 0; i < SUPPORTED_PROTOCOL_SIZE; ++i)
+      spi_transmit_buf[8+i] = protocol_status[i];
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
+  {
+    for (int i = 3; i < SPI_BUF_SIZE; ++i)
+    {
+      if(backup_spi1_recv_buf[i] == 0)
+        break;
+      uint8_t* result = find_in_array_7bit(backup_spi1_recv_buf[i], protocol_status, protocol_status + SUPPORTED_PROTOCOL_SIZE - 1);
+      if(result != NULL)
+      {
+        *result = backup_spi1_recv_buf[i];
+        // handle protocol on/off setup here
+      }
+    }
   }
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);

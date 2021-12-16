@@ -63,7 +63,7 @@ SPI_BUF_INDEX_MSG_TYPE = 2
 
 SPI_MOSI_MSG_TYPE_NOP = 0
 SPI_MOSI_MSG_TYPE_INFO_REQUEST = 1
-SPI_MOSI_MSG_TYPE_PROTOCOL_CONTROL = 2
+SPI_MOSI_MSG_TYPE_SET_PROTOCOL = 2
 SPI_MOSI_MSG_TYPE_REQ_ACK = 3
 
 SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT = 8
@@ -80,6 +80,7 @@ SPI_MISO_MAGIC = 0xcd
 
 nop_spi_msg_template = [SPI_MOSI_MAGIC] + [0]*31
 info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUEST] + [0]*29
+set_protocl_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_SET_PROTOCOL] + [0]*29
 keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
 mouse_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
 gamepad_event_mapped_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED] + [0]*29
@@ -293,3 +294,10 @@ def get_pboard_info():
     # send an empty message to allow response to be shifted into RPi
     response = pcard_spi.xfer(list(nop_spi_msg_template))
     print(response)
+
+def set_protocol():
+    this_msg = list(set_protocl_spi_msg_template)
+    this_msg[3] = 2
+    this_msg[4] = 4
+    this_msg[5] = 1
+    pcard_spi.xfer(this_msg)

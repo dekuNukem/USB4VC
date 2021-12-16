@@ -18,7 +18,7 @@
 
 #define SPI_MOSI_MSG_TYPE_NOP 0
 #define SPI_MOSI_MSG_TYPE_INFO_REQUEST 1
-#define SPI_MOSI_MSG_TYPE_PROTOCOL_CONTROL 2
+#define SPI_MOSI_MSG_TYPE_SET_PROTOCOL 2
 #define SPI_MOSI_MSG_TYPE_REQ_ACK 3
 
 #define SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT 8
@@ -35,6 +35,16 @@
 #define BTN_MIDDLE    0x112
 #define BTN_SIDE    0x113
 #define BTN_EXTRA   0x114
+
+#define PROTOCOL_AT_PS2_KB 1
+#define PROTOCOL_XT_KB 2
+#define PROTOCOL_ADB_KB 3
+#define PROTOCOL_PS2_MOUSE 4
+#define PROTOCOL_MICROSOFT_SERIAL_MOUSE 5
+#define PROTOCOL_ADB_MOUSE 6
+#define PROTOCOL_GENERIC_GAMEPORT_GAMEPAD 7
+#define PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD  8
+#define PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER 9
 
 typedef struct
 {
@@ -82,6 +92,7 @@ void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size);
 uint8_t ps2mouse_buf_add(ps2mouse_buf *lb, mouse_event* event);
 mouse_event* ps2mouse_buf_peek(ps2mouse_buf *lb);
 void ps2mouse_buf_pop(ps2mouse_buf *lb);
+uint8_t* find_in_array_7bit(uint8_t value, uint8_t* start, uint8_t* end);
 
 #ifdef __cplusplus
 }

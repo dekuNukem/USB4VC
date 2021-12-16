@@ -104,3 +104,15 @@ void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size)
   lb->mouse_events = malloc(size * sizeof(mouse_event));
   ps2mouse_buf_reset(lb);
 }
+
+uint8_t* find_in_array_7bit(uint8_t value, uint8_t* start, uint8_t* end)
+{
+	uint8_t* curr = start;
+	while(curr <= end)
+	{
+		if(((*curr) & 0x7f) == (value & 0x7f))
+			return curr;
+		curr++;
+	}
+	return NULL;
+}

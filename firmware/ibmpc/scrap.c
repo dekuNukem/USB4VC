@@ -4,6 +4,8 @@ uint8_t value = 32;
     value = (value & 0xFF);
     printf("w %d\n", HAL_I2C_Mem_Write(&hi2c2,MCP4451_I2C_ADDRESS,addr,1,&value,1,100));
 
+    printf("  f %d %d\n", ((*curr) & 0x7f), (value & 0x7f));
+      printf("%d %d\n", i, backup_spi1_recv_buf[i]);
 
 
     // printf("0x%x\n", this_mouse_event->button_left);
