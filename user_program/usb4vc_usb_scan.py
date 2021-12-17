@@ -95,12 +95,42 @@ GP_BTN_MODE = 0x13c
 GP_BTN_THUMBL = 0x13d
 GP_BTN_THUMBR = 0x13e
 
+ABS_X = 0x00
+ABS_Y = 0x01
+ABS_Z = 0x02
+ABS_RX = 0x03
+ABS_RY = 0x04
+ABS_RZ = 0x05
+ABS_THROTTLE = 0x06
+ABS_RUDDER = 0x07
+ABS_WHEEL = 0x08
+ABS_GAS = 0x09
+ABS_BRAKE = 0x0a
+ABS_HAT0X = 0x10
+ABS_HAT0Y = 0x11
+ABS_HAT1X = 0x12
+ABS_HAT1Y = 0x13
+ABS_HAT2X = 0x14
+ABS_HAT2Y = 0x15
+ABS_HAT3X = 0x16
+ABS_HAT3Y = 0x17
+
+PROTOCOL_AT_PS2_KB = 1
+PROTOCOL_XT_KB = 2
+PROTOCOL_ADB_KB = 3
+PROTOCOL_PS2_MOUSE = 4
+PROTOCOL_MICROSOFT_SERIAL_MOUSE = 5
+PROTOCOL_ADB_MOUSE = 6
+PROTOCOL_GENERIC_GAMEPORT_GAMEPAD = 7
+PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = 8
+PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = 9
+
 nop_spi_msg_template = [SPI_MOSI_MAGIC] + [0]*31
 info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUEST] + [0]*29
 set_protocl_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_SET_PROTOCOL] + [0]*29
 keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
 mouse_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
-gamepad_event_mapped_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED] + [0]*29
+gamepad_event_mapped_spi_msg_template = [SPI_MOSI_MAGIC, 0, PROTOCOL_GENERIC_GAMEPORT_GAMEPAD] + [0]*29
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_REQ_ACK] + [0]*29
@@ -113,8 +143,36 @@ def make_keyboard_spi_packet(input_data, kbd_id):
     result[6] = input_data[4]
     return result
 
-def make_gamepad_spi_packet(gp_status_dict, gp_id, mode):
+def dict_get_if_exist(this_dict, this_key):
+    if this_key not in this_dict:
+        return 0;
+    return this_dict[this_key];
+
+def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     result = list(gamepad_event_mapped_spi_msg_template)
+
+    result[3] = gp_id;
+    result[4] = dict_get_if_exist(gp_status_dict[gp_id], GP_BTN_SOUTH)
+    result[5] = dict_get_if_exist(gp_status_dict[gp_id], GP_BTN_EAST)
+    result[6] = dict_get_if_exist(gp_status_dict[gp_id], GP_BTN_WEST)
+    result[7] = dict_get_if_exist(gp_status_dict[gp_id], GP_BTN_NORTH)
+
+    result[8] = dict_get_if_exist(gp_status_dict[gp_id], ABS_X)
+    if ABS_X in axes_info and 'max' in axes_info[ABS_X]:
+        result[8] = int(result[8] / (axes_info[ABS_X]['max'] / 255))
+
+    result[9] = dict_get_if_exist(gp_status_dict[gp_id], ABS_Y)
+    if ABS_Y in axes_info and 'max' in axes_info[ABS_Y]:
+        result[9] = int(result[9] / (axes_info[ABS_Y]['max'] / 255))
+
+    result[10] = dict_get_if_exist(gp_status_dict[gp_id], ABS_RX)
+    if ABS_RX in axes_info and 'max' in axes_info[ABS_RX]:
+        result[10] = int(result[10] / (axes_info[ABS_RX]['max'] / 255))
+
+    result[11] = dict_get_if_exist(gp_status_dict[gp_id], ABS_RY)
+    if ABS_RY in axes_info and 'max' in axes_info[ABS_RY]:
+        result[11] = int(result[11] / (axes_info[ABS_RY]['max'] / 255))
+    return result
 
 
 def change_kb_led(scrolllock, numlock, capslock):
@@ -237,17 +295,20 @@ def raw_input_event_worker():
                 if not (GP_BTN_SOUTH <= key_code <= GP_BTN_THUMBR):
                     continue
                 gamepad_status_dict[gamepad_id][key_code] = data[4]
-            # joystick / analogue trigger movements
+                to_transfer = make_gamepad_spi_packet(gamepad_status_dict, gamepad_id, gamepad_opened_device_dict[key][2])
+                pcard_spi.xfer(to_transfer)
+                continue
+            # joystick / analogue trigger movements, cache until next SYNC event
             if data[0] == EV_ABS:
                 abs_axes = data[3] * 256 + data[2]
                 abs_value = int.from_bytes(data[4:8], byteorder='little', signed=True)
-                # print(data)
-                # print(hex(abs_axes), abs_value)
-                # print()
                 gamepad_status_dict[gamepad_id][abs_axes] = abs_value
-                print(gamepad_status_dict)
-                print(gamepad_opened_device_dict[key][2])
+            # SYNC report, update now
+            if data[0] == EV_SYN and data[2] == SYN_REPORT:
+                to_transfer = make_gamepad_spi_packet(gamepad_status_dict, gamepad_id, gamepad_opened_device_dict[key][2])
+                pcard_spi.xfer(to_transfer)
 
+# ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):
             slave_result = None
             for x in range(2):

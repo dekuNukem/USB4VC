@@ -1,3 +1,12 @@
+    # print(gp_status_dict[gp_id], axes_info)
+
+    # for key in gp_status_dict[gp_id]:
+    #     print(key, gp_status_dict[gp_id][key], axes_info[key])
+    # print('--')
+                # print(data)
+                # print(hex(abs_axes), abs_value)
+                # print()
+
            # print(data)
             # if data[0] == EV_KEY or data[0] == EV_REL:
             #     to_transfer = mouse_spi_msg_template + data + [0]*20
