@@ -72,10 +72,13 @@ uint8_t hw_revision;
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
-ps2kb_buf my_ps2kb_buf;
-ps2mouse_buf my_ps2mouse_buf;
+kb_buf my_kb_buf;
+mouse_buf my_mouse_buf;
+gamepad_buf my_gamepad_buf;
+
 uint8_t ps2kb_host_cmd, ps2mouse_host_cmd, buffered_code, buffered_value, ps2mouse_bus_status, ps2kb_bus_status;
 mouse_event latest_mouse_event;
+gamepad_event latest_gamepad_event;
 ps2_outgoing_buf my_ps2_outbuf;
 #define SERIAL_MOUSE_BUF_SIZE 3
 uint8_t serial_mouse_output_buf[SERIAL_MOUSE_BUF_SIZE];
@@ -180,7 +183,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
   {
-    ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
+    kb_buf_add(&my_kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
   {
@@ -192,7 +195,23 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     latest_mouse_event.button_middle = backup_spi1_recv_buf[15];
     latest_mouse_event.button_side = backup_spi1_recv_buf[16];
     latest_mouse_event.button_extra = backup_spi1_recv_buf[17];
-    ps2mouse_buf_add(&my_ps2mouse_buf, &latest_mouse_event);
+    mouse_buf_add(&my_mouse_buf, &latest_mouse_event);
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED_IBMPC)
+  {
+    latest_gamepad_event.button_1 = backup_spi1_recv_buf[4];
+    latest_gamepad_event.button_2 = backup_spi1_recv_buf[5];
+    latest_gamepad_event.button_3 = backup_spi1_recv_buf[6];
+    latest_gamepad_event.button_4 = backup_spi1_recv_buf[7];
+    latest_gamepad_event.button_lt = 0;
+    latest_gamepad_event.button_rt = 0;
+    latest_gamepad_event.button_lt2 = 0;
+    latest_gamepad_event.button_rt2 = 0;
+    latest_gamepad_event.axis_x = backup_spi1_recv_buf[8];
+    latest_gamepad_event.axis_y = backup_spi1_recv_buf[9];
+    latest_gamepad_event.axis_rx = backup_spi1_recv_buf[10];
+    latest_gamepad_event.axis_ry = backup_spi1_recv_buf[11];
+    gamepad_buf_add(&my_gamepad_buf, &latest_gamepad_event);
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
   {
@@ -249,20 +268,20 @@ void ps2mouse_update(void)
     return;
   }
 
-  mouse_event* this_mouse_event = ps2mouse_buf_peek(&my_ps2mouse_buf);
+  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
   if(this_mouse_event == NULL)
     return;
 
   if(ps2mouse_get_outgoing_data(this_mouse_event, &my_ps2_outbuf))
   {
     // if return value is not 0, no need to send out packets
-    ps2mouse_buf_pop(&my_ps2mouse_buf);
+    mouse_buf_pop(&my_mouse_buf);
     return;
   }
 
   // only pop the item if sending is complete
   if(ps2mouse_send_update(&my_ps2_outbuf) == 0)
-    ps2mouse_buf_pop(&my_ps2mouse_buf);
+    mouse_buf_pop(&my_mouse_buf);
 }
 
 void ps2kb_update(void)
@@ -294,10 +313,10 @@ void ps2kb_update(void)
     }
   }
 
-  if(ps2kb_buf_peek(&my_ps2kb_buf, &buffered_code, &buffered_value) == 0)
+  if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
   {
     ps2kb_press_key(buffered_code, buffered_value);
-    ps2kb_buf_pop(&my_ps2kb_buf);
+    kb_buf_pop(&my_kb_buf);
   }
 }
 
@@ -323,7 +342,7 @@ void serial_mouse_update(void)
     rts_active = 0;
   }
 
-  mouse_event* this_mouse_event = ps2mouse_buf_peek(&my_ps2mouse_buf);
+  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
   if(this_mouse_event == NULL)
     return;
 
@@ -347,7 +366,7 @@ void serial_mouse_update(void)
   serial_mouse_output_buf[1] = 0x3f & this_mouse_event->movement_x;
   serial_mouse_output_buf[2] = 0x3f & serial_y;
 
-  ps2mouse_buf_pop(&my_ps2mouse_buf);
+  mouse_buf_pop(&my_mouse_buf);
   HAL_UART_Transmit_IT(&huart3, serial_mouse_output_buf, 3);
 }
 
@@ -417,8 +436,9 @@ int main(void)
   delay_us_init(&htim2);
   ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
   ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
-  ps2kb_buf_init(&my_ps2kb_buf, 16);
-  ps2mouse_buf_init(&my_ps2mouse_buf, 16);
+  kb_buf_init(&my_kb_buf, 16);
+  mouse_buf_init(&my_mouse_buf, 16);
+  gamepad_buf_init(&my_gamepad_buf, 16);
   protocol_status_lookup_init();
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   mcp4451_reset();
@@ -440,6 +460,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+
     // If both enabled, PS2 mouse takes priority
     if(protocol_status_lookup[PROTOCOL_PS2_MOUSE] == PROTOCOL_STATUS_ENABLED)
       ps2mouse_update();
@@ -448,6 +469,28 @@ int main(void)
 
     if(protocol_status_lookup[PROTOCOL_AT_PS2_KB] == PROTOCOL_STATUS_ENABLED)
       ps2kb_update();
+
+    gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
+    if(this_gamepad_event != NULL)
+    {
+      printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
+      /*
+      X1 = Wiper 3
+      Y1 = Wiper 0
+      X2 = Wiper 2
+      Y2 = Wiper 1
+      */
+      HAL_GPIO_WritePin(GAMEPAD_B1_GPIO_Port, GAMEPAD_B1_Pin, !(this_gamepad_event->button_1));
+      HAL_GPIO_WritePin(GAMEPAD_B2_GPIO_Port, GAMEPAD_B2_Pin, !(this_gamepad_event->button_2));
+      HAL_GPIO_WritePin(GAMEPAD_B3_GPIO_Port, GAMEPAD_B3_Pin, !(this_gamepad_event->button_3));
+      HAL_GPIO_WritePin(GAMEPAD_B4_GPIO_Port, GAMEPAD_B4_Pin, !(this_gamepad_event->button_4));
+      mcp4451_write_wiper(3, this_gamepad_event->axis_x);
+      mcp4451_write_wiper(0, this_gamepad_event->axis_y);
+      mcp4451_write_wiper(2, this_gamepad_event->axis_rx);
+      mcp4451_write_wiper(1, this_gamepad_event->axis_ry);
+      gamepad_buf_pop(&my_gamepad_buf);
+    }
+
     if(spi_error_occured)
       spi_error_dump_reboot();
   }

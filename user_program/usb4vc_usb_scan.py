@@ -130,7 +130,7 @@ info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUE
 set_protocl_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_SET_PROTOCOL] + [0]*29
 keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
 mouse_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
-gamepad_event_mapped_spi_msg_template = [SPI_MOSI_MAGIC, 0, PROTOCOL_GENERIC_GAMEPORT_GAMEPAD] + [0]*29
+gamepad_event_mapped_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED] + [0]*29
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_REQ_ACK] + [0]*29
@@ -159,21 +159,20 @@ def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
 
     result[8] = dict_get_if_exist(gp_status_dict[gp_id], ABS_X)
     if ABS_X in axes_info and 'max' in axes_info[ABS_X]:
-        result[8] = int(result[8] / (axes_info[ABS_X]['max'] / 255))
+        result[8] = int(result[8] / (axes_info[ABS_X]['max'] / 127)) + 127
 
     result[9] = dict_get_if_exist(gp_status_dict[gp_id], ABS_Y)
     if ABS_Y in axes_info and 'max' in axes_info[ABS_Y]:
-        result[9] = int(result[9] / (axes_info[ABS_Y]['max'] / 255))
+        result[9] = int(result[9] / (axes_info[ABS_Y]['max'] / 127)) + 127
 
     result[10] = dict_get_if_exist(gp_status_dict[gp_id], ABS_RX)
     if ABS_RX in axes_info and 'max' in axes_info[ABS_RX]:
-        result[10] = int(result[10] / (axes_info[ABS_RX]['max'] / 255))
+        result[10] = int(result[10] / (axes_info[ABS_RX]['max'] / 127)) + 127
 
     result[11] = dict_get_if_exist(gp_status_dict[gp_id], ABS_RY)
     if ABS_RY in axes_info and 'max' in axes_info[ABS_RY]:
-        result[11] = int(result[11] / (axes_info[ABS_RY]['max'] / 255))
+        result[11] = int(result[11] / (axes_info[ABS_RY]['max'] / 127)) + 127
     return result
-
 
 def change_kb_led(scrolllock, numlock, capslock):
     led_file_list = os.listdir(led_device_path)

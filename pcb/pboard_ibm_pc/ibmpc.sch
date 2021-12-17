@@ -7257,7 +7257,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <junction x="172.72" y="93.98"/>
 </segment>
 </net>
-<net name="N$17" class="0">
+<net name="Y1_W0" class="0">
 <segment>
 <pinref part="U$9" gate="G$1" pin="Y1"/>
 <wire x1="177.8" y1="73.66" x2="167.64" y2="73.66" width="0.1524" layer="91"/>
@@ -7266,7 +7266,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="167.64" y1="114.3" x2="137.16" y2="114.3" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$30" class="0">
+<net name="Y2_W1" class="0">
 <segment>
 <pinref part="U$5" gate="G$1" pin="P1W"/>
 <wire x1="99.06" y1="114.3" x2="81.28" y2="114.3" width="0.1524" layer="91"/>
@@ -7277,7 +7277,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="139.7" y1="38.1" x2="177.8" y2="38.1" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$33" class="0">
+<net name="X2_W2" class="0">
 <segment>
 <pinref part="U$5" gate="G$1" pin="P2W"/>
 <wire x1="137.16" y1="149.86" x2="215.9" y2="149.86" width="0.1524" layer="91"/>
@@ -7286,7 +7286,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="215.9" y1="48.26" x2="177.8" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$34" class="0">
+<net name="X1_W3" class="0">
 <segment>
 <pinref part="U$5" gate="G$1" pin="P3W"/>
 <wire x1="99.06" y1="149.86" x2="73.66" y2="149.86" width="0.1524" layer="91"/>
