@@ -293,11 +293,12 @@ def get_pboard_info():
     time.sleep(0.01)
     # send an empty message to allow response to be shifted into RPi
     response = pcard_spi.xfer(list(nop_spi_msg_template))
+    time.sleep(0.01)
+    response = pcard_spi.xfer(list(nop_spi_msg_template))
     print(response)
 
 def set_protocol():
     this_msg = list(set_protocl_spi_msg_template)
-    this_msg[3] = 2
-    this_msg[4] = 4
-    this_msg[5] = 1
+    this_msg[3] = 1 | 0x80
+    this_msg[4] = 4 #| 0x80
     pcard_spi.xfer(this_msg)

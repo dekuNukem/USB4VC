@@ -1,3 +1,44 @@
+
+
+  printf("%d %d %d\n", index, protocol_status_lookup[index], onoff);
+
+
+printf("%d %d\n--\n", before & 0x80, after & 0x80);
+  if(before == after)
+    return;
+  if((before & 0x7f) != (after & 0x7f))
+    return;
+  if((before & 0x80) > (after & 0x80)) // switching off
+  {
+    switch(after & 0x7f) 
+    {
+      case PROTOCOL_AT_PS2_KB:
+        printf("PS2KB off\n");
+        ps2kb_release_lines();
+        ps2kb_reset();
+        break;
+
+      // case PROTOCOL_XT_KB:
+      //  printf("XTKB off\n");
+      //  break;
+
+      case PROTOCOL_PS2_MOUSE:
+        printf("PS2MOUSE off\n");
+        ps2mouse_reset();
+        ps2mouse_release_lines();
+        break;
+
+      // case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
+      //  printf("SERMOUSE off\n");
+      //  break;
+
+      // case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
+      //  printf("GGP off\n");
+      //  release all buttons, reset digital pot to middle
+      //  break;
+    }
+  }
+
 uint8_t* find_in_array_7bit(uint8_t value, uint8_t* start, uint8_t* end)
 {
   uint8_t* curr = start;

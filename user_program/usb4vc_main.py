@@ -27,16 +27,16 @@ GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
 
 usb4vc_oled.print_welcome_screen(RPI_APP_VERSION_TUPLE)
 
-reset_pboard()
-# usb4vc_usb_scan.set_protocol()
+# reset_pboard()
+usb4vc_usb_scan.set_protocol()
 usb4vc_usb_scan.get_pboard_info()
 
 # time.sleep(5)
 # usb4vc_oled.oled_clear()
 
 # usb4vc_oled.oled_queue_worker.start()
-# usb4vc_usb_scan.usb_device_scan_thread.start()
-# usb4vc_usb_scan.raw_input_event_parser_thread.start()
+usb4vc_usb_scan.usb_device_scan_thread.start()
+usb4vc_usb_scan.raw_input_event_parser_thread.start()
 
-# while 1:
-#     time.sleep(10)
+while 1:
+    time.sleep(10)
