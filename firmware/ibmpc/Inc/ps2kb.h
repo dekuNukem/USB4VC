@@ -19,6 +19,7 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms);
 void keyboard_reply(uint8_t cmd, uint8_t *leds);
 uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t press1release0);
 void ps2kb_release_lines(void);
+void ps2kb_reset(void);
 
 #define LINUX_KEYCODE_TO_PS2_SCANCODE_SINGLE_SIZE 89
 #define LINUX_KEYCODE_TO_PS2_SCANCODE_SPECIAL_SIZE 32

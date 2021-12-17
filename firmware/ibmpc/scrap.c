@@ -1,12 +1,60 @@
+uint8_t* find_in_array_7bit(uint8_t value, uint8_t* start, uint8_t* end)
+{
+  uint8_t* curr = start;
+  while(curr <= end)
+  {
+    if(((*curr) & 0x7f) == (value & 0x7f))
+      return curr;
+    curr++;
+  }
+  return NULL;
+}
+
+#define SUPPORTED_PROTOCOL_SIZE 5
+uint8_t protocol_status[SUPPORTED_PROTOCOL_SIZE] = 
+{
+  PROTOCOL_AT_PS2_KB | 0x80,
+  PROTOCOL_XT_KB | 0x80,
+  PROTOCOL_PS2_MOUSE | 0x80,
+  PROTOCOL_MICROSOFT_SERIAL_MOUSE | 0x80,
+  PROTOCOL_GENERIC_GAMEPORT_GAMEPAD | 0x80,
+};
+  // else // switching on
+  // {
+  //   switch(after & 0x7f) 
+  //   {
+  //     case PROTOCOL_AT_PS2_KB:
+  //       printf("PS2KB on\n");
+  //       break;
+
+  //     case PROTOCOL_XT_KB:
+  //       printf("XTKB on\n");
+  //       break;
+
+  //     case PROTOCOL_PS2_MOUSE:
+  //       printf("PS2MOUSE on\n");
+  //       break;
+
+  //     case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
+  //       printf("SERMOUSE on\n");
+  //       break;
+
+  //     case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
+  //       printf("GGP on\n");
+  //       break;
+  //   }
+  // }      
       // printf("mouse req: %d", ps2mouse_host_cmd);
 uint8_t value = 32;
     uint8_t addr = ((value >> 8 & 0x01) | 0);
     value = (value & 0xFF);
     printf("w %d\n", HAL_I2C_Mem_Write(&hi2c2,MCP4451_I2C_ADDRESS,addr,1,&value,1,100));
+    printf("%d\n--\n", after & 0x7f);
 
     printf("  f %d %d\n", ((*curr) & 0x7f), (value & 0x7f));
       printf("%d %d\n", i, backup_spi1_recv_buf[i]);
-
+  printf("%d %d\n", before, after);
+  printf("%d %d\n", before & 0x80, after & 0x80);
 
     // printf("0x%x\n", this_mouse_event->button_left);
     // printf("0x%x\n", this_mouse_event->button_right);

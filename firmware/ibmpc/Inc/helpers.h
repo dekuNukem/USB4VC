@@ -92,7 +92,6 @@ void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size);
 uint8_t ps2mouse_buf_add(ps2mouse_buf *lb, mouse_event* event);
 mouse_event* ps2mouse_buf_peek(ps2mouse_buf *lb);
 void ps2mouse_buf_pop(ps2mouse_buf *lb);
-uint8_t* find_in_array_7bit(uint8_t value, uint8_t* start, uint8_t* end);
 
 #ifdef __cplusplus
 }

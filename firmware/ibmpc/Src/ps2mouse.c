@@ -64,7 +64,7 @@ void reset_accumulators(void)
   scroll_accumulator = 0;
 }
 
-void ps2mouse_restore_defaults()
+void ps2mouse_restore_defaults(void)
 {
   ps2mouse_sampling_rate = 100;
   ps2mouse_resolution = 2;

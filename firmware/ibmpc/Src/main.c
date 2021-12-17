@@ -83,15 +83,12 @@ uint8_t serial_mouse_rts_response;
 volatile uint8_t rts_active;
 uint8_t spi_error_occured;
 
-#define SUPPORTED_PROTOCOL_SIZE 5
-uint8_t protocol_status[SUPPORTED_PROTOCOL_SIZE] = 
-{
-  PROTOCOL_AT_PS2_KB | 0x80,
-  PROTOCOL_XT_KB | 0x80,
-  PROTOCOL_PS2_MOUSE | 0x80,
-  PROTOCOL_MICROSOFT_SERIAL_MOUSE | 0x80,
-  PROTOCOL_GENERIC_GAMEPORT_GAMEPAD | 0x80,
-};
+#define PROTOCOL_STATUS_NOT_AVAILABLE 0
+#define PROTOCOL_STATUS_ENABLED 1
+#define PROTOCOL_STATUS_DISABLED 2
+
+#define PROTOCOL_LOOKUP_SIZE 16
+uint8_t protocol_lookup[PROTOCOL_LOOKUP_SIZE];
 
 /* USER CODE END PV */
 
@@ -119,6 +116,44 @@ int fputc(int ch, FILE *f)
 int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
 {
   return (int16_t)((msb << 8) | lsb);
+}
+
+void handle_protocol_switch(uint8_t before, uint8_t after)
+{
+  if(before == after)
+    return;
+  if((before & 0x7f) != (after & 0x7f))
+    return;
+  if((before & 0x80) > (after & 0x80)) // switching off
+  {
+    switch(after & 0x7f) 
+    {
+      case PROTOCOL_AT_PS2_KB:
+        printf("PS2KB off\n");
+        ps2kb_release_lines();
+        ps2kb_reset();
+        break;
+
+      // case PROTOCOL_XT_KB:
+      //  printf("XTKB off\n");
+      //  break;
+
+      case PROTOCOL_PS2_MOUSE:
+        printf("PS2MOUSE off\n");
+        ps2mouse_reset();
+        ps2mouse_release_lines();
+        break;
+
+      // case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
+      //  printf("SERMOUSE off\n");
+      //  break;
+
+      // case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
+      //  printf("GGP off\n");
+      //  release all buttons, reset digital pot to middle
+      //  break;
+    }
+  }
 }
 
 /*
@@ -165,8 +200,17 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     spi_transmit_buf[5] = version_major;
     spi_transmit_buf[6] = version_minor;
     spi_transmit_buf[7] = version_patch;
-    for (int i = 0; i < SUPPORTED_PROTOCOL_SIZE; ++i)
-      spi_transmit_buf[8+i] = protocol_status[i];
+    uint8_t curr_index = 8;
+    for (int i = 0; i < PROTOCOL_LOOKUP_SIZE; i++)
+    {
+      if(protocol_lookup[i] == PROTOCOL_STATUS_NOT_AVAILABLE)
+        continue;
+      else if(protocol_lookup[i] == PROTOCOL_STATUS_DISABLED)
+        spi_transmit_buf[curr_index] = i;
+      else if(protocol_lookup[i] == PROTOCOL_STATUS_ENABLED)
+        spi_transmit_buf[curr_index] = i & 0x80;
+      curr_index++;
+    }
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
   {
@@ -174,12 +218,9 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     {
       if(backup_spi1_recv_buf[i] == 0)
         break;
-      uint8_t* result = find_in_array_7bit(backup_spi1_recv_buf[i], protocol_status, protocol_status + SUPPORTED_PROTOCOL_SIZE - 1);
-      if(result != NULL)
-      {
-        *result = backup_spi1_recv_buf[i];
-        // handle protocol on/off setup here
-      }
+      uint8_t protocol_index = backup_spi1_recv_buf[i] & 0x7f;      
+      if(protocol_index < PROTOCOL_LOOKUP_SIZE)
+        handle_protocol_switch(protocol_lookup[protocol_index], backup_spi1_recv_buf[i]);
     }
   }
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -319,6 +360,16 @@ void spi_error_dump_reboot(void)
 
 const char boot_message[] = "USB4VC Protocol Board\nIBM PC Compatible\ndekuNukem 2022";
 
+void protocol_lookup_init(void)
+{
+  memset(protocol_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
+  protocol_lookup[PROTOCOL_AT_PS2_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_lookup[PROTOCOL_XT_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_lookup[PROTOCOL_PS2_MOUSE] = PROTOCOL_STATUS_ENABLED;
+  protocol_lookup[PROTOCOL_MICROSOFT_SERIAL_MOUSE] = PROTOCOL_STATUS_ENABLED;
+  protocol_lookup[PROTOCOL_GENERIC_GAMEPORT_GAMEPAD] = PROTOCOL_STATUS_ENABLED;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -381,6 +432,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    // if()
     ps2mouse_update();
     // serial_mouse_update();
     ps2kb_update();

@@ -28,7 +28,7 @@ GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
 usb4vc_oled.print_welcome_screen(RPI_APP_VERSION_TUPLE)
 
 reset_pboard()
-usb4vc_usb_scan.set_protocol()
+# usb4vc_usb_scan.set_protocol()
 usb4vc_usb_scan.get_pboard_info()
 
 # time.sleep(5)

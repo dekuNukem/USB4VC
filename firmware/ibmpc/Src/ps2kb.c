@@ -171,7 +171,7 @@ void ps2kb_release_lines(void)
   PS2KB_DATA_HI();
 }
 
-void ps2kb_reset()
+void ps2kb_reset(void)
 {
   ps2kb_current_scancode_set = 2;
   ps2kb_data_reporting_enabled = 1;
