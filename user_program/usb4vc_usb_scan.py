@@ -115,8 +115,9 @@ def change_kb_led(scrolllock, numlock, capslock):
             led_file.write(str(capslock))
 
 def raw_input_event_worker():
-    mouse_spi_packet_dict = {}
+    mouse_status_dict = {}
     mouse_button_state_list = [0] * 5
+    joypad_status_dict = {}
     print("raw_input_event_worker started")
     while 1:
         for key in list(keyboard_opened_device_dict):
@@ -153,11 +154,11 @@ def raw_input_event_worker():
             # buffer those values until a SYNC event
             if data[0] == EV_REL:
                 if data[2] == REL_X:
-                    mouse_spi_packet_dict["x"] = data[4:6]
+                    mouse_status_dict["x"] = data[4:6]
                 if data[2] == REL_Y:
-                    mouse_spi_packet_dict["y"] = data[4:6]
+                    mouse_status_dict["y"] = data[4:6]
                 if data[2] == REL_WHEEL:
-                    mouse_spi_packet_dict["scroll"] = data[4:6]
+                    mouse_status_dict["scroll"] = data[4:6]
 
             # mouse button pressed, send it out immediately
             if data[0] == EV_KEY:
@@ -177,17 +178,17 @@ def raw_input_event_worker():
                     pcard_spi.xfer(make_keyboard_spi_packet(data, mouse_opened_device_dict[key][1]))
 
             # SYNC event happened, send out an update
-            if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_spi_packet_dict) > 0:
+            if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_status_dict) > 0:
                 to_transfer = list(mouse_event_spi_msg_template)
-                if 'x' in mouse_spi_packet_dict:
-                    to_transfer[4:6] = mouse_spi_packet_dict['x']
-                if 'y' in mouse_spi_packet_dict:
-                    to_transfer[6:8] = mouse_spi_packet_dict['y']
-                if 'scroll' in mouse_spi_packet_dict:
-                    to_transfer[8:10] = mouse_spi_packet_dict['scroll']
+                if 'x' in mouse_status_dict:
+                    to_transfer[4:6] = mouse_status_dict['x']
+                if 'y' in mouse_status_dict:
+                    to_transfer[6:8] = mouse_status_dict['y']
+                if 'scroll' in mouse_status_dict:
+                    to_transfer[8:10] = mouse_status_dict['scroll']
                 to_transfer[13:18] = mouse_button_state_list[:]
                 to_transfer[3] = mouse_opened_device_dict[key][1]
-                mouse_spi_packet_dict.clear()
+                mouse_status_dict.clear()
                 pcard_spi.xfer(to_transfer)
 
         for key in list(gamepad_opened_device_dict):
@@ -300,5 +301,5 @@ def get_pboard_info():
 def set_protocol():
     this_msg = list(set_protocl_spi_msg_template)
     this_msg[3] = 1 | 0x80
-    this_msg[4] = 4 #| 0x80
+    this_msg[4] = 4 | 0x80
     pcard_spi.xfer(this_msg)

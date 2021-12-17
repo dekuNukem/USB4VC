@@ -109,8 +109,8 @@ static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN 0 */
 int fputc(int ch, FILE *f)
 {
-    HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
-    return ch;
+  HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
+  return ch;
 }
 
 int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
@@ -440,9 +440,12 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    // If both enabled, PS2 mouse takes priority
     if(protocol_status_lookup[PROTOCOL_PS2_MOUSE] == PROTOCOL_STATUS_ENABLED)
       ps2mouse_update();
-    // serial_mouse_update();
+    else if(protocol_status_lookup[PROTOCOL_MICROSOFT_SERIAL_MOUSE] == PROTOCOL_STATUS_ENABLED)
+      serial_mouse_update();
+
     if(protocol_status_lookup[PROTOCOL_AT_PS2_KB] == PROTOCOL_STATUS_ENABLED)
       ps2kb_update();
     if(spi_error_occured)

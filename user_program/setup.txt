@@ -1,3 +1,5 @@
+-----------
+Fresh install setup
 
 raspbi-config
 enable SPI, I2C, Serial, auto login
@@ -6,10 +8,42 @@ set up ssh:
 ssh-keygen
 copy PC pub key to rpi ~/.ssh/authorized_keys
 
+--------------
+Luma OLED driver
+
 https://luma-oled.readthedocs.io/en/latest/software.html
 sudo apt-get update
 sudo apt-get install python3 python3-pip python3-pil libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5 -y
 sudo -H pip3 install luma.oled
+
+--------------
+Nintendo Pro controller
+https://retropie.org.uk/docs/Nintendo-Switch-Controllers/
+
+sudo apt install git
+sudo apt install dkms
+sudo apt-get install libudev-dev
+sudo apt-get install libevdev-dev
+
+git clone https://github.com/nicman23/dkms-hid-nintendo
+cd dkms-hid-nintendo
+sudo dkms add .
+sudo dkms build nintendo -v 3.2
+sudo dkms install nintendo -v 3.2
+
+git clone https://github.com/DanielOgorchock/joycond.git
+cd joycond
+cmake .
+sudo make install
+sudo systemctl enable --now joycond
+-------------------
+remove CTRL+ALT+DELETE reboot
+
+sudo rm /lib/systemd/system/ctrl-alt-del.target
+sudo ln -s /dev/null /lib/systemd/system/ctrl-alt-del.target
+sudo systemctl daemon-reload
+
+-------------------
 
 run script on launch:
 
