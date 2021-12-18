@@ -1,0 +1,6 @@
+moved digital pot VCC to 5V
+moved digital pot I2C Pullups to 5V
+removed I2C header pins
+
+PB15 Mouse 5V detect
+PA8 Keyboard 5V detect

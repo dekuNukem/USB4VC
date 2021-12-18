@@ -1,0 +1,4 @@
+adjusted opening gap for USB and ethernet connectors
+moved C20 away from OLED connector
+moved power on/off button to edge
+removed copper fill around antenna area
