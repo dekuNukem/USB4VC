@@ -442,6 +442,7 @@ int main(void)
   protocol_status_lookup_init();
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   mcp4451_reset();
+  printf("ma %d\n", mcp4451_is_available());
   if(mcp4451_is_available() == 0)
     hw_revision = 1;
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -484,10 +485,10 @@ int main(void)
       HAL_GPIO_WritePin(GAMEPAD_B2_GPIO_Port, GAMEPAD_B2_Pin, !(this_gamepad_event->button_2));
       HAL_GPIO_WritePin(GAMEPAD_B3_GPIO_Port, GAMEPAD_B3_Pin, !(this_gamepad_event->button_3));
       HAL_GPIO_WritePin(GAMEPAD_B4_GPIO_Port, GAMEPAD_B4_Pin, !(this_gamepad_event->button_4));
-      mcp4451_write_wiper(3, this_gamepad_event->axis_x);
-      mcp4451_write_wiper(0, this_gamepad_event->axis_y);
-      mcp4451_write_wiper(2, this_gamepad_event->axis_rx);
-      mcp4451_write_wiper(1, this_gamepad_event->axis_ry);
+      mcp4451_write_wiper(3, 255-this_gamepad_event->axis_x);
+      mcp4451_write_wiper(0, 255-this_gamepad_event->axis_y);
+      mcp4451_write_wiper(2, 255-this_gamepad_event->axis_rx);
+      mcp4451_write_wiper(1, 255-this_gamepad_event->axis_ry);
       gamepad_buf_pop(&my_gamepad_buf);
     }
 
@@ -751,9 +752,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(UART3_RTS_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : POT_RESET_Pin ERR_LED_Pin */
-  GPIO_InitStruct.Pin = POT_RESET_Pin|ERR_LED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  /*Configure GPIO pins : POT_RESET_Pin PS2MOUSE_DATA_Pin PS2MOUSE_CLK_Pin PS2KB_DATA_Pin 
+                           PS2KB_CLK_Pin */
+  GPIO_InitStruct.Pin = POT_RESET_Pin|PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_DATA_Pin 
+                          |PS2KB_CLK_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -765,12 +768,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ACT_LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PS2MOUSE_DATA_Pin PS2MOUSE_CLK_Pin PS2KB_DATA_Pin PS2KB_CLK_Pin */
-  GPIO_InitStruct.Pin = PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_DATA_Pin|PS2KB_CLK_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  /*Configure GPIO pin : ERR_LED_Pin */
+  GPIO_InitStruct.Pin = ERR_LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(ERR_LED_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI0_1_IRQn, 2, 0);
