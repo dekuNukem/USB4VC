@@ -39,3 +39,4 @@ ibmpc\main.o: ../Inc/ps2kb.h
 ibmpc\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ibmpc\main.o: ../Inc/ps2mouse.h
 ibmpc\main.o: ../Inc/mcp4451.h
+ibmpc\main.o: ../Inc/xt_kb.h

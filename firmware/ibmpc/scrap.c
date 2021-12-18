@@ -1,6 +1,13 @@
-
+    printf("%d %d\n", IS_KB_PRESENT(), IS_PS2MOUSE_PRESENT());
+    HAL_Delay(500);
 
   printf("%d %d %d\n", index, protocol_status_lookup[index], onoff);
+  GPIO_InitTypeDef GPIO_InitStruct;
+  GPIO_InitStruct.Pin = data_pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(data_port, &GPIO_InitStruct);
 
 
 printf("%d %d\n--\n", before & 0x80, after & 0x80);

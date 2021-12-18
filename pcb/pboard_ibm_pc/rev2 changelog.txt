@@ -4,3 +4,7 @@ removed I2C header pins
 
 PB15 Mouse 5V detect
 PA8 Keyboard 5V detect
+
+todo:
+adjust keyboard label
+is 5V pullup on keyboard data line necessary?
