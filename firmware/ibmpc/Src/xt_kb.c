@@ -100,7 +100,7 @@ void xtkb_check_for_softreset(void)
     last_clk_high = HAL_GetTick();
   if(HAL_GetTick() - last_clk_high > 20)
   {
-    wait_for_clk_high(500);
+    wait_for_clk_high(200);
     HAL_Delay(20);
     xtkb_write(0xaa);
     HAL_Delay(10);
@@ -110,7 +110,7 @@ void xtkb_check_for_softreset(void)
 // status 1 pressed 0 released
 uint8_t xtkb_press_key(uint8_t code, uint8_t status)
 {
-  if(code > 83)
+  if(code > 83) // not on XT keyboard
     return 0;
   if(status == 2) // typematic
   {
