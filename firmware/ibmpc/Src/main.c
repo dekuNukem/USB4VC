@@ -125,6 +125,13 @@ int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
   return (int16_t)((msb << 8) | lsb);
 }
 
+uint8_t is_protocol_enabled(uint8_t this_protocol)
+{
+  if(this_protocol >= PROTOCOL_LOOKUP_SIZE)
+    return 0;
+  return protocol_status_lookup[this_protocol] == PROTOCOL_STATUS_ENABLED;
+}
+
 void handle_protocol_switch(uint8_t spi_byte)
 {
   uint8_t index = spi_byte & 0x7f;
@@ -137,6 +144,31 @@ void handle_protocol_switch(uint8_t spi_byte)
     return;
   if(onoff)
   {
+    switch(index) 
+    {
+      case PROTOCOL_AT_PS2_KB:
+        // printf("PS2KB on\n");
+        ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+        break;
+
+      case PROTOCOL_XT_KB:
+        // printf("XTKB on\n");
+        xtkb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+        break;
+
+      case PROTOCOL_PS2_MOUSE:
+        // printf("PS2MOUSE on\n");
+        ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
+        break;
+
+      case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
+        // printf("SERMOUSE on\n");
+        break;
+
+      case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
+        // printf("GGP on\n");
+        break;
+    }
     protocol_status_lookup[index] = PROTOCOL_STATUS_ENABLED;
   }
   else
@@ -152,6 +184,7 @@ void handle_protocol_switch(uint8_t spi_byte)
 
       case PROTOCOL_XT_KB:
         // printf("XTKB off\n");
+        xtkb_release_lines();
         break;
 
       case PROTOCOL_PS2_MOUSE:
@@ -332,7 +365,7 @@ void ps2kb_update(void)
 // GPIO external interrupt callback
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if(GPIO_Pin == UART3_RTS_Pin)
+  if(GPIO_Pin == UART3_RTS_Pin && is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
     rts_active = 1;
 }
 
@@ -362,7 +395,7 @@ void serial_mouse_update(void)
   if(this_mouse_event->button_right)
     serial_mouse_output_buf[0] |= 0x10;
 
-  uint8_t serial_y = -1 * this_mouse_event->movement_y;
+  int8_t serial_y = -1 * this_mouse_event->movement_y;
   if(serial_y & 0x80)
     serial_mouse_output_buf[0] |= 0x8;
   if(serial_y & 0x40)
@@ -374,7 +407,7 @@ void serial_mouse_update(void)
 
   serial_mouse_output_buf[1] = 0x3f & this_mouse_event->movement_x;
   serial_mouse_output_buf[2] = 0x3f & serial_y;
-
+  
   mouse_buf_pop(&my_mouse_buf);
   HAL_UART_Transmit_IT(&huart3, serial_mouse_output_buf, 3);
 }
@@ -399,7 +432,7 @@ void protocol_status_lookup_init(void)
 {
   memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
   protocol_status_lookup[PROTOCOL_AT_PS2_KB] = PROTOCOL_STATUS_ENABLED;
-  protocol_status_lookup[PROTOCOL_XT_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_XT_KB] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_PS2_MOUSE] = PROTOCOL_STATUS_ENABLED;
   protocol_status_lookup[PROTOCOL_MICROSOFT_SERIAL_MOUSE] = PROTOCOL_STATUS_ENABLED;
   protocol_status_lookup[PROTOCOL_GENERIC_GAMEPORT_GAMEPAD] = PROTOCOL_STATUS_ENABLED;
@@ -481,21 +514,28 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
-  // ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
-  xtkb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
-  ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
+  protocol_status_lookup_init();
+
+  if(is_protocol_enabled(PROTOCOL_AT_PS2_KB))
+    ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+  else if(is_protocol_enabled(PROTOCOL_XT_KB))
+    xtkb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+
+  if(is_protocol_enabled(PROTOCOL_PS2_MOUSE))
+    ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
+  
   kb_buf_init(&my_kb_buf, 16);
   mouse_buf_init(&my_mouse_buf, 16);
   gamepad_buf_init(&my_gamepad_buf, 16);
-  protocol_status_lookup_init();
-  memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+
   mcp4451_reset();
-  // printf("mia %d\n", mcp4451_is_available());
   if(mcp4451_is_available() == 0)
     hw_revision = 1;
+
+  memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -512,17 +552,18 @@ int main(void)
   /* USER CODE BEGIN 3 */
 
     // If both enabled, PS2 mouse takes priority
-    if(protocol_status_lookup[PROTOCOL_PS2_MOUSE] == PROTOCOL_STATUS_ENABLED)
+    if(is_protocol_enabled(PROTOCOL_PS2_MOUSE) && IS_PS2MOUSE_PRESENT())
       ps2mouse_update();
-    else if(protocol_status_lookup[PROTOCOL_MICROSOFT_SERIAL_MOUSE] == PROTOCOL_STATUS_ENABLED)
+    else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
       serial_mouse_update();
 
-    // if(protocol_status_lookup[PROTOCOL_AT_PS2_KB] == PROTOCOL_STATUS_ENABLED)
-    //   ps2kb_update();
-    if(protocol_status_lookup[PROTOCOL_XT_KB] == PROTOCOL_STATUS_ENABLED)
+    // If both enabled, PS2 keyboard takes priority
+    if(is_protocol_enabled(PROTOCOL_AT_PS2_KB) && IS_KB_PRESENT())
+      ps2kb_update();
+    else if(is_protocol_enabled(PROTOCOL_XT_KB) && IS_KB_PRESENT())
       xtkb_update();
 
-    if(protocol_status_lookup[PROTOCOL_GENERIC_GAMEPORT_GAMEPAD] == PROTOCOL_STATUS_ENABLED)
+    if(is_protocol_enabled(PROTOCOL_GENERIC_GAMEPORT_GAMEPAD))
       gamepad_update();
 
     if(spi_error_occured)

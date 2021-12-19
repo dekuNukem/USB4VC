@@ -23,6 +23,12 @@ uint16_t xtkb_data_pin;
 
 uint32_t last_clk_high, last_typematic;
 
+void xtkb_release_lines(void)
+{
+  XTKB_CLK_HI();
+  XTKB_DATA_HI();
+}
+
 void xtkb_reset_bus(void)
 {
   XTKB_CLK_HI();

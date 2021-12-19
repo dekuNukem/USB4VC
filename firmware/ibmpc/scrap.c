@@ -1,3 +1,11 @@
+  for (int i = 0; i < SERIAL_MOUSE_BUF_SIZE; ++i)
+    printf("0x%x ", serial_mouse_output_buf[i]);
+  printf("\n");
+    int8_t yyy = serial_mouse_output_buf[2] & 0x3f;
+  yyy = yyy | ((serial_mouse_output_buf[0] & 0xc) << 4);
+  printf("y %d\n", yyy);
+
+
     printf("%d %d\n", IS_KB_PRESENT(), IS_PS2MOUSE_PRESENT());
     HAL_Delay(500);
 
