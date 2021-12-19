@@ -5,8 +5,7 @@ import spidev
 import threading
 import subprocess
 import RPi.GPIO as GPIO
-
-from usb4vc_oled import oled_display_queue
+import usb4vc_ui
 
 """
 sudo apt install stm32flash
@@ -325,7 +324,6 @@ def usb_device_scan_worker():
             device_file_list = os.listdir(input_device_path)
         except FileNotFoundError:
             print("No input devices found")
-            oled_display_queue.put((0, 'no input'))
             continue
         except Exception as e:
             print('list input device exception:', e)

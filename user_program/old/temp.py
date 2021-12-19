@@ -1,3 +1,37 @@
+class usb4vc_level(object):
+    def __init__(self):
+        super(usb4vc_level, self).__init__()
+        self.max_pages = 3
+        self.current_page = 0
+        
+        
+# while 1:
+#   with oled_canvas as ocan:
+#       ocan.rectangle((0, 0, device.width-1, device.height-1), outline=0, fill=0)
+#       oled_print_centered(f"{int(time.time())}", font_large, 0, ocan)
+#   time.sleep(1)
+print(self.current_level, self.current_page)
+
+# while 1:
+#     with canvas(device) as draw:
+#         # draw.rectangle(device.bounding_box, outline="white", fill="black")
+        
+#         # regular font test
+#         draw.text((0, 0), "123456789012345678901234567890", font=font_regular, fill="white")
+#         draw.text((0, 10), "ABCDEFGHIJ", font=font_regular, fill="white")
+#         draw.text((0, 20), "abcdefghij", font=font_regular, fill="white")
+
+#         # medium font test
+#         # draw.text((0, 0), "123456789012345678901234567890", font=font_medium, fill="white")
+#         # draw.text((0, 15), "123456789012345678901234567890", font=font_medium, fill="white")
+
+#         # large font test
+#         # draw.text((0, 0), "123456789012345678901234567890", font=font_large, fill="white")
+#         # draw.text((0, 20), "123456789012345678901234567890", font=font_regular, fill="white")
+#     time.sleep(1)
+# ------------
+
+
     # print(gp_status_dict[gp_id], axes_info)
 
     # for key in gp_status_dict[gp_id]:
