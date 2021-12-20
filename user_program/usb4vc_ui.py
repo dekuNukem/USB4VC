@@ -87,25 +87,6 @@ def oled_print_centered(text, font, y, this_canvas):
         start_x = 0
     this_canvas.text((start_x, y), text, font=font, fill="white")
 
-# persistent canvas, will need to clear areas before drawing new stuff
-# oled_canvas = canvas(device)
-
-# def print_welcome_screen(version_tuple):
-#     with oled_canvas as ocan:
-#         oled_print_centered("USB4VC", font_large, 0, ocan)
-#         oled_print_centered(f"V{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]} dekuNukem", font_regular, 20, ocan)
-#     device.contrast(1)
-
-def oled_clear():
-    device.clear()
-
-"""
-(level, page)
-
-(0, 0) 
-(0, 1) 
-(0, 2) 
-"""
 
 class usb4vc_menu(object):
     def __init__(self):
@@ -195,7 +176,7 @@ def ui_worker():
     while 1: 
         time.sleep(0.1)
         my_menu.update_usb_status();
-        
+
         if GPIO.event_detected(PLUS_BUTTON_PIN):
             print(time.time(), "PLUS_BUTTON pressed!")
             my_menu.switch_page(1)

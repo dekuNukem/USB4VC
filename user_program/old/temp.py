@@ -3,7 +3,14 @@ class usb4vc_level(object):
         super(usb4vc_level, self).__init__()
         self.max_pages = 3
         self.current_page = 0
-        
+def print_welcome_screen(version_tuple):
+    with canvas(device) as draw:
+        oled_print_centered("USB4VC", font_large, 0, draw)
+        oled_print_centered(f"V{version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]} dekuNukem", font_regular, 20, draw)
+
+def oled_clear():
+    device.clear()
+       
         
 # while 1:
 #   with oled_canvas as ocan:
@@ -11,7 +18,9 @@ class usb4vc_level(object):
 #       oled_print_centered(f"{int(time.time())}", font_large, 0, ocan)
 #   time.sleep(1)
 print(self.current_level, self.current_page)
-
+    # device.contrast(1)
+# persistent canvas, will need to clear areas before drawing new stuff
+# oled_canvas = canvas(device)
 # while 1:
 #     with canvas(device) as draw:
 #         # draw.rectangle(device.bounding_box, outline="white", fill="black")
