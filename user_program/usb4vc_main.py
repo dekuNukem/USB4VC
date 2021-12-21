@@ -5,10 +5,10 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 
+import usb4vc_shared
 import usb4vc_usb_scan
 import usb4vc_ui
 
-RPI_APP_VERSION_TUPLE = (0, 0, 1)
 PBOARD_RESET_PIN = 25
 PBOARD_DFU_PIN = 12
 
@@ -27,7 +27,8 @@ GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
 
 reset_pboard()
 # usb4vc_usb_scan.set_protocol()
-usb4vc_usb_scan.get_pboard_info()
+
+usb4vc_ui.ui_init()
 
 usb4vc_ui.ui_worker.start()
 usb4vc_usb_scan.usb_device_scan_thread.start()

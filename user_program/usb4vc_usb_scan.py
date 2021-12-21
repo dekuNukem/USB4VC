@@ -6,6 +6,7 @@ import threading
 import subprocess
 import RPi.GPIO as GPIO
 import usb4vc_ui
+import usb4vc_shared
 
 """
 sudo apt install stm32flash
@@ -113,16 +114,6 @@ ABS_HAT2X = 0x14
 ABS_HAT2Y = 0x15
 ABS_HAT3X = 0x16
 ABS_HAT3Y = 0x17
-
-PROTOCOL_AT_PS2_KB = 1
-PROTOCOL_XT_KB = 2
-PROTOCOL_ADB_KB = 3
-PROTOCOL_PS2_MOUSE = 4
-PROTOCOL_MICROSOFT_SERIAL_MOUSE = 5
-PROTOCOL_ADB_MOUSE = 6
-PROTOCOL_GENERIC_GAMEPORT_GAMEPAD = 7
-PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = 8
-PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = 9
 
 nop_spi_msg_template = [SPI_MOSI_MAGIC] + [0]*31
 info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUEST] + [0]*29
@@ -405,13 +396,18 @@ usb_device_scan_thread = threading.Thread(target=usb_device_scan_worker, daemon=
 
 def get_pboard_info():
     # send request
-    pcard_spi.xfer(list(info_request_spi_msg_template))
+    this_msg = list(info_request_spi_msg_template)
+    this_msg[3] = usb4vc_shared.RPI_APP_VERSION_TUPLE[0]
+    this_msg[4] = usb4vc_shared.RPI_APP_VERSION_TUPLE[1]
+    this_msg[5] = usb4vc_shared.RPI_APP_VERSION_TUPLE[2]
+    pcard_spi.xfer(this_msg)
+
     time.sleep(0.01)
     # send an empty message to allow response to be shifted into RPi
     response = pcard_spi.xfer(list(nop_spi_msg_template))
     time.sleep(0.01)
     response = pcard_spi.xfer(list(nop_spi_msg_template))
-    print(response)
+    return response
 
 def set_protocol():
     this_msg = list(set_protocl_spi_msg_template)

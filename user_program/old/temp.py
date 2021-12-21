@@ -10,6 +10,9 @@ def print_welcome_screen(version_tuple):
 
 def oled_clear():
     device.clear()
+
+import queue
+oled_display_queue = queue.PriorityQueue()
        
         
 # while 1:
