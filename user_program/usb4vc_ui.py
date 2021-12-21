@@ -1,5 +1,6 @@
 # https://luma-oled.readthedocs.io/en/latest/software.html
 
+import os
 import sys
 import time
 import threading
@@ -9,6 +10,7 @@ from PIL import ImageFont
 import RPi.GPIO as GPIO
 import usb4vc_usb_scan
 import usb4vc_shared
+import json
 
 """
 oled display object:
@@ -21,6 +23,16 @@ duration
 afterwards
 
 """
+
+data_dir_path = os.path.join(os.path.expanduser('~'), 'usb4vc_data')
+config_file_path = os.path.join(data_dir_path, 'config.json')
+
+def ensure_dir(dir_path):
+    print('ensure_dir', dir_path)
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+ensure_dir(data_dir_path)
 
 PLUS_BUTTON_PIN = 27
 MINUS_BUTTON_PIN = 19
@@ -47,6 +59,8 @@ OLED_HEIGHT = 32
 my_arg = ['--display', 'ssd1306', '--interface', 'spi', '--spi-port', '0', '--spi-device', '1', '--gpio-reset', '6', '--gpio-data-command', '5', '--width', str(OLED_WIDTH), '--height', str(OLED_HEIGHT), '--spi-bus-speed', '2000000']
 device = get_device(my_arg)
 
+pboard_info_spi_msg = [0] * 32
+this_pboard_id = 0
 
 """
 OLED for USB4VC
@@ -126,9 +140,24 @@ current gamepad procotol
 mouse sensitivity
 """
 
-def save_config():
-    pass
+def load_config():
+    global configuration_dict
+    try:
+        with open(config_file_path) as json_file:
+            configuration_dict = json.load(json_file)
+            # json dump all keys as strings, need to convert them back to ints
+            for key in configuration_dict:
+                if key.isdigit():
+                    configuration_dict[int(key)] = configuration_dict.pop(key)
+    except Exception as e:
+        print("config load failed!", e)
 
+def save_config():
+    try:
+        with open(config_file_path, 'w', encoding='utf8') as save_file:
+           save_file.write(json.dumps(configuration_dict))
+    except Exception as e:
+        print("config save failed!", e)
 
 class usb4vc_menu(object):
     def __init__(self, pboard):
@@ -138,9 +167,9 @@ class usb4vc_menu(object):
         self.level_size = 2
         self.page_size = [4, 5]
         self.last_refresh = 0
-        self.kb_opts = list(pboard['kbp'])
+        self.kb_opts = list(pboard['kp'])
         self.mouse_opts = list(pboard['mp'])
-        self.gamepad_opts = list(pboard['gpp'])
+        self.gamepad_opts = list(pboard['gp'])
         self.pb_info = dict(pboard)
         self.current_keyboard_protocol_index = 0
         self.current_mouse_protocol_index = 0
@@ -216,6 +245,12 @@ class usb4vc_menu(object):
                 self.current_mouse_sensitivity_offset_index = (self.current_mouse_sensitivity_offset_index + 1) % len(mouse_sensitivity_offset_list)
                 self.display_curent_page()
             if page == 4:
+                configuration_dict[this_pboard_id]["keyboard_protocol_index"] = self.current_keyboard_protocol_index
+                configuration_dict[this_pboard_id]["mouse_protocol_index"] = self.current_mouse_protocol_index
+                configuration_dict[this_pboard_id]["mouse_sensitivity_index"] = self.current_mouse_sensitivity_offset_index
+                configuration_dict[this_pboard_id]["gamepad_protocol_index"] = self.current_gamepad_protocol_index
+                print(configuration_dict)
+                save_config()
                 self.switch_level(-1)
                 self.display_curent_page()
 
@@ -230,11 +265,10 @@ class usb4vc_menu(object):
             self.display_page(0, 1)
             self.last_refresh = time.time()
 
-pboard_info_spi_msg = [0] * 32
 pboard_database = {
-    0:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown/Unplugged', 'hw_rev':0, 'kbp':keyboard_protocol_options_raw, 'mp':mouse_protocol_options_raw, 'gpp':gamepad_protocol_options_raw},
-    1:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'kbp':keyboard_protocol_options_ibmpc, 'mp':mouse_protocol_options_ibmpc, 'gpp':gamepad_protocol_options_ibmpc},
-    2:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, , 'kbp':keyboard_protocol_options_adb, 'mp':mouse_protocol_options_adb, 'gpp':gamepad_protocol_options_adb},
+    0:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown/Unplugged', 'hw_rev':0, 'kp':keyboard_protocol_options_raw, 'mp':mouse_protocol_options_raw, 'gp':gamepad_protocol_options_raw},
+    1:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'kp':keyboard_protocol_options_ibmpc, 'mp':mouse_protocol_options_ibmpc, 'gp':gamepad_protocol_options_ibmpc},
+    2:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'kp':keyboard_protocol_options_adb, 'mp':mouse_protocol_options_adb, 'gp':gamepad_protocol_options_adb},
 }
 
 def get_pboard_dict(pid):
@@ -244,15 +278,23 @@ def get_pboard_dict(pid):
 
 def ui_init():
     global pboard_info_spi_msg
+    global this_pboard_id
+    load_config()
     pboard_info_spi_msg = usb4vc_usb_scan.get_pboard_info()
-    if pboard_info_spi_msg[3] in pboard_database:
-        pboard_database[pboard_info_spi_msg[3]]['hw_rev'] = pboard_info_spi_msg[4]
-        pboard_database[pboard_info_spi_msg[3]]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
+    this_pboard_id = pboard_info_spi_msg[3]
+    if this_pboard_id in pboard_database:
+        pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
+        pboard_database[this_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
+    if 'rpi_app_ver' not in configuration_dict:
+        configuration_dict['rpi_app_ver'] = usb4vc_shared.RPI_APP_VERSION_TUPLE
+    if this_pboard_id not in configuration_dict:
+        configuration_dict[this_pboard_id] = {"keyboard_protocol_index":0, "mouse_protocol_index":0, "mouse_sensitivity_index":0, "gamepad_protocol_index":0}
 
 def ui_worker():
     print("ui_worker started")
-    my_menu = usb4vc_menu(get_pboard_dict(pboard_info_spi_msg[3]))
+    my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id))
     my_menu.display_page(0, 0)
+    print(configuration_dict)
     while 1: 
         time.sleep(0.1)
         my_menu.update_usb_status();
