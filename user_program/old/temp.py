@@ -1,3 +1,53 @@
+
+                this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
+                start_idx = 3
+                end_idx = start_idx
+
+                for index, item in enumerate(self.kb_opts):
+                    if item == PROTOCOL_OFF:
+                        continue
+                    this_msg[start_idx + index] = item['pid'] & 0x7f
+                    if index == self.current_keyboard_protocol_index:
+                        this_msg[start_idx + index] |= 0x80
+                    end_idx = start_idx + index
+
+                start_idx = end_idx
+
+                for index, item in enumerate(self.mouse_opts):
+                    if item == PROTOCOL_OFF:
+                        continue
+                    this_msg[start_idx + index] = item['pid'] & 0x7f
+                    if index == self.current_mouse_protocol_index:
+                        this_msg[start_idx + index] |= 0x80
+                    end_idx = start_idx + index
+
+                start_idx = end_idx
+
+                for index, item in enumerate(self.gamepad_opts):
+                    if item == PROTOCOL_OFF:
+                        continue
+                    this_msg[start_idx + index] = item['pid'] & 0x7f
+                    if index == self.current_gamepad_protocol_index:
+                        this_msg[start_idx + index] |= 0x80
+
+                print(this_msg)
+
+                if self.kb_opts[self.current_keyboard_protocol_index]['pid'] == 0:
+                    
+
+
+                for index, item in enumerate(self.kb_opts):
+                    print(index, item)
+
+                # for index, item in enumerate(self.mouse_opts):
+                #     print(index, item)
+
+                # for index, item in enumerate(self.gamepad_opts):
+                #     print(index, item)
+
+                print('000000')
+
+
 class usb4vc_level(object):
     def __init__(self):
         super(usb4vc_level, self).__init__()

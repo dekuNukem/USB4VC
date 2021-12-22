@@ -117,7 +117,6 @@ ABS_HAT3Y = 0x17
 
 nop_spi_msg_template = [SPI_MOSI_MAGIC] + [0]*31
 info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUEST] + [0]*29
-set_protocl_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_SET_PROTOCOL] + [0]*29
 keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
 mouse_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
 gamepad_event_mapped_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED] + [0]*29
@@ -409,8 +408,6 @@ def get_pboard_info():
     response = pcard_spi.xfer(list(nop_spi_msg_template))
     return response
 
-def set_protocol():
-    this_msg = list(set_protocl_spi_msg_template)
-    this_msg[3] = 1 | 0x80
-    this_msg[4] = 4 | 0x80
-    pcard_spi.xfer(this_msg)
+def set_protocol(raw_msg):
+    print(raw_msg)
+    pcard_spi.xfer(list(raw_msg))

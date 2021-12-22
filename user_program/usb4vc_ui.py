@@ -114,17 +114,17 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
-keyboard_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
-mouse_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE]
-gamepad_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_GENERIC_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER]
+keyboard_protocol_options_ibmpc = [PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB, PROTOCOL_OFF]
+mouse_protocol_options_ibmpc = [PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE, PROTOCOL_OFF]
+gamepad_protocol_options_ibmpc = [PROTOCOL_GENERIC_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER, PROTOCOL_OFF]
 
-keyboard_protocol_options_adb = [PROTOCOL_OFF, PROTOCOL_ADB_KB]
-mouse_protocol_options_adb = [PROTOCOL_OFF, PROTOCOL_ADB_MOUSE]
+keyboard_protocol_options_adb = [PROTOCOL_ADB_KB, PROTOCOL_OFF]
+mouse_protocol_options_adb = [PROTOCOL_ADB_MOUSE, PROTOCOL_OFF]
 gamepad_protocol_options_adb = [PROTOCOL_OFF]
 
-keyboard_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_KEYBOARD]
-mouse_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_MOUSE]
-gamepad_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_GAMEPAD]
+keyboard_protocol_options_raw = [PROTOCOL_RAW_KEYBOARD, PROTOCOL_OFF]
+mouse_protocol_options_raw = [PROTOCOL_RAW_MOUSE, PROTOCOL_OFF]
+gamepad_protocol_options_raw = [PROTOCOL_RAW_GAMEPAD, PROTOCOL_OFF]
 
 mouse_sensitivity_offset_list = [0, 0.2, 0.4, 0.6, -0.6, -0.4, -0.2]
 
@@ -160,7 +160,7 @@ def save_config():
         print("config save failed!", e)
 
 class usb4vc_menu(object):
-    def __init__(self, pboard):
+    def __init__(self, pboard, conf_dict):
         super(usb4vc_menu, self).__init__()
         self.current_level = 0
         self.current_page = 0
@@ -171,10 +171,10 @@ class usb4vc_menu(object):
         self.mouse_opts = list(pboard['mp'])
         self.gamepad_opts = list(pboard['gp'])
         self.pb_info = dict(pboard)
-        self.current_keyboard_protocol_index = 0
-        self.current_mouse_protocol_index = 0
-        self.current_mouse_sensitivity_offset_index = 0
-        self.current_gamepad_protocol_index = 0
+        self.current_keyboard_protocol_index = conf_dict['keyboard_protocol_index'] % len(self.kb_opts)
+        self.current_mouse_protocol_index = conf_dict["mouse_protocol_index"] % len(self.mouse_opts)
+        self.current_mouse_sensitivity_offset_index = conf_dict["mouse_sensitivity_index"] % len(mouse_sensitivity_offset_list)
+        self.current_gamepad_protocol_index = conf_dict["gamepad_protocol_index"] % len(self.gamepad_opts)
 
     def switch_page(self, amount):
         self.current_page = (self.current_page + amount) % self.page_size[self.current_level]
@@ -227,6 +227,34 @@ class usb4vc_menu(object):
                 with canvas(device) as draw:
                     oled_print_centered("Back", font_medium, 10, draw)
 
+    def send_spi(self):
+        protocol_bytes = []
+        for index, item in enumerate(self.kb_opts):
+            if item == PROTOCOL_OFF:
+                continue
+            protocol_bytes.append(item['pid'] & 0x7f)
+            if index == self.current_keyboard_protocol_index:
+                protocol_bytes[-1] |= 0x80
+
+        for index, item in enumerate(self.mouse_opts):
+            if item == PROTOCOL_OFF:
+                continue
+            protocol_bytes.append(item['pid'] & 0x7f)
+            if index == self.current_mouse_protocol_index:
+                protocol_bytes[-1] |= 0x80
+
+        for index, item in enumerate(self.gamepad_opts):
+            if item == PROTOCOL_OFF:
+                continue
+            protocol_bytes.append(item['pid'] & 0x7f)
+            if index == self.current_gamepad_protocol_index:
+                protocol_bytes[-1] |= 0x80
+
+        this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
+        this_msg[3:3+len(protocol_bytes)] = protocol_bytes
+        usb4vc_usb_scan.set_protocol(this_msg)
+        print('now', usb4vc_usb_scan.get_pboard_info())
+
     def action(self, level, page):
         if level == 0:
             self.switch_level(1)
@@ -251,6 +279,7 @@ class usb4vc_menu(object):
                 configuration_dict[this_pboard_id]["gamepad_protocol_index"] = self.current_gamepad_protocol_index
                 print(configuration_dict)
                 save_config()
+                self.send_spi()
                 self.switch_level(-1)
                 self.display_curent_page()
 
@@ -292,7 +321,7 @@ def ui_init():
 
 def ui_worker():
     print("ui_worker started")
-    my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id))
+    my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id), configuration_dict[this_pboard_id])
     my_menu.display_page(0, 0)
     print(configuration_dict)
     while 1: 
