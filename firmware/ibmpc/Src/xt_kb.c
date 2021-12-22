@@ -35,16 +35,19 @@ void xtkb_reset_bus(void)
   XTKB_DATA_LOW();
 }
 
+void xtkb_enable(void)
+{
+  xtkb_reset_bus();
+  last_clk_high = HAL_GetTick();
+}
+
 void xtkb_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_port, uint16_t data_pin)
 {
   xtkb_clk_port = clk_port;
   xtkb_clk_pin = clk_pin;
   xtkb_data_port = data_port;
   xtkb_data_pin = data_pin;
-  xtkb_reset_bus();
-  last_clk_high = HAL_GetTick();
 }
-
 
 #define CLK_HI_DURATION_US 65
 #define CLK_LOW_DURATION_US 30

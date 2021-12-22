@@ -126,7 +126,7 @@ keyboard_protocol_options_raw = [PROTOCOL_RAW_KEYBOARD, PROTOCOL_OFF]
 mouse_protocol_options_raw = [PROTOCOL_RAW_MOUSE, PROTOCOL_OFF]
 gamepad_protocol_options_raw = [PROTOCOL_RAW_GAMEPAD, PROTOCOL_OFF]
 
-mouse_sensitivity_offset_list = [0, 0.2, 0.4, 0.6, -0.6, -0.4, -0.2]
+mouse_sensitivity_list = [1, 1.2, 1.4, 1.6, 0.8, 0.6, 0.4]
 
 configuration_dict = {}
 
@@ -173,8 +173,9 @@ class usb4vc_menu(object):
         self.pb_info = dict(pboard)
         self.current_keyboard_protocol_index = conf_dict['keyboard_protocol_index'] % len(self.kb_opts)
         self.current_mouse_protocol_index = conf_dict["mouse_protocol_index"] % len(self.mouse_opts)
-        self.current_mouse_sensitivity_offset_index = conf_dict["mouse_sensitivity_index"] % len(mouse_sensitivity_offset_list)
+        self.current_mouse_sensitivity_offset_index = conf_dict["mouse_sensitivity_index"] % len(mouse_sensitivity_list)
         self.current_gamepad_protocol_index = conf_dict["gamepad_protocol_index"] % len(self.gamepad_opts)
+        self.last_spi_message = []
 
     def switch_page(self, amount):
         self.current_page = (self.current_page + amount) % self.page_size[self.current_level]
@@ -189,9 +190,9 @@ class usb4vc_menu(object):
         if level == 0:
             if page == 0:
                 with canvas(device) as draw:
-                    draw.text((0, 0),  f"KBD: {self.kb_opts[self.current_keyboard_protocol_index]['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 10), f"MOS: {self.mouse_opts[self.current_mouse_protocol_index]['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 20), f"GPD: {self.gamepad_opts[self.current_gamepad_protocol_index]['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 0),  f"KeyBoard:{self.kb_opts[self.current_keyboard_protocol_index]['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 10), f"Mouse:   {self.mouse_opts[self.current_mouse_protocol_index]['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 20), f"GamePad: {self.gamepad_opts[self.current_gamepad_protocol_index]['display_name']}", font=font_regular, fill="white")
             if page == 1:
                 with canvas(device) as draw:
                     draw.text((0, 0), f"USB Keyboard: {len(usb4vc_usb_scan.keyboard_opened_device_dict)}", font=font_regular, fill="white")
@@ -222,7 +223,7 @@ class usb4vc_menu(object):
             if page == 3:
                 with canvas(device) as draw:
                     oled_print_centered("Mouse Sensitivity", font_medium, 0, draw)
-                    oled_print_centered(f"{1 + mouse_sensitivity_offset_list[self.current_mouse_sensitivity_offset_index]}", font_medium, 15, draw)
+                    oled_print_centered(f"{mouse_sensitivity_list[self.current_mouse_sensitivity_offset_index]}", font_medium, 15, draw)
             if page == 4:
                 with canvas(device) as draw:
                     oled_print_centered("Back", font_medium, 10, draw)
@@ -252,8 +253,14 @@ class usb4vc_menu(object):
 
         this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
         this_msg[3:3+len(protocol_bytes)] = protocol_bytes
+
+        if this_msg == self.last_spi_message:
+            print("SPI: no need to send")
+            return
+        print('updating protocol...')
         usb4vc_usb_scan.set_protocol(this_msg)
         print('now', usb4vc_usb_scan.get_pboard_info())
+        self.last_spi_message = list(this_msg)
 
     def action(self, level, page):
         if level == 0:
@@ -270,7 +277,7 @@ class usb4vc_menu(object):
                 self.current_gamepad_protocol_index = (self.current_gamepad_protocol_index + 1) % len(self.gamepad_opts)
                 self.display_curent_page()
             if page == 3:
-                self.current_mouse_sensitivity_offset_index = (self.current_mouse_sensitivity_offset_index + 1) % len(mouse_sensitivity_offset_list)
+                self.current_mouse_sensitivity_offset_index = (self.current_mouse_sensitivity_offset_index + 1) % len(mouse_sensitivity_list)
                 self.display_curent_page()
             if page == 4:
                 configuration_dict[this_pboard_id]["keyboard_protocol_index"] = self.current_keyboard_protocol_index
@@ -304,6 +311,9 @@ def get_pboard_dict(pid):
     if pid not in pboard_database:
         pid = 0
     return pboard_database[pid]
+
+def get_mouse_sensitivity():
+    return mouse_sensitivity_list[configuration_dict[this_pboard_id]["mouse_sensitivity_index"]]
 
 def ui_init():
     global pboard_info_spi_msg
@@ -348,5 +358,3 @@ def ui_worker():
 ui_worker = threading.Thread(target=ui_worker, daemon=True)
 
 
-
-        

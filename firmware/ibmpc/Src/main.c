@@ -153,7 +153,7 @@ void handle_protocol_switch(uint8_t spi_byte)
 
       case PROTOCOL_XT_KB:
         // printf("XTKB on\n");
-        xtkb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+        xtkb_enable();
         break;
 
       case PROTOCOL_PS2_MOUSE:
@@ -194,7 +194,7 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
-        // printf("SERMOUSE off\n");
+        // printf("SERIAL MOUSE off\n");
         break;
 
       case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
@@ -434,7 +434,7 @@ void protocol_status_lookup_init(void)
   protocol_status_lookup[PROTOCOL_AT_PS2_KB] = PROTOCOL_STATUS_ENABLED;
   protocol_status_lookup[PROTOCOL_XT_KB] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_PS2_MOUSE] = PROTOCOL_STATUS_ENABLED;
-  protocol_status_lookup[PROTOCOL_MICROSOFT_SERIAL_MOUSE] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_MICROSOFT_SERIAL_MOUSE] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_GENERIC_GAMEPORT_GAMEPAD] = PROTOCOL_STATUS_ENABLED;
 }
 
@@ -518,14 +518,13 @@ int main(void)
   delay_us_init(&htim2);
   protocol_status_lookup_init();
 
-  if(is_protocol_enabled(PROTOCOL_AT_PS2_KB))
-    ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
-  else if(is_protocol_enabled(PROTOCOL_XT_KB))
-    xtkb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
-
-  if(is_protocol_enabled(PROTOCOL_PS2_MOUSE))
-    ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
+  ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+  xtkb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
+  ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
   
+  if(is_protocol_enabled(PROTOCOL_XT_KB))
+    xtkb_enable();
+
   kb_buf_init(&my_kb_buf, 16);
   mouse_buf_init(&my_mouse_buf, 16);
   gamepad_buf_init(&my_gamepad_buf, 16);

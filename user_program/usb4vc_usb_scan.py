@@ -221,6 +221,7 @@ def raw_input_event_worker():
             4 - 7 key status
             """
             data = list(data[8:])
+            print(usb4vc_ui.get_mouse_sensitivity())
             # mouse movement and scrolling
             # buffer those values until a SYNC event
             if data[0] == EV_REL:

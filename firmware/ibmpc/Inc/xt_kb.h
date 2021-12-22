@@ -12,6 +12,7 @@ void xtkb_check_for_softreset(void);
 uint8_t xtkb_press_key(uint8_t code, uint8_t status);
 void xtkb_reset_bus(void);
 void xtkb_release_lines(void);
+void xtkb_enable(void);
 
 #ifdef __cplusplus
 }
