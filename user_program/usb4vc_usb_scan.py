@@ -115,6 +115,15 @@ ABS_HAT2Y = 0x15
 ABS_HAT3X = 0x16
 ABS_HAT3Y = 0x17
 
+BTN_LEFT = 0x110
+BTN_RIGHT = 0x111
+BTN_MIDDLE = 0x112
+BTN_SIDE = 0x113
+BTN_EXTRA = 0x114
+BTN_FORWARD = 0x115
+BTN_BACK = 0x116
+BTN_TASK = 0x117
+
 nop_spi_msg_template = [SPI_MOSI_MAGIC] + [0]*31
 info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUEST] + [0]*29
 keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
@@ -136,6 +145,22 @@ def dict_get_if_exist(this_dict, this_key):
     if this_key not in this_dict:
         return 0;
     return this_dict[this_key];
+
+def make_mouse_spi_packet(mouse_dict, mouse_id):
+    to_transfer = list(mouse_event_spi_msg_template)
+    to_transfer[3] = mouse_id
+    if 'x' in mouse_dict:
+        to_transfer[4:6] = mouse_dict['x']
+    if 'y' in mouse_dict:
+        to_transfer[6:8] = mouse_dict['y']
+    if 'scroll' in mouse_dict:
+        to_transfer[8:10] = mouse_dict['scroll']
+    to_transfer[13] = dict_get_if_exist(mouse_dict, BTN_LEFT)
+    to_transfer[14] = dict_get_if_exist(mouse_dict, BTN_RIGHT)
+    to_transfer[15] = dict_get_if_exist(mouse_dict, BTN_MIDDLE)
+    to_transfer[16] = dict_get_if_exist(mouse_dict, BTN_SIDE)
+    to_transfer[17] = dict_get_if_exist(mouse_dict, BTN_EXTRA)
+    return to_transfer
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     result = list(gamepad_event_mapped_spi_msg_template)
@@ -184,7 +209,6 @@ def change_kb_led(scrolllock, numlock, capslock):
 
 def raw_input_event_worker():
     mouse_status_dict = {}
-    mouse_button_state_list = [0] * 5
     gamepad_status_dict = {}
     print("raw_input_event_worker started")
     while 1:
@@ -221,26 +245,31 @@ def raw_input_event_worker():
             4 - 7 key status
             """
             data = list(data[8:])
-            print(usb4vc_ui.get_mouse_sensitivity())
+            # print(usb4vc_ui.get_mouse_sensitivity())
             # mouse movement and scrolling
             # buffer those values until a SYNC event
             if data[0] == EV_REL:
                 if data[2] == REL_X:
-                    mouse_status_dict["x"] = data[4:6]
+                    rawx = int.from_bytes(data[4:6], byteorder='little', signed=True)
+                    rawx = int(rawx * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                    mouse_status_dict["x"] = list(rawx.to_bytes(2, byteorder='little'))
                 if data[2] == REL_Y:
-                    mouse_status_dict["y"] = data[4:6]
+                    rawy = int.from_bytes(data[4:6], byteorder='little', signed=True)
+                    rawy = int(rawy * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                    mouse_status_dict["y"] = list(rawy.to_bytes(2, byteorder='little'))
                 if data[2] == REL_WHEEL:
                     mouse_status_dict["scroll"] = data[4:6]
+                # print(usb4vc_ui.get_mouse_sensitivity(), mouse_status_dict)
 
             # mouse button pressed, send it out immediately
             if data[0] == EV_KEY:
                 key_code = data[3] * 256 + data[2]
                 if 0x110 <= key_code <= 0x117:
-                    mouse_button_state_list[data[2]-16] = data[4]
-                    to_transfer = list(mouse_event_spi_msg_template)
-                    to_transfer[10:13] = data[2:5]
-                    to_transfer[13:18] = mouse_button_state_list[:]
-                    to_transfer[3] = mouse_opened_device_dict[key][1]
+                    mouse_status_dict[key_code] = data[4]
+                    mouse_status_dict['x'] = [0, 0]
+                    mouse_status_dict['y'] = [0, 0]
+                    mouse_status_dict['scroll'] = [0, 0]
+                    to_transfer = make_mouse_spi_packet(mouse_status_dict, mouse_opened_device_dict[key][1])
                     pcard_spi.xfer(to_transfer)
                 """
                 Logitech unifying receiver identifies itself as a mouse,
@@ -251,17 +280,9 @@ def raw_input_event_worker():
 
             # SYNC event happened, send out an update
             if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_status_dict) > 0:
-                to_transfer = list(mouse_event_spi_msg_template)
-                if 'x' in mouse_status_dict:
-                    to_transfer[4:6] = mouse_status_dict['x']
-                if 'y' in mouse_status_dict:
-                    to_transfer[6:8] = mouse_status_dict['y']
-                if 'scroll' in mouse_status_dict:
-                    to_transfer[8:10] = mouse_status_dict['scroll']
-                to_transfer[13:18] = mouse_button_state_list[:]
-                to_transfer[3] = mouse_opened_device_dict[key][1]
-                mouse_status_dict.clear()
+                to_transfer = make_mouse_spi_packet(mouse_status_dict, mouse_opened_device_dict[key][1])
                 pcard_spi.xfer(to_transfer)
+                mouse_status_dict['scroll'] = [0, 0]
 
 # ----------------- GAMEPAD PARSING -----------------
         for key in list(gamepad_opened_device_dict):
@@ -304,8 +325,11 @@ def raw_input_event_worker():
                 slave_result = pcard_spi.xfer(make_spi_msg_ack())
             print(int(time.time()), slave_result)
             if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_TYPE_KB_LED_REQUEST:
-                change_kb_led(slave_result[3], slave_result[4], slave_result[5])
-                change_kb_led(slave_result[3], slave_result[4], slave_result[5])
+                try:
+                    change_kb_led(slave_result[3], slave_result[4], slave_result[5])
+                    change_kb_led(slave_result[3], slave_result[4], slave_result[5])
+                except Exception as e:
+                    print('change_kb_led exception:', e)
 
 def usb_device_scan_worker():
     print("usb_device_scan_worker started")
@@ -410,5 +434,4 @@ def get_pboard_info():
     return response
 
 def set_protocol(raw_msg):
-    print(raw_msg)
     pcard_spi.xfer(list(raw_msg))

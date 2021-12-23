@@ -1,3 +1,31 @@
+if data[0] == EV_REL:
+                if data[2] == REL_X:
+                    rawx = int.from_bytes(data[4:6], byteorder='little', signed=True)
+                    rawx = int(rawx * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                    mouse_status_dict["x"] = list(rawx.to_bytes(2, byteorder='little'))
+                if data[2] == REL_Y:
+                    rawy = int.from_bytes(data[4:6], byteorder='little', signed=True)
+                    rawy = int(rawy * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                    mouse_status_dict["y"] = list(rawy.to_bytes(2, byteorder='little'))
+                if data[2] == REL_WHEEL:
+                    mouse_status_dict["scroll"] = data[4:6]
+                # print(usb4vc_ui.get_mouse_sensitivity(), mouse_status_dict)
+
+
+rawx = int.from_bytes(data[4:6], byteorder='little', signed=True)
+                    if usb4vc_ui.get_mouse_sensitivity() != 1:
+                        rawx = int(rawx * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                    print(rawx, adjusted, adjusted.to_bytes(2, byteorder='little'))
+                    mouse_status_dict["x"] = data[4:6]
+
+                    config load failed! dictionary keys changed during iteration
+
+                    mouse_status_dict["x"] = data[4:6]
+                    rawx = int.from_bytes(data[4:6], byteorder='little', signed=True)
+                    adjusted = int(rawx * 1.33) & 0xffff
+
+                    print(data)
+                    print(rawx, adjusted, list(adjusted.to_bytes(2, byteorder='little')))
 
                 this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
                 start_idx = 3
@@ -34,7 +62,8 @@
 
                 if self.kb_opts[self.current_keyboard_protocol_index]['pid'] == 0:
                     
-
+def int_to_bytes(number: int) -> bytes:
+    return number.to_bytes(length=(8 + (number + (number < 0)).bit_length()) // 8, byteorder='big', signed=True)
 
                 for index, item in enumerate(self.kb_opts):
                     print(index, item)

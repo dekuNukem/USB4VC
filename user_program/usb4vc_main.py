@@ -26,7 +26,6 @@ GPIO.setup(PBOARD_DFU_PIN, GPIO.OUT)
 GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
 
 reset_pboard()
-# usb4vc_usb_scan.set_protocol()
 
 usb4vc_ui.ui_init()
 

@@ -126,7 +126,7 @@ keyboard_protocol_options_raw = [PROTOCOL_RAW_KEYBOARD, PROTOCOL_OFF]
 mouse_protocol_options_raw = [PROTOCOL_RAW_MOUSE, PROTOCOL_OFF]
 gamepad_protocol_options_raw = [PROTOCOL_RAW_GAMEPAD, PROTOCOL_OFF]
 
-mouse_sensitivity_list = [1, 1.2, 1.4, 1.6, 0.8, 0.6, 0.4]
+mouse_sensitivity_list = [1, 1.25, 1.5, 1.75, 0.25, 0.5, 0.75]
 
 configuration_dict = {}
 
@@ -144,11 +144,13 @@ def load_config():
     global configuration_dict
     try:
         with open(config_file_path) as json_file:
-            configuration_dict = json.load(json_file)
+            temp_dict = json.load(json_file)
             # json dump all keys as strings, need to convert them back to ints
-            for key in configuration_dict:
+            for key in temp_dict:
                 if key.isdigit():
-                    configuration_dict[int(key)] = configuration_dict.pop(key)
+                    configuration_dict[int(key)] = temp_dict[key]
+                else:
+                    configuration_dict[key] = temp_dict[key]
     except Exception as e:
         print("config load failed!", e)
 
@@ -176,6 +178,7 @@ class usb4vc_menu(object):
         self.current_mouse_sensitivity_offset_index = conf_dict["mouse_sensitivity_index"] % len(mouse_sensitivity_list)
         self.current_gamepad_protocol_index = conf_dict["gamepad_protocol_index"] % len(self.gamepad_opts)
         self.last_spi_message = []
+        self.send_spi()
 
     def switch_page(self, amount):
         self.current_page = (self.current_page + amount) % self.page_size[self.current_level]
@@ -226,7 +229,7 @@ class usb4vc_menu(object):
                     oled_print_centered(f"{mouse_sensitivity_list[self.current_mouse_sensitivity_offset_index]}", font_medium, 15, draw)
             if page == 4:
                 with canvas(device) as draw:
-                    oled_print_centered("Back", font_medium, 10, draw)
+                    oled_print_centered("Save & Quit", font_medium, 10, draw)
 
     def send_spi(self):
         protocol_bytes = []
@@ -257,9 +260,9 @@ class usb4vc_menu(object):
         if this_msg == self.last_spi_message:
             print("SPI: no need to send")
             return
-        print('updating protocol...')
+        print("set_protocol:", this_msg)
         usb4vc_usb_scan.set_protocol(this_msg)
-        print('now', usb4vc_usb_scan.get_pboard_info())
+        print('new status:', usb4vc_usb_scan.get_pboard_info())
         self.last_spi_message = list(this_msg)
 
     def action(self, level, page):
