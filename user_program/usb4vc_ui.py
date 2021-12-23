@@ -41,17 +41,21 @@ SHUTDOWN_BUTTON_PIN = 21
 
 GPIO.setmode(GPIO.BCM)
 
-GPIO.setup(PLUS_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.add_event_detect(PLUS_BUTTON_PIN, GPIO.FALLING, bouncetime=200)
+class my_button(object):
+    def __init__(self, bcm_pin):
+        super(my_button, self).__init__()
+        self.pin_number = bcm_pin
+        GPIO.setup(self.pin_number, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        self.prev_state = GPIO.input(self.pin_number)
 
-GPIO.setup(MINUS_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.add_event_detect(MINUS_BUTTON_PIN, GPIO.FALLING, bouncetime=200)
-
-GPIO.setup(ENTER_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.add_event_detect(ENTER_BUTTON_PIN, GPIO.FALLING, bouncetime=200)
-
-GPIO.setup(SHUTDOWN_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.add_event_detect(SHUTDOWN_BUTTON_PIN, GPIO.FALLING, bouncetime=200)
+    def is_pressed(self):
+        result = False
+        current_state = GPIO.input(self.pin_number)
+        if self.prev_state == 1 and current_state == 0:
+            result = True
+        self.prev_state = current_state
+        return result
+        
 
 OLED_WIDTH = 128
 OLED_HEIGHT = 32
@@ -332,6 +336,11 @@ def ui_init():
     if this_pboard_id not in configuration_dict:
         configuration_dict[this_pboard_id] = {"keyboard_protocol_index":0, "mouse_protocol_index":0, "mouse_sensitivity_index":0, "gamepad_protocol_index":0}
 
+plus_button = my_button(PLUS_BUTTON_PIN)
+minus_button = my_button(MINUS_BUTTON_PIN)
+enter_button = my_button(ENTER_BUTTON_PIN)
+shutdown_button = my_button(SHUTDOWN_BUTTON_PIN)
+
 def ui_worker():
     print("ui_worker started")
     my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id), configuration_dict[this_pboard_id])
@@ -341,21 +350,21 @@ def ui_worker():
         time.sleep(0.1)
         my_menu.update_usb_status();
 
-        if GPIO.event_detected(PLUS_BUTTON_PIN):
+        if plus_button.is_pressed():
             print(time.time(), "PLUS_BUTTON pressed!")
             my_menu.switch_page(1)
             my_menu.display_curent_page()
 
-        if GPIO.event_detected(MINUS_BUTTON_PIN):
+        if minus_button.is_pressed():
             print(time.time(), "MINUS_BUTTON pressed!")
             my_menu.switch_page(-1)
             my_menu.display_curent_page()
 
-        if GPIO.event_detected(ENTER_BUTTON_PIN):
+        if enter_button.is_pressed():
             print(time.time(), "ENTER_BUTTON pressed!")
             my_menu.action_current_page()
 
-        if GPIO.event_detected(SHUTDOWN_BUTTON_PIN):
+        if shutdown_button.is_pressed():
             print(time.time(), "SHUTDOWN_BUTTON pressed!")
 
 ui_worker = threading.Thread(target=ui_worker, daemon=True)
