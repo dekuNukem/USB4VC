@@ -132,6 +132,16 @@ uint8_t is_protocol_enabled(uint8_t this_protocol)
   return protocol_status_lookup[this_protocol] == PROTOCOL_STATUS_ENABLED;
 }
 
+void gameport_init()
+{
+  // release all buttons, reset digital pot
+  HAL_GPIO_WritePin(GAMEPAD_B1_GPIO_Port, GAMEPAD_B1_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GAMEPAD_B2_GPIO_Port, GAMEPAD_B2_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GAMEPAD_B3_GPIO_Port, GAMEPAD_B3_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GAMEPAD_B4_GPIO_Port, GAMEPAD_B4_Pin, GPIO_PIN_SET);
+  mcp4451_reset();
+}
+
 void handle_protocol_switch(uint8_t spi_byte)
 {
   uint8_t index = spi_byte & 0x7f;
@@ -142,69 +152,57 @@ void handle_protocol_switch(uint8_t spi_byte)
   // trying to change a protocol that is not available on this board
   if(protocol_status_lookup[index] == PROTOCOL_STATUS_NOT_AVAILABLE)
     return;
-  if(onoff)
+  // switching protocol ON
+  if(onoff && protocol_status_lookup[index] == PROTOCOL_STATUS_DISABLED)
   {
-    switch(index) 
+    switch(index)
     {
       case PROTOCOL_AT_PS2_KB:
-        // printf("PS2KB on\n");
         ps2kb_init(PS2KB_CLK_GPIO_Port, PS2KB_CLK_Pin, PS2KB_DATA_GPIO_Port, PS2KB_DATA_Pin);
         break;
 
       case PROTOCOL_XT_KB:
-        // printf("XTKB on\n");
         xtkb_enable();
         break;
 
       case PROTOCOL_PS2_MOUSE:
-        // printf("PS2MOUSE on\n");
         ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
         break;
 
       case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
-        // printf("SERMOUSE on\n");
         break;
 
       case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
-        // printf("GGP on\n");
+        gameport_init();
         break;
     }
     protocol_status_lookup[index] = PROTOCOL_STATUS_ENABLED;
   }
-  else
+  // switching protocol OFF
+  else if((onoff == 0) && protocol_status_lookup[index] == PROTOCOL_STATUS_ENABLED)
   {
     protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
     switch(index) 
     {
       case PROTOCOL_AT_PS2_KB:
-        // printf("PS2KB off\n");
         ps2kb_release_lines();
         ps2kb_reset();
         break;
 
       case PROTOCOL_XT_KB:
-        // printf("XTKB off\n");
         xtkb_release_lines();
         break;
 
       case PROTOCOL_PS2_MOUSE:
-        // printf("PS2MOUSE off\n");
         ps2mouse_reset();
         ps2mouse_release_lines();
         break;
 
       case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
-        // printf("SERIAL MOUSE off\n");
         break;
 
       case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
-        // printf("GGP off\n");
-        // release all buttons, reset digital pot
-        HAL_GPIO_WritePin(GAMEPAD_B1_GPIO_Port, GAMEPAD_B1_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GAMEPAD_B2_GPIO_Port, GAMEPAD_B2_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GAMEPAD_B3_GPIO_Port, GAMEPAD_B3_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GAMEPAD_B4_GPIO_Port, GAMEPAD_B4_Pin, GPIO_PIN_SET);
-        mcp4451_reset();
+        gameport_init();
         break;
     }
   }
@@ -530,6 +528,7 @@ int main(void)
   gamepad_buf_init(&my_gamepad_buf, 16);
 
   mcp4451_reset();
+  HAL_Delay(1);
   if(mcp4451_is_available() == 0)
     hw_revision = 1;
 

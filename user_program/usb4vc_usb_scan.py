@@ -282,6 +282,8 @@ def raw_input_event_worker():
             if data[0] == EV_SYN and data[2] == SYN_REPORT and len(mouse_status_dict) > 0:
                 to_transfer = make_mouse_spi_packet(mouse_status_dict, mouse_opened_device_dict[key][1])
                 pcard_spi.xfer(to_transfer)
+                mouse_status_dict['x'] = [0, 0]
+                mouse_status_dict['y'] = [0, 0]
                 mouse_status_dict['scroll'] = [0, 0]
 
 # ----------------- GAMEPAD PARSING -----------------
