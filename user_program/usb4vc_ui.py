@@ -68,21 +68,21 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data", 'is_custom':0}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data", 'is_custom':0}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data", 'is_custom':0}
 
-BTN_SOUTH = 0x130
-BTN_EAST = 0x131
-BTN_C = 0x132
-BTN_NORTH = 0x133
-BTN_WEST = 0x134
-BTN_Z = 0x135
-BTN_TL = 0x136
-BTN_TR = 0x137
-BTN_TL2 = 0x138
-BTN_TR2 = 0x139
-BTN_SELECT = 0x13a
-BTN_START = 0x13b
-BTN_MODE = 0x13c
-BTN_THUMBL = 0x13d
-BTN_THUMBR = 0x13e
+GP_BTN_SOUTH = 0x130
+GP_BTN_EAST = 0x131
+GP_BTN_C = 0x132
+GP_BTN_NORTH = 0x133
+GP_BTN_WEST = 0x134
+GP_BTN_Z = 0x135
+GP_BTN_TL = 0x136
+GP_BTN_TR = 0x137
+GP_BTN_TL2 = 0x138
+GP_BTN_TR2 = 0x139
+GP_BTN_SELECT = 0x13a
+GP_BTN_START = 0x13b
+GP_BTN_MODE = 0x13c
+GP_BTN_THUMBL = 0x13d
+GP_BTN_THUMBR = 0x13e
 
 IBMPC_GGP_BUTTON_1 = 1
 IBMPC_GGP_BUTTON_2 = 2
@@ -104,12 +104,12 @@ custom_profile_1 = {
     'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
     'mapping':
     {
-        BTN_SOUTH: IBMPC_GGP_BUTTON_1,
-        BTN_EAST: IBMPC_GGP_BUTTON_2,
-        BTN_WEST: IBMPC_GGP_BUTTON_3,
-        BTN_NORTH: IBMPC_GGP_BUTTON_4,
-        BTN_TL: IBMPC_GGP_BUTTON_1,
-        BTN_TR2: IBMPC_GGP_BUTTON_2,
+        GP_BTN_SOUTH: IBMPC_GGP_BUTTON_1,
+        GP_BTN_EAST: IBMPC_GGP_BUTTON_2,
+        GP_BTN_WEST: IBMPC_GGP_BUTTON_3,
+        GP_BTN_NORTH: IBMPC_GGP_BUTTON_4,
+        GP_BTN_TL: IBMPC_GGP_BUTTON_1,
+        GP_BTN_TR2: IBMPC_GGP_BUTTON_2,
     }
 }
 
@@ -120,12 +120,12 @@ custom_profile_2 = {
     'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
     'mapping':
     {
-        BTN_SOUTH: IBMPC_GGP_BUTTON_1,
-        BTN_EAST: IBMPC_GGP_BUTTON_1,
-        BTN_WEST: IBMPC_GGP_BUTTON_1,
-        BTN_NORTH: IBMPC_GGP_BUTTON_1,
-        BTN_TL: IBMPC_GGP_BUTTON_1,
-        BTN_TR2: IBMPC_GGP_BUTTON_1,
+        GP_BTN_SOUTH: IBMPC_GGP_BUTTON_1,
+        GP_BTN_EAST: IBMPC_GGP_BUTTON_1,
+        GP_BTN_WEST: IBMPC_GGP_BUTTON_1,
+        GP_BTN_NORTH: IBMPC_GGP_BUTTON_1,
+        GP_BTN_TL: IBMPC_GGP_BUTTON_1,
+        GP_BTN_TR2: IBMPC_GGP_BUTTON_1,
     }
 }
 
@@ -169,17 +169,17 @@ def oled_print_centered(text, font, y, this_canvas):
         start_x = 0
     this_canvas.text((start_x, y), text, font=font, fill="white")
 
-keyboard_protocol_options_ibmpc = [PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB, PROTOCOL_OFF]
-mouse_protocol_options_ibmpc = [PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE, PROTOCOL_OFF]
-gamepad_protocol_options_ibmpc = [PROTOCOL_GENERIC_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER, PROTOCOL_OFF]
+keyboard_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
+mouse_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE]
+gamepad_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_GENERIC_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER]
 
-keyboard_protocol_options_adb = [PROTOCOL_ADB_KB, PROTOCOL_OFF]
-mouse_protocol_options_adb = [PROTOCOL_ADB_MOUSE, PROTOCOL_OFF]
+keyboard_protocol_options_adb = [PROTOCOL_OFF, PROTOCOL_ADB_KB]
+mouse_protocol_options_adb = [PROTOCOL_OFF, PROTOCOL_ADB_MOUSE]
 gamepad_protocol_options_adb = [PROTOCOL_OFF]
 
-keyboard_protocol_options_raw = [PROTOCOL_RAW_KEYBOARD, PROTOCOL_OFF]
-mouse_protocol_options_raw = [PROTOCOL_RAW_MOUSE, PROTOCOL_OFF]
-gamepad_protocol_options_raw = [PROTOCOL_RAW_GAMEPAD, PROTOCOL_OFF]
+keyboard_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_KEYBOARD]
+mouse_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_MOUSE]
+gamepad_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_GAMEPAD]
 
 mouse_sensitivity_list = [1, 1.25, 1.5, 1.75, 0.25, 0.5, 0.75]
 
@@ -295,16 +295,22 @@ class usb4vc_menu(object):
     def send_spi(self):
         status_dict = {}
         for index, item in enumerate(self.kb_opts):
+            if item['pid'] & 0x7f in status_dict and status_dict[item['pid'] & 0x7f] == 1:
+                continue
             status_dict[item['pid'] & 0x7f] = 0
             if index == self.current_keyboard_protocol_index:
                 status_dict[item['pid'] & 0x7f] = 1
 
         for index, item in enumerate(self.mouse_opts):
+            if item['pid'] & 0x7f in status_dict and status_dict[item['pid'] & 0x7f] == 1:
+                continue
             status_dict[item['pid'] & 0x7f] = 0
             if index == self.current_mouse_protocol_index:
                 status_dict[item['pid'] & 0x7f] = 1
 
         for index, item in enumerate(self.gamepad_opts):
+            if item['pid'] & 0x7f in status_dict and status_dict[item['pid'] & 0x7f] == 1:
+                continue
             status_dict[item['pid'] & 0x7f] = 0
             if index == self.current_gamepad_protocol_index:
                 status_dict[item['pid'] & 0x7f] = 1
@@ -321,6 +327,12 @@ class usb4vc_menu(object):
         this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
         this_msg[3:3+len(protocol_bytes)] = protocol_bytes
 
+        self.current_keyboard_protocol = self.kb_opts[self.current_keyboard_protocol_index]
+        self.current_mouse_protocol = self.mouse_opts[self.current_mouse_protocol_index]
+        self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
+
+        print('this', this_msg)
+        print('last', self.last_spi_message)
         if this_msg == self.last_spi_message:
             print("SPI: no need to send")
             return
@@ -328,9 +340,6 @@ class usb4vc_menu(object):
         usb4vc_usb_scan.set_protocol(this_msg)
         print('new status:', [hex(x) for x in usb4vc_usb_scan.get_pboard_info()])
         self.last_spi_message = list(this_msg)
-        self.current_keyboard_protocol = self.kb_opts[self.current_keyboard_protocol_index]
-        self.current_mouse_protocol = self.mouse_opts[self.current_mouse_protocol_index]
-        self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
 
     def action(self, level, page):
         if level == 0:
@@ -405,7 +414,7 @@ def ui_init():
     if 'rpi_app_ver' not in configuration_dict:
         configuration_dict['rpi_app_ver'] = usb4vc_shared.RPI_APP_VERSION_TUPLE
     if this_pboard_id not in configuration_dict:
-        configuration_dict[this_pboard_id] = {"keyboard_protocol_index":0, "mouse_protocol_index":0, "mouse_sensitivity_index":0, "gamepad_protocol_index":0}
+        configuration_dict[this_pboard_id] = {"keyboard_protocol_index":1, "mouse_protocol_index":1, "mouse_sensitivity_index":0, "gamepad_protocol_index":1}
 
 plus_button = my_button(PLUS_BUTTON_PIN)
 minus_button = my_button(MINUS_BUTTON_PIN)
