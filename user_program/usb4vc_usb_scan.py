@@ -163,6 +163,9 @@ def make_mouse_spi_packet(mouse_dict, mouse_id):
     return to_transfer
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
+    # do the mapping here
+    print(usb4vc_ui.get_gamepad_protocol())
+
     result = list(gamepad_event_mapped_spi_msg_template)
 
     result[3] = gp_id;
@@ -245,7 +248,6 @@ def raw_input_event_worker():
             4 - 7 key status
             """
             data = list(data[8:])
-            # print(usb4vc_ui.get_mouse_sensitivity())
             # mouse movement and scrolling
             # buffer those values until a SYNC event
             if data[0] == EV_REL:
@@ -259,7 +261,6 @@ def raw_input_event_worker():
                     mouse_status_dict["y"] = list(rawy.to_bytes(2, byteorder='little'))
                 if data[2] == REL_WHEEL:
                     mouse_status_dict["scroll"] = data[4:6]
-                # print(usb4vc_ui.get_mouse_sensitivity(), mouse_status_dict)
 
             # mouse button pressed, send it out immediately
             if data[0] == EV_KEY:

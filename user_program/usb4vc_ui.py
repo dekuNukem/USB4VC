@@ -12,18 +12,6 @@ import usb4vc_usb_scan
 import usb4vc_shared
 import json
 
-"""
-oled display object:
-
-text
-size
-font
-x, y
-duration
-afterwards
-
-"""
-
 data_dir_path = os.path.join(os.path.expanduser('~'), 'usb4vc_data')
 config_file_path = os.path.join(data_dir_path, 'config.json')
 
@@ -66,6 +54,83 @@ device = get_device(my_arg)
 pboard_info_spi_msg = [0] * 32
 this_pboard_id = 0
 
+PROTOCOL_OFF = {'pid':0, 'display_name':"OFF", 'is_custom':0}
+PROTOCOL_AT_PS2_KB = {'pid':1, 'display_name':"AT/PS2", 'is_custom':0}
+PROTOCOL_XT_KB = {'pid':2, 'display_name':"PC XT", 'is_custom':0}
+PROTOCOL_ADB_KB = {'pid':3, 'display_name':"ADB", 'is_custom':0}
+PROTOCOL_PS2_MOUSE = {'pid':4, 'display_name':"PS/2", 'is_custom':0}
+PROTOCOL_MICROSOFT_SERIAL_MOUSE = {'pid':5, 'display_name':"MS Serial", 'is_custom':0}
+PROTOCOL_ADB_MOUSE = {'pid':6, 'display_name':"ADB", 'is_custom':0}
+PROTOCOL_GENERIC_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic PC", 'is_custom':0}
+PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = {'pid':8, 'display_name':"Gravis Pro", 'is_custom':0}
+PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = {'pid':9, 'display_name':"MS Sidewinder", 'is_custom':0}
+PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data", 'is_custom':0}
+PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data", 'is_custom':0}
+PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data", 'is_custom':0}
+
+BTN_SOUTH = 0x130
+BTN_EAST = 0x131
+BTN_C = 0x132
+BTN_NORTH = 0x133
+BTN_WEST = 0x134
+BTN_Z = 0x135
+BTN_TL = 0x136
+BTN_TR = 0x137
+BTN_TL2 = 0x138
+BTN_TR2 = 0x139
+BTN_SELECT = 0x13a
+BTN_START = 0x13b
+BTN_MODE = 0x13c
+BTN_THUMBL = 0x13d
+BTN_THUMBR = 0x13e
+
+IBMPC_GGP_BUTTON_1 = 1
+IBMPC_GGP_BUTTON_2 = 2
+IBMPC_GGP_BUTTON_3 = 3
+IBMPC_GGP_BUTTON_4 = 4
+IBMPC_GGP_JS1_X = 5
+IBMPC_GGP_JS1_Y = 6
+IBMPC_GGP_JS2_X = 7
+IBMPC_GGP_JS2_Y = 8
+
+PBOARD_ID_UNKNOWN = 0
+PBOARD_ID_IBMPC = 1
+PBOARD_ID_ADB = 2
+
+custom_profile_1 = {
+    'name':'gpp1',
+    'type':'pl_gamepad',
+    'bid':PBOARD_ID_IBMPC,
+    'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
+    'mapping':
+    {
+        BTN_SOUTH: IBMPC_GGP_BUTTON_1,
+        BTN_EAST: IBMPC_GGP_BUTTON_2,
+        BTN_WEST: IBMPC_GGP_BUTTON_3,
+        BTN_NORTH: IBMPC_GGP_BUTTON_4,
+        BTN_TL: IBMPC_GGP_BUTTON_1,
+        BTN_TR2: IBMPC_GGP_BUTTON_2,
+    }
+}
+
+custom_profile_2 = {
+    'name':'gpp2',
+    'type':'pl_gamepad',
+    'bid':PBOARD_ID_IBMPC,
+    'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
+    'mapping':
+    {
+        BTN_SOUTH: IBMPC_GGP_BUTTON_1,
+        BTN_EAST: IBMPC_GGP_BUTTON_1,
+        BTN_WEST: IBMPC_GGP_BUTTON_1,
+        BTN_NORTH: IBMPC_GGP_BUTTON_1,
+        BTN_TL: IBMPC_GGP_BUTTON_1,
+        BTN_TR2: IBMPC_GGP_BUTTON_1,
+    }
+}
+
+custom_profile_list = [custom_profile_1, custom_profile_2]
+
 """
 OLED for USB4VC
 128*32
@@ -103,20 +168,6 @@ def oled_print_centered(text, font, y, this_canvas):
     if start_x < 0:
         start_x = 0
     this_canvas.text((start_x, y), text, font=font, fill="white")
-
-PROTOCOL_OFF = {'pid':0, 'display_name':"OFF"}
-PROTOCOL_AT_PS2_KB = {'pid':1, 'display_name':"AT/PS2"}
-PROTOCOL_XT_KB = {'pid':2, 'display_name':"PC XT"}
-PROTOCOL_ADB_KB = {'pid':3, 'display_name':"ADB"}
-PROTOCOL_PS2_MOUSE = {'pid':4, 'display_name':"PS/2"}
-PROTOCOL_MICROSOFT_SERIAL_MOUSE = {'pid':5, 'display_name':"MS Serial"}
-PROTOCOL_ADB_MOUSE = {'pid':6, 'display_name':"ADB"}
-PROTOCOL_GENERIC_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic PC"}
-PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = {'pid':8, 'display_name':"Gravis Pro"}
-PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = {'pid':9, 'display_name':"MS Sidewinder"}
-PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
-PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
-PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
 keyboard_protocol_options_ibmpc = [PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB, PROTOCOL_OFF]
 mouse_protocol_options_ibmpc = [PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE, PROTOCOL_OFF]
@@ -166,21 +217,27 @@ def save_config():
         print("config save failed!", e)
 
 class usb4vc_menu(object):
+    def cap_index(self, index, list_size):
+        if index >= list_size:
+            return 0
+        return index
     def __init__(self, pboard, conf_dict):
         super(usb4vc_menu, self).__init__()
         self.current_level = 0
         self.current_page = 0
         self.level_size = 2
         self.page_size = [4, 5]
-        self.last_refresh = 0
-        self.kb_opts = list(pboard['kp'])
-        self.mouse_opts = list(pboard['mp'])
-        self.gamepad_opts = list(pboard['gp'])
+        self.kb_opts = list(pboard['pl_keybboard'])
+        self.mouse_opts = list(pboard['pl_mouse'])
+        self.gamepad_opts = list(pboard['pl_gamepad'])
         self.pb_info = dict(pboard)
-        self.current_keyboard_protocol_index = conf_dict['keyboard_protocol_index'] % len(self.kb_opts)
-        self.current_mouse_protocol_index = conf_dict["mouse_protocol_index"] % len(self.mouse_opts)
-        self.current_mouse_sensitivity_offset_index = conf_dict["mouse_sensitivity_index"] % len(mouse_sensitivity_list)
-        self.current_gamepad_protocol_index = conf_dict["gamepad_protocol_index"] % len(self.gamepad_opts)
+        self.current_keyboard_protocol_index = self.cap_index(conf_dict['keyboard_protocol_index'], len(self.kb_opts))
+        self.current_mouse_protocol_index = self.cap_index(conf_dict["mouse_protocol_index"], len(self.mouse_opts))
+        self.current_mouse_sensitivity_offset_index = self.cap_index(conf_dict["mouse_sensitivity_index"], len(mouse_sensitivity_list))
+        self.current_gamepad_protocol_index = self.cap_index(conf_dict["gamepad_protocol_index"], len(self.gamepad_opts))
+        self.current_keyboard_protocol = self.kb_opts[self.current_keyboard_protocol_index]
+        self.current_mouse_protocol = self.mouse_opts[self.current_mouse_protocol_index]
+        self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
         self.last_spi_message = []
         self.send_spi()
 
@@ -197,9 +254,9 @@ class usb4vc_menu(object):
         if level == 0:
             if page == 0:
                 with canvas(device) as draw:
-                    draw.text((0, 0),  f"KeyBoard:{self.kb_opts[self.current_keyboard_protocol_index]['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 10), f"Mouse:   {self.mouse_opts[self.current_mouse_protocol_index]['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 20), f"GamePad: {self.gamepad_opts[self.current_gamepad_protocol_index]['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 0),  f"KeyBoard:{self.current_keyboard_protocol['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 10), f"Mouse:   {self.current_mouse_protocol['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 20), f"GamePad: {self.current_gamepad_protocol['display_name']}", font=font_regular, fill="white")
             if page == 1:
                 with canvas(device) as draw:
                     draw.text((0, 0), f"USB Keyboard: {len(usb4vc_usb_scan.keyboard_opened_device_dict)}", font=font_regular, fill="white")
@@ -236,27 +293,30 @@ class usb4vc_menu(object):
                     oled_print_centered("Save & Quit", font_medium, 10, draw)
 
     def send_spi(self):
-        protocol_bytes = []
+        status_dict = {}
         for index, item in enumerate(self.kb_opts):
-            if item == PROTOCOL_OFF:
-                continue
-            protocol_bytes.append(item['pid'] & 0x7f)
+            status_dict[item['pid'] & 0x7f] = 0
             if index == self.current_keyboard_protocol_index:
-                protocol_bytes[-1] |= 0x80
+                status_dict[item['pid'] & 0x7f] = 1
 
         for index, item in enumerate(self.mouse_opts):
-            if item == PROTOCOL_OFF:
-                continue
-            protocol_bytes.append(item['pid'] & 0x7f)
+            status_dict[item['pid'] & 0x7f] = 0
             if index == self.current_mouse_protocol_index:
-                protocol_bytes[-1] |= 0x80
+                status_dict[item['pid'] & 0x7f] = 1
 
         for index, item in enumerate(self.gamepad_opts):
-            if item == PROTOCOL_OFF:
-                continue
-            protocol_bytes.append(item['pid'] & 0x7f)
+            status_dict[item['pid'] & 0x7f] = 0
             if index == self.current_gamepad_protocol_index:
-                protocol_bytes[-1] |= 0x80
+                status_dict[item['pid'] & 0x7f] = 1
+
+        protocol_bytes = []
+        for key in status_dict:
+            if key == PROTOCOL_OFF['pid']:
+                continue
+            if status_dict[key]:
+                protocol_bytes.append(key | 0x80)
+            else:
+                protocol_bytes.append(key)
 
         this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
         this_msg[3:3+len(protocol_bytes)] = protocol_bytes
@@ -264,10 +324,13 @@ class usb4vc_menu(object):
         if this_msg == self.last_spi_message:
             print("SPI: no need to send")
             return
-        print("set_protocol:", this_msg)
+        print("set_protocol:", [hex(x) for x in this_msg])
         usb4vc_usb_scan.set_protocol(this_msg)
-        print('new status:', usb4vc_usb_scan.get_pboard_info())
+        print('new status:', [hex(x) for x in usb4vc_usb_scan.get_pboard_info()])
         self.last_spi_message = list(this_msg)
+        self.current_keyboard_protocol = self.kb_opts[self.current_keyboard_protocol_index]
+        self.current_mouse_protocol = self.mouse_opts[self.current_mouse_protocol_index]
+        self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
 
     def action(self, level, page):
         if level == 0:
@@ -304,14 +367,13 @@ class usb4vc_menu(object):
         self.display_page(self.current_level, self.current_page)
 
     def update_usb_status(self):
-        if self.current_level == 0 and self.current_page == 1 and time.time() - self.last_refresh > 0.2:
+        if self.current_level == 0 and self.current_page == 1:
             self.display_page(0, 1)
-            self.last_refresh = time.time()
 
 pboard_database = {
-    0:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown/Unplugged', 'hw_rev':0, 'kp':keyboard_protocol_options_raw, 'mp':mouse_protocol_options_raw, 'gp':gamepad_protocol_options_raw},
-    1:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'kp':keyboard_protocol_options_ibmpc, 'mp':mouse_protocol_options_ibmpc, 'gp':gamepad_protocol_options_ibmpc},
-    2:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'kp':keyboard_protocol_options_adb, 'mp':mouse_protocol_options_adb, 'gp':gamepad_protocol_options_adb},
+    PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown/Unplugged', 'hw_rev':0, 'pl_keybboard':keyboard_protocol_options_raw, 'pl_mouse':mouse_protocol_options_raw, 'pl_gamepad':gamepad_protocol_options_raw},
+    PBOARD_ID_IBMPC:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'pl_keybboard':keyboard_protocol_options_ibmpc, 'pl_mouse':mouse_protocol_options_ibmpc, 'pl_gamepad':gamepad_protocol_options_ibmpc},
+    PBOARD_ID_ADB:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'pl_keybboard':keyboard_protocol_options_adb, 'pl_mouse':mouse_protocol_options_adb, 'pl_gamepad':gamepad_protocol_options_adb},
 }
 
 def get_pboard_dict(pid):
@@ -322,6 +384,8 @@ def get_pboard_dict(pid):
 def get_mouse_sensitivity():
     return mouse_sensitivity_list[configuration_dict[this_pboard_id]["mouse_sensitivity_index"]]
 
+PROTOCOL_CUSTOM_PROFILE = {'pid':0, 'display_name':'Custom', 'is_custom':1, 'mapping':{}}
+
 def ui_init():
     global pboard_info_spi_msg
     global this_pboard_id
@@ -329,6 +393,13 @@ def ui_init():
     pboard_info_spi_msg = usb4vc_usb_scan.get_pboard_info()
     this_pboard_id = pboard_info_spi_msg[3]
     if this_pboard_id in pboard_database:
+        for item in custom_profile_list:
+            if item['bid'] == this_pboard_id and item['type'] in pboard_database[this_pboard_id]:
+                this_profile = dict(PROTOCOL_CUSTOM_PROFILE)
+                this_profile['pid'] = item['pid']
+                this_profile['display_name'] = item['name']
+                this_profile['mapping'] = item['mapping']
+                pboard_database[this_pboard_id][item['type']].append(this_profile)
         pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
         pboard_database[this_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
     if 'rpi_app_ver' not in configuration_dict:
@@ -341,7 +412,10 @@ minus_button = my_button(MINUS_BUTTON_PIN)
 enter_button = my_button(ENTER_BUTTON_PIN)
 shutdown_button = my_button(SHUTDOWN_BUTTON_PIN)
 
+my_menu = None
+
 def ui_worker():
+    global my_menu
     print("ui_worker started")
     my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id), configuration_dict[this_pboard_id])
     my_menu.display_page(0, 0)
@@ -367,6 +441,8 @@ def ui_worker():
         if shutdown_button.is_pressed():
             print(time.time(), "SHUTDOWN_BUTTON pressed!")
 
-ui_worker = threading.Thread(target=ui_worker, daemon=True)
+def get_gamepad_protocol():
+    return my_menu.current_gamepad_protocol
 
+ui_worker = threading.Thread(target=ui_worker, daemon=True)
 

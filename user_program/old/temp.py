@@ -1,3 +1,43 @@
+
+def send_spi(self):
+        protocol_bytes = []
+        for index, item in enumerate(self.kb_opts):
+            if item == PROTOCOL_OFF:
+                continue
+            protocol_bytes.append(item['pid'] & 0x7f)
+            if index == self.current_keyboard_protocol_index:
+                protocol_bytes[-1] |= 0x80
+
+        for index, item in enumerate(self.mouse_opts):
+            if item == PROTOCOL_OFF:
+                continue
+            protocol_bytes.append(item['pid'] & 0x7f)
+            if index == self.current_mouse_protocol_index:
+                protocol_bytes[-1] |= 0x80
+
+        for index, item in enumerate(self.gamepad_opts):
+            if item == PROTOCOL_OFF:
+                continue
+            protocol_bytes.append(item['pid'] & 0x7f)
+            if index == self.current_gamepad_protocol_index:
+                protocol_bytes[-1] |= 0x80
+
+        # protocol_bytes = list(set(protocol_bytes))
+        this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
+        this_msg[3:3+len(protocol_bytes)] = protocol_bytes
+
+        if this_msg == self.last_spi_message:
+            print("SPI: no need to send")
+            return
+        print("set_protocol:", [hex(x) for x in this_msg])
+        usb4vc_usb_scan.set_protocol(this_msg)
+        print('new status:', [hex(x) for x in usb4vc_usb_scan.get_pboard_info()])
+        self.last_spi_message = list(this_msg)
+
+def load_custom_profiles(profile_list):
+    for item in profile_list:
+        if item['']
+
 if data[0] == EV_REL:
                 if data[2] == REL_X:
                     rawx = int.from_bytes(data[4:6], byteorder='little', signed=True)
