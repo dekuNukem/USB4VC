@@ -164,32 +164,32 @@ def make_mouse_spi_packet(mouse_dict, mouse_id):
 
 PID_GENERIC_GAMEPORT_GAMEPAD = 7
 
+def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_info):
+    result = list(gamepad_event_mapped_spi_msg_template)
+    result[3] = gp_id;
+    for key in mapping_info['mapping']:
+        print(key, mapping_info['mapping'][key])
+        from_code = key[0]
+        from_type = key[1]
+        to_code = mapping_info['mapping'][key][0]
+        to_type = mapping_info['mapping'][key][1]
+        # button to button
+        if from_type == 'usb_gp_btn' and to_type == 'pb_gp_btn':
+            if from_code in gp_status_dict[gp_id] and to_code == 'ibm_ggp_btn1':
+                result[4] = gp_status_dict[gp_id][from_code]
+            if from_code in gp_status_dict[gp_id] and to_code == 'ibm_ggp_btn2':
+                result[5] = gp_status_dict[gp_id][from_code]
+            if from_code in gp_status_dict[gp_id] and to_code == 'ibm_ggp_btn3':
+                result[6] = gp_status_dict[gp_id][from_code]
+            if from_code in gp_status_dict[gp_id] and to_code == 'ibm_ggp_btn4':
+                result[7] = gp_status_dict[gp_id][from_code]
+    print([hex(x) for x in result])
+    print('--------')
+
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
-    current_gamepad_protocol = usb4vc_ui.get_gamepad_protocol()
-    if current_gamepad_protocol['pid'] == PID_GENERIC_GAMEPORT_GAMEPAD:
-        result = list(gamepad_event_mapped_spi_msg_template)
-        result[3] = gp_id;
-        result[4] = dict_get_if_exist(gp_status_dict[gp_id], GP_BTN_SOUTH)
-        result[5] = dict_get_if_exist(gp_status_dict[gp_id], GP_BTN_EAST)
-        result[6] = dict_get_if_exist(gp_status_dict[gp_id], GP_BTN_WEST)
-        result[7] = dict_get_if_exist(gp_status_dict[gp_id], GP_BTN_NORTH)
-
-        result[8] = dict_get_if_exist(gp_status_dict[gp_id], ABS_X)
-        if ABS_X in axes_info and 'max' in axes_info[ABS_X]:
-            result[8] = int(result[8] / (axes_info[ABS_X]['max'] / 127)) + 127
-
-        result[9] = dict_get_if_exist(gp_status_dict[gp_id], ABS_Y)
-        if ABS_Y in axes_info and 'max' in axes_info[ABS_Y]:
-            result[9] = int(result[9] / (axes_info[ABS_Y]['max'] / 127)) + 127
-
-        result[10] = dict_get_if_exist(gp_status_dict[gp_id], ABS_RX)
-        if ABS_RX in axes_info and 'max' in axes_info[ABS_RX]:
-            result[10] = int(result[10] / (axes_info[ABS_RX]['max'] / 127)) + 127
-
-        result[11] = dict_get_if_exist(gp_status_dict[gp_id], ABS_RY)
-        if ABS_RY in axes_info and 'max' in axes_info[ABS_RY]:
-            result[11] = int(result[11] / (axes_info[ABS_RY]['max'] / 127)) + 127
-        return result
+    current_protocol = usb4vc_ui.get_gamepad_protocol()
+    if current_protocol['pid'] == PID_GENERIC_GAMEPORT_GAMEPAD and current_protocol['is_custom']:
+        make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
     return list(nop_spi_msg_template)
 
 def change_kb_led(scrolllock, numlock, capslock):

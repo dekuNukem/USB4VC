@@ -68,64 +68,112 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data", 'is_custom':0}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data", 'is_custom':0}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data", 'is_custom':0}
 
-GP_BTN_SOUTH = 0x130
-GP_BTN_EAST = 0x131
-GP_BTN_C = 0x132
-GP_BTN_NORTH = 0x133
-GP_BTN_WEST = 0x134
-GP_BTN_Z = 0x135
-GP_BTN_TL = 0x136
-GP_BTN_TR = 0x137
-GP_BTN_TL2 = 0x138
-GP_BTN_TR2 = 0x139
-GP_BTN_SELECT = 0x13a
-GP_BTN_START = 0x13b
-GP_BTN_MODE = 0x13c
-GP_BTN_THUMBL = 0x13d
-GP_BTN_THUMBR = 0x13e
+USBGP_BTN_SOUTH = (0x130, 'usb_gp_btn')
+USBGP_BTN_EAST = (0x131, 'usb_gp_btn')
+USBGP_BTN_C = (0x132, 'usb_gp_btn')
+USBGP_BTN_NORTH = (0x133, 'usb_gp_btn')
+USBGP_BTN_WEST = (0x134, 'usb_gp_btn')
+USBGP_BTN_Z = (0x135, 'usb_gp_btn')
+USBGP_BTN_TL = (0x136, 'usb_gp_btn')
+USBGP_BTN_TR = (0x137, 'usb_gp_btn')
+USBGP_BTN_TL2 = (0x138, 'usb_gp_btn')
+USBGP_BTN_TR2 = (0x139, 'usb_gp_btn')
+USBGP_BTN_SELECT = (0x13a, 'usb_gp_btn')
+USBGP_BTN_START = (0x13b, 'usb_gp_btn')
+USBGP_BTN_MODE = (0x13c, 'usb_gp_btn')
+USBGP_BTN_THUMBL = (0x13d, 'usb_gp_btn')
+USBGP_BTN_THUMBR = (0x13e, 'usb_gp_btn')
 
-IBMPC_GGP_BUTTON_1 = 1
-IBMPC_GGP_BUTTON_2 = 2
-IBMPC_GGP_BUTTON_3 = 3
-IBMPC_GGP_BUTTON_4 = 4
-IBMPC_GGP_JS1_X = 5
-IBMPC_GGP_JS1_Y = 6
-IBMPC_GGP_JS2_X = 7
-IBMPC_GGP_JS2_Y = 8
+USBGP_ABS_X = (0x00, 'usb_gp_axes') # left stick X
+USBGP_ABS_Y = (0x01, 'usb_gp_axes') # left stick Y
+USBGP_ABS_Z = (0x02, 'usb_gp_axes') # left analog trigger
+USBGP_ABS_RX = (0x03, 'usb_gp_axes') # right stick X
+USBGP_ABS_RY = (0x04, 'usb_gp_axes') # right stick Y
+USBGP_ABS_RZ = (0x05, 'usb_gp_axes') # right analog trigger
+USBGP_ABS_HAT0X = (0x10, 'usb_gp_dpad') # D-pad X
+USBGP_ABS_HAT0Y = (0x11, 'usb_gp_dpad') # D-pad Y
+
+IBMPC_GGP_BUTTON_1 = ('ibm_ggp_btn1', 'pb_gp_btn')
+IBMPC_GGP_BUTTON_2 = ('ibm_ggp_btn2', 'pb_gp_btn')
+IBMPC_GGP_BUTTON_3 = ('ibm_ggp_btn3', 'pb_gp_btn')
+IBMPC_GGP_BUTTON_4 = ('ibm_ggp_btn4', 'pb_gp_btn')
+IBMPC_GGP_JS1_X = ('ibm_ggp_js1x', 'pb_gp_axes')
+IBMPC_GGP_JS1_Y = ('ibm_ggp_js1y', 'pb_gp_axes')
+IBMPC_GGP_JS2_X = ('ibm_ggp_js2x', 'pb_gp_axes')
+IBMPC_GGP_JS2_Y = ('ibm_ggp_js2y', 'pb_gp_axes')
 
 PBOARD_ID_UNKNOWN = 0
 PBOARD_ID_IBMPC = 1
 PBOARD_ID_ADB = 2
 
+KB_KEY_A = (30, 'pb_kb_a')
+KB_KEY_B = (48, 'pb_kb_b')
+
+KB_KEY_C = (46, 'pb_kb_c')
+KB_KEY_D = (32, 'pb_kb_d')
+
+
+"""
+A analog stick
+B buttons
+C keyboard key
+
+AA
+AB XXXX
+AC
+
+BB
+BA
+BC
+
+CA XXXX
+CB XXXX
+CC XXXX
+
+"""
+
 custom_profile_1 = {
-    'name':'gpp1',
-    'type':'pl_gamepad',
+    'name':'2kb',
+    'type':'plist_gamepad',
     'bid':PBOARD_ID_IBMPC,
     'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
     'mapping':
     {
-        GP_BTN_SOUTH: IBMPC_GGP_BUTTON_1,
-        GP_BTN_EAST: IBMPC_GGP_BUTTON_2,
-        GP_BTN_WEST: IBMPC_GGP_BUTTON_3,
-        GP_BTN_NORTH: IBMPC_GGP_BUTTON_4,
-        GP_BTN_TL: IBMPC_GGP_BUTTON_1,
-        GP_BTN_TR2: IBMPC_GGP_BUTTON_2,
+        # buttons to buttons
+        USBGP_BTN_SOUTH: IBMPC_GGP_BUTTON_1,
+        USBGP_BTN_EAST: IBMPC_GGP_BUTTON_2,
+        USBGP_BTN_WEST: IBMPC_GGP_BUTTON_3,
+        USBGP_BTN_NORTH: IBMPC_GGP_BUTTON_4,
+        # analog stick to analog stick
+        USBGP_ABS_X: IBMPC_GGP_JS1_X,
+        USBGP_ABS_Y: IBMPC_GGP_JS1_Y,
+        USBGP_ABS_HAT0X: IBMPC_GGP_JS1_X,
+        USBGP_ABS_HAT0Y: IBMPC_GGP_JS1_Y,
+        # buttons to analog stick
+        USBGP_BTN_TL: IBMPC_GGP_JS2_X,
+        USBGP_BTN_TR: IBMPC_GGP_JS2_Y,
+        # buttons to keyboard key
+        USBGP_BTN_START: KB_KEY_A,
+        USBGP_BTN_SELECT: KB_KEY_B,
+        # analog stick to keyboard key
+        USBGP_ABS_RX: KB_KEY_C,
+        USBGP_ABS_RY: KB_KEY_D,
     }
 }
 
 custom_profile_2 = {
-    'name':'gpp2',
-    'type':'pl_gamepad',
+    'name':'test2',
+    'type':'plist_gamepad',
     'bid':PBOARD_ID_IBMPC,
     'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
     'mapping':
     {
-        GP_BTN_SOUTH: IBMPC_GGP_BUTTON_1,
-        GP_BTN_EAST: IBMPC_GGP_BUTTON_1,
-        GP_BTN_WEST: IBMPC_GGP_BUTTON_1,
-        GP_BTN_NORTH: IBMPC_GGP_BUTTON_1,
-        GP_BTN_TL: IBMPC_GGP_BUTTON_1,
-        GP_BTN_TR2: IBMPC_GGP_BUTTON_1,
+        USBGP_BTN_SOUTH: IBMPC_GGP_BUTTON_1,
+        USBGP_BTN_EAST: IBMPC_GGP_BUTTON_1,
+        USBGP_BTN_WEST: IBMPC_GGP_BUTTON_1,
+        USBGP_BTN_NORTH: IBMPC_GGP_BUTTON_1,
+        USBGP_BTN_TL: IBMPC_GGP_BUTTON_1,
+        USBGP_BTN_TR2: IBMPC_GGP_BUTTON_1,
     }
 }
 
@@ -227,9 +275,9 @@ class usb4vc_menu(object):
         self.current_page = 0
         self.level_size = 2
         self.page_size = [4, 5]
-        self.kb_opts = list(pboard['pl_keybboard'])
-        self.mouse_opts = list(pboard['pl_mouse'])
-        self.gamepad_opts = list(pboard['pl_gamepad'])
+        self.kb_opts = list(pboard['plist_keyboard'])
+        self.mouse_opts = list(pboard['plist_mouse'])
+        self.gamepad_opts = list(pboard['plist_gamepad'])
         self.pb_info = dict(pboard)
         self.current_keyboard_protocol_index = self.cap_index(conf_dict['keyboard_protocol_index'], len(self.kb_opts))
         self.current_mouse_protocol_index = self.cap_index(conf_dict["mouse_protocol_index"], len(self.mouse_opts))
@@ -380,9 +428,9 @@ class usb4vc_menu(object):
             self.display_page(0, 1)
 
 pboard_database = {
-    PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown/Unplugged', 'hw_rev':0, 'pl_keybboard':keyboard_protocol_options_raw, 'pl_mouse':mouse_protocol_options_raw, 'pl_gamepad':gamepad_protocol_options_raw},
-    PBOARD_ID_IBMPC:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'pl_keybboard':keyboard_protocol_options_ibmpc, 'pl_mouse':mouse_protocol_options_ibmpc, 'pl_gamepad':gamepad_protocol_options_ibmpc},
-    PBOARD_ID_ADB:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'pl_keybboard':keyboard_protocol_options_adb, 'pl_mouse':mouse_protocol_options_adb, 'pl_gamepad':gamepad_protocol_options_adb},
+    PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown/Unplugged', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_raw, 'plist_mouse':mouse_protocol_options_raw, 'plist_gamepad':gamepad_protocol_options_raw},
+    PBOARD_ID_IBMPC:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_ibmpc, 'plist_mouse':mouse_protocol_options_ibmpc, 'plist_gamepad':gamepad_protocol_options_ibmpc},
+    PBOARD_ID_ADB:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_adb, 'plist_mouse':mouse_protocol_options_adb, 'plist_gamepad':gamepad_protocol_options_adb},
 }
 
 def get_pboard_dict(pid):
@@ -402,12 +450,10 @@ def ui_init():
     pboard_info_spi_msg = usb4vc_usb_scan.get_pboard_info()
     this_pboard_id = pboard_info_spi_msg[3]
     if this_pboard_id in pboard_database:
+        # load custom profile mapping into protocol list
         for item in custom_profile_list:
             if item['bid'] == this_pboard_id and item['type'] in pboard_database[this_pboard_id]:
-                this_profile = dict(PROTOCOL_CUSTOM_PROFILE)
-                this_profile['pid'] = item['pid']
-                this_profile['display_name'] = item['name']
-                this_profile['mapping'] = item['mapping']
+                this_profile = {'pid':item['pid'], 'display_name':item['name'], 'is_custom':1, 'mapping':item['mapping']}
                 pboard_database[this_pboard_id][item['type']].append(this_profile)
         pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
         pboard_database[this_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
