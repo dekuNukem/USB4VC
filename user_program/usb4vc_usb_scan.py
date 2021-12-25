@@ -129,7 +129,6 @@ info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUE
 keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
 mouse_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
 gamepad_event_ibm_ggp_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED, 0, 0, 0, 0, 0, 127, 127, 127, 127] + [0]*20
-last_ibm_ggp_spi_message = list(gamepad_event_ibm_ggp_spi_msg_template)
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_REQ_ACK] + [0]*29
@@ -220,16 +219,6 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                     axis_value = 255
                 elif to_code.endswith('n'):
                     axis_value = 0
-            else:
-                if to_code.startswith('ibm_ggp_js1x'):
-                    axis_value = last_ibm_ggp_spi_message[8]
-                if to_code.startswith('ibm_ggp_js1y'):
-                    axis_value = last_ibm_ggp_spi_message[9]
-                if to_code.startswith('ibm_ggp_js2x'):
-                    axis_value = last_ibm_ggp_spi_message[10]
-                if to_code.startswith('ibm_ggp_js2y'):
-                    axis_value = last_ibm_ggp_spi_message[11]
-
             if to_code.startswith('ibm_ggp_js1x'):
                 axes_status.add((IBMPC_GGP_JS1_X, axis_value, gp_status_dict[gp_id][from_code][1]))
             if to_code.startswith('ibm_ggp_js1y'):
@@ -238,7 +227,6 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                 axes_status.add((IBMPC_GGP_JS2_X, axis_value, gp_status_dict[gp_id][from_code][1]))
             if to_code.startswith('ibm_ggp_js2y'):
                 axes_status.add((IBMPC_GGP_JS2_Y, axis_value, gp_status_dict[gp_id][from_code][1]))
-            print('last ggp:', last_ibm_ggp_spi_message)
         # button to keyboard key
         if from_type == 'usb_gp_btn' and to_type == 'pb_kb':
             kb_key_status.add((to_code, gp_status_dict[gp_id][from_code][0], gp_status_dict[gp_id][from_code][1]))
@@ -285,8 +273,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         kb_result[4] = kb_key_status[0][0]
         kb_result[6] = kb_key_status[0][1]
 
-    print('this ggp:', gp_result)
-    print(int(time.time()), '------------')
+    # print(gp_result, kb_result)
     return gp_result, kb_result
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
@@ -314,7 +301,6 @@ def change_kb_led(scrolllock, numlock, capslock):
             led_file.write(str(capslock))
 
 def raw_input_event_worker():
-    global last_ibm_ggp_spi_message
     mouse_status_dict = {}
     gamepad_status_dict = {}
     print("raw_input_event_worker started")
@@ -420,7 +406,6 @@ def raw_input_event_worker():
             # SYNC report, update now
             if data[0] == EV_SYN and data[2] == SYN_REPORT:
                 gp_to_transfer, kb_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, gamepad_id, gamepad_opened_device_dict[key][2])
-                last_ibm_ggp_spi_message = list(gp_to_transfer)
                 pcard_spi.xfer(gp_to_transfer)
                 if kb_to_transfer is not None:
                     pcard_spi.xfer(kb_to_transfer)
