@@ -121,15 +121,25 @@ IBMPC_GGP_JS1_Y = ('ibm_ggp_js1y', 'pb_gp_axes')
 IBMPC_GGP_JS2_X = ('ibm_ggp_js2x', 'pb_gp_axes')
 IBMPC_GGP_JS2_Y = ('ibm_ggp_js2y', 'pb_gp_axes')
 
+IBMPC_GGP_JS1_X_POS = ('ibm_ggp_js1xp', 'pb_gp_half_axes')
+IBMPC_GGP_JS1_X_NEG = ('ibm_ggp_js1xn', 'pb_gp_half_axes')
+IBMPC_GGP_JS1_Y_POS = ('ibm_ggp_js1yp', 'pb_gp_half_axes')
+IBMPC_GGP_JS1_Y_NEG = ('ibm_ggp_js1yn', 'pb_gp_half_axes')
+
+IBMPC_GGP_JS2_X_POS = ('ibm_ggp_js2xp', 'pb_gp_half_axes')
+IBMPC_GGP_JS2_X_NEG = ('ibm_ggp_js2xn', 'pb_gp_half_axes')
+IBMPC_GGP_JS2_Y_POS = ('ibm_ggp_js2yp', 'pb_gp_half_axes')
+IBMPC_GGP_JS2_Y_NEG = ('ibm_ggp_js2yn', 'pb_gp_half_axes')
+
 PBOARD_ID_UNKNOWN = 0
 PBOARD_ID_IBMPC = 1
 PBOARD_ID_ADB = 2
 
-KB_KEY_A = (30, 'pb_kb_a')
-KB_KEY_B = (48, 'pb_kb_b')
+KB_KEY_A = (30, 'pb_kb')
+KB_KEY_B = (48, 'pb_kb')
 
-KB_KEY_C = (46, 'pb_kb_c')
-KB_KEY_D = (32, 'pb_kb_d')
+KB_KEY_C = (46, 'pb_kb')
+KB_KEY_D = (32, 'pb_kb')
 
 
 custom_profile_1 = {
@@ -150,8 +160,8 @@ custom_profile_1 = {
         USBGP_ABS_HAT0X: IBMPC_GGP_JS1_X,
         USBGP_ABS_HAT0Y: IBMPC_GGP_JS1_Y,
         # buttons to analog stick
-        USBGP_BTN_TL: IBMPC_GGP_JS2_X,
-        USBGP_BTN_TR: IBMPC_GGP_JS2_Y,
+        USBGP_BTN_TL: IBMPC_GGP_JS1_X_POS,
+        USBGP_BTN_TR: IBMPC_GGP_JS1_X_NEG,
         # buttons to keyboard key
         USBGP_BTN_START: KB_KEY_A,
         USBGP_BTN_SELECT: KB_KEY_B,

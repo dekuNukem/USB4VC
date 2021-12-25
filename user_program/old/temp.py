@@ -1,5 +1,53 @@
-
-
+    for item in kb_key_status:
+        this_code = item[0]
+        this_value = item[1]
+        if this_code in already_added:
+            print("pass")
+            continue
+        print(item, this_value)
+        kb_result = list(keyboard_event_spi_msg_template)
+        kb_result[4] = this_code
+        kb_result[6] = this_value
+        already_added.add(this_code)
+        print('kbr', kb_result)
+    # print(axes_status)
+# ----------------- GAMEPAD PARSING -----------------
+        for key in list(gamepad_opened_device_dict):
+            try:
+                data = gamepad_opened_device_dict[key][0].read(16)
+            except OSError:
+                gamepad_opened_device_dict[key][0].close()
+                del gamepad_opened_device_dict[key]
+                print("gamepad disappeared:", key)
+                continue
+            if data is None:
+                continue
+            data = list(data[8:])
+            gamepad_id = gamepad_opened_device_dict[key][1]
+            if gamepad_id not in gamepad_status_dict:
+                gamepad_status_dict[gamepad_id] = {}
+            # gamepad button presses, send out immediately
+            if data[0] == EV_KEY:
+                key_code = data[3] * 256 + data[2]
+                if not (GP_BTN_SOUTH <= key_code <= GP_BTN_THUMBR):
+                    continue
+                gamepad_status_dict[gamepad_id][key_code] = (data[4], time.time_ns())
+                gp_to_transfer, kb_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, gamepad_id, gamepad_opened_device_dict[key][2])
+                last_ibm_ggp_spi_message = list(gp_to_transfer)
+                pcard_spi.xfer(gp_to_transfer)
+                if kb_to_transfer is not None:
+                    pcard_spi.xfer(kb_to_transfer)
+                continue
+            # joystick / analogue trigger movements, cache until next SYNC event
+            if data[0] == EV_ABS:
+                abs_axes = data[3] * 256 + data[2]
+                abs_value = int.from_bytes(data[4:8], byteorder='little', signed=True)
+                gamepad_status_dict[gamepad_id][abs_axes] = (abs_value, time.time_ns())
+            # SYNC report, update now
+            if data[0] == EV_SYN and data[2] == SYN_REPORT:
+                gp_to_transfer, kb_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, gamepad_id, gamepad_opened_device_dict[key][2])
+                last_ibm_ggp_spi_message = list(gp_to_transfer)
+                pcard_spi.xfer(gp_to_transfer)
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     current_gamepad_protocol = usb4vc_ui.get_gamepad_protocol()
     print(current_gamepad_protocol)
