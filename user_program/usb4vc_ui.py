@@ -68,6 +68,25 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data", 'is_custom':0}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data", 'is_custom':0}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data", 'is_custom':0}
 
+"""
+A analog stick
+B buttons
+C keyboard key
+
+AA
+AB XXXX
+AC
+
+BB
+BA
+BC
+
+CA XXXX
+CB XXXX
+CC XXXX
+
+"""
+
 USBGP_BTN_SOUTH = (0x130, 'usb_gp_btn')
 USBGP_BTN_EAST = (0x131, 'usb_gp_btn')
 USBGP_BTN_C = (0x132, 'usb_gp_btn')
@@ -90,8 +109,8 @@ USBGP_ABS_Z = (0x02, 'usb_gp_axes') # left analog trigger
 USBGP_ABS_RX = (0x03, 'usb_gp_axes') # right stick X
 USBGP_ABS_RY = (0x04, 'usb_gp_axes') # right stick Y
 USBGP_ABS_RZ = (0x05, 'usb_gp_axes') # right analog trigger
-USBGP_ABS_HAT0X = (0x10, 'usb_gp_dpad') # D-pad X
-USBGP_ABS_HAT0Y = (0x11, 'usb_gp_dpad') # D-pad Y
+USBGP_ABS_HAT0X = (0x10, 'usb_gp_axes') # D-pad X
+USBGP_ABS_HAT0Y = (0x11, 'usb_gp_axes') # D-pad Y
 
 IBMPC_GGP_BUTTON_1 = ('ibm_ggp_btn1', 'pb_gp_btn')
 IBMPC_GGP_BUTTON_2 = ('ibm_ggp_btn2', 'pb_gp_btn')
@@ -112,25 +131,6 @@ KB_KEY_B = (48, 'pb_kb_b')
 KB_KEY_C = (46, 'pb_kb_c')
 KB_KEY_D = (32, 'pb_kb_d')
 
-
-"""
-A analog stick
-B buttons
-C keyboard key
-
-AA
-AB XXXX
-AC
-
-BB
-BA
-BC
-
-CA XXXX
-CB XXXX
-CC XXXX
-
-"""
 
 custom_profile_1 = {
     'name':'2kb',
