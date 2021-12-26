@@ -112,7 +112,7 @@ ABS_HAT1X = 0x12
 ABS_HAT1Y = 0x13
 ABS_HAT2X = 0x14
 ABS_HAT2Y = 0x15
-ABS_HAT3X = 0x16
+ABS_HAT3Y = 0x16
 ABS_HAT3Y = 0x17
 
 BTN_LEFT = 0x110
@@ -169,112 +169,131 @@ def clamp_to_8bit(value, axes_dict, axis_key):
         return value % 256
     return int(value / (axes_dict[axis_key]['max'] / 127)) + 127
 
-IBMPC_GGP_BUTTON_1 = 1001
-IBMPC_GGP_BUTTON_2 = 1002
-IBMPC_GGP_BUTTON_3 = 1003
-IBMPC_GGP_BUTTON_4 = 1004
-IBMPC_GGP_JS1_X = 1005
-IBMPC_GGP_JS1_Y = 1006
-IBMPC_GGP_JS2_X = 1007
-IBMPC_GGP_JS2_Y = 1008
+IBMPC_GGP_BTN_1 = 'IBMGGP_BTN_1'
+IBMPC_GGP_BTN_2 = 'IBMGGP_BTN_2'
+IBMPC_GGP_BTN_3 = 'IBMGGP_BTN_3'
+IBMPC_GGP_BTN_4 = 'IBMGGP_BTN_4'
+IBMPC_GGP_JS1_X = 'IBMGGP_JS1_X'
+IBMPC_GGP_JS1_Y = 'IBMGGP_JS1_Y'
+IBMPC_GGP_JS2_X = 'IBMGGP_JS2_X'
+IBMPC_GGP_JS2_Y = 'IBMGGP_JS2_Y'
 
+IBMPC_GGP_SPI_LOOKUP = {
+    'IBMGGP_BTN_1':4,
+    'IBMGGP_BTN_2':5,
+    'IBMGGP_BTN_3':6,
+    'IBMGGP_BTN_4':7,
+    'IBMGGP_JS1_X':8,
+    'IBMGGP_JS1_Y':9,
+    'IBMGGP_JS2_X':10,
+    'IBMGGP_JS2_Y':11,
+}
+
+def find_keycode_in_mapping(key_code, mapping_dict):
+    if ABS_X <= key_code <= ABS_HAT3Y:
+        code_type = 'usb_gp_axes'
+    if GP_BTN_SOUTH <= key_code <= GP_BTN_THUMBR:
+        code_type = 'usb_gp_btn'
+    return code_type, mapping_dict.get((key_code, code_type))
+
+def find_furthest_from_midpoint(this_set):
+    curr_best = None
+    diff_max = 0
+    for item in this_set:
+        this_diff = abs(item - 127)
+        if this_diff >= diff_max:
+            diff_max = this_diff
+            curr_best = item
+    return curr_best
+
+prev_gp_output = {}
+prev_kb_output = {}
 def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_info):
-    button_status = set()
-    axes_status = set()
-    kb_key_status = set()
-    for key in mapping_info['mapping']:
-        # print(key, mapping_info['mapping'][key])
-        from_code = key[0]
-        from_type = key[1]
-        to_code = mapping_info['mapping'][key][0]
-        to_type = mapping_info['mapping'][key][1]
-        if from_code not in gp_status_dict[gp_id]:
+    global prev_gp_output
+    global prev_kb_output
+    this_gp_dict = gp_status_dict[gp_id]
+    curr_gp_output = {
+        IBMPC_GGP_BTN_1:set([0]),
+        IBMPC_GGP_BTN_2:set([0]),
+        IBMPC_GGP_BTN_3:set([0]),
+        IBMPC_GGP_BTN_4:set([0]),
+        IBMPC_GGP_JS1_X:set([127]),
+        IBMPC_GGP_JS1_Y:set([127]),
+        IBMPC_GGP_JS2_X:set([127]),
+        IBMPC_GGP_JS2_Y:set([127]),
+    }
+    curr_kb_output = {}
+    
+    for from_code in this_gp_dict:
+        from_type, this_mapping = find_keycode_in_mapping(from_code, mapping_info['mapping'])
+        if this_mapping is None:
             continue
+        to_code, to_type = this_mapping
+        print('=====>',from_code, from_type, to_code, to_type)
         # button to button
-        # add them into a set first, then sort by timestamp, so latest action will have pirority
-        if from_type == 'usb_gp_btn' and to_type == 'pb_gp_btn':
-            if to_code == 'ibm_ggp_btn1':
-                button_status.add((IBMPC_GGP_BUTTON_1, gp_status_dict[gp_id][from_code][0], gp_status_dict[gp_id][from_code][1]))
-            if to_code == 'ibm_ggp_btn2':
-                button_status.add((IBMPC_GGP_BUTTON_2, gp_status_dict[gp_id][from_code][0], gp_status_dict[gp_id][from_code][1]))
-            if to_code == 'ibm_ggp_btn3':
-                button_status.add((IBMPC_GGP_BUTTON_3, gp_status_dict[gp_id][from_code][0], gp_status_dict[gp_id][from_code][1]))
-            if to_code == 'ibm_ggp_btn4':
-                button_status.add((IBMPC_GGP_BUTTON_4, gp_status_dict[gp_id][from_code][0], gp_status_dict[gp_id][from_code][1]))
+        if from_type == 'usb_gp_btn' and to_type == 'pb_gp_btn' and to_code in curr_gp_output:
+            curr_gp_output[to_code].add(this_gp_dict[from_code])
         # analog to analog
-        if from_type == 'usb_gp_axes' and to_type == 'pb_gp_axes':
-            if to_code == 'ibm_ggp_js1x':
-                axes_status.add((IBMPC_GGP_JS1_X, clamp_to_8bit(gp_status_dict[gp_id][from_code][0], axes_info, from_code), gp_status_dict[gp_id][from_code][1]))
-            if to_code == 'ibm_ggp_js1y':
-                axes_status.add((IBMPC_GGP_JS1_Y, clamp_to_8bit(gp_status_dict[gp_id][from_code][0], axes_info, from_code), gp_status_dict[gp_id][from_code][1]))
-            if to_code == 'ibm_ggp_js2x':
-                axes_status.add((IBMPC_GGP_JS2_X, clamp_to_8bit(gp_status_dict[gp_id][from_code][0], axes_info, from_code), gp_status_dict[gp_id][from_code][1]))
-            if to_code == 'ibm_ggp_js2y':
-                axes_status.add((IBMPC_GGP_JS2_Y, clamp_to_8bit(gp_status_dict[gp_id][from_code][0], axes_info, from_code), gp_status_dict[gp_id][from_code][1]))
+        if from_type == 'usb_gp_axes' and to_type == 'pb_gp_axes' and to_code in curr_gp_output:
+            curr_gp_output[to_code].add(clamp_to_8bit(this_gp_dict[from_code], axes_info, from_code))
         # button to analog
-        if from_type == 'usb_gp_btn' and to_type == 'pb_gp_half_axes':
-            axis_value = 127
-            if gp_status_dict[gp_id][from_code][0]:
-                if to_code.endswith('p'):
-                    axis_value = 255
-                elif to_code.endswith('n'):
-                    axis_value = 0
-            if to_code.startswith('ibm_ggp_js1x'):
-                axes_status.add((IBMPC_GGP_JS1_X, axis_value, gp_status_dict[gp_id][from_code][1]))
-            if to_code.startswith('ibm_ggp_js1y'):
-                axes_status.add((IBMPC_GGP_JS1_Y, axis_value, gp_status_dict[gp_id][from_code][1]))
-            if to_code.startswith('ibm_ggp_js2x'):
-                axes_status.add((IBMPC_GGP_JS2_X, axis_value, gp_status_dict[gp_id][from_code][1]))
-            if to_code.startswith('ibm_ggp_js2y'):
-                axes_status.add((IBMPC_GGP_JS2_Y, axis_value, gp_status_dict[gp_id][from_code][1]))
+        if from_type == 'usb_gp_btn' and to_type == 'pb_gp_half_axes' and to_code[:-1] in curr_gp_output and this_gp_dict[from_code]:
+            if to_code.endswith('P'):
+                axis_value = 255
+            elif to_code.endswith('N'):
+                axis_value = 0
+            curr_gp_output[to_code[:-1]].add(axis_value)
         # button to keyboard key
         if from_type == 'usb_gp_btn' and to_type == 'pb_kb':
-            kb_key_status.add((to_code, gp_status_dict[gp_id][from_code][0], gp_status_dict[gp_id][from_code][1]))
+            if to_code not in curr_kb_output:
+                curr_kb_output[to_code] = set()
+            curr_kb_output[to_code].add(this_gp_dict[from_code])
 
-    button_status = sorted(button_status, key=lambda x: x[2], reverse=True)
-    axes_status = sorted(axes_status, key=lambda x: x[2], reverse=True)
-    kb_key_status = sorted(kb_key_status, key=lambda x: x[2], reverse=True)
-    gp_result = list(gamepad_event_ibm_ggp_spi_msg_template)
-    gp_result[3] = gp_id;
-    already_added = set()
-    for item in axes_status:
-        this_code = item[0]
-        this_value = item[1]
-        # only send event with most recent timestamp to protocol board
-        if this_code in already_added:
-            continue
-        if this_code == IBMPC_GGP_JS1_X:
-            gp_result[8] = this_value
-        if this_code == IBMPC_GGP_JS1_Y:
-            gp_result[9] = this_value
-        if this_code == IBMPC_GGP_JS2_X:
-            gp_result[10] = this_value
-        if this_code == IBMPC_GGP_JS2_Y:
-            gp_result[11] = this_value
-        already_added.add(this_code)
-    for item in button_status:
-        this_code = item[0]
-        this_value = item[1]
-        if this_code in already_added:
-            continue
-        if this_code == IBMPC_GGP_BUTTON_1:
-            gp_result[4] = this_value
-        if this_code == IBMPC_GGP_BUTTON_2:
-            gp_result[5] = this_value
-        if this_code == IBMPC_GGP_BUTTON_3:
-            gp_result[6] = this_value
-        if this_code == IBMPC_GGP_BUTTON_4:
-            gp_result[7] = this_value
-        already_added.add(this_code)
+    print('prev', prev_gp_output)
+    print('curr', curr_gp_output)
+    for key in curr_kb_output:
+        key_status_set = curr_kb_output[key]
+        curr_kb_output[key] = 0
+        if 1 in key_status_set:
+            curr_kb_output[key] = 1
 
-    kb_result = None
-    if len(kb_key_status) > 0:
-        kb_result = list(keyboard_event_spi_msg_template)
-        kb_result[4] = kb_key_status[0][0]
-        kb_result[6] = kb_key_status[0][1]
+    # if curr axes set is more than prev, apply the new one, else apply the one furest from midpoint
+    gp_spi_msg = list(gamepad_event_ibm_ggp_spi_msg_template)
+    gp_spi_msg[3] = gp_id;
+    for key in curr_gp_output:
+        if "IBMGGP_BTN_" in key:
+            this_value = 0
+            if 1 in curr_gp_output[key]:
+                this_value = 1
+            gp_spi_msg[IBMPC_GGP_SPI_LOOKUP[key]] = this_value
+        if 'IBMGGP_JS' in key:
+            if key in prev_gp_output:
+                new_value_set = curr_gp_output[key] - prev_gp_output[key]
+                if len(new_value_set) > 0:
+                    gp_spi_msg[IBMPC_GGP_SPI_LOOKUP[key]] = list(new_value_set)[0]
+                else:
+                    gp_spi_msg[IBMPC_GGP_SPI_LOOKUP[key]] = find_furthest_from_midpoint(curr_gp_output[key])
+            else:
+                gp_spi_msg[IBMPC_GGP_SPI_LOOKUP[key]] = find_furthest_from_midpoint(curr_gp_output[key])
 
-    # print(gp_result, kb_result)
-    return gp_result, kb_result
+    kb_spi_msg = None
+    new_keys = curr_kb_output.keys() - prev_kb_output.keys()
+    if len(new_keys) > 0:
+        this_key = list(new_keys)[0]
+        kb_spi_msg = list(keyboard_event_spi_msg_template)
+        kb_spi_msg[4] = this_key
+        kb_spi_msg[6] = curr_kb_output[this_key]
+    for key in curr_kb_output:
+        if key in prev_kb_output and curr_kb_output[key] != prev_kb_output[key]:
+            kb_spi_msg = list(keyboard_event_spi_msg_template)
+            kb_spi_msg[4] = key
+            kb_spi_msg[6] = curr_kb_output[key]
+
+    prev_gp_output = curr_gp_output
+    prev_kb_output = curr_kb_output
+    print(gp_spi_msg)
+    print(time.time(), '-----------')
+    return list(nop_spi_msg_template), kb_spi_msg
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
@@ -397,12 +416,12 @@ def raw_input_event_worker():
                 key_code = data[3] * 256 + data[2]
                 if not (GP_BTN_SOUTH <= key_code <= GP_BTN_THUMBR):
                     continue
-                gamepad_status_dict[gamepad_id][key_code] = (data[4], time.time_ns())
+                gamepad_status_dict[gamepad_id][key_code] = data[4]
             # joystick / analogue trigger movements, cache until next SYNC event
             if data[0] == EV_ABS:
                 abs_axes = data[3] * 256 + data[2]
                 abs_value = int.from_bytes(data[4:8], byteorder='little', signed=True)
-                gamepad_status_dict[gamepad_id][abs_axes] = (abs_value, time.time_ns())
+                gamepad_status_dict[gamepad_id][abs_axes] = abs_value
             # SYNC report, update now
             if data[0] == EV_SYN and data[2] == SYN_REPORT:
                 gp_to_transfer, kb_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, gamepad_id, gamepad_opened_device_dict[key][2])
