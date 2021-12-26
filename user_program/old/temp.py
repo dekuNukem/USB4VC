@@ -1,3 +1,6 @@
+            print("HERE")
+            print('=====>',from_code, from_type, to_code, to_type)
+
     def find_furthest_from_midpoint(this_set):
         print("vvvvvvvvvv")
         curr_best = None

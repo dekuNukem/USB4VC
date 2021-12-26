@@ -163,8 +163,8 @@ custom_profile_1 = {
         USBGP_BTN_TL: IBMPC_GGP_JS1_X_NEG,
         USBGP_BTN_TR: IBMPC_GGP_JS1_X_POS,
         # analog stick to keyboard key
-        USBGP_ABS_RX: KB_KEY_C,
-        USBGP_ABS_RY: KB_KEY_D,
+        USBGP_ABS_RX: {'type':'pb_kb', 'pos_key':KB_KEY_RIGHT[0], 'neg_key':KB_KEY_LEFT[0]},
+        USBGP_ABS_RY: {'type':'pb_kb', 'pos_key':KB_KEY_DOWN[0], 'neg_key':KB_KEY_UP[0]},
     }
 }
 

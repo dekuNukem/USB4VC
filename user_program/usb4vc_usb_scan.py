@@ -194,7 +194,12 @@ def find_keycode_in_mapping(key_code, mapping_dict):
         code_type = 'usb_gp_axes'
     if GP_BTN_SOUTH <= key_code <= GP_BTN_THUMBR:
         code_type = 'usb_gp_btn'
-    return code_type, mapping_dict.get((key_code, code_type))
+    result = mapping_dict.get((key_code, code_type))
+    if type(result) is tuple:
+        return code_type, result[0], result[1]
+    if type(result) is dict:
+        return code_type, result, None
+    return None, None, None
 
 def find_furthest_from_midpoint(this_set):
     curr_best = None
@@ -225,11 +230,9 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     curr_kb_output = {}
     
     for from_code in this_gp_dict:
-        from_type, this_mapping = find_keycode_in_mapping(from_code, mapping_info['mapping'])
-        if this_mapping is None:
+        from_type, to_code, to_type = find_keycode_in_mapping(from_code, mapping_info['mapping'])
+        if from_type is None:
             continue
-        to_code, to_type = this_mapping
-        print('=====>',from_code, from_type, to_code, to_type)
         # button to button
         if from_type == 'usb_gp_btn' and to_type == 'pb_gp_btn' and to_code in curr_gp_output:
             curr_gp_output[to_code].add(this_gp_dict[from_code])
@@ -248,9 +251,28 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             if to_code not in curr_kb_output:
                 curr_kb_output[to_code] = set()
             curr_kb_output[to_code].add(this_gp_dict[from_code])
+        # analog to keyboard key
+        if from_type == 'usb_gp_axes' and type(to_code) is dict and to_code['type'] == 'pb_kb':
+            if to_code['pos_key'] not in curr_kb_output:
+                curr_kb_output[to_code['pos_key']] = set()
+            is_activated = 0
+            if clamp_to_8bit(this_gp_dict[from_code], axes_info, from_code) > 127+64:
+                is_activated = 1
+            curr_kb_output[to_code['pos_key']].add(is_activated)
 
-    print('prev', prev_gp_output)
-    print('curr', curr_gp_output)
+            if to_code['neg_key'] not in curr_kb_output:
+                curr_kb_output[to_code['neg_key']] = set()
+            is_activated = 0
+            if clamp_to_8bit(this_gp_dict[from_code], axes_info, from_code) < 127-64:
+                is_activated = 1
+            curr_kb_output[to_code['neg_key']].add(is_activated)
+
+        # analog to mouse axes
+        # button to mouse buttons
+        
+    # print('kb', curr_kb_output)
+    # print('prev', prev_gp_output)
+    # print('curr', curr_gp_output)
     for key in curr_kb_output:
         key_status_set = curr_kb_output[key]
         curr_kb_output[key] = 0
@@ -292,8 +314,8 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     prev_gp_output = curr_gp_output
     prev_kb_output = curr_kb_output
     print(gp_spi_msg)
-    print(time.time(), '-----------')
-    return list(nop_spi_msg_template), kb_spi_msg
+    # print(time.time(), '-----------')
+    return gp_spi_msg, kb_spi_msg
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
