@@ -1,6 +1,10 @@
             print("HERE")
             print('=====>',from_code, from_type, to_code, to_type)
-
+if page == 1:
+                with canvas(device) as draw:
+                    draw.text((0, 0), f"USB Keyboard: {len(usb4vc_usb_scan.keyboard_opened_device_dict)}", font=font_regular, fill="white")
+                    draw.text((0, 10), f"USB Mouse:    {len(usb4vc_usb_scan.mouse_opened_device_dict)}", font=font_regular, fill="white")
+                    draw.text((0, 20), f"USB Gamepad:  {len(usb4vc_usb_scan.gamepad_opened_device_dict)}", font=font_regular, fill="white")
     def find_furthest_from_midpoint(this_set):
         print("vvvvvvvvvv")
         curr_best = None

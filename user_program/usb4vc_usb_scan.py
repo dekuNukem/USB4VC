@@ -178,6 +178,15 @@ IBMPC_GGP_JS1_Y = 'IBMGGP_JS1_Y'
 IBMPC_GGP_JS2_X = 'IBMGGP_JS2_X'
 IBMPC_GGP_JS2_Y = 'IBMGGP_JS2_Y'
 
+MOUSE_BTN_LEFT = 'MOUSE_BTN_LEFT'
+MOUSE_BTN_MIDDLE = 'MOUSE_BTN_MIDDLE'
+MOUSE_BTN_RIGHT = 'MOUSE_BTN_RIGHT'
+MOUSE_BTN_SIDE = 'MOUSE_BTN_SIDE'
+MOUSE_BTN_EXTRA = 'MOUSE_BTN_EXTRA'
+MOUSE_X = 'MOUSE_X'
+MOUSE_Y = 'MOUSE_Y'
+MOUSE_SCROLL = 'MOUSE_SCROLL'
+
 IBMPC_GGP_SPI_LOOKUP = {
     'IBMGGP_BTN_1':4,
     'IBMGGP_BTN_2':5,
@@ -228,6 +237,16 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         IBMPC_GGP_JS2_Y:set([127]),
     }
     curr_kb_output = {}
+    curr_mouse_output = {
+        MOUSE_BTN_LEFT:set([0]),
+        MOUSE_BTN_MIDDLE:set([0]),
+        MOUSE_BTN_RIGHT:set([0]),
+        MOUSE_BTN_SIDE:set([0]),
+        MOUSE_BTN_EXTRA:set([0]),
+        MOUSE_X:set([0]),
+        MOUSE_Y:set([0]),
+        MOUSE_SCROLL:set([0]),
+    }
     
     for from_code in this_gp_dict:
         from_type, to_code, to_type = find_keycode_in_mapping(from_code, mapping_info['mapping'])
@@ -267,9 +286,10 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                 is_activated = 1
             curr_kb_output[to_code['neg_key']].add(is_activated)
 
-        # analog to mouse axes
         # button to mouse buttons
+        # analog to mouse axes
         
+
     # print('kb', curr_kb_output)
     # print('prev', prev_gp_output)
     # print('curr', curr_gp_output)

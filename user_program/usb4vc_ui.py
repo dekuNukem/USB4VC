@@ -117,8 +117,14 @@ IBMPC_GGP_JS2_X_NEG = ('IBMGGP_JS2_XN', 'pb_gp_half_axes')
 IBMPC_GGP_JS2_Y_POS = ('IBMGGP_JS2_YP', 'pb_gp_half_axes')
 IBMPC_GGP_JS2_Y_NEG = ('IBMGGP_JS2_YN', 'pb_gp_half_axes')
 
-MOUSE_X = ('mouse_x', 'mouse_axes')
-MOUSE_Y = ('mouse_y', 'mouse_axes')
+MOUSE_BTN_LEFT = ('MOUSE_BTN_LEFT', 'mouse_btn')
+MOUSE_BTN_MIDDLE = ('MOUSE_BTN_MIDDLE', 'mouse_btn')
+MOUSE_BTN_RIGHT = ('MOUSE_BTN_RIGHT', 'mouse_btn')
+MOUSE_BTN_SIDE = ('MOUSE_BTN_SIDE', 'mouse_btn')
+MOUSE_BTN_EXTRA = ('MOUSE_BTN_EXTRA', 'mouse_btn')
+MOUSE_X = ('MOUSE_X', 'mouse_axes')
+MOUSE_Y = ('MOUSE_Y', 'mouse_axes')
+MOUSE_SCROLL = ('MOUSE_SCROLL', 'mouse_axes')
 
 PBOARD_ID_UNKNOWN = 0
 PBOARD_ID_IBMPC = 1
@@ -281,7 +287,7 @@ class usb4vc_menu(object):
         self.current_level = 0
         self.current_page = 0
         self.level_size = 2
-        self.page_size = [4, 5]
+        self.page_size = [3, 5]
         self.kb_opts = list(pboard['plist_keyboard'])
         self.mouse_opts = list(pboard['plist_mouse'])
         self.gamepad_opts = list(pboard['plist_gamepad'])
@@ -309,20 +315,15 @@ class usb4vc_menu(object):
         if level == 0:
             if page == 0:
                 with canvas(device) as draw:
-                    draw.text((0, 0),  f"KeyBoard:{self.current_keyboard_protocol['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 10), f"Mouse:   {self.current_mouse_protocol['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 20), f"GamePad: {self.current_gamepad_protocol['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 0),  f"KBD {len(usb4vc_usb_scan.keyboard_opened_device_dict)} {self.current_keyboard_protocol['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 10), f"MOS {len(usb4vc_usb_scan.mouse_opened_device_dict)} {self.current_mouse_protocol['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 20), f"GPD {len(usb4vc_usb_scan.gamepad_opened_device_dict)} {self.current_gamepad_protocol['display_name']}", font=font_regular, fill="white")
             if page == 1:
-                with canvas(device) as draw:
-                    draw.text((0, 0), f"USB Keyboard: {len(usb4vc_usb_scan.keyboard_opened_device_dict)}", font=font_regular, fill="white")
-                    draw.text((0, 10), f"USB Mouse:    {len(usb4vc_usb_scan.mouse_opened_device_dict)}", font=font_regular, fill="white")
-                    draw.text((0, 20), f"USB Gamepad:  {len(usb4vc_usb_scan.gamepad_opened_device_dict)}", font=font_regular, fill="white")
-            if page == 2:
                 with canvas(device) as draw:
                     draw.text((0, 0), f"PB:{self.pb_info['full_name']}", font=font_regular, fill="white")
                     draw.text((0, 10), f"FW:{self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  REV:{self.pb_info['hw_rev']}", font=font_regular, fill="white")
                     draw.text((0, 20), f"IP: 192.168.231.12", font=font_regular, fill="white")
-            if page == 3:
+            if page == 2:
                 with canvas(device) as draw:
                     oled_print_centered("Pair Bluetooth", font_medium, 10, draw)
 
@@ -431,8 +432,8 @@ class usb4vc_menu(object):
         self.display_page(self.current_level, self.current_page)
 
     def update_usb_status(self):
-        if self.current_level == 0 and self.current_page == 1:
-            self.display_page(0, 1)
+        if self.current_level == 0 and self.current_page == 0:
+            self.display_page(0, 0)
 
 pboard_database = {
     PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown/Unplugged', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_raw, 'plist_mouse':mouse_protocol_options_raw, 'plist_gamepad':gamepad_protocol_options_raw},
