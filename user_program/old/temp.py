@@ -1,3 +1,38 @@
+    # print(time.time(), '-----------')
+
+
+            # print('=====>',from_code, from_type, to_code, to_type)
+# print('kb', curr_kb_output)
+    # print('prev', prev_gp_output)
+    # print('curr', curr_gp_output)
+    print("mouse", curr_mouse_output)
+rawx = int.from_bytes(data[4:6], byteorder='little', signed=True)
+rawx = int(rawx * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+mouse_status_dict["x"] = list(rawx.to_bytes(2, byteorder='little'))
+    'mapping':
+    {
+        # buttons to buttons
+        USBGP_BTN_X: IBMPC_GGP_JS1_X_NEG,
+        USBGP_BTN_B: IBMPC_GGP_JS1_X_POS,
+        USBGP_BTN_Y: IBMPC_GGP_JS1_Y_POS,
+        USBGP_BTN_A: IBMPC_GGP_JS1_Y_NEG,
+        # analog stick to analog stick
+        USBGP_ABS_X: IBMPC_GGP_JS1_X,
+        USBGP_ABS_Y: IBMPC_GGP_JS1_Y,
+        USBGP_ABS_HAT0X: IBMPC_GGP_JS1_X,
+        USBGP_ABS_HAT0Y: IBMPC_GGP_JS1_Y,
+        # buttons to analog stick
+        USBGP_BTN_TL: IBMPC_GGP_BTN_1,
+        USBGP_BTN_TR: IBMPC_GGP_BTN_2,
+        # buttons to keyboard key
+        USBGP_BTN_START: KB_KEY_A,
+        USBGP_BTN_SELECT: KB_KEY_B,
+        USBGP_BTN_TL: IBMPC_GGP_JS1_X_NEG,
+        USBGP_BTN_TR: IBMPC_GGP_JS1_X_POS,
+        # analog stick to keyboard key
+        USBGP_ABS_RX: {'type':'pb_kb', 'pos_key':KB_KEY_RIGHT[0], 'neg_key':KB_KEY_LEFT[0]},
+        USBGP_ABS_RY: {'type':'pb_kb', 'pos_key':KB_KEY_DOWN[0], 'neg_key':KB_KEY_UP[0]},
+    }
             print("HERE")
             print('=====>',from_code, from_type, to_code, to_type)
 if page == 1:

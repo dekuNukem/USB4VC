@@ -169,24 +169,6 @@ def clamp_to_8bit(value, axes_dict, axis_key):
         return value % 256
     return int(value / (axes_dict[axis_key]['max'] / 127)) + 127
 
-IBMPC_GGP_BTN_1 = 'IBMGGP_BTN_1'
-IBMPC_GGP_BTN_2 = 'IBMGGP_BTN_2'
-IBMPC_GGP_BTN_3 = 'IBMGGP_BTN_3'
-IBMPC_GGP_BTN_4 = 'IBMGGP_BTN_4'
-IBMPC_GGP_JS1_X = 'IBMGGP_JS1_X'
-IBMPC_GGP_JS1_Y = 'IBMGGP_JS1_Y'
-IBMPC_GGP_JS2_X = 'IBMGGP_JS2_X'
-IBMPC_GGP_JS2_Y = 'IBMGGP_JS2_Y'
-
-MOUSE_BTN_LEFT = 'MOUSE_BTN_LEFT'
-MOUSE_BTN_MIDDLE = 'MOUSE_BTN_MIDDLE'
-MOUSE_BTN_RIGHT = 'MOUSE_BTN_RIGHT'
-MOUSE_BTN_SIDE = 'MOUSE_BTN_SIDE'
-MOUSE_BTN_EXTRA = 'MOUSE_BTN_EXTRA'
-MOUSE_X = 'MOUSE_X'
-MOUSE_Y = 'MOUSE_Y'
-MOUSE_SCROLL = 'MOUSE_SCROLL'
-
 IBMPC_GGP_SPI_LOOKUP = {
     'IBMGGP_BTN_1':4,
     'IBMGGP_BTN_2':5,
@@ -196,6 +178,17 @@ IBMPC_GGP_SPI_LOOKUP = {
     'IBMGGP_JS1_Y':9,
     'IBMGGP_JS2_X':10,
     'IBMGGP_JS2_Y':11,
+}
+
+MOUSE_SPI_LOOKUP = {
+    'MOUSE_BTN_LEFT':13,
+    'MOUSE_BTN_RIGHT':14,
+    'MOUSE_BTN_MIDDLE':15,
+    'MOUSE_BTN_SIDE':16,
+    'MOUSE_BTN_EXTRA':17,
+    'MOUSE_X':4,
+    'MOUSE_Y':6,
+    'MOUSE_SCROLL':8,
 }
 
 def find_keycode_in_mapping(key_code, mapping_dict):
@@ -227,25 +220,26 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     global prev_kb_output
     this_gp_dict = gp_status_dict[gp_id]
     curr_gp_output = {
-        IBMPC_GGP_BTN_1:set([0]),
-        IBMPC_GGP_BTN_2:set([0]),
-        IBMPC_GGP_BTN_3:set([0]),
-        IBMPC_GGP_BTN_4:set([0]),
-        IBMPC_GGP_JS1_X:set([127]),
-        IBMPC_GGP_JS1_Y:set([127]),
-        IBMPC_GGP_JS2_X:set([127]),
-        IBMPC_GGP_JS2_Y:set([127]),
+        'IBMPC_GGP_BTN_1':set([0]),
+        'IBMPC_GGP_BTN_2':set([0]),
+        'IBMPC_GGP_BTN_3':set([0]),
+        'IBMPC_GGP_BTN_4':set([0]),
+        'IBMPC_GGP_JS1_X':set([127]),
+        'IBMPC_GGP_JS1_Y':set([127]),
+        'IBMPC_GGP_JS2_X':set([127]),
+        'IBMPC_GGP_JS2_Y':set([127]),
     }
     curr_kb_output = {}
     curr_mouse_output = {
-        MOUSE_BTN_LEFT:set([0]),
-        MOUSE_BTN_MIDDLE:set([0]),
-        MOUSE_BTN_RIGHT:set([0]),
-        MOUSE_BTN_SIDE:set([0]),
-        MOUSE_BTN_EXTRA:set([0]),
-        MOUSE_X:set([0]),
-        MOUSE_Y:set([0]),
-        MOUSE_SCROLL:set([0]),
+        'IS_MODIFIED':False,
+        'MOUSE_BTN_LEFT':set([0]),
+        'MOUSE_BTN_MIDDLE':set([0]),
+        'MOUSE_BTN_RIGHT':set([0]),
+        'MOUSE_BTN_SIDE':set([0]),
+        'MOUSE_BTN_EXTRA':set([0]),
+        'MOUSE_X':0,
+        'MOUSE_Y':0,
+        'MOUSE_SCROLL':0,
     }
     
     for from_code in this_gp_dict:
@@ -285,19 +279,30 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             if clamp_to_8bit(this_gp_dict[from_code], axes_info, from_code) < 127-64:
                 is_activated = 1
             curr_kb_output[to_code['neg_key']].add(is_activated)
-
         # button to mouse buttons
+        if from_type == 'usb_gp_btn' and to_type == 'mouse_btn' and to_code in curr_mouse_output:
+            curr_mouse_output[to_code].add(this_gp_dict[from_code])
+            curr_mouse_output['IS_MODIFIED'] = True
         # analog to mouse axes
-        
-
-    # print('kb', curr_kb_output)
-    # print('prev', prev_gp_output)
-    # print('curr', curr_gp_output)
+        if from_type == 'usb_gp_axes' and to_type == 'mouse_axes' and to_code in curr_mouse_output:
+            amount = clamp_to_8bit(this_gp_dict[from_code], axes_info, from_code) - 127
+            if abs(amount) <= 20:
+                amount = 0
+            curr_mouse_output[to_code] = int(amount / 15) & 0xffff
+            curr_mouse_output['IS_MODIFIED'] = True
+    
     for key in curr_kb_output:
         key_status_set = curr_kb_output[key]
         curr_kb_output[key] = 0
         if 1 in key_status_set:
             curr_kb_output[key] = 1
+
+    for key in curr_mouse_output:
+        if "MOUSE_BTN_" in key:
+            mouse_button_status_set = curr_mouse_output[key]
+            curr_mouse_output[key] = 0
+            if 1 in mouse_button_status_set:
+                curr_mouse_output[key] = 1
 
     # if curr axes set is more than prev, apply the new one, else apply the one furest from midpoint
     gp_spi_msg = list(gamepad_event_ibm_ggp_spi_msg_template)
@@ -331,17 +336,28 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             kb_spi_msg[4] = key
             kb_spi_msg[6] = curr_kb_output[key]
 
+    mouse_spi_msg = None
+    if curr_mouse_output['IS_MODIFIED']:
+        mouse_spi_msg = list(mouse_event_spi_msg_template)
+        for fuck in curr_mouse_output:
+            if "MOUSE_BTN_" in fuck:
+                mouse_spi_msg[MOUSE_SPI_LOOKUP[fuck]] = curr_mouse_output[fuck]
+            elif "MOUSE_" in fuck:
+                mouse_spi_msg[MOUSE_SPI_LOOKUP[fuck]:MOUSE_SPI_LOOKUP[fuck]+2] = list(curr_mouse_output[fuck].to_bytes(2, byteorder='little'))
+
     prev_gp_output = curr_gp_output
     prev_kb_output = curr_kb_output
     print(gp_spi_msg)
-    # print(time.time(), '-----------')
-    return gp_spi_msg, kb_spi_msg
+    print(kb_spi_msg)
+    print(mouse_spi_msg)
+    print('-------')
+    return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
     if current_protocol['pid'] == PID_GENERIC_GAMEPORT_GAMEPAD and current_protocol['is_custom']:
         return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
-    return list(nop_spi_msg_template)
+    return list(nop_spi_msg_template), None, None
 
 def change_kb_led(scrolllock, numlock, capslock):
     led_file_list = os.listdir(led_device_path)
@@ -466,10 +482,14 @@ def raw_input_event_worker():
                 gamepad_status_dict[gamepad_id][abs_axes] = abs_value
             # SYNC report, update now
             if data[0] == EV_SYN and data[2] == SYN_REPORT:
-                gp_to_transfer, kb_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, gamepad_id, gamepad_opened_device_dict[key][2])
+                gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, gamepad_id, gamepad_opened_device_dict[key][2])
                 pcard_spi.xfer(gp_to_transfer)
                 if kb_to_transfer is not None:
+                    time.sleep(0.001)
                     pcard_spi.xfer(kb_to_transfer)
+                if mouse_to_transfer is not None:
+                    time.sleep(0.001)
+                    pcard_spi.xfer(mouse_to_transfer)
 
 # ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):

@@ -151,13 +151,13 @@ custom_profile_1 = {
     'mapping':
     {
         # buttons to buttons
-        USBGP_BTN_X: IBMPC_GGP_JS1_X_NEG,
-        USBGP_BTN_B: IBMPC_GGP_JS1_X_POS,
-        USBGP_BTN_Y: IBMPC_GGP_JS1_Y_POS,
-        USBGP_BTN_A: IBMPC_GGP_JS1_Y_NEG,
+        USBGP_BTN_X: MOUSE_BTN_LEFT,
+        USBGP_BTN_B: MOUSE_BTN_RIGHT,
+        USBGP_BTN_Y: MOUSE_BTN_MIDDLE,
+        USBGP_BTN_A: MOUSE_BTN_MIDDLE,
         # analog stick to analog stick
-        USBGP_ABS_X: IBMPC_GGP_JS1_X,
-        USBGP_ABS_Y: IBMPC_GGP_JS1_Y,
+        USBGP_ABS_X: MOUSE_X,
+        USBGP_ABS_Y: MOUSE_Y,
         USBGP_ABS_HAT0X: IBMPC_GGP_JS1_X,
         USBGP_ABS_HAT0Y: IBMPC_GGP_JS1_Y,
         # buttons to analog stick
@@ -448,8 +448,6 @@ def get_pboard_dict(pid):
 
 def get_mouse_sensitivity():
     return mouse_sensitivity_list[configuration_dict[this_pboard_id]["mouse_sensitivity_index"]]
-
-PROTOCOL_CUSTOM_PROFILE = {'pid':0, 'display_name':'Custom', 'is_custom':1, 'mapping':{}}
 
 def ui_init():
     global pboard_info_spi_msg
