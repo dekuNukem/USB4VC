@@ -1,6 +1,9 @@
     # print(time.time(), '-----------')
 
-
+    print(gp_spi_msg)
+    print(kb_spi_msg)
+    print(mouse_spi_msg)
+    print('-------')
             # print('=====>',from_code, from_type, to_code, to_type)
 # print('kb', curr_kb_output)
     # print('prev', prev_gp_output)

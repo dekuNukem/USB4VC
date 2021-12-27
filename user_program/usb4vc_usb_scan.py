@@ -347,10 +347,6 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
 
     prev_gp_output = curr_gp_output
     prev_kb_output = curr_kb_output
-    print(gp_spi_msg)
-    print(kb_spi_msg)
-    print(mouse_spi_msg)
-    print('-------')
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
