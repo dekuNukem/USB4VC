@@ -11,6 +11,7 @@ import RPi.GPIO as GPIO
 import usb4vc_usb_scan
 import usb4vc_shared
 import json
+import map_codes
 
 data_dir_path = os.path.join(os.path.expanduser('~'), 'usb4vc_data')
 config_file_path = os.path.join(data_dir_path, 'config.json')
@@ -51,8 +52,11 @@ OLED_HEIGHT = 32
 my_arg = ['--display', 'ssd1306', '--interface', 'spi', '--spi-port', '0', '--spi-device', '1', '--gpio-reset', '6', '--gpio-data-command', '5', '--width', str(OLED_WIDTH), '--height', str(OLED_HEIGHT), '--spi-bus-speed', '2000000']
 device = get_device(my_arg)
 
+PBOARD_ID_UNKNOWN = 0
+PBOARD_ID_IBMPC = 1
+PBOARD_ID_ADB = 2
 pboard_info_spi_msg = [0] * 32
-this_pboard_id = 0
+this_pboard_id = PBOARD_ID_UNKNOWN
 
 PROTOCOL_OFF = {'pid':0, 'display_name':"OFF", 'is_custom':0}
 PROTOCOL_AT_PS2_KB = {'pid':1, 'display_name':"AT/PS2", 'is_custom':0}
@@ -68,80 +72,35 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data", 'is_custom':0}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data", 'is_custom':0}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data", 'is_custom':0}
 
-USBGP_BTN_SOUTH = (0x130, 'usb_gp_btn')
-USBGP_BTN_EAST = (0x131, 'usb_gp_btn')
-USBGP_BTN_C = (0x132, 'usb_gp_btn')
-USBGP_BTN_NORTH = (0x133, 'usb_gp_btn')
-USBGP_BTN_WEST = (0x134, 'usb_gp_btn')
-USBGP_BTN_Z = (0x135, 'usb_gp_btn')
-USBGP_BTN_TL = (0x136, 'usb_gp_btn')
-USBGP_BTN_TR = (0x137, 'usb_gp_btn')
-USBGP_BTN_TL2 = (0x138, 'usb_gp_btn')
-USBGP_BTN_TR2 = (0x139, 'usb_gp_btn')
-USBGP_BTN_SELECT = (0x13a, 'usb_gp_btn')
-USBGP_BTN_START = (0x13b, 'usb_gp_btn')
-USBGP_BTN_MODE = (0x13c, 'usb_gp_btn')
-USBGP_BTN_THUMBL = (0x13d, 'usb_gp_btn')
-USBGP_BTN_THUMBR = (0x13e, 'usb_gp_btn')
+USBGP_BTN_SOUTH = 0x130
+USBGP_BTN_EAST = 0x131
+USBGP_BTN_C = 0x132
+USBGP_BTN_NORTH = 0x133
+USBGP_BTN_WEST = 0x134
+USBGP_BTN_Z = 0x135
+USBGP_BTN_TL = 0x136
+USBGP_BTN_TR = 0x137
+USBGP_BTN_TL2 = 0x138
+USBGP_BTN_TR2 = 0x139
+USBGP_BTN_SELECT = 0x13a
+USBGP_BTN_START = 0x13b
+USBGP_BTN_MODE = 0x13c
+USBGP_BTN_THUMBL = 0x13d
+USBGP_BTN_THUMBR = 0x13e
 
 USBGP_BTN_A = USBGP_BTN_SOUTH
 USBGP_BTN_B = USBGP_BTN_EAST
 USBGP_BTN_X = USBGP_BTN_NORTH
 USBGP_BTN_Y = USBGP_BTN_WEST
 
-USBGP_ABS_X = (0x00, 'usb_gp_axes') # left stick X
-USBGP_ABS_Y = (0x01, 'usb_gp_axes') # left stick Y
-USBGP_ABS_Z = (0x02, 'usb_gp_axes') # left analog trigger
-USBGP_ABS_RX = (0x03, 'usb_gp_axes') # right stick X
-USBGP_ABS_RY = (0x04, 'usb_gp_axes') # right stick Y
-USBGP_ABS_RZ = (0x05, 'usb_gp_axes') # right analog trigger
-USBGP_ABS_HAT0X = (0x10, 'usb_gp_axes') # D-pad X
-USBGP_ABS_HAT0Y = (0x11, 'usb_gp_axes') # D-pad Y
-
-IBMPC_GGP_BTN_1 = ('IBMGGP_BTN_1', 'pb_gp_btn')
-IBMPC_GGP_BTN_2 = ('IBMGGP_BTN_2', 'pb_gp_btn')
-IBMPC_GGP_BTN_3 = ('IBMGGP_BTN_3', 'pb_gp_btn')
-IBMPC_GGP_BTN_4 = ('IBMGGP_BTN_4', 'pb_gp_btn')
-IBMPC_GGP_JS1_X = ('IBMGGP_JS1_X', 'pb_gp_axes')
-IBMPC_GGP_JS1_Y = ('IBMGGP_JS1_Y', 'pb_gp_axes')
-IBMPC_GGP_JS2_X = ('IBMGGP_JS2_X', 'pb_gp_axes')
-IBMPC_GGP_JS2_Y = ('IBMGGP_JS2_Y', 'pb_gp_axes')
-
-IBMPC_GGP_JS1_X_POS = ('IBMGGP_JS1_XP', 'pb_gp_half_axes')
-IBMPC_GGP_JS1_X_NEG = ('IBMGGP_JS1_XN', 'pb_gp_half_axes')
-IBMPC_GGP_JS1_Y_POS = ('IBMGGP_JS1_YP', 'pb_gp_half_axes')
-IBMPC_GGP_JS1_Y_NEG = ('IBMGGP_JS1_YN', 'pb_gp_half_axes')
-
-IBMPC_GGP_JS2_X_POS = ('IBMGGP_JS2_XP', 'pb_gp_half_axes')
-IBMPC_GGP_JS2_X_NEG = ('IBMGGP_JS2_XN', 'pb_gp_half_axes')
-IBMPC_GGP_JS2_Y_POS = ('IBMGGP_JS2_YP', 'pb_gp_half_axes')
-IBMPC_GGP_JS2_Y_NEG = ('IBMGGP_JS2_YN', 'pb_gp_half_axes')
-
-MOUSE_BTN_LEFT = ('MOUSE_BTN_LEFT', 'mouse_btn')
-MOUSE_BTN_MIDDLE = ('MOUSE_BTN_MIDDLE', 'mouse_btn')
-MOUSE_BTN_RIGHT = ('MOUSE_BTN_RIGHT', 'mouse_btn')
-MOUSE_BTN_SIDE = ('MOUSE_BTN_SIDE', 'mouse_btn')
-MOUSE_BTN_EXTRA = ('MOUSE_BTN_EXTRA', 'mouse_btn')
-MOUSE_X = ('MOUSE_X', 'mouse_axes')
-MOUSE_Y = ('MOUSE_Y', 'mouse_axes')
-MOUSE_SCROLL = ('MOUSE_SCROLL', 'mouse_axes')
-
-PBOARD_ID_UNKNOWN = 0
-PBOARD_ID_IBMPC = 1
-PBOARD_ID_ADB = 2
-
-KB_KEY_A = (30, 'pb_kb')
-KB_KEY_B = (48, 'pb_kb')
-
-KB_KEY_C = (46, 'pb_kb')
-KB_KEY_D = (32, 'pb_kb')
-
-KB_KEY_UP = (103, 'pb_kb')
-KB_KEY_DOWN = (108, 'pb_kb')
-KB_KEY_LEFT = (105, 'pb_kb')
-KB_KEY_RIGHT = (106, 'pb_kb')
-
-KB_KEY_LCTRL = (29, 'pb_kb')
+USBGP_ABS_X = 0x00 # left stick X
+USBGP_ABS_Y = 0x01 # left stick Y
+USBGP_ABS_Z = 0x02 # left analog trigger
+USBGP_ABS_RX = 0x03 # right stick X
+USBGP_ABS_RY = 0x04 # right stick Y
+USBGP_ABS_RZ = 0x05 # right analog trigger
+USBGP_ABS_HAT0X = 0x10 # D-pad X
+USBGP_ABS_HAT0Y = 0x11 # D-pad Y
 
 custom_profile_1 = {
     'name':'test',
@@ -151,26 +110,26 @@ custom_profile_1 = {
     'mapping':
     {
         # buttons to buttons
-        USBGP_BTN_X: MOUSE_BTN_LEFT,
-        USBGP_BTN_B: MOUSE_BTN_RIGHT,
-        USBGP_BTN_Y: MOUSE_BTN_MIDDLE,
-        USBGP_BTN_A: MOUSE_BTN_MIDDLE,
+        USBGP_BTN_X: {'code':map_codes.MOUSE_BTN_LEFT[0], 'type':map_codes.MOUSE_BTN_LEFT[1]},
+        USBGP_BTN_B: {'code':map_codes.MOUSE_BTN_RIGHT[0], 'type':map_codes.MOUSE_BTN_RIGHT[1]},
+        USBGP_BTN_Y: {'code':map_codes.MOUSE_BTN_MIDDLE[0], 'type':map_codes.MOUSE_BTN_MIDDLE[1]},
+        USBGP_BTN_A: {'code':map_codes.MOUSE_BTN_MIDDLE[0], 'type':map_codes.MOUSE_BTN_MIDDLE[1]},
         # analog stick to analog stick
-        USBGP_ABS_X: MOUSE_X,
-        USBGP_ABS_Y: MOUSE_Y,
-        USBGP_ABS_HAT0X: IBMPC_GGP_JS1_X,
-        USBGP_ABS_HAT0Y: IBMPC_GGP_JS1_Y,
+        USBGP_ABS_X: {'code':map_codes.MOUSE_X[0], 'type':map_codes.MOUSE_X[1], 'deadzone':20},
+        USBGP_ABS_Y: {'code':map_codes.MOUSE_Y[0], 'type':map_codes.MOUSE_Y[1], 'deadzone':20},
+        USBGP_ABS_HAT0X: {'code':map_codes.IBMPC_GGP_JS1_X[0], 'type':map_codes.IBMPC_GGP_JS1_X[1]},
+        USBGP_ABS_HAT0Y: {'code':map_codes.IBMPC_GGP_JS1_Y[0], 'type':map_codes.IBMPC_GGP_JS1_Y[1]},
         # buttons to analog stick
-        USBGP_BTN_TL: IBMPC_GGP_BTN_1,
-        USBGP_BTN_TR: IBMPC_GGP_BTN_2,
+        USBGP_BTN_TL: {'code':map_codes.IBMPC_GGP_BTN_1[0], 'type':map_codes.IBMPC_GGP_BTN_1[1]},
+        USBGP_BTN_TR: {'code':map_codes.IBMPC_GGP_BTN_2[0], 'type':map_codes.IBMPC_GGP_BTN_2[1]},
         # buttons to keyboard key
-        USBGP_BTN_START: KB_KEY_A,
-        USBGP_BTN_SELECT: KB_KEY_B,
-        USBGP_BTN_TL: IBMPC_GGP_JS1_X_NEG,
-        USBGP_BTN_TR: IBMPC_GGP_JS1_X_POS,
+        USBGP_BTN_START: {'code':map_codes.KB_KEY_A[0], 'type':map_codes.KB_KEY_A[1]},
+        USBGP_BTN_SELECT: {'code':map_codes.KB_KEY_B[0], 'type':map_codes.KB_KEY_B[1]},
+        USBGP_BTN_TL: {'code':map_codes.IBMPC_GGP_JS1_X_NEG[0], 'type':map_codes.IBMPC_GGP_JS1_X_NEG[1]},
+        USBGP_BTN_TR: {'code':map_codes.IBMPC_GGP_JS1_X_POS[0], 'type':map_codes.IBMPC_GGP_JS1_X_POS[1]},
         # analog stick to keyboard key
-        USBGP_ABS_RX: {'type':'pb_kb', 'pos_key':KB_KEY_RIGHT[0], 'neg_key':KB_KEY_LEFT[0]},
-        USBGP_ABS_RY: {'type':'pb_kb', 'pos_key':KB_KEY_DOWN[0], 'neg_key':KB_KEY_UP[0]},
+        USBGP_ABS_RX: {'type':'pb_kb', 'code':map_codes.KB_KEY_RIGHT[0], 'code_neg':map_codes.KB_KEY_LEFT[0], 'deadzone':64},
+        USBGP_ABS_RY: {'type':'pb_kb', 'code':map_codes.KB_KEY_DOWN[0], 'code_neg':map_codes.KB_KEY_UP[0], 'deadzone':64},
     }
 }
 
@@ -181,12 +140,12 @@ custom_profile_2 = {
     'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
     'mapping':
     {
-        USBGP_BTN_X: KB_KEY_LEFT,
-        USBGP_BTN_B: KB_KEY_RIGHT,
-        USBGP_BTN_Y: KB_KEY_UP,
-        USBGP_BTN_A: KB_KEY_DOWN,
-        USBGP_BTN_TL: KB_KEY_LCTRL,
-        USBGP_BTN_TR: KB_KEY_LCTRL,
+        # USBGP_BTN_X: KB_KEY_LEFT,
+        # USBGP_BTN_B: KB_KEY_RIGHT,
+        # USBGP_BTN_Y: KB_KEY_UP,
+        # USBGP_BTN_A: KB_KEY_DOWN,
+        # USBGP_BTN_TL: KB_KEY_LCTRL,
+        # USBGP_BTN_TR: KB_KEY_LCTRL,
     }
 }
 
