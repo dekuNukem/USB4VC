@@ -235,7 +235,6 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     }
     curr_kb_output = {}
     curr_mouse_output = {
-        'NEEDS_SUSTAIN':False,
         'IS_MODIFIED':False,
         BTN_LEFT:set([0]),
         BTN_MIDDLE:set([0]),
@@ -298,10 +297,10 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
             if abs(movement) <= deadzone_amount:
                 movement = 0
-            curr_mouse_output[target_code] = int(movement / 15) & 0xffff
+            joystick_to_mouse_slowdown = 20
+            curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown) & 0xffff
             curr_mouse_output['IS_MODIFIED'] = True
-            curr_mouse_output['NEEDS_SUSTAIN'] = True
-    
+
     for key in curr_kb_output:
         key_status_set = curr_kb_output[key]
         curr_kb_output[key] = 0
@@ -354,7 +353,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             if type(mcode) is int:
                 if BTN_LEFT <= mcode <= BTN_TASK:
                     mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]] = curr_mouse_output[mcode]
-                elif REL_X <= mcode <= 0x08:
+                elif REL_X <= mcode <= REL_WHEEL:
                     mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]:MOUSE_SPI_LOOKUP[mcode]+2] = list(curr_mouse_output[mcode].to_bytes(2, byteorder='little'))
 
     prev_gp_output = curr_gp_output
@@ -390,17 +389,32 @@ def clear_mouse_movement(mdict):
     mdict['y'] = [0, 0]
     mdict['scroll'] = [0, 0]
 
+def joystick_hold_update():
+    needs_update = 0
+    for key in curr_mouse_output:
+        if type(key) is int and REL_X <= key <= REL_WHEEL and curr_mouse_output[key]:
+            needs_update = 1
+    if needs_update and curr_mouse_output['IS_MODIFIED']:
+        mouse_spi_msg = list(mouse_event_spi_msg_template)
+        for mcode in curr_mouse_output:
+            if type(mcode) is int:
+                if BTN_LEFT <= mcode <= BTN_TASK:
+                    mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]] = curr_mouse_output[mcode]
+                elif REL_X <= mcode <= 0x08:
+                    mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]:MOUSE_SPI_LOOKUP[mcode]+2] = list(curr_mouse_output[mcode].to_bytes(2, byteorder='little'))
+        pcard_spi.xfer(mouse_spi_msg)
 
+gamepad_hold_check_interval = 0.013
 def raw_input_event_worker():
     mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': [0, 0], BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
     gamepad_status_dict = {}
-    next_gamepad_hold_check = time.time() + 0.2
+    next_gamepad_hold_check = time.time() + gamepad_hold_check_interval
     print("raw_input_event_worker started")
     while 1:
         now = time.time()
         if now > next_gamepad_hold_check:
-            # print(curr_mouse_output)
-            next_gamepad_hold_check = now + 0.2
+            joystick_hold_update()
+            next_gamepad_hold_check = now + gamepad_hold_check_interval
 
         for key in list(opened_device_dict):
             this_device = opened_device_dict[key]
@@ -431,6 +445,7 @@ def raw_input_event_worker():
                     mouse_status_dict[event_code] = data[4]
                     clear_mouse_movement(mouse_status_dict)
                     pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
+                    next_gamepad_hold_check = now + gamepad_hold_check_interval
                 # Gamepad buttons
                 elif BTN_SOUTH <= event_code <= BTN_THUMBR:
                     gamepad_status_dict[this_id][event_code] = data[4]
@@ -456,6 +471,7 @@ def raw_input_event_worker():
             elif data[0] == EV_SYN and event_code == SYN_REPORT:
                 if this_device['is_mouse']:
                     pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
+                    next_gamepad_hold_check = now + gamepad_hold_check_interval
                     clear_mouse_movement(mouse_status_dict)
                 if this_device['is_gp']:
                     gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device['axes_info'])
@@ -466,6 +482,7 @@ def raw_input_event_worker():
                     if mouse_to_transfer is not None:
                         time.sleep(0.001)
                         pcard_spi.xfer(mouse_to_transfer)
+                        next_gamepad_hold_check = now + gamepad_hold_check_interval
 # ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):
             slave_result = None
