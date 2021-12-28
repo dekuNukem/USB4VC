@@ -29,7 +29,7 @@ GPIO.add_event_detect(SLAVE_REQ_PIN, GPIO.RISING)
 pcard_spi = spidev.SpiDev(0, 0)
 pcard_spi.max_speed_hz = 2000000
 
-ooopened_device_dict = {}
+opened_device_dict = {}
 
 led_device_path = '/sys/class/leds'
 input_device_path = '/dev/input/by-path/'
@@ -381,20 +381,21 @@ def raw_input_event_worker():
     gamepad_status_dict = {}
     print("raw_input_event_worker started")
     while 1:
-        for key in list(ooopened_device_dict):
-            this_device = ooopened_device_dict[key]
+        for key in list(opened_device_dict):
+            this_device = opened_device_dict[key]
+            this_id = this_device['id']
             try:
                 data = this_device['file'].read(16)
             except OSError:
                 print("Device disappeared:", this_device['name'])
                 this_device['file'].close()
-                del ooopened_device_dict[key]
+                del opened_device_dict[key]
                 continue
             if data is None:
                 continue
 
-            if this_device['is_gp'] and this_device['id'] not in gamepad_status_dict:
-                gamepad_status_dict[this_device['id']] = {}
+            if this_device['is_gp'] and this_id not in gamepad_status_dict:
+                gamepad_status_dict[this_id] = {}
 
             data = list(data[8:])
             event_code = data[3] * 256 + data[2]
@@ -403,15 +404,15 @@ def raw_input_event_worker():
             if data[0] == EV_KEY:
                 # keyboard keys
                 if 0x1 <= event_code <= 248:
-                    pcard_spi.xfer(make_keyboard_spi_packet(data, this_device['id']))
+                    pcard_spi.xfer(make_keyboard_spi_packet(data, this_id))
                 # Mouse buttons
                 elif 0x110 <= event_code <= 0x117:
                     mouse_status_dict[event_code] = data[4]
                     clear_mouse_movement(mouse_status_dict)
-                    pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_device['id']))
+                    pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
                 # Gamepad buttons
                 elif GP_BTN_SOUTH <= event_code <= GP_BTN_THUMBR:
-                    gamepad_status_dict[this_device['id']][event_code] = data[4]
+                    gamepad_status_dict[this_id][event_code] = data[4]
 
             # event is relative axes AKA mouse
             elif data[0] == EV_REL and event_code == REL_X:
@@ -428,15 +429,15 @@ def raw_input_event_worker():
             # event is absolute axes AKA joystick
             elif data[0] == EV_ABS:
                 abs_value = int.from_bytes(data[4:8], byteorder='little', signed=True)
-                gamepad_status_dict[this_device['id']][event_code] = abs_value
+                gamepad_status_dict[this_id][event_code] = abs_value
 
             # SYNC event
             elif data[0] == EV_SYN and event_code == SYN_REPORT:
                 if this_device['is_mouse']:
-                    pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_device['id']))
+                    pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
                     clear_mouse_movement(mouse_status_dict)
                 if this_device['is_gp']:
-                    gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_device['id'], this_device['axes_info'])
+                    gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device['axes_info'])
                     pcard_spi.xfer(gp_to_transfer)
                     if kb_to_transfer is not None:
                         time.sleep(0.001)
@@ -476,12 +477,12 @@ def get_device_count():
     mouse_count = 0
     kb_count = 0
     gp_count = 0
-    for key in ooopened_device_dict:
-        if ooopened_device_dict[key]['is_mouse']:
+    for key in opened_device_dict:
+        if opened_device_dict[key]['is_mouse']:
             mouse_count += 1
-        elif ooopened_device_dict[key]['is_kb']:
+        elif opened_device_dict[key]['is_kb']:
             kb_count += 1
-        elif ooopened_device_dict[key]['is_gp']:
+        elif opened_device_dict[key]['is_gp']:
             gp_count += 1
     return (mouse_count, kb_count, gp_count)
 
@@ -495,7 +496,7 @@ def usb_device_scan_worker():
             continue
 
         for item in device_list:
-            if item['path'] in ooopened_device_dict:
+            if item['path'] in opened_device_dict:
                 continue
             try:
                 this_file = open(item['path'], "rb")
@@ -505,7 +506,7 @@ def usb_device_scan_worker():
                     item['id'] = int(item['path'][len(item['path'].rstrip('0123456789')):])
                 except:
                     item['id'] = 255
-                ooopened_device_dict[item['path']] = item
+                opened_device_dict[item['path']] = item
                 print("opened device:", item['name'])
             except Exception as e:
                 print("Device open exception:", e, item)
