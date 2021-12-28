@@ -159,13 +159,18 @@ def make_mouse_spi_packet(mouse_dict, mouse_id):
 
 PID_GENERIC_GAMEPORT_GAMEPAD = 7
 
-def clamp_to_8bit(value, axes_dict, axis_key):
+def get_range_max(axes_dict, axis_key):
     try:
-        range_max = axes_dict[axis_key]['max'] - axes_dict[axis_key]['min']
-        return int((value / range_max) * 255) + 127
+        return axes_dict[axis_key]['max'] - axes_dict[axis_key]['min']
     except Exception as e:
-        print('clamp_to_8bit:', e)
-    return 127
+        print('get_range_max:', e)
+    return None
+
+def clamp_to_8bit(value, axes_dict, axis_key):
+    rmax = get_range_max(axes_dict, axis_key)
+    if rmax is None:
+        return 127
+    return int((value / rmax) * 255) + 127
 
 IBMPC_GGP_SPI_LOOKUP = {
     'IBMGBTN_1':4,
@@ -212,9 +217,11 @@ def find_furthest_from_midpoint(this_set):
 
 prev_gp_output = {}
 prev_kb_output = {}
+curr_mouse_output = {}
 def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_info):
     global prev_gp_output
     global prev_kb_output
+    global curr_mouse_output
     this_gp_dict = gp_status_dict[gp_id]
     curr_gp_output = {
         'IBMPC_GBTN_1':set([0]),
@@ -228,6 +235,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     }
     curr_kb_output = {}
     curr_mouse_output = {
+        'NEEDS_SUSTAIN':False,
         'IS_MODIFIED':False,
         BTN_LEFT:set([0]),
         BTN_MIDDLE:set([0]),
@@ -269,14 +277,15 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             if target_code not in curr_kb_output:
                 curr_kb_output[target_code] = set()
             is_activated = 0
-            if clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) > 127 + target_info['deadzone']:
+            deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
+            if clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) > 127 + deadzone_amount:
                 is_activated = 1
             curr_kb_output[target_code].add(is_activated)
 
             if target_info['code_neg'] not in curr_kb_output:
                 curr_kb_output[target_info['code_neg']] = set()
             is_activated = 0
-            if clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) < 127 - target_info['deadzone']:
+            if clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) < 127 - deadzone_amount:
                 is_activated = 1
             curr_kb_output[target_info['code_neg']].add(is_activated)
         # button to mouse buttons
@@ -285,11 +294,13 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             curr_mouse_output['IS_MODIFIED'] = True
         # analog to mouse axes
         if source_type == 'usb_gp_axes' and target_type == 'mouse_axes' and target_code in curr_mouse_output:
-            amount = clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) - 127
-            if abs(amount) <= target_info['deadzone']:
-                amount = 0
-            curr_mouse_output[target_code] = int(amount / 15) & 0xffff
+            movement = clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) - 127
+            deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
+            if abs(movement) <= deadzone_amount:
+                movement = 0
+            curr_mouse_output[target_code] = int(movement / 15) & 0xffff
             curr_mouse_output['IS_MODIFIED'] = True
+            curr_mouse_output['NEEDS_SUSTAIN'] = True
     
     for key in curr_kb_output:
         key_status_set = curr_kb_output[key]
@@ -379,11 +390,18 @@ def clear_mouse_movement(mdict):
     mdict['y'] = [0, 0]
     mdict['scroll'] = [0, 0]
 
+
 def raw_input_event_worker():
     mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': [0, 0], BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
     gamepad_status_dict = {}
+    next_gamepad_hold_check = time.time() + 0.2
     print("raw_input_event_worker started")
     while 1:
+        now = time.time()
+        if now > next_gamepad_hold_check:
+            # print(curr_mouse_output)
+            next_gamepad_hold_check = now + 0.2
+
         for key in list(opened_device_dict):
             this_device = opened_device_dict[key]
             this_id = this_device['id']
@@ -448,6 +466,18 @@ def raw_input_event_worker():
                     if mouse_to_transfer is not None:
                         time.sleep(0.001)
                         pcard_spi.xfer(mouse_to_transfer)
+# ----------------- PBOARD INTERRUPT -----------------
+        if GPIO.event_detected(SLAVE_REQ_PIN):
+            slave_result = None
+            for x in range(2):
+                slave_result = pcard_spi.xfer(make_spi_msg_ack())
+            print(int(time.time()), slave_result)
+            if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_TYPE_KB_LED_REQUEST:
+                try:
+                    change_kb_led(slave_result[3], slave_result[4], slave_result[5])
+                    change_kb_led(slave_result[3], slave_result[4], slave_result[5])
+                except Exception as e:
+                    print('change_kb_led exception:', e)
 
 def get_input_devices():
     result = []

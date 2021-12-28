@@ -132,8 +132,8 @@ custom_profile_1 = {
         USBGP_BTN_Y: {'code':usb4vc_shared.MOUSE_BTN_MIDDLE[0], 'type':usb4vc_shared.MOUSE_BTN_MIDDLE[1]},
         USBGP_BTN_A: {'code':usb4vc_shared.MOUSE_BTN_MIDDLE[0], 'type':usb4vc_shared.MOUSE_BTN_MIDDLE[1]},
         # analog stick to analog stick
-        USBGP_ABS_X: {'code':usb4vc_shared.MOUSE_X[0], 'type':usb4vc_shared.MOUSE_X[1], 'deadzone':20},
-        USBGP_ABS_Y: {'code':usb4vc_shared.MOUSE_Y[0], 'type':usb4vc_shared.MOUSE_Y[1], 'deadzone':20},
+        USBGP_ABS_X: {'code':usb4vc_shared.MOUSE_X[0], 'type':usb4vc_shared.MOUSE_X[1], 'deadzone_percent':15},
+        USBGP_ABS_Y: {'code':usb4vc_shared.MOUSE_Y[0], 'type':usb4vc_shared.MOUSE_Y[1], 'deadzone_percent':15},
         USBGP_ABS_HAT0X: {'code':usb4vc_shared.IBMPC_GGP_JS1_X[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X[1]},
         USBGP_ABS_HAT0Y: {'code':usb4vc_shared.IBMPC_GGP_JS1_Y[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_Y[1]},
         # buttons to analog stick
@@ -145,8 +145,8 @@ custom_profile_1 = {
         USBGP_BTN_TL: {'code':usb4vc_shared.IBMPC_GGP_JS1_X_NEG[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X_NEG[1]},
         USBGP_BTN_TR: {'code':usb4vc_shared.IBMPC_GGP_JS1_X_POS[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X_POS[1]},
         # analog stick to keyboard key
-        USBGP_ABS_RX: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_RIGHT[0], 'code_neg':usb4vc_shared.KB_KEY_LEFT[0], 'deadzone':64},
-        USBGP_ABS_RY: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_DOWN[0], 'code_neg':usb4vc_shared.KB_KEY_UP[0], 'deadzone':64},
+        USBGP_ABS_RX: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_RIGHT[0], 'code_neg':usb4vc_shared.KB_KEY_LEFT[0], 'deadzone_percent':15},
+        USBGP_ABS_RY: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_DOWN[0], 'code_neg':usb4vc_shared.KB_KEY_UP[0], 'deadzone_percent':15},
     }
 }
 
