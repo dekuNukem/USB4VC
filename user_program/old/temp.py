@@ -1,4 +1,5 @@
 this_device = ooopened_device_dict[key]
+        print(source_code, source_type, target_info)
 
 def raw_input_event_worker():
     mouse_status_dict = {}

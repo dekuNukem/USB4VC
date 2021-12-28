@@ -243,7 +243,6 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         source_type, target_info = find_keycode_in_mapping(source_code, mapping_info['mapping'])
         if target_info is None:
             continue
-        print(source_code, source_type, target_info)
         target_code = target_info['code']
         target_type = target_info['type']
         
@@ -353,7 +352,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
-    if current_protocol['pid'] == PID_GENERIC_GAMEPORT_GAMEPAD and current_protocol['is_custom']:
+    if current_protocol['pid'] == PID_GENERIC_GAMEPORT_GAMEPAD:
         return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
     return list(nop_spi_msg_template), None, None
 
