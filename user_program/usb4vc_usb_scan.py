@@ -147,25 +147,25 @@ def dict_get_if_exist(this_dict, this_key):
 def make_mouse_spi_packet(mouse_dict, mouse_id):
     to_transfer = list(mouse_event_spi_msg_template)
     to_transfer[3] = mouse_id
-    if 'x' in mouse_dict:
-        to_transfer[4:6] = mouse_dict['x']
-    if 'y' in mouse_dict:
-        to_transfer[6:8] = mouse_dict['y']
-    if 'scroll' in mouse_dict:
-        to_transfer[8:10] = mouse_dict['scroll']
-    to_transfer[13] = dict_get_if_exist(mouse_dict, BTN_LEFT)
-    to_transfer[14] = dict_get_if_exist(mouse_dict, BTN_RIGHT)
-    to_transfer[15] = dict_get_if_exist(mouse_dict, BTN_MIDDLE)
-    to_transfer[16] = dict_get_if_exist(mouse_dict, BTN_SIDE)
-    to_transfer[17] = dict_get_if_exist(mouse_dict, BTN_EXTRA)
+    to_transfer[4:6] = mouse_dict['x']
+    to_transfer[6:8] = mouse_dict['y']
+    to_transfer[8:10] = mouse_dict['scroll']
+    to_transfer[13] = mouse_dict[BTN_LEFT]
+    to_transfer[14] = mouse_dict[BTN_RIGHT]
+    to_transfer[15] = mouse_dict[BTN_MIDDLE]
+    to_transfer[16] = mouse_dict[BTN_SIDE]
+    to_transfer[17] = mouse_dict[BTN_EXTRA]
     return to_transfer
 
 PID_GENERIC_GAMEPORT_GAMEPAD = 7
 
 def clamp_to_8bit(value, axes_dict, axis_key):
-    if axis_key not in axes_dict or 'max' not in axes_dict[axis_key]:
-        return value % 256
-    return int(value / (axes_dict[axis_key]['max'] / 127)) + 127
+    try:
+        range_max = axes_dict[axis_key]['max'] - axes_dict[axis_key]['min']
+        return int((value / range_max) * 255) + 127
+    except Exception as e:
+        print('clamp_to_8bit:', e)
+    return 127
 
 IBMPC_GGP_SPI_LOOKUP = {
     'IBMGGP_BTN_1':4,
@@ -371,37 +371,79 @@ def change_kb_led(scrolllock, numlock, capslock):
         with open(os.path.join(item, 'brightness'), 'w') as led_file:
             led_file.write(str(capslock))
 
+def clear_mouse_movement(mdict):
+    mdict['x'] = [0, 0]
+    mdict['y'] = [0, 0]
+    mdict['scroll'] = [0, 0]
+
 def raw_input_event_worker():
-    mouse_status_dict = {}
+    mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': [0, 0], BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
     gamepad_status_dict = {}
     print("raw_input_event_worker started")
     while 1:
         for key in list(ooopened_device_dict):
+            this_device = ooopened_device_dict[key]
             try:
-                data = ooopened_device_dict[key]['file'].read(16)
+                data = this_device['file'].read(16)
             except OSError:
-                print("Device disappeared:", ooopened_device_dict[key]['name'])
-                ooopened_device_dict[key]['file'].close()
+                print("Device disappeared:", this_device['name'])
+                this_device['file'].close()
                 del ooopened_device_dict[key]
                 continue
             if data is None:
                 continue
+
+            if this_device['is_gp'] and this_device['id'] not in gamepad_status_dict:
+                gamepad_status_dict[this_device['id']] = {}
+
             data = list(data[8:])
-            print(data)
+            event_code = data[3] * 256 + data[2]
+
             # event is a key press
             if data[0] == EV_KEY:
-                key_code = data[3] * 256 + data[2]
-                print('EV_KEY:', key_code)
                 # keyboard keys
-                if 0x1 <= key_code <= 248:
-                    pcard_spi.xfer(make_keyboard_spi_packet(data, ooopened_device_dict[key]['id']))
+                if 0x1 <= event_code <= 248:
+                    pcard_spi.xfer(make_keyboard_spi_packet(data, this_device['id']))
                 # Mouse buttons
-                elif 0x110 <= key_code <= 0x117:
-                    mouse_status_dict[key_code] = data[4]
-                    mouse_status_dict['x'] = [0, 0]
-                    mouse_status_dict['y'] = [0, 0]
-                    mouse_status_dict['scroll'] = [0, 0]
-                    pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, ooopened_device_dict[key]['id']))
+                elif 0x110 <= event_code <= 0x117:
+                    mouse_status_dict[event_code] = data[4]
+                    clear_mouse_movement(mouse_status_dict)
+                    pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_device['id']))
+                # Gamepad buttons
+                elif GP_BTN_SOUTH <= event_code <= GP_BTN_THUMBR:
+                    gamepad_status_dict[this_device['id']][event_code] = data[4]
+
+            # event is relative axes AKA mouse
+            elif data[0] == EV_REL and event_code == REL_X:
+                rawx = int.from_bytes(data[4:6], byteorder='little', signed=True)
+                rawx = int(rawx * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                mouse_status_dict["x"] = list(rawx.to_bytes(2, byteorder='little'))
+            elif data[0] == EV_REL and event_code == REL_Y:
+                rawy = int.from_bytes(data[4:6], byteorder='little', signed=True)
+                rawy = int(rawy * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                mouse_status_dict["y"] = list(rawy.to_bytes(2, byteorder='little'))
+            elif data[0] == EV_REL and event_code == REL_WHEEL:
+                mouse_status_dict["scroll"] = data[4:6]
+
+            # event is absolute axes AKA joystick
+            elif data[0] == EV_ABS:
+                abs_value = int.from_bytes(data[4:8], byteorder='little', signed=True)
+                gamepad_status_dict[this_device['id']][event_code] = abs_value
+
+            # SYNC event
+            elif data[0] == EV_SYN and event_code == SYN_REPORT:
+                if this_device['is_mouse']:
+                    pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_device['id']))
+                    clear_mouse_movement(mouse_status_dict)
+                if this_device['is_gp']:
+                    gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_device['id'], this_device['axes_info'])
+                    pcard_spi.xfer(gp_to_transfer)
+                    if kb_to_transfer is not None:
+                        time.sleep(0.001)
+                        pcard_spi.xfer(kb_to_transfer)
+                    if mouse_to_transfer is not None:
+                        time.sleep(0.001)
+                        pcard_spi.xfer(mouse_to_transfer)
 
 def get_input_devices():
     result = []
@@ -429,6 +471,19 @@ def get_input_devices():
                 print('get_input_devices exception:', e)
         result.append(dev_dict)
     return result
+
+def get_device_count():
+    mouse_count = 0
+    kb_count = 0
+    gp_count = 0
+    for key in ooopened_device_dict:
+        if ooopened_device_dict[key]['is_mouse']:
+            mouse_count += 1
+        elif ooopened_device_dict[key]['is_kb']:
+            kb_count += 1
+        elif ooopened_device_dict[key]['is_gp']:
+            gp_count += 1
+    return (mouse_count, kb_count, gp_count)
 
 def usb_device_scan_worker():
     print("usb_device_scan_worker started")

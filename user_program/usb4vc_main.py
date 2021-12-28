@@ -25,11 +25,10 @@ GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
 GPIO.setup(PBOARD_DFU_PIN, GPIO.OUT)
 GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
 
-reset_pboard()
+# reset_pboard()
 
-# usb4vc_ui.ui_init()
-
-# usb4vc_ui.ui_worker.start()
+usb4vc_ui.ui_init()
+usb4vc_ui.ui_worker.start()
 
 usb4vc_usb_scan.usb_device_scan_thread.start()
 usb4vc_usb_scan.raw_input_event_parser_thread.start()

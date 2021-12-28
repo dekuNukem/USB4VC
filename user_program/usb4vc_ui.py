@@ -315,9 +315,10 @@ class usb4vc_menu(object):
         if level == 0:
             if page == 0:
                 with canvas(device) as draw:
-                    draw.text((0, 0),  f"KBD {len(usb4vc_usb_scan.keyboard_opened_device_dict)} {self.current_keyboard_protocol['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 10), f"MOS {len(usb4vc_usb_scan.mouse_opened_device_dict)} {self.current_mouse_protocol['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 20), f"GPD {len(usb4vc_usb_scan.gamepad_opened_device_dict)} {self.current_gamepad_protocol['display_name']}", font=font_regular, fill="white")
+                    mouse_count, kb_count, gp_count = usb4vc_usb_scan.get_device_count()
+                    draw.text((0, 0),  f"KBD {kb_count} {self.current_keyboard_protocol['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 10), f"MOS {mouse_count} {self.current_mouse_protocol['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 20), f"GPD {gp_count} {self.current_gamepad_protocol['display_name']}", font=font_regular, fill="white")
             if page == 1:
                 with canvas(device) as draw:
                     draw.text((0, 0), f"PB:{self.pb_info['full_name']}", font=font_regular, fill="white")
