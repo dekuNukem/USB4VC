@@ -1,5 +1,17 @@
+"""----------bluetooth---------
+
+https://github.com/oscaracena/pygattlib
+sudo apt install pkg-config libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev python-dev
+pip install gattlib
+
+
+sudo apt-get install bluetooth bluez libbluetooth-dev
+sudo pip3 install pybluez
+https://raspberrypi.stackexchange.com/questions/114149/bluetooth-library-for-raspberry-pi
+https://raspberrypi.stackexchange.com/questions/45246/bluetooth-import-for-python-raspberry-pi-3
+
 this_device = ooopened_device_dict[key]
-        print(source_code, source_type, target_info)
+        print(source_code, source_type, target_info)"""
 
 def raw_input_event_worker():
     mouse_status_dict = {}
