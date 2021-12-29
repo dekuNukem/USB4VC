@@ -11,6 +11,7 @@ import RPi.GPIO as GPIO
 import usb4vc_usb_scan
 import usb4vc_shared
 import json
+import subprocess
 
 data_dir_path = os.path.join(os.path.expanduser('~'), 'usb4vc_data')
 config_file_path = os.path.join(data_dir_path, 'config.json')
@@ -232,6 +233,25 @@ current gamepad procotol
 mouse sensitivity
 """
 
+def scan_bt_devices(timeout_sec = 5):
+    LINUX_EXIT_CODE_TIMEOUT = 124
+    os.system('bluetoothctl agent on')
+    exit_code = os.system(f"timeout {timeout_sec} bluetoothctl scan on") >> 8
+    if exit_code != LINUX_EXIT_CODE_TIMEOUT:
+        print('bluetoothctl scan error')
+        return None
+    device_str = subprocess.getoutput("bluetoothctl devices")
+    bt_dev_list = []
+    for line in device_str.replace('\r', '').split('\n'):
+        if 'device' not in line.lower():
+            continue
+        line_split = line.split(' ', maxsplit=2)
+        # skip if device has no name
+        if len(line_split) < 3 or line_split[2].count('-') == 5:
+            continue
+        bt_dev_list.append((line_split[1], line_split[2]))
+    return bt_dev_list
+
 def load_config():
     global configuration_dict
     try:
@@ -262,8 +282,8 @@ class usb4vc_menu(object):
         super(usb4vc_menu, self).__init__()
         self.current_level = 0
         self.current_page = 0
-        self.level_size = 2
-        self.page_size = [3, 5]
+        self.level_size = 4
+        self.page_size = [3, 5, 3, 1]
         self.kb_opts = list(pboard['plist_keyboard'])
         self.mouse_opts = list(pboard['plist_mouse'])
         self.gamepad_opts = list(pboard['plist_gamepad'])
@@ -276,13 +296,13 @@ class usb4vc_menu(object):
         self.current_mouse_protocol = self.mouse_opts[self.current_mouse_protocol_index]
         self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
         self.last_spi_message = []
+        self.bluetooth_device_list = None
         self.send_spi()
 
     def switch_page(self, amount):
         self.current_page = (self.current_page + amount) % self.page_size[self.current_level]
 
-    def switch_level(self, amount):
-        new_level = self.current_level + amount
+    def switch_to_level(self, new_level):
         if new_level < self.level_size:
             self.current_level = new_level
             self.current_page = 0
@@ -324,6 +344,32 @@ class usb4vc_menu(object):
             if page == 4:
                 with canvas(device) as draw:
                     oled_print_centered("Save & Quit", font_medium, 10, draw)
+        if level == 2:
+            if page == 0:
+                with canvas(device) as draw:
+                    oled_print_centered("Put your device in", font_regular, 0, draw)
+                    oled_print_centered("pairing mode now.", font_regular, 10, draw)
+                    oled_print_centered("Ready to start?", font_regular, 20, draw)
+            if page == 1:
+                with canvas(device) as draw:
+                    oled_print_centered("Scanning for new", font_regular, 0, draw)
+                    oled_print_centered("Bluetooth devices...", font_regular, 10, draw)
+                    oled_print_centered("One moment please", font_regular, 20, draw)
+                self.bluetooth_device_list = scan_bt_devices(10)
+                print("BT LIST:", self.bluetooth_device_list)
+                # if list is None, go to error screen
+                self.page_size[3] = len(self.bluetooth_device_list) + 1
+                # set up level 3 menu structure here
+                self.switch_to_level(3)
+                self.display_curent_page()
+        if level == 3:
+            if page == self.page_size[3] - 1:
+                with canvas(device) as draw:
+                    oled_print_centered("Exit", font_medium, 10, draw)
+            else:
+                with canvas(device) as draw:
+                    oled_print_centered("Pair this device?", font_medium, 0, draw)
+                    oled_print_centered(f"{self.bluetooth_device_list[page][1]}", font_medium, 15, draw)
 
     def send_spi(self):
         status_dict = {}
@@ -376,21 +422,19 @@ class usb4vc_menu(object):
 
     def action(self, level, page):
         if level == 0:
-            self.switch_level(1)
-            self.display_curent_page()
+            if page == 2:
+                self.switch_to_level(2)
+            else:
+                self.switch_to_level(1)
         if level == 1:
             if page == 0:
                 self.current_keyboard_protocol_index = (self.current_keyboard_protocol_index + 1) % len(self.kb_opts)
-                self.display_curent_page()
             if page == 1:
                 self.current_mouse_protocol_index = (self.current_mouse_protocol_index + 1) % len(self.mouse_opts)
-                self.display_curent_page()
             if page == 2:
                 self.current_gamepad_protocol_index = (self.current_gamepad_protocol_index + 1) % len(self.gamepad_opts)
-                self.display_curent_page()
             if page == 3:
                 self.current_mouse_sensitivity_offset_index = (self.current_mouse_sensitivity_offset_index + 1) % len(mouse_sensitivity_list)
-                self.display_curent_page()
             if page == 4:
                 configuration_dict[this_pboard_id]["keyboard_protocol_index"] = self.current_keyboard_protocol_index
                 configuration_dict[this_pboard_id]["mouse_protocol_index"] = self.current_mouse_protocol_index
@@ -399,8 +443,16 @@ class usb4vc_menu(object):
                 print(configuration_dict)
                 save_config()
                 self.send_spi()
-                self.switch_level(-1)
-                self.display_curent_page()
+                self.switch_to_level(0)
+        if level == 2:
+            if page == 0:
+                self.switch_page(1)
+        if level == 3:
+            if page == self.page_size[3] - 1:
+                self.switch_to_level(0)
+            else:
+                print("pair this device!", self.bluetooth_device_list[page])
+        self.display_curent_page()
 
     def action_current_page(self):
         self.action(self.current_level, self.current_page);
