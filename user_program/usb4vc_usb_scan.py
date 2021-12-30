@@ -235,7 +235,8 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     }
     curr_kb_output = {}
     curr_mouse_output = {
-        'IS_MODIFIED':False,
+        'mouse_id':gp_id,
+        'is_modified':False,
         BTN_LEFT:set([0]),
         BTN_MIDDLE:set([0]),
         BTN_RIGHT:set([0]),
@@ -290,7 +291,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         # button to mouse buttons
         if source_type == 'usb_gp_btn' and target_type == 'mouse_btn' and target_code in curr_mouse_output:
             curr_mouse_output[target_code].add(this_gp_dict[source_code])
-            curr_mouse_output['IS_MODIFIED'] = True
+            curr_mouse_output['is_modified'] = True
         # analog to mouse axes
         if source_type == 'usb_gp_axes' and target_type == 'mouse_axes' and target_code in curr_mouse_output:
             movement = clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) - 127
@@ -299,7 +300,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                 movement = 0
             joystick_to_mouse_slowdown = 20
             curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown) & 0xffff
-            curr_mouse_output['IS_MODIFIED'] = True
+            curr_mouse_output['is_modified'] = True
 
     for key in curr_kb_output:
         key_status_set = curr_kb_output[key]
@@ -338,17 +339,20 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     if len(new_keys) > 0:
         this_key = list(new_keys)[0]
         kb_spi_msg = list(keyboard_event_spi_msg_template)
+        kb_spi_msg[3] = gp_id
         kb_spi_msg[4] = this_key
         kb_spi_msg[6] = curr_kb_output[this_key]
     for key in curr_kb_output:
         if key in prev_kb_output and curr_kb_output[key] != prev_kb_output[key]:
             kb_spi_msg = list(keyboard_event_spi_msg_template)
+            kb_spi_msg[3] = gp_id
             kb_spi_msg[4] = key
             kb_spi_msg[6] = curr_kb_output[key]
 
     mouse_spi_msg = None
-    if curr_mouse_output['IS_MODIFIED']:
+    if curr_mouse_output['is_modified']:
         mouse_spi_msg = list(mouse_event_spi_msg_template)
+        mouse_spi_msg[3] = gp_id
         for mcode in curr_mouse_output:
             if type(mcode) is int:
                 if BTN_LEFT <= mcode <= BTN_TASK:
@@ -394,8 +398,9 @@ def joystick_hold_update():
     for key in curr_mouse_output:
         if type(key) is int and REL_X <= key <= REL_WHEEL and curr_mouse_output[key]:
             needs_update = 1
-    if needs_update and curr_mouse_output['IS_MODIFIED']:
+    if needs_update and curr_mouse_output['is_modified']:
         mouse_spi_msg = list(mouse_event_spi_msg_template)
+        mouse_spi_msg[3] = curr_mouse_output['mouse_id']
         for mcode in curr_mouse_output:
             if type(mcode) is int:
                 if BTN_LEFT <= mcode <= BTN_TASK:
