@@ -1,3 +1,6 @@
+# print('-------', is_successful, result_message, self.pairing_result, '----------')
+
+
 """----------bluetooth---------
 
 https://github.com/oscaracena/pygattlib

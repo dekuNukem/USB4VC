@@ -92,7 +92,7 @@ if len(sys.argv) > 1:
     delete_all_devices()
 else:
     print(pair_device('20:20:01:01:3C:0C'))
-    # [agent] PIN code: 027004
+    # [agent] PIN: 027004
 
 
     # [agent] Enter passkey (number in 0-999999):

@@ -51,7 +51,7 @@ OLED_WIDTH = 128
 OLED_HEIGHT = 32
 
 my_arg = ['--display', 'ssd1306', '--interface', 'spi', '--spi-port', '0', '--spi-device', '1', '--gpio-reset', '6', '--gpio-data-command', '5', '--width', str(OLED_WIDTH), '--height', str(OLED_HEIGHT), '--spi-bus-speed', '2000000']
-device = get_device(my_arg)
+oled_device = get_device(my_arg)
 
 PBOARD_ID_UNKNOWN = 0
 PBOARD_ID_IBMPC = 1
@@ -281,11 +281,16 @@ def pair_device(mac_addr):
                 p.stdin.write(f'pair {mac_addr}\n')
                 is_sent = True
             if 'PIN code:' in line:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Enter PIN code:", font_medium, 0, draw)
                     oled_print_centered(line.split('PIN code:')[-1], font_medium, 15, draw)
             if '(yes/no)' in line:
                 p.stdin.write('yes\n')
+            # if 'number in 0-999999' in line:
+            #     with canvas(oled_device) as draw:
+            #         oled_print_centered("Enter PIN code:", font_medium, 0, draw)
+            #         oled_print_centered("123456", font_medium, 15, draw)
+            #     p.stdin.write('123456\n')
             if 'successful' in line_lo:
                 p.stdin.write('exit\n')
                 return True, 'Success!'
@@ -360,49 +365,49 @@ class usb4vc_menu(object):
     def display_page(self, level, page):
         if level == 0:
             if page == 0:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     mouse_count, kb_count, gp_count = usb4vc_usb_scan.get_device_count()
                     draw.text((0, 0),  f"KBD {kb_count} {self.current_keyboard_protocol['display_name']}", font=font_regular, fill="white")
                     draw.text((0, 10), f"MOS {mouse_count} {self.current_mouse_protocol['display_name']}", font=font_regular, fill="white")
                     draw.text((0, 20), f"GPD {gp_count} {self.current_gamepad_protocol['display_name']}", font=font_regular, fill="white")
             if page == 1:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     draw.text((0, 0), f"PB:{self.pb_info['full_name']}", font=font_regular, fill="white")
                     draw.text((0, 10), f"FW:{self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  REV:{self.pb_info['hw_rev']}", font=font_regular, fill="white")
                     draw.text((0, 20), f"IP: 192.168.231.12", font=font_regular, fill="white")
             if page == 2:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Pair Bluetooth", font_medium, 0, draw)
                     oled_print_centered("(experimental)", font_regular, 20, draw)
 
         if level == 1:
             if page == 0:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Keyboard Protocol", font_medium, 0, draw)
                     oled_print_centered(self.kb_opts[self.current_keyboard_protocol_index]['display_name'], font_medium, 15, draw)
             if page == 1:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Mouse Protocol", font_medium, 0, draw)
                     oled_print_centered(self.mouse_opts[self.current_mouse_protocol_index]['display_name'], font_medium, 15, draw)
             if page == 2:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Gamepad Protocol", font_medium, 0, draw)
                     oled_print_centered(self.gamepad_opts[self.current_gamepad_protocol_index]['display_name'], font_medium, 15, draw)
             if page == 3:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Mouse Sensitivity", font_medium, 0, draw)
                     oled_print_centered(f"{mouse_sensitivity_list[self.current_mouse_sensitivity_offset_index]}", font_medium, 15, draw)
             if page == 4:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Save & Quit", font_medium, 10, draw)
         if level == 2:
             if page == 0:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Put your device in", font_regular, 0, draw)
                     oled_print_centered("pairing mode now.", font_regular, 10, draw)
                     oled_print_centered("Press enter to start", font_regular, 20, draw)
             if page == 1:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Scanning...", font_medium, 0, draw)
                     oled_print_centered("Please wait", font_medium, 15, draw)
                 result, self.error_message = bt_setup()
@@ -421,19 +426,19 @@ class usb4vc_menu(object):
                 self.goto_level(3)
                 self.display_curent_page()
             if page == 2:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Pairing result:", font_medium, 0, draw)
                     oled_print_centered(self.pairing_result, font_regular, 20, draw)
             if page == 3:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Bluetooth Error!", font_medium, 0, draw)
                     oled_print_centered(self.error_message, font_regular, 20, draw)
         if level == 3:
             if page == self.page_size[3] - 1:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Exit", font_medium, 10, draw)
             else:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered(f"Found {len(self.bluetooth_device_list)}. Pair this?", font_regular, 0, draw)
                     oled_print_centered(f"{self.bluetooth_device_list[page][1]}", font_regular, 10, draw)
                     oled_print_centered(f"{self.bluetooth_device_list[page][0]}", font_regular, 20, draw)
@@ -522,14 +527,13 @@ class usb4vc_menu(object):
             if page == self.page_size[3] - 1:
                 self.goto_level(0)
             else:
-                with canvas(device) as draw:
+                with canvas(oled_device) as draw:
                     oled_print_centered("Pairing...", font_medium, 0, draw)
                     oled_print_centered("Please wait", font_medium, 15, draw)
                 print("pairing", self.bluetooth_device_list[page])
                 bt_mac_addr = self.bluetooth_device_list[page][0]
                 is_successful, result_message = pair_device(bt_mac_addr)
                 self.pairing_result = result_message.split('.')[-1].strip()[-22:]
-                print('-------', is_successful, result_message, self.pairing_result, '----------')
                 if is_successful:
                     os.system(f'timeout {self.bt_scan_timeout_sec} bluetoothctl --agent NoInputNoOutput trust {bt_mac_addr}')
                     os.system(f'timeout {self.bt_scan_timeout_sec} bluetoothctl --agent NoInputNoOutput connect {bt_mac_addr}')

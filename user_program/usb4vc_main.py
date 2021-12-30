@@ -27,6 +27,8 @@ GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
 
 # reset_pboard()
 
+os.system('sudo bash -c "echo 1 > /sys/module/bluetooth/parameters/disable_ertm"')
+
 usb4vc_ui.ui_init()
 usb4vc_ui.ui_worker.start()
 
