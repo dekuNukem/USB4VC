@@ -80,3 +80,17 @@ MS intellimouse id3
 
 Serial Mouse:
 Microsoft serial mouse (3 byte 1200bps 7n1)
+
+
+
+rfkill returns nothing with no bluetooth on rpi 2
+
+bluetoothctrl gets stuck if no bluetooth
+
+check rfkill first, then put a timeout on first btctl command
+
+
+bluetoothctl --agent NoInputNoOutput
+scan on
+trust <MAC-Address>
+connect <MAC-Address>

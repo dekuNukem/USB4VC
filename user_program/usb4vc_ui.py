@@ -58,7 +58,6 @@ PBOARD_ID_ADB = 2
 pboard_info_spi_msg = [0] * 32
 this_pboard_id = PBOARD_ID_UNKNOWN
 
-
 USBGP_BTN_SOUTH = 0x130
 USBGP_BTN_EAST = 0x131
 USBGP_BTN_C = 0x132
@@ -221,8 +220,6 @@ gamepad_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_GAMEPAD]
 
 mouse_sensitivity_list = [1, 1.25, 1.5, 1.75, 0.25, 0.5, 0.75]
 
-configuration_dict = {}
-
 """
 key is protocol card ID
 conf_dict[pbid]:
@@ -233,15 +230,27 @@ current gamepad procotol
 mouse sensitivity
 """
 
+configuration_dict = {}
+
+LINUX_EXIT_CODE_TIMEOUT = 124
+
+def bt_setup():
+    rfkill_str = subprocess.getoutput("/usr/sbin/rfkill -n")
+    if 'bluetooth' not in rfkill_str:
+        return 1, "no BT receiver found"
+    os.system('/usr/sbin/rfkill unblock bluetooth')
+    time.sleep(0.1)
+    exit_code = os.system('timeout 1 bluetoothctl agent on')
+    if exit_code == LINUX_EXIT_CODE_TIMEOUT:
+        return 2, 'bluetoothctl stuck'
+    return 0, ''
+
 def scan_bt_devices(timeout_sec = 5):
-    LINUX_EXIT_CODE_TIMEOUT = 124
-    os.system('bluetoothctl agent on')
     exit_code = os.system(f"timeout {timeout_sec} bluetoothctl scan on") >> 8
     if exit_code != LINUX_EXIT_CODE_TIMEOUT:
-        print('bluetoothctl scan error')
-        return None
+        return None, 'scan error'
     device_str = subprocess.getoutput("bluetoothctl devices")
-    bt_dev_list = []
+    dev_list = []
     for line in device_str.replace('\r', '').split('\n'):
         if 'device' not in line.lower():
             continue
@@ -249,8 +258,10 @@ def scan_bt_devices(timeout_sec = 5):
         # skip if device has no name
         if len(line_split) < 3 or line_split[2].count('-') == 5:
             continue
-        bt_dev_list.append((line_split[1], line_split[2]))
-    return bt_dev_list
+        dev_list.append((line_split[1], line_split[2]))
+    if len(dev_list) == 0:
+        return None, 'Nothing was found'
+    return dev_list, ''
 
 def load_config():
     global configuration_dict
@@ -283,7 +294,7 @@ class usb4vc_menu(object):
         self.current_level = 0
         self.current_page = 0
         self.level_size = 4
-        self.page_size = [3, 5, 3, 1]
+        self.page_size = [3, 5, 4, 1]
         self.kb_opts = list(pboard['plist_keyboard'])
         self.mouse_opts = list(pboard['plist_mouse'])
         self.gamepad_opts = list(pboard['plist_gamepad'])
@@ -297,12 +308,18 @@ class usb4vc_menu(object):
         self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
         self.last_spi_message = []
         self.bluetooth_device_list = None
+        self.error_message = ''
+        self.pairing_result = ''
         self.send_spi()
 
     def switch_page(self, amount):
         self.current_page = (self.current_page + amount) % self.page_size[self.current_level]
 
-    def switch_to_level(self, new_level):
+    def goto_page(self, new_page):
+        if new_page < self.page_size[self.current_level]:
+            self.current_page = new_page
+
+    def goto_level(self, new_level):
         if new_level < self.level_size:
             self.current_level = new_level
             self.current_page = 0
@@ -355,13 +372,29 @@ class usb4vc_menu(object):
                     oled_print_centered("Scanning for new", font_regular, 0, draw)
                     oled_print_centered("Bluetooth devices...", font_regular, 10, draw)
                     oled_print_centered("One moment please", font_regular, 20, draw)
-                self.bluetooth_device_list = scan_bt_devices(10)
+                result, self.error_message = bt_setup()
+                if result != 0:
+                    self.goto_page(3)
+                    self.display_curent_page()
+                    return
+                self.bluetooth_device_list, self.error_message = scan_bt_devices(10)
+                if self.bluetooth_device_list is None:
+                    self.goto_page(3)
+                    self.display_curent_page()
+                    return
                 print("BT LIST:", self.bluetooth_device_list)
-                # if list is None, go to error screen
+                # set up level 3 menu structure
                 self.page_size[3] = len(self.bluetooth_device_list) + 1
-                # set up level 3 menu structure here
-                self.switch_to_level(3)
+                self.goto_level(3)
                 self.display_curent_page()
+            if page == 2:
+                with canvas(device) as draw:
+                    oled_print_centered("Pairing result:", font_medium, 0, draw)
+                    oled_print_centered(self.pairing_result, font_regular, 15, draw)
+            if page == 3:
+                with canvas(device) as draw:
+                    oled_print_centered("Bluetooth Error!", font_medium, 0, draw)
+                    oled_print_centered(self.error_message, font_regular, 15, draw)
         if level == 3:
             if page == self.page_size[3] - 1:
                 with canvas(device) as draw:
@@ -423,9 +456,9 @@ class usb4vc_menu(object):
     def action(self, level, page):
         if level == 0:
             if page == 2:
-                self.switch_to_level(2)
+                self.goto_level(2)
             else:
-                self.switch_to_level(1)
+                self.goto_level(1)
         if level == 1:
             if page == 0:
                 self.current_keyboard_protocol_index = (self.current_keyboard_protocol_index + 1) % len(self.kb_opts)
@@ -443,15 +476,29 @@ class usb4vc_menu(object):
                 print(configuration_dict)
                 save_config()
                 self.send_spi()
-                self.switch_to_level(0)
+                self.goto_level(0)
         if level == 2:
             if page == 0:
                 self.switch_page(1)
+            if page == 2:
+                self.goto_level(0)
+            if page == 3:
+                self.goto_level(0)
         if level == 3:
             if page == self.page_size[3] - 1:
-                self.switch_to_level(0)
+                self.goto_level(0)
             else:
-                print("pair this device!", self.bluetooth_device_list[page])
+                print("pairing", self.bluetooth_device_list[page])
+                pair_timeout_sec = 15
+                pair_result = subprocess.getoutput(f"timeout {pair_timeout_sec} bluetoothctl pair {self.bluetooth_device_list[page][0]}")
+                print('-------', pair_result, '----------')
+                self.pairing_result = 'Unknown'
+                try:
+                    self.pairing_result = [x for x in pair_result.split('\n') if '[' not in x][-1][-22:].split('.')[-1].strip()
+                except Exception as e:
+                    print('pair:', e)
+                self.goto_level(2)
+                self.goto_page(2)
         self.display_curent_page()
 
     def action_current_page(self):
@@ -516,13 +563,15 @@ def ui_worker():
 
         if plus_button.is_pressed():
             print(time.time(), "PLUS_BUTTON pressed!")
-            my_menu.switch_page(1)
-            my_menu.display_curent_page()
+            if my_menu.current_level != 2:
+                my_menu.switch_page(1)
+                my_menu.display_curent_page()
 
         if minus_button.is_pressed():
             print(time.time(), "MINUS_BUTTON pressed!")
-            my_menu.switch_page(-1)
-            my_menu.display_curent_page()
+            if my_menu.current_level != 2:
+                my_menu.switch_page(-1)
+                my_menu.display_curent_page()
 
         if enter_button.is_pressed():
             print(time.time(), "ENTER_BUTTON pressed!")

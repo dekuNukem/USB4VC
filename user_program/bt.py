@@ -1,9 +1,21 @@
+import time
 import os
 import subprocess
 
+LINUX_EXIT_CODE_TIMEOUT = 124
+
+def bt_setup():
+	rfkill_str = subprocess.getoutput("/usr/sbin/rfkill -n")
+	if 'bluetooth' not in rfkill_str:
+		return 1, "no bluetooth receiver"
+	os.system('/usr/sbin/rfkill unblock bluetooth')
+	time.sleep(0.1)
+	exit_code = os.system('timeout 1 bluetoothctl agent on')
+	if exit_code == LINUX_EXIT_CODE_TIMEOUT:
+		return 2, 'bluetoothctl stuck'
+	return 0, ''
+
 def scan_bt_devices(timeout_sec = 5):
-    LINUX_EXIT_CODE_TIMEOUT = 124
-    os.system('bluetoothctl agent on')
     exit_code = os.system(f"timeout {timeout_sec} bluetoothctl scan on") >> 8
     if exit_code != LINUX_EXIT_CODE_TIMEOUT:
         print('bluetoothctl scan error')
@@ -25,6 +37,8 @@ def pair_bt_device(mac_addr):
 	result_str = subprocess.getoutput(f"timeout 10 bluetoothctl pair {mac_addr}")
 	print(result_str)
 
-dev_list = scan_bt_devices()
-print(dev_list)
+print(bt_setup())
+
+# dev_list = scan_bt_devices()
+# print(dev_list)
 # pair_bt_device(dev_list[0][0])
