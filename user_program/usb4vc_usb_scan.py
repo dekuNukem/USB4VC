@@ -159,17 +159,18 @@ def make_mouse_spi_packet(mouse_dict, mouse_id):
 
 PID_GENERIC_GAMEPORT_GAMEPAD = 7
 
-def get_range_max(axes_dict, axis_key):
+def get_range_max_and_midpoint(axes_dict, axis_key):
     try:
-        return axes_dict[axis_key]['max'] - axes_dict[axis_key]['min']
+        return axes_dict[axis_key]['max'] - axes_dict[axis_key]['min'], int((axes_dict[axis_key]['max'] + axes_dict[axis_key]['min']) / 2)
     except Exception as e:
-        print('get_range_max:', e)
-    return None
+        print('get_range_max_and_midpoint:', e)
+    return None, None
 
-def clamp_to_8bit(value, axes_dict, axis_key):
-    rmax = get_range_max(axes_dict, axis_key)
+def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
+    rmax, rmid = get_range_max_and_midpoint(axes_dict, axis_key)
     if rmax is None:
         return 127
+    value -= rmid
     return int((value / rmax) * 255) + 127
 
 IBMPC_GGP_SPI_LOOKUP = {
@@ -246,7 +247,6 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         REL_Y:0,
         REL_WHEEL:0,
     }
-    
     for source_code in this_gp_dict:
         source_type, target_info = find_keycode_in_mapping(source_code, mapping_info['mapping'])
         if target_info is None:
@@ -259,7 +259,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             curr_gp_output[target_code].add(this_gp_dict[source_code])
         # analog to analog
         if source_type == 'usb_gp_axes' and target_type == 'pb_gp_axes' and target_code in curr_gp_output:
-            curr_gp_output[target_code].add(clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code))
+            curr_gp_output[target_code].add(convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code))
         # button to analog
         if source_type == 'usb_gp_btn' and target_type == 'pb_gp_half_axes' and target_code[:-1] in curr_gp_output and this_gp_dict[source_code]:
             if target_code.endswith('P'):
@@ -278,14 +278,14 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                 curr_kb_output[target_code] = set()
             is_activated = 0
             deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
-            if clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) > 127 + deadzone_amount:
+            if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) > 127 + deadzone_amount:
                 is_activated = 1
             curr_kb_output[target_code].add(is_activated)
 
             if target_info['code_neg'] not in curr_kb_output:
                 curr_kb_output[target_info['code_neg']] = set()
             is_activated = 0
-            if clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) < 127 - deadzone_amount:
+            if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) < 127 - deadzone_amount:
                 is_activated = 1
             curr_kb_output[target_info['code_neg']].add(is_activated)
         # button to mouse buttons
@@ -294,12 +294,12 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             curr_mouse_output['is_modified'] = True
         # analog to mouse axes
         if source_type == 'usb_gp_axes' and target_type == 'mouse_axes' and target_code in curr_mouse_output:
-            movement = clamp_to_8bit(this_gp_dict[source_code], axes_info, source_code) - 127
+            movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
             deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
             if abs(movement) <= deadzone_amount:
                 movement = 0
             joystick_to_mouse_slowdown = 20
-            curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown) & 0xffff
+            curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown)
             curr_mouse_output['is_modified'] = True
 
     for key in curr_kb_output:
@@ -358,7 +358,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                 if BTN_LEFT <= mcode <= BTN_TASK:
                     mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]] = curr_mouse_output[mcode]
                 elif REL_X <= mcode <= REL_WHEEL:
-                    mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]:MOUSE_SPI_LOOKUP[mcode]+2] = list(curr_mouse_output[mcode].to_bytes(2, byteorder='little'))
+                    mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]:MOUSE_SPI_LOOKUP[mcode]+2] = list((curr_mouse_output[mcode] & 0xffff).to_bytes(2, byteorder='little'))
 
     prev_gp_output = curr_gp_output
     prev_kb_output = curr_kb_output
@@ -395,6 +395,7 @@ def clear_mouse_movement(mdict):
 
 def joystick_hold_update():
     needs_update = 0
+    abs_value_multiplier = 1.5
     for key in curr_mouse_output:
         if type(key) is int and REL_X <= key <= REL_WHEEL and curr_mouse_output[key]:
             needs_update = 1
@@ -406,10 +407,11 @@ def joystick_hold_update():
                 if BTN_LEFT <= mcode <= BTN_TASK:
                     mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]] = curr_mouse_output[mcode]
                 elif REL_X <= mcode <= 0x08:
-                    mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]:MOUSE_SPI_LOOKUP[mcode]+2] = list(curr_mouse_output[mcode].to_bytes(2, byteorder='little'))
+                    movement_value = int(curr_mouse_output[mcode] * abs_value_multiplier) & 0xffff
+                    mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]:MOUSE_SPI_LOOKUP[mcode]+2] = list(movement_value.to_bytes(2, byteorder='little'))
         pcard_spi.xfer(mouse_spi_msg)
 
-gamepad_hold_check_interval = 0.013
+gamepad_hold_check_interval = 0.02
 def raw_input_event_worker():
     mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': [0, 0], BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
     gamepad_status_dict = {}
@@ -468,7 +470,7 @@ def raw_input_event_worker():
                 mouse_status_dict["scroll"] = data[4:6]
 
             # event is absolute axes AKA joystick
-            elif data[0] == EV_ABS:
+            elif this_device['is_gp'] and data[0] == EV_ABS:
                 abs_value = int.from_bytes(data[4:8], byteorder='little', signed=True)
                 gamepad_status_dict[this_id][event_code] = abs_value
 
