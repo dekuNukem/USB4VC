@@ -198,7 +198,7 @@ font_medium = ImageFont.truetype("ChiKareGo2.ttf", 16)
 font_large = ImageFont.truetype("ProggyTiny.ttf", 32)
 
 max_char_per_line = {font_regular:21, font_medium:17, font_large:11}
-width_per_char = {font_regular:6, font_medium:8, font_large:12}
+width_per_char = {font_regular:6, font_medium:7, font_large:12}
 
 def oled_print_centered(text, font, y, this_canvas):
     text = text.strip()[:max_char_per_line[font]]
@@ -371,7 +371,8 @@ class usb4vc_menu(object):
                     draw.text((0, 20), f"IP: 192.168.231.12", font=font_regular, fill="white")
             if page == 2:
                 with canvas(device) as draw:
-                    oled_print_centered("Pair Bluetooth", font_medium, 10, draw)
+                    oled_print_centered("Pair Bluetooth", font_medium, 0, draw)
+                    oled_print_centered("(experimental)", font_regular, 20, draw)
 
         if level == 1:
             if page == 0:
