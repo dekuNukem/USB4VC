@@ -366,12 +366,11 @@ class usb4vc_menu(object):
                 with canvas(device) as draw:
                     oled_print_centered("Put your device in", font_regular, 0, draw)
                     oled_print_centered("pairing mode now.", font_regular, 10, draw)
-                    oled_print_centered("Ready to start?", font_regular, 20, draw)
+                    oled_print_centered("Press enter to start", font_regular, 20, draw)
             if page == 1:
                 with canvas(device) as draw:
-                    oled_print_centered("Scanning for new", font_regular, 0, draw)
-                    oled_print_centered("Bluetooth devices...", font_regular, 10, draw)
-                    oled_print_centered("One moment please", font_regular, 20, draw)
+                    oled_print_centered("Scanning...", font_medium, 0, draw)
+                    oled_print_centered("Please wait", font_medium, 15, draw)
                 result, self.error_message = bt_setup()
                 if result != 0:
                     self.goto_page(3)
@@ -401,8 +400,9 @@ class usb4vc_menu(object):
                     oled_print_centered("Exit", font_medium, 10, draw)
             else:
                 with canvas(device) as draw:
-                    oled_print_centered("Pair this device?", font_medium, 0, draw)
-                    oled_print_centered(f"{self.bluetooth_device_list[page][1]}", font_medium, 15, draw)
+                    oled_print_centered(f"{len(self.bluetooth_device_list)} found. Pair this?", font_regular, 0, draw)
+                    oled_print_centered(f"{self.bluetooth_device_list[page][0]}", font_regular, 10, draw)
+                    oled_print_centered(f"{self.bluetooth_device_list[page][1]}", font_regular, 20, draw)
 
     def send_spi(self):
         status_dict = {}
