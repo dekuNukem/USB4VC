@@ -280,6 +280,12 @@ def pair_device(mac_addr):
             if '#' in line_lo and is_sent == False:
                 p.stdin.write(f'pair {mac_addr}\n')
                 is_sent = True
+            if 'PIN code:' in line:
+                with canvas(device) as draw:
+                    oled_print_centered("Enter PIN code:", font_medium, 0, draw)
+                    oled_print_centered(line.split('PIN code:')[-1], font_medium, 15, draw)
+            if '(yes/no)' in line:
+                p.stdin.write('yes\n')
             if 'successful' in line_lo:
                 p.stdin.write('exit\n')
                 return True, 'Success!'
@@ -518,9 +524,12 @@ class usb4vc_menu(object):
                     oled_print_centered("Pairing...", font_medium, 0, draw)
                     oled_print_centered("Please wait", font_medium, 15, draw)
                 print("pairing", self.bluetooth_device_list[page])
-                is_successful, result_message = pair_device(self.bluetooth_device_list[page][0])
+                bt_mac_addr = self.bluetooth_device_list[page][0]
+                is_successful, result_message = pair_device(bt_mac_addr)
                 self.pairing_result = result_message.split('.')[-1].strip()[-22:]
                 print('-------', is_successful, result_message, self.pairing_result, '----------')
+                if is_successful:
+                    os.system(f'timeout 15 bluetoothctl --agent NoInputNoOutput connect {bt_mac_addr}')
                 self.goto_level(2)
                 self.goto_page(2)
         self.display_curent_page()
