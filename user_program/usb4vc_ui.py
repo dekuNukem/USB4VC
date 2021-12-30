@@ -12,6 +12,7 @@ import usb4vc_usb_scan
 import usb4vc_shared
 import json
 import subprocess
+from subprocess import Popen, PIPE
 
 data_dir_path = os.path.join(os.path.expanduser('~'), 'usb4vc_data')
 config_file_path = os.path.join(data_dir_path, 'config.json')
@@ -240,16 +241,16 @@ def bt_setup():
         return 1, "no BT receiver found"
     os.system('/usr/sbin/rfkill unblock bluetooth')
     time.sleep(0.1)
-    exit_code = os.system('timeout 1 bluetoothctl agent on')
+    exit_code = os.system('timeout 1 bluetoothctl agent NoInputNoOutput')
     if exit_code == LINUX_EXIT_CODE_TIMEOUT:
         return 2, 'bluetoothctl stuck'
     return 0, ''
 
 def scan_bt_devices(timeout_sec = 5):
-    exit_code = os.system(f"timeout {timeout_sec} bluetoothctl scan on") >> 8
+    exit_code = os.system(f"timeout {timeout_sec} bluetoothctl --agent NoInputNoOutput scan on") >> 8
     if exit_code != LINUX_EXIT_CODE_TIMEOUT:
         return None, 'scan error'
-    device_str = subprocess.getoutput("bluetoothctl devices")
+    device_str = subprocess.getoutput("bluetoothctl --agent NoInputNoOutput devices")
     dev_list = []
     for line in device_str.replace('\r', '').split('\n'):
         if 'device' not in line.lower():
@@ -262,6 +263,31 @@ def scan_bt_devices(timeout_sec = 5):
     if len(dev_list) == 0:
         return None, 'Nothing was found'
     return dev_list, ''
+
+def pair_device(mac_addr):
+    is_ready = False
+    is_sent = False
+    fail_phrases = ['fail', 'error', 'not available', 'excep']
+    with Popen(["bluetoothctl", "--agent", "NoInputNoOutput"], stdout=PIPE, stdin=PIPE, bufsize=1,
+               universal_newlines=True, shell=True) as p:
+        for line in p.stdout:
+            print(line, end='')
+            line_lo = line.lower()
+            if 'registered' in line_lo:
+                is_ready = True
+            if is_ready is False:
+                continue
+            if '#' in line_lo and is_sent == False:
+                p.stdin.write(f'pair {mac_addr}\n')
+                is_sent = True
+            if 'successful' in line_lo:
+                p.stdin.write('exit\n')
+                return True, 'Success!'
+            for item in fail_phrases:
+                if item in line_lo:
+                    p.stdin.write('exit\n')
+                    return False, line
+    return False, "wtf"
 
 def load_config():
     global configuration_dict
@@ -376,7 +402,7 @@ class usb4vc_menu(object):
                     self.goto_page(3)
                     self.display_curent_page()
                     return
-                self.bluetooth_device_list, self.error_message = scan_bt_devices(10)
+                self.bluetooth_device_list, self.error_message = scan_bt_devices(5)
                 if self.bluetooth_device_list is None:
                     self.goto_page(3)
                     self.display_curent_page()
@@ -389,20 +415,20 @@ class usb4vc_menu(object):
             if page == 2:
                 with canvas(device) as draw:
                     oled_print_centered("Pairing result:", font_medium, 0, draw)
-                    oled_print_centered(self.pairing_result, font_regular, 15, draw)
+                    oled_print_centered(self.pairing_result, font_regular, 20, draw)
             if page == 3:
                 with canvas(device) as draw:
                     oled_print_centered("Bluetooth Error!", font_medium, 0, draw)
-                    oled_print_centered(self.error_message, font_regular, 15, draw)
+                    oled_print_centered(self.error_message, font_regular, 20, draw)
         if level == 3:
             if page == self.page_size[3] - 1:
                 with canvas(device) as draw:
                     oled_print_centered("Exit", font_medium, 10, draw)
             else:
                 with canvas(device) as draw:
-                    oled_print_centered(f"{len(self.bluetooth_device_list)} found. Pair this?", font_regular, 0, draw)
-                    oled_print_centered(f"{self.bluetooth_device_list[page][0]}", font_regular, 10, draw)
-                    oled_print_centered(f"{self.bluetooth_device_list[page][1]}", font_regular, 20, draw)
+                    oled_print_centered(f"Found {len(self.bluetooth_device_list)}. Pair this?", font_regular, 0, draw)
+                    oled_print_centered(f"{self.bluetooth_device_list[page][1]}", font_regular, 10, draw)
+                    oled_print_centered(f"{self.bluetooth_device_list[page][0]}", font_regular, 20, draw)
 
     def send_spi(self):
         status_dict = {}
@@ -488,15 +514,13 @@ class usb4vc_menu(object):
             if page == self.page_size[3] - 1:
                 self.goto_level(0)
             else:
+                with canvas(device) as draw:
+                    oled_print_centered("Pairing...", font_medium, 0, draw)
+                    oled_print_centered("Please wait", font_medium, 15, draw)
                 print("pairing", self.bluetooth_device_list[page])
-                pair_timeout_sec = 15
-                pair_result = subprocess.getoutput(f"timeout {pair_timeout_sec} bluetoothctl pair {self.bluetooth_device_list[page][0]}")
-                print('-------', pair_result, '----------')
-                self.pairing_result = 'Unknown'
-                try:
-                    self.pairing_result = [x for x in pair_result.split('\n') if '[' not in x][-1][-22:].split('.')[-1].strip()
-                except Exception as e:
-                    print('pair:', e)
+                is_successful, result_message = pair_device(self.bluetooth_device_list[page][0])
+                self.pairing_result = result_message.split('.')[-1].strip()[-22:]
+                print('-------', is_successful, result_message, self.pairing_result, '----------')
                 self.goto_level(2)
                 self.goto_page(2)
         self.display_curent_page()
