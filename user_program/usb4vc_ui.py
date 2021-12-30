@@ -342,6 +342,7 @@ class usb4vc_menu(object):
         self.bluetooth_device_list = None
         self.error_message = ''
         self.pairing_result = ''
+        self.bt_scan_timeout_sec = 10
         self.send_spi()
 
     def switch_page(self, amount):
@@ -409,7 +410,7 @@ class usb4vc_menu(object):
                     self.goto_page(3)
                     self.display_curent_page()
                     return
-                self.bluetooth_device_list, self.error_message = scan_bt_devices(5)
+                self.bluetooth_device_list, self.error_message = scan_bt_devices(self.bt_scan_timeout_sec)
                 if self.bluetooth_device_list is None:
                     self.goto_page(3)
                     self.display_curent_page()
@@ -530,7 +531,8 @@ class usb4vc_menu(object):
                 self.pairing_result = result_message.split('.')[-1].strip()[-22:]
                 print('-------', is_successful, result_message, self.pairing_result, '----------')
                 if is_successful:
-                    os.system(f'timeout 15 bluetoothctl --agent NoInputNoOutput connect {bt_mac_addr}')
+                    os.system(f'timeout {self.bt_scan_timeout_sec} bluetoothctl --agent NoInputNoOutput trust {bt_mac_addr}')
+                    os.system(f'timeout {self.bt_scan_timeout_sec} bluetoothctl --agent NoInputNoOutput connect {bt_mac_addr}')
                 self.goto_level(2)
                 self.goto_page(2)
         self.display_curent_page()
