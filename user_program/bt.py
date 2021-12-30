@@ -87,12 +87,36 @@ def pair_device(mac_addr):
                     return False, line
     return False, "wtf"
 
-if len(sys.argv) > 1:
-    print("deleting all devices..")
-    delete_all_devices()
-else:
-    print(pair_device('20:20:01:01:3C:0C'))
+# if len(sys.argv) > 1:
+#     print("deleting all devices..")
+#     delete_all_devices()
+# else:
+#     print(pair_device('20:20:01:01:3C:0C'))
+
     # [agent] PIN: 027004
-
-
     # [agent] Enter passkey (number in 0-999999):
+
+
+def get_paired_devices():
+    dev_set = set()
+    try:
+        device_str = subprocess.getoutput(f"timeout 5 bluetoothctl --agent NoInputNoOutput paired-devices")
+        for line in device_str.replace('\r', '').split('\n'):
+            if 'device' not in line.lower():
+                continue
+            line_split = line.split(' ', maxsplit=2)
+            # skip if device has no name
+            if len(line_split) < 3 or line_split[2].count('-') == 5:
+                continue
+            dev_set.add((line_split[1], line_split[2]))
+    except Exception as e:
+        print('get_paired_devices exception:', e)
+    return dev_set
+
+print(get_paired_devices())
+
+    # for item in dev_set:
+    #     os.system(f'bluetoothctl --agent NoInputNoOutput block {item[0]}')
+    #     os.system(f'bluetoothctl --agent NoInputNoOutput remove {item[0]}')
+    #     os.system(f'bluetoothctl --agent NoInputNoOutput unblock {item[0]}')
+    # print('done')

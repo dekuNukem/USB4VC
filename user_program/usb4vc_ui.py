@@ -300,6 +300,22 @@ def pair_device(mac_addr):
                     return False, line
     return False, "wtf"
 
+def get_paired_devices():
+    dev_set = set()
+    try:
+        device_str = subprocess.getoutput(f"timeout 5 bluetoothctl --agent NoInputNoOutput paired-devices")
+        for line in device_str.replace('\r', '').split('\n'):
+            if 'device' not in line.lower():
+                continue
+            line_split = line.split(' ', maxsplit=2)
+            # skip if device has no name
+            if len(line_split) < 3 or line_split[2].count('-') == 5:
+                continue
+            dev_set.add((line_split[1], line_split[2]))
+    except Exception as e:
+        print('get_paired_devices exception:', e)
+    return list(dev_set)
+
 def load_config():
     global configuration_dict
     try:
@@ -330,8 +346,8 @@ class usb4vc_menu(object):
         super(usb4vc_menu, self).__init__()
         self.current_level = 0
         self.current_page = 0
-        self.level_size = 4
-        self.page_size = [3, 5, 4, 1]
+        self.level_size = 5
+        self.page_size = [4, 5, 4, 1, 1]
         self.kb_opts = list(pboard['plist_keyboard'])
         self.mouse_opts = list(pboard['plist_mouse'])
         self.gamepad_opts = list(pboard['plist_gamepad'])
@@ -348,6 +364,7 @@ class usb4vc_menu(object):
         self.error_message = ''
         self.pairing_result = ''
         self.bt_scan_timeout_sec = 10
+        self.paired_devices_list = []
         self.send_spi()
 
     def switch_page(self, amount):
@@ -376,6 +393,10 @@ class usb4vc_menu(object):
                     draw.text((0, 10), f"FW:{self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  REV:{self.pb_info['hw_rev']}", font=font_regular, fill="white")
                     draw.text((0, 20), f"IP: 192.168.231.12", font=font_regular, fill="white")
             if page == 2:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Remove BT Device", font_medium, 0, draw)
+                    oled_print_centered("(experimental)", font_regular, 20, draw)
+            if page == 3:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Pair Bluetooth", font_medium, 0, draw)
                     oled_print_centered("(experimental)", font_regular, 20, draw)
@@ -442,6 +463,15 @@ class usb4vc_menu(object):
                     oled_print_centered(f"Found {len(self.bluetooth_device_list)}. Pair this?", font_regular, 0, draw)
                     oled_print_centered(f"{self.bluetooth_device_list[page][1]}", font_regular, 10, draw)
                     oled_print_centered(f"{self.bluetooth_device_list[page][0]}", font_regular, 20, draw)
+        if level == 4:
+            if page == self.page_size[4] - 1:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Exit", font_medium, 10, draw)
+            else:
+                with canvas(oled_device) as draw:
+                    oled_print_centered(f"Remove this device?", font_regular, 0, draw)
+                    oled_print_centered(f"{self.paired_devices_list[page][1]}", font_regular, 10, draw)
+                    oled_print_centered(f"{self.paired_devices_list[page][0]}", font_regular, 20, draw)
 
     def send_spi(self):
         status_dict = {}
@@ -495,6 +525,10 @@ class usb4vc_menu(object):
     def action(self, level, page):
         if level == 0:
             if page == 2:
+                self.paired_devices_list = get_paired_devices()
+                self.page_size[4] = len(self.paired_devices_list) + 1
+                self.goto_level(4)
+            elif page == 3:
                 self.goto_level(2)
             else:
                 self.goto_level(1)
@@ -539,6 +573,13 @@ class usb4vc_menu(object):
                     os.system(f'timeout {self.bt_scan_timeout_sec} bluetoothctl --agent NoInputNoOutput connect {bt_mac_addr}')
                 self.goto_level(2)
                 self.goto_page(2)
+        if level == 4:
+            if page == self.page_size[4] - 1:
+                self.goto_level(0)
+            else:
+                os.system(f'timeout 5 bluetoothctl --agent NoInputNoOutput untrust {self.paired_devices_list[page][0]}')
+                os.system(f'timeout 5 bluetoothctl --agent NoInputNoOutput remove {self.paired_devices_list[page][0]}')
+                self.goto_level(0)
         self.display_curent_page()
 
     def action_current_page(self):
