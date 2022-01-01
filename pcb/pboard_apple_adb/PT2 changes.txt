@@ -1,3 +1,4 @@
 moved ACT LED to PB8 (BOOT0)
 ADB 5V detect on PA3
 Removed RX pin on debug header
+added a current limiting resistor on PB8

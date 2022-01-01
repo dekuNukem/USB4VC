@@ -4044,6 +4044,7 @@ MAX3223-MAX3243.pdf</description>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="JP5" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2"/>
+<part name="R7" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="12K"/>
 </parts>
 <sheets>
 <sheet>
@@ -4201,6 +4202,10 @@ MAX3223-MAX3243.pdf</description>
 <instance part="JP5" gate="A" x="88.9" y="-149.86" smashed="yes">
 <attribute name="NAME" x="82.55" y="-141.605" size="1.778" layer="95"/>
 <attribute name="VALUE" x="82.55" y="-160.02" size="1.778" layer="96"/>
+</instance>
+<instance part="R7" gate="G$1" x="134.62" y="-119.38" smashed="yes" rot="R180">
+<attribute name="NAME" x="138.43" y="-120.8786" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="138.43" y="-116.078" size="1.778" layer="96" rot="R180"/>
 </instance>
 </instances>
 <busses>
@@ -4502,9 +4507,8 @@ MAX3223-MAX3243.pdf</description>
 <segment>
 <pinref part="R5" gate="G$1" pin="2"/>
 <wire x1="144.78" y1="-119.38" x2="144.78" y2="-124.46" width="0.1524" layer="91"/>
-<pinref part="IC3" gate="G$1" pin="BOOT0/PB8"/>
-<wire x1="119.38" y1="-119.38" x2="144.78" y2="-119.38" width="0.1524" layer="91"/>
 <pinref part="SW1" gate="G$1" pin="1"/>
+<wire x1="139.7" y1="-119.38" x2="144.78" y2="-119.38" width="0.1524" layer="91"/>
 <wire x1="160.02" y1="-124.46" x2="160.02" y2="-119.38" width="0.1524" layer="91"/>
 <pinref part="SW1" gate="G$1" pin="4"/>
 <wire x1="160.02" y1="-119.38" x2="160.02" y2="-149.86" width="0.1524" layer="91"/>
@@ -4514,9 +4518,7 @@ MAX3223-MAX3243.pdf</description>
 <pinref part="JP1" gate="A" pin="32"/>
 <wire x1="104.14" y1="-55.88" x2="144.78" y2="-55.88" width="0.1524" layer="91"/>
 <wire x1="144.78" y1="-55.88" x2="144.78" y2="-119.38" width="0.1524" layer="91"/>
-<pinref part="LED1" gate="G$1" pin="A"/>
-<wire x1="160.02" y1="-149.86" x2="160.02" y2="-160.02" width="0.1524" layer="91"/>
-<junction x="160.02" y="-149.86"/>
+<pinref part="R7" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -4659,6 +4661,17 @@ MAX3223-MAX3243.pdf</description>
 <wire x1="50.8" y1="10.16" x2="96.52" y2="10.16" width="0.1524" layer="91"/>
 <junction x="96.52" y="10.16"/>
 <junction x="154.94" y="38.1"/>
+</segment>
+</net>
+<net name="N$9" class="0">
+<segment>
+<pinref part="R7" gate="G$1" pin="2"/>
+<pinref part="IC3" gate="G$1" pin="BOOT0/PB8"/>
+<wire x1="119.38" y1="-119.38" x2="129.54" y2="-119.38" width="0.1524" layer="91"/>
+<pinref part="LED1" gate="G$1" pin="A"/>
+<wire x1="160.02" y1="-160.02" x2="129.54" y2="-160.02" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="-160.02" x2="129.54" y2="-119.38" width="0.1524" layer="91"/>
+<junction x="129.54" y="-119.38"/>
 </segment>
 </net>
 </nets>
