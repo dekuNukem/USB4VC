@@ -38,7 +38,6 @@ void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port
 uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq);
 uint8_t parse_adb_cmd(uint8_t data);
 void adb_reset(void);
-void write_test(void);
 
 #ifdef __cplusplus
 }

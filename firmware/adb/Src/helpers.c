@@ -4,7 +4,7 @@
 #include "helpers.h"
 #include "shared.h"
 
-void ps2kb_buf_reset(ps2kb_buf *lb)
+void kb_buf_reset(kb_buf *lb)
 {
   lb->head = 0;
   lb->tail = 0;
@@ -12,19 +12,19 @@ void ps2kb_buf_reset(ps2kb_buf *lb)
   memset(lb->keyvalue_buf, 0, lb->size);
 }
 
-uint8_t ps2kb_buf_is_full(ps2kb_buf *lb)
+uint8_t kb_buf_is_full(kb_buf *lb)
 {
 	return lb->tail == (lb->head + 1) % lb->size;
 }
 
-uint8_t ps2kb_buf_is_empty(ps2kb_buf *lb)
+uint8_t kb_buf_is_empty(kb_buf *lb)
 {
 	return lb->tail == lb->head;
 }
 
-uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value)
+uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value)
 {
-	if(ps2kb_buf_is_full(lb))
+	if(kb_buf_is_full(lb))
 		return 1;
 	lb->keycode_buf[lb->head] = code;
 	lb->keyvalue_buf[lb->head] = value;
@@ -32,9 +32,9 @@ uint8_t ps2kb_buf_add(ps2kb_buf *lb, uint8_t code, uint8_t value)
 	return 0;
 }
 
-uint8_t ps2kb_buf_get(ps2kb_buf *lb, uint8_t* code, uint8_t* value)
+uint8_t kb_buf_get(kb_buf *lb, uint8_t* code, uint8_t* value)
 {
-	if(ps2kb_buf_is_empty(lb))
+	if(kb_buf_is_empty(lb))
 		return 1;
 	*code = lb->keycode_buf[lb->tail];
 	*value = lb->keyvalue_buf[lb->tail];
@@ -42,56 +42,56 @@ uint8_t ps2kb_buf_get(ps2kb_buf *lb, uint8_t* code, uint8_t* value)
 	return 0;
 }
 
-void ps2kb_buf_init(ps2kb_buf *lb, uint8_t size)
+void kb_buf_init(kb_buf *lb, uint8_t size)
 {
   lb->size = size;
   lb->keycode_buf = malloc(size);
   lb->keyvalue_buf = malloc(size);
-  ps2kb_buf_reset(lb);
+  kb_buf_reset(lb);
 }
 
 // ----------------------------
 
-uint8_t ps2mouse_buf_is_full(ps2mouse_buf *lb)
+uint8_t mouse_buf_is_full(mouse_buf *lb)
 {
 	return lb->tail == (lb->head + 1) % lb->size;
 }
 
-uint8_t ps2mouse_buf_is_empty(ps2mouse_buf *lb)
+uint8_t mouse_buf_is_empty(mouse_buf *lb)
 {
 	return lb->tail == lb->head;
 }
 
-uint8_t ps2mouse_buf_add(ps2mouse_buf *lb, mouse_event* event)
+uint8_t mouse_buf_add(mouse_buf *lb, mouse_event* event)
 {
-	if(ps2mouse_buf_is_full(lb))
+	if(mouse_buf_is_full(lb))
 		return 1;
 	memcpy(&lb->mouse_events[lb->head], event, sizeof(mouse_event));
 	lb->head = (lb->head + 1) % lb->size;
 	return 0;
 }
 
-mouse_event* ps2mouse_buf_get(ps2mouse_buf *lb)
+mouse_event* mouse_buf_get(mouse_buf *lb)
 {
 	mouse_event* to_return = NULL;
-	if(ps2mouse_buf_is_empty(lb))
+	if(mouse_buf_is_empty(lb))
 		return to_return;
 	to_return = &lb->mouse_events[lb->tail];
 	lb->tail = (lb->tail + 1) % lb->size;
 	return to_return;
 }
 
-void ps2mouse_buf_reset(ps2mouse_buf *lb)
+void mouse_buf_reset(mouse_buf *lb)
 {
   lb->head = 0;
   lb->tail = 0;
   memset(lb->mouse_events, 0, lb->size * sizeof(mouse_event));
 }
 
-void ps2mouse_buf_init(ps2mouse_buf *lb, uint8_t size)
+void mouse_buf_init(mouse_buf *lb, uint8_t size)
 {
   lb->size = size;
   lb->mouse_events = malloc(size * sizeof(mouse_event));
-  ps2mouse_buf_reset(lb);
+  mouse_buf_reset(lb);
 }
 

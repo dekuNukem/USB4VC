@@ -41,14 +41,23 @@
 #include "stm32f0xx_hal.h"
 
 /* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
 #include <string.h>
 #include <stdlib.h>
 #include "delay_us.h"
 #include "shared.h"
 #include "helpers.h"
 #include "adb.h"
+
+#define PROTOCOL_STATUS_NOT_AVAILABLE 0
+#define PROTOCOL_STATUS_ENABLED 1
+#define PROTOCOL_STATUS_DISABLED 2
+#define PROTOCOL_LOOKUP_SIZE 16
+
+#define IS_ADB_DEVICE_PRESENT() HAL_GPIO_ReadPin(ADB_5V_DET_GPIO_Port, ADB_5V_DET_Pin)
+
+
+/* USER CODE END Includes */
+
 
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
@@ -59,9 +68,20 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+const uint8_t board_id = 2;
+const uint8_t version_major = 0;
+const uint8_t version_minor = 1;
+const uint8_t version_patch = 0;
+uint8_t hw_revision;
+
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
+kb_buf my_kb_buf;
+mouse_buf my_mouse_buf;
+mouse_event latest_mouse_event;
+uint8_t spi_error_occured;
+uint8_t protocol_status_lookup[PROTOCOL_LOOKUP_SIZE];
 
 /* USER CODE END PV */
 
@@ -84,43 +104,141 @@ int fputc(int ch, FILE *f)
     return ch;
 }
 
+uint8_t is_protocol_enabled(uint8_t this_protocol)
+{
+  if(this_protocol >= PROTOCOL_LOOKUP_SIZE)
+    return 0;
+  return protocol_status_lookup[this_protocol] == PROTOCOL_STATUS_ENABLED;
+}
+
 int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
 {
   return (int16_t)((msb << 8) | lsb);
+}
+
+void handle_protocol_switch(uint8_t spi_byte)
+{
+  uint8_t index = spi_byte & 0x7f;
+  uint8_t onoff = spi_byte & 0x80;
+
+  if(index >= PROTOCOL_LOOKUP_SIZE)
+    return;
+  // trying to change a protocol that is not available on this board
+  if(protocol_status_lookup[index] == PROTOCOL_STATUS_NOT_AVAILABLE)
+    return;
+  // switching protocol ON
+  if(onoff && protocol_status_lookup[index] == PROTOCOL_STATUS_DISABLED)
+  {
+    switch(index)
+    {
+      case PROTOCOL_ADB_KB:
+      case PROTOCOL_ADB_MOUSE:
+        adb_reset();
+        break;
+    }
+    protocol_status_lookup[index] = PROTOCOL_STATUS_ENABLED;
+  }
+  // switching protocol OFF
+  else if((onoff == 0) && protocol_status_lookup[index] == PROTOCOL_STATUS_ENABLED)
+  {
+    protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
+    switch(index) 
+    {
+      case PROTOCOL_ADB_KB:
+      case PROTOCOL_ADB_MOUSE:
+        adb_reset();
+        break;
+    }
+  }
 }
 
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
   memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-
+  
   if(backup_spi1_recv_buf[0] != 0xde)
   {
-    printf("WRONG");
-    while(1);
+    spi_error_occured = 1;
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
+  {
+    kb_buf_add(&my_kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
+  {
+    latest_mouse_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
+    latest_mouse_event.movement_y = -1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
+    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
+    latest_mouse_event.button_left = backup_spi1_recv_buf[13];
+    latest_mouse_event.button_right = backup_spi1_recv_buf[14];
+    latest_mouse_event.button_middle = backup_spi1_recv_buf[15];
+    latest_mouse_event.button_side = backup_spi1_recv_buf[16];
+    latest_mouse_event.button_extra = backup_spi1_recv_buf[17];
+    mouse_buf_add(&my_mouse_buf, &latest_mouse_event);
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
+  {
+    HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
+  {
+    memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+    spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+    spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+    spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_INFO_REQUEST;
+    spi_transmit_buf[3] = board_id;
+    spi_transmit_buf[4] = hw_revision;
+    spi_transmit_buf[5] = version_major;
+    spi_transmit_buf[6] = version_minor;
+    spi_transmit_buf[7] = version_patch;
+    uint8_t curr_index = 8;
+    for (int i = 0; i < PROTOCOL_LOOKUP_SIZE; i++)
+    {
+      if(protocol_status_lookup[i] == PROTOCOL_STATUS_NOT_AVAILABLE)
+        continue;
+      else if(protocol_status_lookup[i] == PROTOCOL_STATUS_DISABLED)
+        spi_transmit_buf[curr_index] = i;
+      else if(protocol_status_lookup[i] == PROTOCOL_STATUS_ENABLED)
+        spi_transmit_buf[curr_index] = i | 0x80;
+      curr_index++;
+    }
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
+  {
+    for (int i = 3; i < SPI_BUF_SIZE; ++i)
+    {
+      if(backup_spi1_recv_buf[i] == 0)
+        break;
+      handle_protocol_switch(backup_spi1_recv_buf[i]);
+    }
   }
 
-  // if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_KB_EVENT)
-  //   ps2kb_buf_add(&my_ps2kb_buf, backup_spi1_recv_buf[6], backup_spi1_recv_buf[8]);
-
-  // if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_MOUSE_EVENT)
-  // {
-  //   mouse_event this_event;
-  //   this_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
-  //   this_event.movement_y = -1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
-  //   this_event.scroll_vertical = -1 * byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
-  //   this_event.button_left = backup_spi1_recv_buf[13];
-  //   this_event.button_right = backup_spi1_recv_buf[14];
-  //   this_event.button_middle = backup_spi1_recv_buf[15];
-  //   this_event.button_side = backup_spi1_recv_buf[16];
-  //   this_event.button_extra = backup_spi1_recv_buf[17];
-  //   ps2mouse_buf_add(&my_ps2mouse_buf, &this_event);
-  // }
-
-  if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_REQ_ACK)
-    HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
+  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
+}
+
+void spi_error_dump_reboot(void)
+{
+  printf("SPI ERROR\n");
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    printf("%d ", backup_spi1_recv_buf[i]);
+  printf("\nrebooting...\n");
+  for (int i = 0; i < 100; ++i)
+  {
+    HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
+    HAL_Delay(100);
+  }
+  NVIC_SystemReset();
+}
+
+const char boot_message[] = "USB4VC Protocol Board\nApple Desktop Bus (ADB)\ndekuNukem 2022";
+
+void protocol_status_lookup_init(void)
+{
+  memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
+  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
 }
 
 /* USER CODE END 0 */
@@ -158,20 +276,23 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
+  protocol_status_lookup_init();
+  kb_buf_init(&my_kb_buf, 16);
+  mouse_buf_init(&my_mouse_buf, 16);
+  
+  uint8_t adb_data, adb_status;
+  adb_init(ADB_DATA_GPIO_Port, ADB_DATA_Pin, ADB_PSW_GPIO_Port, ADB_PSW_Pin);
+  
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  adb_init(ADB_DATA_GPIO_Port, ADB_DATA_Pin, ADB_PSW_GPIO_Port, ADB_PSW_Pin);
-  printf("hello world\n");
-  uint8_t adb_data, adb_status;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
-    // HAL_Delay(200);
 
   /* USER CODE END WHILE */
 
@@ -185,7 +306,6 @@ int main(void)
       continue;
 
     parse_adb_cmd(adb_data);
-
   }
   /* USER CODE END 3 */
 
