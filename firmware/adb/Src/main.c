@@ -241,6 +241,23 @@ void protocol_status_lookup_init(void)
   protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
 }
 
+void adb_mouse_update(void)
+{
+  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
+  if(this_mouse_event == NULL)
+    return;
+  uint16_t response = 0;
+  if(this_mouse_event->button_left)
+    response |= 0x8000;
+  if(this_mouse_event->button_right)
+    response |= 0x80;
+  response |= ((uint8_t)(this_mouse_event->movement_x)) & 0x7f;
+  response |= (((uint8_t)(this_mouse_event->movement_y)) & 0x7f) << 8;
+  adb_send_response_16b(response);
+  printf("0x%x\n", response);
+  mouse_buf_pop(&my_mouse_buf);
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -281,7 +298,7 @@ int main(void)
   protocol_status_lookup_init();
   kb_buf_init(&my_kb_buf, 16);
   mouse_buf_init(&my_mouse_buf, 16);
-  
+  fputc('%', NULL);
   uint8_t adb_data, adb_status;
   adb_init(ADB_DATA_GPIO_Port, ADB_DATA_Pin, ADB_PSW_GPIO_Port, ADB_PSW_Pin);
   
@@ -305,7 +322,9 @@ int main(void)
     else if(adb_status != ADB_OK)
       continue;
 
-    parse_adb_cmd(adb_data);
+    adb_status = parse_adb_cmd(adb_data);
+    if(adb_status == ADB_MOUSE_POLL)
+      adb_mouse_update();
   }
   /* USER CODE END 3 */
 

@@ -16,10 +16,18 @@
 
 #define ADB_OK 0
 #define ADB_TIMEOUT -1
+#define ADB_KB_POLL 2
+#define ADB_MOUSE_POLL 3
 #define ADB_ERROR ADB_LINE_STATUS_ERROR
 
 #define ADB_KB_DEFAULT_ADDR 2
 #define ADB_MOUSE_DEFAULT_ADDR 3
+
+#define ADB_CMD_TYPE_FLUSH 0
+#define ADB_CMD_TYPE_LISTEN 2
+#define ADB_CMD_TYPE_TALK 3
+
+#define ADB_CHANGE_ADDR 0xFE
 
 // #define DEBUG0_HI() HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET)
 // #define DEBUG0_LOW() HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET)
@@ -38,6 +46,8 @@ void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port
 uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq);
 uint8_t parse_adb_cmd(uint8_t data);
 void adb_reset(void);
+void adb_release_lines(void);
+uint8_t adb_send_response_16b(uint16_t data);
 
 #ifdef __cplusplus
 }

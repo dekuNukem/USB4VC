@@ -32,14 +32,19 @@ uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value)
 	return 0;
 }
 
-uint8_t kb_buf_get(kb_buf *lb, uint8_t* code, uint8_t* value)
+uint8_t kb_buf_peek(kb_buf *lb, uint8_t* code, uint8_t* value)
 {
 	if(kb_buf_is_empty(lb))
 		return 1;
 	*code = lb->keycode_buf[lb->tail];
 	*value = lb->keyvalue_buf[lb->tail];
-	lb->tail = (lb->tail + 1) % lb->size;
 	return 0;
+}
+
+void kb_buf_pop(kb_buf *lb)
+{
+	if(!kb_buf_is_empty(lb))
+		lb->tail = (lb->tail + 1) % lb->size;;
 }
 
 void kb_buf_init(kb_buf *lb, uint8_t size)
@@ -71,14 +76,17 @@ uint8_t mouse_buf_add(mouse_buf *lb, mouse_event* event)
 	return 0;
 }
 
-mouse_event* mouse_buf_get(mouse_buf *lb)
+mouse_event* mouse_buf_peek(mouse_buf *lb)
 {
-	mouse_event* to_return = NULL;
 	if(mouse_buf_is_empty(lb))
-		return to_return;
-	to_return = &lb->mouse_events[lb->tail];
-	lb->tail = (lb->tail + 1) % lb->size;
-	return to_return;
+		return NULL;
+	return &lb->mouse_events[lb->tail];
+}
+
+void mouse_buf_pop(mouse_buf *lb)
+{
+	if(!mouse_buf_is_empty(lb))
+		lb->tail = (lb->tail + 1) % lb->size;
 }
 
 void mouse_buf_reset(mouse_buf *lb)

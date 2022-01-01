@@ -256,7 +256,6 @@ uint8_t adb_send_response_16b(uint16_t data)
   return ADB_OK;
 }
 
-
 uint8_t adb_listen_16b(uint16_t* data)
 {
   *data = 0;
@@ -284,15 +283,8 @@ uint8_t adb_listen_16b(uint16_t* data)
   return ADB_OK;
 }
 
-#define ADB_CMD_TYPE_FLUSH 0
-#define ADB_CMD_TYPE_LISTEN 2
-#define ADB_CMD_TYPE_TALK 3
 // addr 2 keyboard, 3 mouse
-
-#define ADB_CHANGE_ADDR 0xFE
-
 uint32_t last_send;
-
 uint8_t parse_adb_cmd(uint8_t data)
 {
   uint8_t addr = data >> 4;
@@ -338,25 +330,17 @@ uint8_t parse_adb_cmd(uint8_t data)
       adb_kb_current_addr = (host_cmd & 0xf00) >> 8;
   }
 
-  // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
-  // {
-  //   uint16_t response = 0x80fc;
-  //   DEBUG1_HI();
-  //   adb_send_response_16b(response);
-  //   last_send = HAL_GetTick();
-  //   printf("sending...\n");
-  //   DEBUG1_LOW();
-  // }
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
+  {
+    uint16_t response = 0x8082;
+    if(HAL_GetTick() % 2)
+      response = 0x80fc;
+    adb_send_response_16b(response);
+    last_send = HAL_GetTick();
+  }
 
-  // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_kb_current_addr && HAL_GetTick() - last_send > 500)
-  // {
-  //   uint16_t response = 0x580;
-  //   DEBUG1_HI();
-  //   adb_send_response_16b(response);
-  //   last_send = HAL_GetTick();
-  //   printf("sending...\n");
-  //   DEBUG1_LOW();
-  // }
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_kb_current_addr && HAL_GetTick() - last_send > 500)
+    return ADB_KB_POLL;
 
   return ADB_OK;
 }
