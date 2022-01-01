@@ -343,15 +343,15 @@ uint8_t parse_adb_cmd(uint8_t data)
       adb_kb_current_addr = (host_cmd & 0xf00) >> 8;
   }
 
-  // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
-  // {
-  //   uint16_t response = 0x80fc;
-  //   DEBUG1_HI();
-  //   adb_send_response_16b(response);
-  //   last_send = HAL_GetTick();
-  //   printf("sending...\n");
-  //   DEBUG1_LOW();
-  // }
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
+  {
+    uint16_t response = 0x80fc;
+    DEBUG1_HI();
+    adb_send_response_16b(response);
+    last_send = HAL_GetTick();
+    printf("sending...\n");
+    DEBUG1_LOW();
+  }
 
   // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_kb_current_addr && HAL_GetTick() - last_send > 500)
   // {

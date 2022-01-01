@@ -407,10 +407,10 @@ by exp-lbrs.ulp</description>
 <wire x1="-7.5" y1="-8.3" x2="7.5" y2="-8.3" width="0.127" layer="21"/>
 <wire x1="7.5" y1="-8.3" x2="7.5" y2="-2.45" width="0.127" layer="21"/>
 <wire x1="-7.5" y1="-8.3" x2="-7.5" y2="-2.45" width="0.127" layer="21"/>
-<pad name="2_PSW" x="-3.4" y="-3.8" drill="0.9"/>
-<pad name="1_ADB" x="3.4" y="-3.8" drill="0.9"/>
-<pad name="4_GND" x="-3.4" y="-6.3" drill="0.9"/>
-<pad name="3_5V" x="3.4" y="-6.3" drill="0.9"/>
+<pad name="ADB" x="-3.4" y="-3.8" drill="0.9"/>
+<pad name="PSW" x="3.4" y="-3.8" drill="0.9"/>
+<pad name="5V" x="-3.4" y="-6.3" drill="0.9"/>
+<pad name="GND" x="3.4" y="-6.3" drill="0.9"/>
 <pad name="SHIELD1" x="-6.75" y="-0.8" drill="2.2"/>
 <pad name="SHIELD2" x="0" y="0" drill="2.2"/>
 <pad name="SHIELD3" x="6.75" y="-0.8" drill="2.2"/>
@@ -536,10 +536,10 @@ Super Speed pins not available on the 16-pin purely SMD connector so this part i
 <devices>
 <device name="" package="DIN4">
 <connects>
-<connect gate="J1" pin="5V" pad="3_5V"/>
-<connect gate="J1" pin="ADB_DATA" pad="1_ADB"/>
-<connect gate="J1" pin="GND" pad="4_GND"/>
-<connect gate="J1" pin="PSW" pad="2_PSW"/>
+<connect gate="J1" pin="5V" pad="5V"/>
+<connect gate="J1" pin="ADB_DATA" pad="ADB"/>
+<connect gate="J1" pin="GND" pad="GND"/>
+<connect gate="J1" pin="PSW" pad="PSW"/>
 <connect gate="J1" pin="SHIELD" pad="SHIELD1 SHIELD2 SHIELD3"/>
 </connects>
 <technologies>

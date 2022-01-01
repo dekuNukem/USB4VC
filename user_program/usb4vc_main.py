@@ -21,10 +21,8 @@ def reset_pboard():
     time.sleep(0.05)
     print("done")
 
-GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
-GPIO.setup(PBOARD_DFU_PIN, GPIO.OUT)
-GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
-
+GPIO.setup(PBOARD_DFU_PIN, GPIO.IN)
+# GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
 # reset_pboard()
 
 os.system('sudo bash -c "echo 1 > /sys/module/bluetooth/parameters/disable_ertm"')
