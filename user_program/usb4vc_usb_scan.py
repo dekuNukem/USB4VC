@@ -424,6 +424,7 @@ def raw_input_event_worker():
     mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': [0, 0], BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
     gamepad_status_dict = {}
     next_gamepad_hold_check = time.time() + gamepad_hold_check_interval
+    last_mouse_spi_msg = []
     print("raw_input_event_worker started")
     while 1:
         now = time.time()
@@ -485,7 +486,10 @@ def raw_input_event_worker():
             # SYNC event
             elif data[0] == EV_SYN and event_code == SYN_REPORT:
                 if this_device['is_mouse']:
-                    # pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
+                    this_spi_msg = make_mouse_spi_packet(mouse_status_dict, this_id)
+                    if not (this_spi_msg[4:] == last_mouse_spi_msg[4:] and sum(this_spi_msg[4:]) == 0):
+                        pcard_spi.xfer(list(this_spi_msg))
+                    last_mouse_spi_msg = list(this_spi_msg)
                     next_gamepad_hold_check = now + gamepad_hold_check_interval
                     clear_mouse_movement(mouse_status_dict)
                 if this_device['is_gp']:
