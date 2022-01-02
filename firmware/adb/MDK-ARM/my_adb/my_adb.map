@@ -1087,7 +1087,7 @@ Removing Unused input sections from the image.
 
     Removing adb.o(.rev16_text), (4 bytes).
     Removing adb.o(.revsh_text), (4 bytes).
-    Removing adb.o(.data), (83 bytes).
+    Removing adb.o(.constdata), (186 bytes).
     Removing adb.o(.data), (1 bytes).
     Removing delay_us.o(.rev16_text), (4 bytes).
     Removing delay_us.o(.revsh_text), (4 bytes).
@@ -1575,7 +1575,7 @@ Removing Unused input sections from the image.
     Removing stm32f0xx_hal_tim.o(i.__ARM_common_switch8), (26 bytes).
     Removing depilogue.o(i.__ARM_clz), (46 bytes).
 
-489 unused section(s) (total 34798 bytes) removed from the image.
+489 unused section(s) (total 34901 bytes) removed from the image.
 
 ==============================================================================
 
@@ -2281,7 +2281,7 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       980         86          0         16          0     458448   adb.o
+       980         86          0         16          0     458498   adb.o
         52         10          0          4          0       1931   delay_us.o
        370          0          0          0          0       7263   helpers.o
       1656        198         61         16        380      16799   main.o
@@ -2300,7 +2300,7 @@ Image component sizes
         92         14         24          4          0       1123   system_stm32f0xx.o
 
     ----------------------------------------------------------------------
-      8804        628        312         44       1916     539108   Object Totals
+      8804        628        312         44       1916     539158   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         28          0          3          0          0          0   (incl. Padding)
 
@@ -2348,8 +2348,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      9684        684        312         60       1916     535244   Grand Totals
-      9684        684        312         60       1916     535244   ELF Image Totals
+      9684        684        312         60       1916     535294   Grand Totals
+      9684        684        312         60       1916     535294   ELF Image Totals
       9684        684        312         60          0          0   ROM Totals
 
 ==============================================================================
