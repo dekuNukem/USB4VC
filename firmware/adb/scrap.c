@@ -1,3 +1,31 @@
+while (1)
+  {
+
+  /* USER CODE END WHILE */
+
+  /* USER CODE BEGIN 3 */
+
+    adb_status = adb_recv_cmd(&adb_data, 0);
+    // printf("%d\n", adb_status);
+
+    if(adb_status == ADB_LINE_STATUS_RESET)
+      adb_reset();
+    else if(adb_status != ADB_OK)
+      continue;
+    // printf("%d\n", adb_data);
+    adb_status = parse_adb_cmd(adb_data);
+
+    if(adb_status == ADB_MOUSE_POLL)
+    {
+      adb_mouse_update();
+    }
+    // if(adb_status == ADB_KB_POLL)
+    // {
+    //   DEBUG0_HI();
+    //   DEBUG0_LOW();
+    // }
+  }
+
 adb_status = adb_recv_cmd(&adb_data, 0);
   // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
   // {

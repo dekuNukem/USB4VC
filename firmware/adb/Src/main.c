@@ -55,7 +55,6 @@
 
 #define IS_ADB_DEVICE_PRESENT() HAL_GPIO_ReadPin(ADB_5V_DET_GPIO_Port, ADB_5V_DET_Pin)
 
-
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -154,11 +153,45 @@ void handle_protocol_switch(uint8_t spi_byte)
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
-  memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
-  
-  if(backup_spi1_recv_buf[0] != 0xde)
-  {
+  if(spi_recv_buf[0] != 0xde)
     spi_error_occured = 1;
+  memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
+  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+  HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
+}
+
+void spi_error_dump_reboot(void)
+{
+  printf("SPI ERROR\n");
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    printf("%d ", backup_spi1_recv_buf[i]);
+  printf("\nrebooting...\n");
+  for (int i = 0; i < 100; ++i)
+  {
+    HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
+    HAL_Delay(100);
+  }
+  NVIC_SystemReset();
+}
+
+const char boot_message[] = "USB4VC Protocol Board\nApple Desktop Bus (ADB)\ndekuNukem 2022";
+
+void protocol_status_lookup_init(void)
+{
+  memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
+  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
+}
+
+void process_spi_data(void)
+{
+  if(backup_spi1_recv_buf[0] == 0)
+  {
+    return;
+  }
+  else if(spi_error_occured)
+  {
+    spi_error_dump_reboot();
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
   {
@@ -212,42 +245,14 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
       handle_protocol_switch(backup_spi1_recv_buf[i]);
     }
   }
-
-  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
+  memset(backup_spi1_recv_buf, 0, SPI_BUF_SIZE);
 }
 
-void spi_error_dump_reboot(void)
-{
-  printf("SPI ERROR\n");
-  for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    printf("%d ", backup_spi1_recv_buf[i]);
-  printf("\nrebooting...\n");
-  for (int i = 0; i < 100; ++i)
-  {
-    HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
-    HAL_Delay(100);
-  }
-  NVIC_SystemReset();
-}
-
-const char boot_message[] = "USB4VC Protocol Board\nApple Desktop Bus (ADB)\ndekuNukem 2022";
-
-void protocol_status_lookup_init(void)
-{
-  memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
-  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_ENABLED;
-  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
-}
-uint32_t last_send;
 void adb_mouse_update(void)
 {
   mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
   if(this_mouse_event == NULL)
     return;
-
-  // printf("%d %d\n", this_mouse_event->movement_x, this_mouse_event->movement_y);
-
   uint16_t response = 0;
   if(this_mouse_event->button_left == 0)
     response |= 0x8000;
@@ -256,15 +261,10 @@ void adb_mouse_update(void)
   response |= ((uint8_t)(this_mouse_event->movement_x)) & 0x7f;
   response |= (((uint8_t)(this_mouse_event->movement_y)) & 0x7f) << 8;
   
-  if(0 || HAL_GetTick() - last_send > 300)
-  {
-    DEBUG1_HI();
-    adb_send_response_16b(0x8080);
-    // printf("0x%x\n", response);
-    DEBUG1_LOW();
-    last_send = HAL_GetTick();
-  }
-
+  DEBUG1_HI();
+  adb_send_response_16b(response);
+  DEBUG1_LOW();
+  printf("%d %d\n", this_mouse_event->movement_x, this_mouse_event->movement_y);
   mouse_buf_reset(&my_mouse_buf);
 }
 
@@ -319,30 +319,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+    DEBUG0_HI();
+    process_spi_data();
+    DEBUG0_LOW();
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+    if(IS_ADB_DEVICE_PRESENT() == 0)
+      continue;
     adb_status = adb_recv_cmd(&adb_data, 0);
-    // printf("%d\n", adb_status);
-
     if(adb_status == ADB_LINE_STATUS_RESET)
       adb_reset();
     else if(adb_status != ADB_OK)
       continue;
-    // printf("%d\n", adb_data);
+    
     adb_status = parse_adb_cmd(adb_data);
-
     if(adb_status == ADB_MOUSE_POLL)
     {
       adb_mouse_update();
     }
-    // if(adb_status == ADB_KB_POLL)
-    // {
-    //   DEBUG0_HI();
-    //   DEBUG0_LOW();
-    // }
   }
   /* USER CODE END 3 */
 

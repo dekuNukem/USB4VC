@@ -6,7 +6,6 @@
 #include "adb.h"
 #include "delay_us.h"
 
-
 GPIO_TypeDef* adb_psw_port;
 uint16_t adb_psw_pin;
 GPIO_TypeDef* adb_data_port;
@@ -149,14 +148,13 @@ int32_t wait_until_change(int32_t timeout_us)
 uint8_t look_for_atten(void)
 {
   // if ADB data line is high
-  if(ADB_READ_DATA_PIN() == GPIO_PIN_SET)
-    wait_until_change(0);
-
+  if(ADB_READ_DATA_PIN() == GPIO_PIN_SET && wait_until_change(ADB_DEFAULT_TIMEOUT_US) == ADB_TIMEOUT)
+    return ADB_TIMEOUT;
   // now data line is low
   int32_t atten_duration = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
   if(atten_duration > 2000 || atten_duration == ADB_TIMEOUT)
     return ADB_LINE_STATUS_RESET;
-  if(atten_duration < 600)
+  if(atten_duration < 500)
     return ADB_LINE_STATUS_BUSY;  // not an attention signal
 	return ADB_LINE_STATUS_ATTEN;
 }
@@ -211,21 +209,21 @@ uint8_t adb_write_byte(uint8_t data)
     if((data >> (7-i)) & 0x1)
     {
       ADB_DATA_LOW();
-      delay_us(35);
+      delay_us(ADB_CLK_35);
       ADB_DATA_HI();
       // if the line doesnt actually go high, then there has been a bus collision
       if(ADB_READ_DATA_PIN() != GPIO_PIN_SET) 
         return ADB_LINE_STATUS_COLLISION;
-      delay_us(65);
+      delay_us(ADB_CLK_65);
     }
     else
     {
       ADB_DATA_LOW();
-      delay_us(65);
+      delay_us(ADB_CLK_65);
       ADB_DATA_HI();
       if(ADB_READ_DATA_PIN() != GPIO_PIN_SET)
         return ADB_LINE_STATUS_COLLISION;
-      delay_us(35);
+      delay_us(ADB_CLK_35);
     }
   }
   return ADB_OK;
@@ -245,13 +243,13 @@ uint8_t adb_send_response_16b(uint16_t data)
 {
   delay_us(200); // stop-to-start time
   ADB_DATA_LOW();
-  delay_us(35);
+  delay_us(ADB_CLK_35);
   ADB_DATA_HI();
-  delay_us(65);
+  delay_us(ADB_CLK_65);
   if(adb_write_16(data) == ADB_LINE_STATUS_COLLISION)
     return ADB_LINE_STATUS_COLLISION;
   ADB_DATA_LOW();
-  delay_us(65);
+  delay_us(ADB_CLK_65);
   ADB_DATA_HI();
   return ADB_OK;
 }
@@ -329,9 +327,7 @@ uint8_t parse_adb_cmd(uint8_t data)
 
   // if(data != last_cmd)
   // {
-  //   DEBUG0_HI();
   //   printf("%x %x\n", data, adb_mouse_current_addr);
-  //   DEBUG0_LOW();
   //   last_cmd = data;
   // }
 

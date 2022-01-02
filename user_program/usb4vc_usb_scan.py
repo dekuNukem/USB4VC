@@ -411,6 +411,14 @@ def joystick_hold_update():
                     mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]:MOUSE_SPI_LOOKUP[mcode]+2] = list(movement_value.to_bytes(2, byteorder='little'))
         pcard_spi.xfer(mouse_spi_msg)
 
+def multiply_round_up_0(number, multi):
+    new_number = number * multi
+    if 0 < new_number < 1:
+        new_number = 1
+    elif -1 < new_number < 0:
+        new_number = -1
+    return int(new_number)
+
 gamepad_hold_check_interval = 0.02
 def raw_input_event_worker():
     mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': [0, 0], BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
@@ -460,11 +468,11 @@ def raw_input_event_worker():
             # event is relative axes AKA mouse
             elif data[0] == EV_REL and event_code == REL_X:
                 rawx = int.from_bytes(data[4:6], byteorder='little', signed=True)
-                rawx = int(rawx * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                rawx = multiply_round_up_0(rawx, usb4vc_ui.get_mouse_sensitivity()) & 0xffff
                 mouse_status_dict["x"] = list(rawx.to_bytes(2, byteorder='little'))
             elif data[0] == EV_REL and event_code == REL_Y:
                 rawy = int.from_bytes(data[4:6], byteorder='little', signed=True)
-                rawy = int(rawy * usb4vc_ui.get_mouse_sensitivity()) & 0xffff
+                rawy = multiply_round_up_0(rawy, usb4vc_ui.get_mouse_sensitivity()) & 0xffff
                 mouse_status_dict["y"] = list(rawy.to_bytes(2, byteorder='little'))
             elif data[0] == EV_REL and event_code == REL_WHEEL:
                 mouse_status_dict["scroll"] = data[4:6]
