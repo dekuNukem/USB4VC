@@ -73,7 +73,6 @@ const uint8_t version_patch = 0;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
-uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
 kb_buf my_kb_buf;
 mouse_buf my_mouse_buf;
@@ -153,71 +152,35 @@ void handle_protocol_switch(uint8_t spi_byte)
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, adb_write_in_progress);
+ 
   if(spi_recv_buf[0] != 0xde)
     spi_error_occured = 1;
-  memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
-}
-
-void spi_error_dump_reboot(void)
-{
-  printf("SPI ERROR\n");
-  for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    printf("%d ", backup_spi1_recv_buf[i]);
-  printf("\nrebooting...\n");
-  for (int i = 0; i < 100; ++i)
+  if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
+    kb_buf_add(&my_kb_buf, spi_recv_buf[4], spi_recv_buf[6]);
+  if(adb_write_in_progress)
+    goto spi_isr_end;
+  if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
   {
-    HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
-    HAL_Delay(100);
-  }
-  NVIC_SystemReset();
-}
-
-const char boot_message[] = "USB4VC Protocol Board\nApple Desktop Bus (ADB)\ndekuNukem 2022";
-
-void protocol_status_lookup_init(void)
-{
-  memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
-  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_ENABLED;
-  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
-}
-
-void process_spi_data(void)
-{
-  if(backup_spi1_recv_buf[0] == 0)
-  {
-    return;
-  }
-  else if(spi_error_occured)
-  {
-    spi_error_dump_reboot();
-  }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
-  {
-    kb_buf_add(&my_kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
-  }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
-  {
-    latest_mouse_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
-    latest_mouse_event.movement_y = 1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
-    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
-    latest_mouse_event.button_left = backup_spi1_recv_buf[13];
-    latest_mouse_event.button_right = backup_spi1_recv_buf[14];
-    latest_mouse_event.button_middle = backup_spi1_recv_buf[15];
-    latest_mouse_event.button_side = backup_spi1_recv_buf[16];
-    latest_mouse_event.button_extra = backup_spi1_recv_buf[17];
+    latest_mouse_event.movement_x = byte_to_int16_t(spi_recv_buf[4], spi_recv_buf[5]);
+    latest_mouse_event.movement_y = 1 * byte_to_int16_t(spi_recv_buf[6], spi_recv_buf[7]);
+    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(spi_recv_buf[8], spi_recv_buf[9]);
+    latest_mouse_event.button_left = spi_recv_buf[13];
+    latest_mouse_event.button_right = spi_recv_buf[14];
+    latest_mouse_event.button_middle = spi_recv_buf[15];
+    latest_mouse_event.button_side = spi_recv_buf[16];
+    latest_mouse_event.button_extra = spi_recv_buf[17];
     mouse_buf_add(&my_mouse_buf, &latest_mouse_event);
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
   {
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
   {
     memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
     spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
-    spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+    spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = spi_recv_buf[SPI_BUF_INDEX_SEQNUM];
     spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_INFO_REQUEST;
     spi_transmit_buf[3] = board_id;
     spi_transmit_buf[4] = hw_revision;
@@ -236,29 +199,54 @@ void process_spi_data(void)
       curr_index++;
     }
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
   {
     for (int i = 3; i < SPI_BUF_SIZE; ++i)
     {
-      if(backup_spi1_recv_buf[i] == 0)
+      if(spi_recv_buf[i] == 0)
         break;
-      handle_protocol_switch(backup_spi1_recv_buf[i]);
+      handle_protocol_switch(spi_recv_buf[i]);
     }
   }
-  // for (int i = 0; i < SPI_BUF_SIZE; ++i)
-  //   printf("%d ", backup_spi1_recv_buf[i]);
-  // printf("\n");
-  memset(backup_spi1_recv_buf, 0, SPI_BUF_SIZE);
+  spi_isr_end:
+  HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+  HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
+}
+
+void spi_error_dump_reboot(void)
+{
+  printf("SPI ERROR\n");
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    printf("%d ", spi_recv_buf[i]);
+  printf("\nrebooting...\n");
+  for (int i = 0; i < 100; ++i)
+  {
+    HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
+    HAL_Delay(100);
+  }
+  NVIC_SystemReset();
+}
+
+const char boot_message[] = "USB4VC Protocol Board\nApple Desktop Bus (ADB)\ndekuNukem 2022";
+
+void protocol_status_lookup_init(void)
+{
+  memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
+  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
 }
 
 uint8_t int16_to_uint6(int16_t value)
 {
-  int8_t result = value >> 1; // maybe 2?
-  if(result >= 63)
-    result = 63;
-  if(result <= -63)
-    result = -63;
-  return (uint8_t)result;
+  // int8_t result = value; // maybe 1 or 2?
+  if(abs(value) <= 3)
+    return (uint8_t)value;
+  value = value >> 1;
+  if(value >= 63)
+    value = 63;
+  if(value <= -63)
+    value = -63;
+  return (uint8_t)value;
 }
 
 uint8_t kb_srq = 0;
@@ -275,10 +263,9 @@ void adb_mouse_update(void)
     response |= 0x80;
   response |= int16_to_uint6(this_mouse_event->movement_x) & 0x7f;
   response |= (int16_to_uint6(this_mouse_event->movement_y) & 0x7f) << 8;
-  DEBUG0_HI();
   adb_send_response_16b(response);
-  DEBUG0_LOW();
   mouse_buf_reset(&my_mouse_buf);
+  DEBUG0_LOW();
 }
 
 void adb_keyboard_update(void)
@@ -286,12 +273,12 @@ void adb_keyboard_update(void)
   uint8_t buffered_code, buffered_value;
   if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
   {
-    DEBUG0_HI();
+    // DEBUG0_HI();
     if(buffered_value)
       adb_send_response_16b(0x580);
     else
       adb_send_response_16b(0x8080);
-    DEBUG0_LOW();
+    // DEBUG0_LOW();
     kb_buf_pop(&my_kb_buf);
     kb_srq = 0;
   }
@@ -349,7 +336,8 @@ int main(void)
   uint8_t this_addr = last_addr;
   while (1)
   {
-    process_spi_data();
+    if(spi_error_occured)
+      spi_error_dump_reboot();
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -367,10 +355,10 @@ int main(void)
     else if(adb_status != ADB_OK)
       continue;
 
-    this_addr = adb_data >> 4;
+    // this_addr = adb_data >> 4;
 
-    if(!kb_buf_is_empty(&my_kb_buf) && this_addr != adb_kb_current_addr)
-      kb_srq = 1;
+    // if(!kb_buf_is_empty(&my_kb_buf) && this_addr != adb_kb_current_addr)
+    //   kb_srq = 1;
 
     adb_status = parse_adb_cmd(adb_data);
     if(adb_status == ADB_MOUSE_POLL)

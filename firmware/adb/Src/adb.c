@@ -10,7 +10,7 @@ GPIO_TypeDef* adb_psw_port;
 uint16_t adb_psw_pin;
 GPIO_TypeDef* adb_data_port;
 uint16_t adb_data_pin;
-uint8_t adb_mouse_current_addr, adb_kb_current_addr;
+uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_write_in_progress;
 
 #define ADB_PSW_HI() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_SET)
 #define ADB_PSW_LOW() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_RESET)
@@ -241,16 +241,21 @@ uint8_t adb_write_16(uint16_t data)
 // to be called right after a LISTEN command from host
 uint8_t adb_send_response_16b(uint16_t data)
 {
+  adb_write_in_progress = 1;
   delay_us(200); // stop-to-start time
   ADB_DATA_LOW();
   delay_us(ADB_CLK_35);
   ADB_DATA_HI();
   delay_us(ADB_CLK_65);
   if(adb_write_16(data) == ADB_LINE_STATUS_COLLISION)
+  {
+    adb_write_in_progress = 0;
     return ADB_LINE_STATUS_COLLISION;
+  }
   ADB_DATA_LOW();
   delay_us(ADB_CLK_65);
   ADB_DATA_HI();
+  adb_write_in_progress = 0;
   return ADB_OK;
 }
 
