@@ -149,16 +149,19 @@ void handle_protocol_switch(uint8_t spi_byte)
   }
 }
 
+uint32_t last_spi_ts;
+
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, adb_write_in_progress);
- 
+  // HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, adb_rw_in_progress);
+  if(micros() - last_spi_ts < 1000)
+    goto spi_isr_end;
   if(spi_recv_buf[0] != 0xde)
     spi_error_occured = 1;
   if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
     kb_buf_add(&my_kb_buf, spi_recv_buf[4], spi_recv_buf[6]);
-  if(adb_write_in_progress)
+  if(adb_rw_in_progress)
     goto spi_isr_end;
   if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
   {
@@ -209,6 +212,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     }
   }
   spi_isr_end:
+  last_spi_ts = micros();
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 }
@@ -238,7 +242,6 @@ void protocol_status_lookup_init(void)
 
 uint8_t int16_to_uint6(int16_t value)
 {
-  // int8_t result = value; // maybe 1 or 2?
   if(abs(value) <= 3)
     return (uint8_t)value;
   value = value >> 1;
@@ -248,8 +251,6 @@ uint8_t int16_to_uint6(int16_t value)
     value = -63;
   return (uint8_t)value;
 }
-
-uint8_t kb_srq = 0;
 
 void adb_mouse_update(void)
 {
@@ -265,7 +266,7 @@ void adb_mouse_update(void)
   response |= (int16_to_uint6(this_mouse_event->movement_y) & 0x7f) << 8;
   adb_send_response_16b(response);
   mouse_buf_reset(&my_mouse_buf);
-  DEBUG0_LOW();
+  // DEBUG0_LOW();
 }
 
 void adb_keyboard_update(void)
@@ -273,14 +274,13 @@ void adb_keyboard_update(void)
   uint8_t buffered_code, buffered_value;
   if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
   {
-    // DEBUG0_HI();
+    DEBUG0_HI();
     if(buffered_value)
       adb_send_response_16b(0x580);
     else
       adb_send_response_16b(0x8080);
-    // DEBUG0_LOW();
+    DEBUG0_LOW();
     kb_buf_pop(&my_kb_buf);
-    kb_srq = 0;
   }
 }
 
@@ -324,7 +324,9 @@ int main(void)
   protocol_status_lookup_init();
   kb_buf_init(&my_kb_buf, 16);
   mouse_buf_init(&my_mouse_buf, 16);
-  uint8_t adb_data, adb_status;
+  uint8_t adb_data, adb_status, this_addr;
+  uint8_t kb_srq = 0;
+  uint8_t mouse_srq = 0;
   adb_init(ADB_DATA_GPIO_Port, ADB_DATA_Pin, ADB_PSW_GPIO_Port, ADB_PSW_Pin);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -332,8 +334,6 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t last_addr = adb_mouse_current_addr;
-  uint8_t this_addr = last_addr;
   while (1)
   {
     if(spi_error_occured)
@@ -344,30 +344,30 @@ int main(void)
     if(IS_ADB_DEVICE_PRESENT() == 0)
       continue;
 
-    // if(!mouse_buf_is_empty(&my_mouse_buf))
-    //     mouse_srq = 1;
-    // if(!kb_buf_is_empty(&my_kb_buf))
-    //     kb_srq = 1;
-
-    adb_status = adb_recv_cmd(&adb_data, kb_srq);
+    adb_status = adb_recv_cmd(&adb_data);
+    adb_rw_in_progress = 0;
     if(adb_status == ADB_LINE_STATUS_RESET)
       adb_reset();
     else if(adb_status != ADB_OK)
       continue;
 
-    // this_addr = adb_data >> 4;
+    // we are just at the end of a ADB command, check address, assert SRQ if needed
+    this_addr = adb_data >> 4;
+    if(!kb_buf_is_empty(&my_kb_buf))
+      kb_srq = (this_addr != adb_kb_current_addr);
+    else if(!mouse_buf_is_empty(&my_mouse_buf))
+      mouse_srq = (this_addr != adb_mouse_current_addr);
 
-    // if(!kb_buf_is_empty(&my_kb_buf) && this_addr != adb_kb_current_addr)
-    //   kb_srq = 1;
+    if(kb_srq || mouse_srq)
+      send_srq();
 
     adb_status = parse_adb_cmd(adb_data);
     if(adb_status == ADB_MOUSE_POLL)
       adb_mouse_update();
     if(adb_status == ADB_KB_POLL)
       adb_keyboard_update();
-    // printf("%x\n", adb_data);
-    last_addr = this_addr;
-    HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, kb_srq);
+
+    HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, kb_srq || mouse_srq);
   }
   /* USER CODE END 3 */
 

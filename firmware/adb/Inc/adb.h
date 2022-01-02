@@ -45,13 +45,14 @@
 #define ADB_CLK_65 64
 
 void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port, uint16_t psw_pin);
-uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq);
+uint8_t adb_recv_cmd(uint8_t* data);
 uint8_t parse_adb_cmd(uint8_t data);
 void adb_reset(void);
 void adb_release_lines(void);
 uint8_t adb_send_response_16b(uint16_t data);
+void send_srq(void);
 
-extern uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_write_in_progress;
+extern uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 
 
 void wtf(void);

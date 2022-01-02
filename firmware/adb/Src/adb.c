@@ -10,7 +10,7 @@ GPIO_TypeDef* adb_psw_port;
 uint16_t adb_psw_pin;
 GPIO_TypeDef* adb_data_port;
 uint16_t adb_data_pin;
-uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_write_in_progress;
+uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 
 #define ADB_PSW_HI() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_SET)
 #define ADB_PSW_LOW() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_RESET)
@@ -170,12 +170,13 @@ uint8_t adb_read_bit(void)
   return hi_time > lo_time;
 }
 
-uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq)
+uint8_t adb_recv_cmd(uint8_t* data)
 {
   *data = 0;
   uint8_t atten_result = look_for_atten();
   if(atten_result != ADB_LINE_STATUS_ATTEN)
     return atten_result;
+  adb_rw_in_progress = 1;
   int32_t sync_duration = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
   if(sync_duration > 90 || sync_duration < 50)
     return ADB_ERROR;
@@ -187,15 +188,6 @@ uint8_t adb_recv_cmd(uint8_t* data, uint8_t srq)
     if(this_bit == ADB_ERROR)
       return ADB_ERROR;
     temp |= this_bit << (7 - i);
-  }
-
-  if(srq == 0)
-    wait_until_change(ADB_DEFAULT_TIMEOUT_US);
-  else
-  {
-    ADB_DATA_LOW();
-    delay_us(300);
-    ADB_DATA_HI();
   }
 
   *data = temp;
@@ -241,7 +233,7 @@ uint8_t adb_write_16(uint16_t data)
 // to be called right after a LISTEN command from host
 uint8_t adb_send_response_16b(uint16_t data)
 {
-  adb_write_in_progress = 1;
+  adb_rw_in_progress = 1;
   delay_us(200); // stop-to-start time
   ADB_DATA_LOW();
   delay_us(ADB_CLK_35);
@@ -249,13 +241,13 @@ uint8_t adb_send_response_16b(uint16_t data)
   delay_us(ADB_CLK_65);
   if(adb_write_16(data) == ADB_LINE_STATUS_COLLISION)
   {
-    adb_write_in_progress = 0;
+    adb_rw_in_progress = 0;
     return ADB_LINE_STATUS_COLLISION;
   }
   ADB_DATA_LOW();
   delay_us(ADB_CLK_65);
   ADB_DATA_HI();
-  adb_write_in_progress = 0;
+  adb_rw_in_progress = 0;
   return ADB_OK;
 }
 
@@ -339,11 +331,11 @@ uint8_t parse_adb_cmd(uint8_t data)
   return ADB_OK;
 }
 
-void wtf(void)
+void send_srq(void)
 {
-  // DEBUG0_HI();
-  // printf("%d\n", adb_mouse_current_addr);
-  // DEBUG0_LOW();
+  ADB_DATA_LOW();
+  delay_us(300);
+  ADB_DATA_HI();
 }
 
 
