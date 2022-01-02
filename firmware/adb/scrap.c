@@ -1,7 +1,8 @@
   for (int i = 0; i < SPI_BUF_SIZE; ++i)
     printf("%d ", backup_spi1_recv_buf[i]);
   printf("\n");
-  
+      printf("%d %d %x\n", buffered_code, adb_code, response);
+
   while (1)
   {
     DEBUG0_HI();

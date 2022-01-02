@@ -3,7 +3,7 @@
 <title>Static Call Graph - [my_adb\my_adb.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image my_adb\my_adb.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Jan 02 22:54:15 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Jan 02 23:12:53 2022
 <BR><P>
 <H3>Maximum Stack Usage =        180 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -287,7 +287,6 @@ Global Symbols
 
 <P><STRONG><a name="[4b]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_keyboard_update
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_srq
@@ -447,7 +446,7 @@ Global Symbols
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 </UL>
 
-<P><STRONG><a name="[4a]"></a>HAL_SPI_TxRxCpltCallback</STRONG> (Thumb, 308 bytes, Stack size 24 bytes, main.o(i.HAL_SPI_TxRxCpltCallback))
+<P><STRONG><a name="[4a]"></a>HAL_SPI_TxRxCpltCallback</STRONG> (Thumb, 318 bytes, Stack size 24 bytes, main.o(i.HAL_SPI_TxRxCpltCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = HAL_SPI_TxRxCpltCallback &rArr; mouse_buf_add &rArr; mouse_buf_is_full &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
@@ -661,12 +660,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[71]"></a>adb_keyboard_update</STRONG> (Thumb, 66 bytes, Stack size 16 bytes, main.o(i.adb_keyboard_update))
+<P><STRONG><a name="[71]"></a>adb_keyboard_update</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, main.o(i.adb_keyboard_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = adb_keyboard_update &rArr; adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
-<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
 </UL>
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -863,7 +861,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 </UL>
 
-<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 292 bytes, Stack size 16 bytes, main.o(i.main))
+<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 302 bytes, Stack size 16 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 180<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT

@@ -150,11 +150,10 @@ void handle_protocol_switch(uint8_t spi_byte)
 }
 
 uint32_t last_spi_ts;
-
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
-  // HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, adb_rw_in_progress);
+  HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, adb_rw_in_progress);
   if(micros() - last_spi_ts < 1000)
     goto spi_isr_end;
   if(spi_recv_buf[0] != 0xde)
@@ -271,15 +270,23 @@ void adb_mouse_update(void)
 
 void adb_keyboard_update(void)
 {
-  uint8_t buffered_code, buffered_value;
+  uint8_t buffered_code, buffered_value, adb_code;
   if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
   {
-    DEBUG0_HI();
+    if(buffered_code >= EV_TO_ADB_LOOKUP_SIZE)
+      goto adb_kb_end;
+    adb_code = linux_ev_to_adb_lookup[buffered_code];
+    if(adb_code == ADB_KEY_UNKNOWN)
+      goto adb_kb_end;
+
+    // DEBUG0_HI();
+    uint16_t response = 0x8080;
     if(buffered_value)
-      adb_send_response_16b(0x580);
-    else
-      adb_send_response_16b(0x8080);
-    DEBUG0_LOW();
+      response &= 0x7fff;
+    response |= ((uint16_t)adb_code & 0x7f) << 8;
+    adb_send_response_16b(response);
+    // DEBUG0_LOW();
+    adb_kb_end:
     kb_buf_pop(&my_kb_buf);
   }
 }
@@ -367,6 +374,7 @@ int main(void)
     if(adb_status == ADB_KB_POLL)
       adb_keyboard_update();
 
+    HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, 0);
     HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, kb_srq || mouse_srq);
   }
   /* USER CODE END 3 */

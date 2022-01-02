@@ -20,10 +20,6 @@ uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 
 #define ADB_READ_DATA_PIN() HAL_GPIO_ReadPin(adb_data_port, adb_data_pin)
 
-#define ADB_DEFAULT_TIMEOUT_US 10000
-#define ADB_KEY_UNKNOWN 255
-#define EV_TO_ADB_LOOKUP_SIZE 186
-
 const uint8_t linux_ev_to_adb_lookup[EV_TO_ADB_LOOKUP_SIZE] = 
 {
   ADB_KEY_UNKNOWN, // EV0 KEY_RESERVED

@@ -27,18 +27,26 @@ Project File Date:  01/01/2022
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'my_adb'
-compiling adb.c...
-..\Src\adb.c(257): warning:  #68-D: integer conversion resulted in a change of sign
-      return ADB_TIMEOUT;
-..\Src\adb.c: 1 warning, 0 errors
 compiling main.c...
-../Src/main.c(370): warning:  #188-D: enumerated type mixed with another type
+../Src/main.c(157): warning:  #188-D: enumerated type mixed with another type
+    HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, adb_rw_in_progress);
+../Src/main.c(278): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "response"  (declared at line 284)
+        goto adb_kb_end;
+        ^
+../Src/main.c(281): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "response"  (declared at line 284)
+        goto adb_kb_end;
+        ^
+../Src/main.c(378): warning:  #188-D: enumerated type mixed with another type
+      HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, 0);
+../Src/main.c(379): warning:  #188-D: enumerated type mixed with another type
       HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, kb_srq || mouse_srq);
-../Src/main.c: 1 warning, 0 errors
+../Src/main.c: 5 warnings, 0 errors
 linking...
-Program Size: Code=9684 RO-data=312 RW-data=60 ZI-data=1916  
+Program Size: Code=9708 RO-data=496 RW-data=60 ZI-data=1916  
 FromELF: creating hex file...
-"my_adb\my_adb.axf" - 0 Error(s), 2 Warning(s).
+"my_adb\my_adb.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
