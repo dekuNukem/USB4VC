@@ -149,13 +149,13 @@ void handle_protocol_switch(uint8_t spi_byte)
   }
 }
 
-uint32_t last_spi_ts;
+// uint32_t last_spi_ts;
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
   HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, adb_rw_in_progress);
-  if(micros() - last_spi_ts < 1000)
-    goto spi_isr_end;
+  // if(micros() - last_spi_ts < 1000)
+  //   goto spi_isr_end;
   if(spi_recv_buf[0] != 0xde)
     spi_error_occured = 1;
   if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
@@ -211,7 +211,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     }
   }
   spi_isr_end:
-  last_spi_ts = micros();
+  // last_spi_ts = micros();
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 }
