@@ -1,4 +1,56 @@
+adb_status = adb_recv_cmd(&adb_data, 0);
+  // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
+  // {
+  //   uint16_t response = 0x8082;
+  //   if(HAL_GetTick() % 2)
+  //     response = 0x80fc;
+  //   adb_send_response_16b(response);
+  //   last_send = HAL_GetTick();
+  // }
 
+uint32_t last_send;
+void adb_mouse_update(void)
+{
+  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
+  if(this_mouse_event == NULL)
+    return;
+  // uint16_t response = 0;
+  // if(this_mouse_event->button_left == 0)
+  //   response |= 0x8000;
+  // if(this_mouse_event->button_right == 0)
+  //   response |= 0x80;
+  response |= ((uint8_t)(this_mouse_event->movement_x)) & 0x7f;
+  response |= (((uint8_t)(this_mouse_event->movement_y)) & 0x7f) << 8;
+  adb_send_response_16b(response);
+  printf("0x%x\n", response);
+
+  if(HAL_GetTick() - last_send > 100)
+  {
+    // uint16_t response = 0x8080;
+    // if(HAL_GetTick() % 2)
+    //   response = 0x80fc;
+    DEBUG1_HI();
+    adb_send_response_16b(response);
+    DEBUG1_LOW();
+    last_send = HAL_GetTick();
+  }
+
+  mouse_buf_reset(&my_mouse_buf);
+}
+
+
+    if(adb_status == ADB_LINE_STATUS_RESET)
+      adb_reset();
+    else if(adb_status != ADB_OK)
+      continue;
+    
+    adb_status = parse_adb_cmd(adb_data);
+    if(adb_status == ADB_MOUSE_POLL)
+    {
+      // DEBUG0_HI();
+      adb_mouse_update();
+      // DEBUG0_LOW();
+    }
   if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr && HAL_GetTick() - last_send > 500)
   {
     uint16_t response = 0x80fc;

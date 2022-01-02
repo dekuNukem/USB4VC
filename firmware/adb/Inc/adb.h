@@ -29,17 +29,17 @@
 
 #define ADB_CHANGE_ADDR 0xFE
 
-// #define DEBUG0_HI() HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET)
-// #define DEBUG0_LOW() HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET)
+#define DEBUG0_HI() HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_SET)
+#define DEBUG0_LOW() HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, GPIO_PIN_RESET)
 
-// #define DEBUG1_HI() HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, GPIO_PIN_SET)
-// #define DEBUG1_LOW() HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, GPIO_PIN_RESET)
+#define DEBUG1_HI() HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, GPIO_PIN_SET)
+#define DEBUG1_LOW() HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, GPIO_PIN_RESET)
 
-#define DEBUG0_HI() {}
-#define DEBUG0_LOW() {}
+// #define DEBUG0_HI() {}
+// #define DEBUG0_LOW() {}
 
-#define DEBUG1_HI() {}
-#define DEBUG1_LOW() {}
+// #define DEBUG1_HI() {}
+// #define DEBUG1_LOW() {}
 
 
 void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port, uint16_t psw_pin);
@@ -48,6 +48,8 @@ uint8_t parse_adb_cmd(uint8_t data);
 void adb_reset(void);
 void adb_release_lines(void);
 uint8_t adb_send_response_16b(uint16_t data);
+
+void wtf(void);
 
 #ifdef __cplusplus
 }
