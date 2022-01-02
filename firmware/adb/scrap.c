@@ -1,3 +1,39 @@
+  while (1)
+  {
+    DEBUG0_HI();
+    process_spi_data();
+    DEBUG0_LOW();
+  /* USER CODE END WHILE */
+
+  /* USER CODE BEGIN 3 */
+    if(IS_ADB_DEVICE_PRESENT() == 0)
+      continue;
+    adb_status = adb_recv_cmd(&adb_data, 0);
+    if(adb_status == ADB_LINE_STATUS_RESET)
+      adb_reset();
+    else if(adb_status != ADB_OK)
+      continue;
+
+    uint8_t this_addr = adb_data >> 4;
+
+    mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
+    if(this_mouse_event != NULL)
+    {
+      
+    }
+
+
+
+
+    adb_status = parse_adb_cmd(adb_data);
+    if(adb_status == ADB_MOUSE_POLL)
+      adb_mouse_update();
+  }
+  /* USER CODE END 3 */
+
+}  
+  // printf("%d %d\n", this_mouse_event->movement_x, this_mouse_event->movement_y);
+  // mouse_buf_pop(&my_mouse_buf);
 while (1)
   {
 

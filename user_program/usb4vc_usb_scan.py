@@ -485,7 +485,7 @@ def raw_input_event_worker():
             # SYNC event
             elif data[0] == EV_SYN and event_code == SYN_REPORT:
                 if this_device['is_mouse']:
-                    pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
+                    # pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
                     next_gamepad_hold_check = now + gamepad_hold_check_interval
                     clear_mouse_movement(mouse_status_dict)
                 if this_device['is_gp']:

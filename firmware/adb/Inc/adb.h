@@ -51,6 +51,9 @@ void adb_reset(void);
 void adb_release_lines(void);
 uint8_t adb_send_response_16b(uint16_t data);
 
+extern uint8_t adb_mouse_current_addr, adb_kb_current_addr;
+
+
 void wtf(void);
 
 #ifdef __cplusplus

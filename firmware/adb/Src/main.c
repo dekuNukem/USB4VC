@@ -195,6 +195,7 @@ void process_spi_data(void)
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
   {
+    printf("ooo\n");
     kb_buf_add(&my_kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
@@ -245,8 +246,14 @@ void process_spi_data(void)
       handle_protocol_switch(backup_spi1_recv_buf[i]);
     }
   }
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    printf("%d ", backup_spi1_recv_buf[i]);
+  printf("\n");
   memset(backup_spi1_recv_buf, 0, SPI_BUF_SIZE);
 }
+
+uint8_t mouse_srq = 0;
+uint8_t kb_srq = 0;
 
 void adb_mouse_update(void)
 {
@@ -260,12 +267,25 @@ void adb_mouse_update(void)
     response |= 0x80;
   response |= ((uint8_t)(this_mouse_event->movement_x)) & 0x7f;
   response |= (((uint8_t)(this_mouse_event->movement_y)) & 0x7f) << 8;
-  
-  DEBUG1_HI();
   adb_send_response_16b(response);
-  DEBUG1_LOW();
-  printf("%d %d\n", this_mouse_event->movement_x, this_mouse_event->movement_y);
   mouse_buf_reset(&my_mouse_buf);
+  mouse_srq = 0;
+}
+
+void adb_keyboard_update(void)
+{
+  uint8_t buffered_code, buffered_value;
+  if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+  {
+    DEBUG0_HI();
+    if(buffered_value)
+      adb_send_response_16b(0x580);
+    else
+      adb_send_response_16b(0x8080);
+    DEBUG0_LOW();
+    kb_buf_pop(&my_kb_buf);
+    kb_srq = 0;
+  }
 }
 
 /* USER CODE END 0 */
@@ -317,27 +337,35 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  
   while (1)
   {
-    DEBUG0_HI();
     process_spi_data();
-    DEBUG0_LOW();
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
     if(IS_ADB_DEVICE_PRESENT() == 0)
       continue;
-    adb_status = adb_recv_cmd(&adb_data, 0);
+    adb_status = adb_recv_cmd(&adb_data, mouse_srq || kb_srq);
     if(adb_status == ADB_LINE_STATUS_RESET)
       adb_reset();
     else if(adb_status != ADB_OK)
       continue;
-    
+
     adb_status = parse_adb_cmd(adb_data);
-    if(adb_status == ADB_MOUSE_POLL)
-    {
-      adb_mouse_update();
-    }
+    // if(adb_status == ADB_MOUSE_POLL)
+    //   adb_mouse_update();
+    if(adb_status == ADB_KB_POLL)
+      adb_keyboard_update();
+
+    // printf("%x\n", adb_status);
+
+    if(!kb_buf_is_empty(&my_kb_buf))
+      kb_srq = 1;
+    // if(!mouse_buf_is_empty(&my_mouse_buf))
+    //   mouse_srq = 1;
+
+    HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, mouse_srq || kb_srq);
   }
   /* USER CODE END 3 */
 

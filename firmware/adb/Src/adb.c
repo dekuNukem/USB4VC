@@ -22,7 +22,7 @@ uint8_t adb_mouse_current_addr, adb_kb_current_addr;
 
 #define ADB_DEFAULT_TIMEOUT_US 10000
 
-uint8_t adb_kb_scancode[] = 
+uint8_t linux_scancode_to_adb_lookup[] = 
 {
     0x00, // A
     0x0B, // B
@@ -301,13 +301,13 @@ uint8_t parse_adb_cmd(uint8_t data)
     adb_send_response_16b(response);
   }
 
-  // if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_kb_current_addr)
-  // {
-  //   uint16_t response = 0x6005; // 0110 0000 0000 0101, device handler 0x5, appledesign keyboard
-  //   uint16_t rand_id = (rand() % 0xf) << 8;
-  //   response |= rand_id;
-  //   adb_send_response_16b(response);
-  // }
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_kb_current_addr)
+  {
+    uint16_t response = 0x6005; // 0110 0000 0000 0101, device handler 0x5, appledesign keyboard
+    uint16_t rand_id = (rand() % 0xf) << 8;
+    response |= rand_id;
+    adb_send_response_16b(response);
+  }
 
   if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_mouse_current_addr)
   {
@@ -317,25 +317,19 @@ uint8_t parse_adb_cmd(uint8_t data)
       adb_mouse_current_addr = (host_cmd & 0xf00) >> 8;
   }
 
-  // if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_kb_current_addr)
-  // {
-  //   uint16_t host_cmd;
-  //   adb_listen_16b(&host_cmd);
-  //   if((host_cmd & ADB_CHANGE_ADDR) == ADB_CHANGE_ADDR)
-  //     adb_kb_current_addr = (host_cmd & 0xf00) >> 8;
-  // }
-
-  // if(data != last_cmd)
-  // {
-  //   printf("%x %x\n", data, adb_mouse_current_addr);
-  //   last_cmd = data;
-  // }
+  if(cmd == ADB_CMD_TYPE_LISTEN && reg == 3 && addr == adb_kb_current_addr)
+  {
+    uint16_t host_cmd;
+    adb_listen_16b(&host_cmd);
+    if((host_cmd & ADB_CHANGE_ADDR) == ADB_CHANGE_ADDR)
+      adb_kb_current_addr = (host_cmd & 0xf00) >> 8;
+  }
 
   if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_mouse_current_addr)
     return ADB_MOUSE_POLL;
 
-  // if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_kb_current_addr)
-  //   return ADB_KB_POLL;
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_kb_current_addr)
+    return ADB_KB_POLL;
 
   return ADB_OK;
 }
