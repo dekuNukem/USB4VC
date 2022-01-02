@@ -195,7 +195,6 @@ void process_spi_data(void)
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
   {
-    printf("ooo\n");
     kb_buf_add(&my_kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
@@ -246,10 +245,20 @@ void process_spi_data(void)
       handle_protocol_switch(backup_spi1_recv_buf[i]);
     }
   }
-  for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    printf("%d ", backup_spi1_recv_buf[i]);
-  printf("\n");
+  // for (int i = 0; i < SPI_BUF_SIZE; ++i)
+  //   printf("%d ", backup_spi1_recv_buf[i]);
+  // printf("\n");
   memset(backup_spi1_recv_buf, 0, SPI_BUF_SIZE);
+}
+
+uint8_t int16_to_uint6(int16_t value)
+{
+  int8_t result = value >> 2;
+  if(result >= 63)
+    result = 63;
+  if(result <= -63)
+    result = -63;
+  return (uint8_t)result;
 }
 
 uint8_t mouse_srq = 0;
@@ -265,9 +274,11 @@ void adb_mouse_update(void)
     response |= 0x8000;
   if(this_mouse_event->button_right == 0)
     response |= 0x80;
-  response |= ((uint8_t)(this_mouse_event->movement_x)) & 0x7f;
-  response |= (((uint8_t)(this_mouse_event->movement_y)) & 0x7f) << 8;
+  response |= int16_to_uint6(this_mouse_event->movement_x) & 0x7f;
+  response |= (int16_to_uint6(this_mouse_event->movement_y) & 0x7f) << 8;
+  DEBUG0_HI();
   adb_send_response_16b(response);
+  DEBUG0_LOW();
   mouse_buf_reset(&my_mouse_buf);
   mouse_srq = 0;
 }
@@ -353,18 +364,18 @@ int main(void)
       continue;
 
     adb_status = parse_adb_cmd(adb_data);
-    // if(adb_status == ADB_MOUSE_POLL)
-    //   adb_mouse_update();
+    if(adb_status == ADB_MOUSE_POLL)
+    {
+      adb_mouse_update();
+      if(!kb_buf_is_empty(&my_kb_buf))
+        kb_srq = 1;
+    }
     if(adb_status == ADB_KB_POLL)
+    {
       adb_keyboard_update();
-
-    // printf("%x\n", adb_status);
-
-    if(!kb_buf_is_empty(&my_kb_buf))
-      kb_srq = 1;
-    // if(!mouse_buf_is_empty(&my_mouse_buf))
-    //   mouse_srq = 1;
-
+      if(!mouse_buf_is_empty(&my_mouse_buf))
+        mouse_srq = 1;
+    }
     HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, mouse_srq || kb_srq);
   }
   /* USER CODE END 3 */
