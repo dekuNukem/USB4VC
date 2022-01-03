@@ -149,54 +149,34 @@ void handle_protocol_switch(uint8_t spi_byte)
   }
 }
 
-#define TEMP_BUF_SIZE 8
-uint8_t temp_kb_code_buf[TEMP_BUF_SIZE];
-uint8_t temp_kb_value_buf[TEMP_BUF_SIZE];
-uint8_t temp_kb_buf_index;
 
-void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
+void parse_spi_buf(uint8_t* spibuf)
 {
-  HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
-  
-  if(spi_recv_buf[0] != 0xde)
-    spi_error_occured = 1;
-  if(adb_rw_in_progress)
+  if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
   {
-    if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
-    {
-      temp_kb_code_buf[temp_kb_buf_index] = spi_recv_buf[4];
-      temp_kb_value_buf[temp_kb_buf_index] = spi_recv_buf[6];
-      if(temp_kb_buf_index < TEMP_BUF_SIZE)
-        temp_kb_buf_index++;
-      // HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, 1);
-    }
-    goto spi_isr_end;
-  }
-  if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
-  {
-    latest_mouse_event.movement_x = byte_to_int16_t(spi_recv_buf[4], spi_recv_buf[5]);
-    latest_mouse_event.movement_y = 1 * byte_to_int16_t(spi_recv_buf[6], spi_recv_buf[7]);
-    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(spi_recv_buf[8], spi_recv_buf[9]);
-    latest_mouse_event.button_left = spi_recv_buf[13];
-    latest_mouse_event.button_right = spi_recv_buf[14];
-    latest_mouse_event.button_middle = spi_recv_buf[15];
-    latest_mouse_event.button_side = spi_recv_buf[16];
-    latest_mouse_event.button_extra = spi_recv_buf[17];
+    latest_mouse_event.movement_x = byte_to_int16_t(spibuf[4], spibuf[5]);
+    latest_mouse_event.movement_y = 1 * byte_to_int16_t(spibuf[6], spibuf[7]);
+    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(spibuf[8], spibuf[9]);
+    latest_mouse_event.button_left = spibuf[13];
+    latest_mouse_event.button_right = spibuf[14];
+    latest_mouse_event.button_middle = spibuf[15];
+    latest_mouse_event.button_side = spibuf[16];
+    latest_mouse_event.button_extra = spibuf[17];
     mouse_buf_add(&my_mouse_buf, &latest_mouse_event);
   }
-  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
+  else if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
   {
-    kb_buf_add(&my_kb_buf, spi_recv_buf[4], spi_recv_buf[6]);
+    kb_buf_add(&my_kb_buf, spibuf[4], spibuf[6]);
   }
-  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
+  else if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
   {
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   }
-  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
+  else if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
   {
     memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
     spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
-    spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = spi_recv_buf[SPI_BUF_INDEX_SEQNUM];
+    spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = spibuf[SPI_BUF_INDEX_SEQNUM];
     spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_INFO_REQUEST;
     spi_transmit_buf[3] = board_id;
     spi_transmit_buf[4] = hw_revision;
@@ -215,15 +195,55 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
       curr_index++;
     }
   }
-  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
+  else if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
   {
     for (int i = 3; i < SPI_BUF_SIZE; ++i)
     {
-      if(spi_recv_buf[i] == 0)
+      if(spibuf[i] == 0)
         break;
-      handle_protocol_switch(spi_recv_buf[i]);
+      handle_protocol_switch(spibuf[i]);
     }
   }
+}
+
+#define TEMP_BUF_SIZE 8
+uint8_t temp_kb_code_buf[TEMP_BUF_SIZE];
+uint8_t temp_kb_value_buf[TEMP_BUF_SIZE];
+uint8_t temp_kb_buf_index;
+
+uint8_t temp_spi_msg_buf[SPI_BUF_SIZE];
+
+/*
+  a full rundown of this ISR takes around 30us, so if it comes in 
+  while reading or writing ADB message, it will mess up the timing
+  
+  solution: cache the data and return immediately, only takes around 6us,
+  then process the data in main loop.
+*/
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+  HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
+  
+  if(spi_recv_buf[0] != 0xde)
+    spi_error_occured = 1;
+  if(adb_rw_in_progress)
+  {
+    // don't want to miss ANY keyboard events, so put them in a seperate buffer
+    if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
+    {
+      temp_kb_code_buf[temp_kb_buf_index] = spi_recv_buf[4];
+      temp_kb_value_buf[temp_kb_buf_index] = spi_recv_buf[6];
+      if(temp_kb_buf_index < TEMP_BUF_SIZE)
+        temp_kb_buf_index++;
+    }
+    else
+    {
+      // mouse event and other events. doesn't matter if we miss a few, so only keep the last one
+      memcpy(temp_spi_msg_buf, spi_recv_buf, SPI_BUF_SIZE);
+    }
+    goto spi_isr_end;
+  }
+  parse_spi_buf(spi_recv_buf);
   spi_isr_end:
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
@@ -437,15 +457,19 @@ int main(void)
     if(spi_error_occured)
       spi_error_dump_reboot();
     process_spi_kb_events();
+    if(temp_spi_msg_buf[0] != 0)
+    {
+      parse_spi_buf(temp_spi_msg_buf);
+      memset(temp_spi_msg_buf, 0, SPI_BUF_SIZE);
+    }
+    
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
     if(IS_ADB_DEVICE_PRESENT() == 0)
       continue;
 
-    DEBUG0_HI();
     adb_status = adb_recv_cmd(&adb_data);
-    DEBUG0_LOW();
     adb_rw_in_progress = 0;
     if(adb_status == ADB_LINE_STATUS_RESET)
       adb_reset();
@@ -482,7 +506,6 @@ int main(void)
     //   printf("%x\n", adb_kb_reg2);
     // }
 
-    // HAL_GPIO_WritePin(DEBUG0_GPIO_Port, DEBUG0_Pin, 0);
     
   }
   /* USER CODE END 3 */
