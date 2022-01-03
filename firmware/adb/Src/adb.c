@@ -10,6 +10,7 @@ GPIO_TypeDef* adb_psw_port;
 uint16_t adb_psw_pin;
 GPIO_TypeDef* adb_data_port;
 uint16_t adb_data_pin;
+uint16_t adb_kb_reg2;
 uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 
 #define ADB_PSW_HI() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_SET)
@@ -252,6 +253,7 @@ uint8_t look_for_atten(void)
   if(ADB_READ_DATA_PIN() == GPIO_PIN_SET && wait_until_change(ADB_DEFAULT_TIMEOUT_US) == ADB_TIMEOUT)
     return ADB_TIMEOUT;
   // now data line is low
+  adb_rw_in_progress = 1;
   int32_t atten_duration = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
   if(atten_duration > 2000 || atten_duration == ADB_TIMEOUT)
     return ADB_LINE_STATUS_RESET;
@@ -277,7 +279,6 @@ uint8_t adb_recv_cmd(uint8_t* data)
   uint8_t atten_result = look_for_atten();
   if(atten_result != ADB_LINE_STATUS_ATTEN)
     return atten_result;
-  adb_rw_in_progress = 1;
   int32_t sync_duration = wait_until_change(ADB_DEFAULT_TIMEOUT_US);
   if(sync_duration > 90 || sync_duration < 50)
     return ADB_ERROR;
@@ -379,8 +380,6 @@ uint8_t adb_listen_16b(uint16_t* data)
   return ADB_OK;
 }
 
-uint8_t last_cmd;
-
 // addr 2 keyboard, 3 mouse
 uint8_t parse_adb_cmd(uint8_t data)
 {
@@ -429,6 +428,18 @@ uint8_t parse_adb_cmd(uint8_t data)
   if(cmd == ADB_CMD_TYPE_TALK && reg == 0 && addr == adb_kb_current_addr)
     return ADB_KB_POLL;
 
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 2 && addr == adb_kb_current_addr)
+    return ADB_KB_POLL_REG2;
+
+  if(cmd == ADB_CMD_TYPE_LISTEN && reg == 2 && addr == adb_kb_current_addr)
+  {
+    uint16_t host_cmd;
+    DEBUG1_HI();
+    adb_listen_16b(&host_cmd);
+    DEBUG1_LOW();
+    printf("%x\n", host_cmd);
+    return ADB_KB_CHANGE_LED;
+  }
   return ADB_OK;
 }
 

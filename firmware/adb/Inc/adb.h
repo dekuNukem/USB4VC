@@ -14,10 +14,12 @@
 #define ADB_LINE_STATUS_ERROR 5
 #define ADB_LINE_STATUS_COLLISION 6
 
-#define ADB_OK 0
 #define ADB_TIMEOUT -1
+#define ADB_OK 0
 #define ADB_KB_POLL 2
-#define ADB_MOUSE_POLL 3
+#define ADB_KB_POLL_REG2 3
+#define ADB_KB_CHANGE_LED 4
+#define ADB_MOUSE_POLL 5
 #define ADB_ERROR ADB_LINE_STATUS_ERROR
 
 #define ADB_KB_DEFAULT_ADDR 2
@@ -53,9 +55,11 @@ void adb_reset(void);
 void adb_release_lines(void);
 uint8_t adb_send_response_16b(uint16_t data);
 void send_srq(void);
+int32_t wait_until_change(int32_t timeout_us);
 
 extern uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 extern const uint8_t linux_ev_to_adb_lookup[EV_TO_ADB_LOOKUP_SIZE];
+extern uint16_t adb_kb_reg2;
 
 void wtf(void);
 
