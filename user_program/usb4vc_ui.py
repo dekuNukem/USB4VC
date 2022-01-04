@@ -260,8 +260,6 @@ def scan_bt_devices(timeout_sec = 5):
         if len(line_split) < 3 or line_split[2].count('-') == 5:
             continue
         dev_list.append((line_split[1], line_split[2]))
-    if len(dev_list) == 0:
-        return None, 'Nothing was found'
     return dev_list, ''
 
 def pair_device(mac_addr):
@@ -314,7 +312,7 @@ def get_paired_devices():
             dev_set.add((line_split[1], line_split[2]))
     except Exception as e:
         print('get_paired_devices exception:', e)
-    return list(dev_set)
+    return dev_set
 
 def load_config():
     global configuration_dict
@@ -436,8 +434,11 @@ class usb4vc_menu(object):
                     self.goto_page(3)
                     self.display_curent_page()
                     return
+                paired_devices_set = get_paired_devices()
                 self.bluetooth_device_list, self.error_message = scan_bt_devices(self.bt_scan_timeout_sec)
-                if self.bluetooth_device_list is None:
+                self.bluetooth_device_list = list(set(self.bluetooth_device_list) - paired_devices_set)
+                if len(self.bluetooth_device_list) == 0:
+                    self.error_message = "Nothing was found"
                     self.goto_page(3)
                     self.display_curent_page()
                     return
@@ -525,7 +526,7 @@ class usb4vc_menu(object):
     def action(self, level, page):
         if level == 0:
             if page == 2:
-                self.paired_devices_list = get_paired_devices()
+                self.paired_devices_list = list(get_paired_devices())
                 self.page_size[4] = len(self.paired_devices_list) + 1
                 self.goto_level(4)
             elif page == 3:

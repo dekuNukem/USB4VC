@@ -595,7 +595,7 @@ def get_pboard_info():
     this_msg[5] = usb4vc_shared.RPI_APP_VERSION_TUPLE[2]
     pcard_spi.xfer(this_msg)
 
-    time.sleep(0.01)
+    time.sleep(0.1)
     # send an empty message to allow response to be shifted into RPi
     response = pcard_spi.xfer(list(nop_spi_msg_template))
     time.sleep(0.01)
