@@ -296,6 +296,7 @@ void adb_mouse_update(void)
 #define KEY_RIGHTALT 100
 #define KEY_RIGHTMETA 126
 
+uint8_t capslock_counter;
 void adb_keyboard_update(void)
 {
   uint8_t buffered_code, buffered_value, adb_code;
@@ -307,6 +308,19 @@ void adb_keyboard_update(void)
     adb_code = linux_ev_to_adb_lookup[buffered_code];
     if(adb_code == ADB_KEY_UNKNOWN)
       goto adb_kb_end;
+    /*
+    adb mac keyboard capslock key seems to behave differently than PC keyboards
+    On PC: Capslock down then up = Caps lock on, Capslock down then up again = Caps lock off
+    on adb mac: Capslock down = Capslock on, Capslock up = Caps lock off
+    looks like mac keyboard uses a locking capslock, so need to convert the PC code to suit
+    */
+    if(adb_code == ADB_KEY_CAPSLOCK)
+    {
+      if(buffered_value != 1)
+        goto adb_kb_end;
+      capslock_counter++;
+      buffered_value = capslock_counter % 2;
+    }
     if(buffered_value)
       response &= 0x7fff;
     response |= ((uint16_t)adb_code & 0x7f) << 8;
@@ -316,60 +330,60 @@ void adb_keyboard_update(void)
 
     if(buffered_code == KEY_DELETE)
     {
-      if(buffered_value)
+      if(buffered_value == 0)
         adb_kb_reg2 |= 0x4000;
       else
         adb_kb_reg2 &= 0xbfff;
     }
     if(buffered_code == KEY_CAPSLOCK)
     {
-      if(buffered_value)
+      if(buffered_value == 0)
         adb_kb_reg2 |= 0x2000;
       else
         adb_kb_reg2 &= 0xdfff;
     }
     if(buffered_code == KEY_LEFTCTRL || buffered_code == KEY_RIGHTCTRL)
     {
-      if(buffered_value)
+      if(buffered_value == 0)
         adb_kb_reg2 |= 0x800;
       else
         adb_kb_reg2 &= 0xf7ff;
     }
     if(buffered_code == KEY_LEFTSHIFT || buffered_code == KEY_RIGHTSHIFT)
     {
-      if(buffered_value)
+      if(buffered_value == 0)
         adb_kb_reg2 |= 0x400;
       else
         adb_kb_reg2 &= 0xfbff;
     }
     if(buffered_code == KEY_LEFTALT || buffered_code == KEY_RIGHTALT)
     {
-      if(buffered_value)
+      if(buffered_value == 0)
         adb_kb_reg2 |= 0x200;
       else
         adb_kb_reg2 &= 0xfdff;
     }
     if(buffered_code == KEY_LEFTMETA || buffered_code == KEY_RIGHTMETA)
     {
-      if(buffered_value)
+      if(buffered_value == 0)
         adb_kb_reg2 |= 0x100;
       else
         adb_kb_reg2 &= 0xfeff;
     }
-    if(buffered_code == KEY_NUMLOCK)
-    {
-      if(buffered_value)
-        adb_kb_reg2 |= 0x80;
-      else
-        adb_kb_reg2 &= 0xff7f;
-    }
-    if(buffered_code == KEY_SCROLLLOCK)
-    {
-      if(buffered_value)
-        adb_kb_reg2 |= 0x40;
-      else
-        adb_kb_reg2 &= 0xffbf;
-    }
+    // if(buffered_code == KEY_NUMLOCK)
+    // {
+    //   if(buffered_value == 0)
+    //     adb_kb_reg2 |= 0x80;
+    //   else
+    //     adb_kb_reg2 &= 0xff7f;
+    // }
+    // if(buffered_code == KEY_SCROLLLOCK)
+    // {
+    //   if(buffered_value == 0)
+    //     adb_kb_reg2 |= 0x40;
+    //   else
+    //     adb_kb_reg2 &= 0xffbf;
+    // }
   }
 }
 
@@ -492,10 +506,12 @@ int main(void)
       adb_keyboard_update();
     else if(adb_status == ADB_KB_POLL_REG2 && kb_enabled)
       adb_send_response_16b(adb_kb_reg2);
-    // else if(adb_status == ADB_KB_CHANGE_LED)
-    // {
-    //   printf("%x\n", adb_kb_reg2);
-    // }
+    else if(adb_status == ADB_KB_CHANGE_LED)
+    {
+      // kb reg2 top 13 bits is button status, 1 = released 0 = pressed
+      // first 3 bits is LED, 1 = on, 0 = off
+      printf("%x\n", adb_kb_reg2);
+    }
   }
   /* USER CODE END 3 */
 

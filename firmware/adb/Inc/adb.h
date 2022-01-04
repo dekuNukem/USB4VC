@@ -48,6 +48,7 @@
 #define EV_TO_ADB_LOOKUP_SIZE 186
 #define ADB_DEFAULT_TIMEOUT_US 10000
 #define ADB_KEY_UNKNOWN 255
+#define ADB_KEY_CAPSLOCK 57
 void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port, uint16_t psw_pin);
 uint8_t adb_recv_cmd(uint8_t* data);
 uint8_t parse_adb_cmd(uint8_t data);
@@ -61,8 +62,6 @@ extern uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 extern const uint8_t linux_ev_to_adb_lookup[EV_TO_ADB_LOOKUP_SIZE];
 extern uint16_t adb_kb_reg2;
 extern uint8_t kb_enabled, mouse_enabled;
-
-void wtf(void);
 
 #ifdef __cplusplus
 }

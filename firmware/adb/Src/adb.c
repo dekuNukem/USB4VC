@@ -10,7 +10,7 @@ GPIO_TypeDef* adb_psw_port;
 uint16_t adb_psw_pin;
 GPIO_TypeDef* adb_data_port;
 uint16_t adb_data_pin;
-uint16_t adb_kb_reg2;
+uint16_t adb_kb_reg2 = 0xfff8; // all key released, all LED off
 uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 uint8_t kb_enabled, mouse_enabled;
 
@@ -434,11 +434,9 @@ uint8_t parse_adb_cmd(uint8_t data)
 
   if(cmd == ADB_CMD_TYPE_LISTEN && reg == 2 && addr == adb_kb_current_addr)
   {
-    uint16_t host_cmd;
     DEBUG1_HI();
-    adb_listen_16b(&host_cmd);
+    adb_listen_16b(&adb_kb_reg2);
     DEBUG1_LOW();
-    printf("%x\n", host_cmd);
     return ADB_KB_CHANGE_LED;
   }
   return ADB_OK;
