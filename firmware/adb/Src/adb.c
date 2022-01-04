@@ -10,7 +10,7 @@ GPIO_TypeDef* adb_psw_port;
 uint16_t adb_psw_pin;
 GPIO_TypeDef* adb_data_port;
 uint16_t adb_data_pin;
-uint16_t adb_kb_reg2 = 0xfff8; // all key released, all LED off
+uint16_t adb_kb_reg2 = 0xffff; // all key released, all LED off
 uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 uint8_t kb_enabled, mouse_enabled;
 

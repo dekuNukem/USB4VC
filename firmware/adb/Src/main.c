@@ -70,7 +70,7 @@ const uint8_t board_id = 2;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 1;
 const uint8_t version_patch = 0;
-uint8_t hw_revision;
+uint8_t hw_revision = 0;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
@@ -125,12 +125,22 @@ void handle_protocol_switch(uint8_t spi_byte)
     return;
   // switching protocol ON
   if(onoff && protocol_status_lookup[index] == PROTOCOL_STATUS_DISABLED)
+  {
+    switch(index)
+    {
+      case PROTOCOL_ADB_KB:
+        kb_buf_reset(&my_kb_buf);
+        break;
+      case PROTOCOL_ADB_MOUSE:
+        mouse_buf_reset(&my_mouse_buf);
+        break;
+    }
     protocol_status_lookup[index] = PROTOCOL_STATUS_ENABLED;
+  }
   // switching protocol OFF
   else if((onoff == 0) && protocol_status_lookup[index] == PROTOCOL_STATUS_ENABLED)
     protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
 }
-
 
 void parse_spi_buf(uint8_t* spibuf)
 {
@@ -149,10 +159,6 @@ void parse_spi_buf(uint8_t* spibuf)
   else if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
   {
     kb_buf_add(&my_kb_buf, spibuf[4], spibuf[6]);
-  }
-  else if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
-  {
-    HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   }
   else if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
   {
@@ -227,6 +233,8 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   }
   parse_spi_buf(spi_recv_buf);
   spi_isr_end:
+  if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
+      HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 }
@@ -509,8 +517,17 @@ int main(void)
     else if(adb_status == ADB_KB_CHANGE_LED)
     {
       // kb reg2 top 13 bits is button status, 1 = released 0 = pressed
-      // first 3 bits is LED, 1 = on, 0 = off
-      printf("%x\n", adb_kb_reg2);
+      // bottom 3 bits is LED, 1 = off, 0 = on
+      memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+      spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+      spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_KB_LED_REQUEST;
+      if(!(adb_kb_reg2 & 0x4)) // scroll lock LED
+        spi_transmit_buf[3] = 1;
+      if(!(adb_kb_reg2 & 0x1))  // num lock LED
+        spi_transmit_buf[4] = 1;
+      if(!(adb_kb_reg2 & 0x2))  // caps lock LED
+        spi_transmit_buf[5] = 1;
+      HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
     }
   }
   /* USER CODE END 3 */
