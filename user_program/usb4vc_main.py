@@ -25,6 +25,8 @@ GPIO.setup(PBOARD_DFU_PIN, GPIO.IN)
 # GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
 # reset_pboard()
 
+# use sudo -E to preserve environmental variables for python3
+
 os.system('sudo bash -c "echo 1 > /sys/module/bluetooth/parameters/disable_ertm"')
 
 usb4vc_ui.ui_init()

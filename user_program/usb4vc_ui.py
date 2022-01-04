@@ -328,6 +328,13 @@ def load_config():
     except Exception as e:
         print("config load failed!", e)
 
+def get_ip_name():
+    ip_str = subprocess.getoutput("timeout 1 hostname -I")
+    ip_list = [x for x in ip_str.split(' ') if '.' in x]
+    if len(ip_list) == 0:
+        return "Offline"
+    return f'{ip_list[0]}'
+
 def save_config():
     try:
         with open(config_file_path, 'w', encoding='utf8') as save_file:
@@ -387,9 +394,13 @@ class usb4vc_menu(object):
                     draw.text((0, 20), f"GPD {gp_count} {self.current_gamepad_protocol['display_name']}", font=font_regular, fill="white")
             if page == 1:
                 with canvas(oled_device) as draw:
-                    draw.text((0, 0), f"PB:{self.pb_info['full_name']}", font=font_regular, fill="white")
-                    draw.text((0, 10), f"FW:{self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  REV:{self.pb_info['hw_rev']}", font=font_regular, fill="white")
-                    draw.text((0, 20), f"IP: 192.168.231.12", font=font_regular, fill="white")
+                    if 'Unknown' in self.pb_info['full_name']:
+                        draw.text((0, 0), f"{self.pb_info['full_name']} PID {this_pboard_id}", font=font_regular, fill="white")
+                    else:
+                        draw.text((0, 0), f"{self.pb_info['full_name']}", font=font_regular, fill="white")
+                    draw.text((0, 10), f"PB {self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  RPi {usb4vc_shared.RPI_APP_VERSION_TUPLE[0]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[1]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[2]}", font=font_regular, fill="white")
+                    draw.text((0, 20), f"IP: {get_ip_name()}", font=font_regular, fill="white")
+                    
             if page == 2:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Remove BT Device", font_medium, 0, draw)
@@ -594,7 +605,7 @@ class usb4vc_menu(object):
             self.display_page(0, 0)
 
 pboard_database = {
-    PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown/Unplugged', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_raw, 'plist_mouse':mouse_protocol_options_raw, 'plist_gamepad':gamepad_protocol_options_raw},
+    PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_raw, 'plist_mouse':mouse_protocol_options_raw, 'plist_gamepad':gamepad_protocol_options_raw},
     PBOARD_ID_IBMPC:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_ibmpc, 'plist_mouse':mouse_protocol_options_ibmpc, 'plist_gamepad':gamepad_protocol_options_ibmpc},
     PBOARD_ID_ADB:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_adb, 'plist_mouse':mouse_protocol_options_adb, 'plist_gamepad':gamepad_protocol_options_adb},
 }
