@@ -125,28 +125,10 @@ void handle_protocol_switch(uint8_t spi_byte)
     return;
   // switching protocol ON
   if(onoff && protocol_status_lookup[index] == PROTOCOL_STATUS_DISABLED)
-  {
-    switch(index)
-    {
-      case PROTOCOL_ADB_KB:
-      case PROTOCOL_ADB_MOUSE:
-        adb_reset();
-        break;
-    }
     protocol_status_lookup[index] = PROTOCOL_STATUS_ENABLED;
-  }
   // switching protocol OFF
   else if((onoff == 0) && protocol_status_lookup[index] == PROTOCOL_STATUS_ENABLED)
-  {
     protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
-    switch(index) 
-    {
-      case PROTOCOL_ADB_KB:
-      case PROTOCOL_ADB_MOUSE:
-        adb_reset();
-        break;
-    }
-  }
 }
 
 
@@ -469,6 +451,15 @@ int main(void)
     if(IS_ADB_DEVICE_PRESENT() == 0)
       continue;
 
+    kb_enabled = is_protocol_enabled(PROTOCOL_ADB_KB);
+    mouse_enabled = is_protocol_enabled(PROTOCOL_ADB_MOUSE);
+
+    if(kb_enabled == 0 && mouse_enabled == 0)
+    {
+      adb_reset();
+      continue;
+    }
+
     adb_status = adb_recv_cmd(&adb_data);
     adb_rw_in_progress = 0;
     if(adb_status == ADB_LINE_STATUS_RESET)
@@ -489,24 +480,22 @@ int main(void)
     }
 
     HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, kb_srq || mouse_srq);
-    if(kb_srq || mouse_srq)
+    if((kb_srq && kb_enabled) || (mouse_srq && mouse_enabled))
       send_srq();
     else
       wait_until_change(ADB_DEFAULT_TIMEOUT_US);
 
     adb_status = parse_adb_cmd(adb_data);
-    if(adb_status == ADB_MOUSE_POLL)
+    if(adb_status == ADB_MOUSE_POLL && mouse_enabled)
       adb_mouse_update();
-    else if(adb_status == ADB_KB_POLL)
+    else if(adb_status == ADB_KB_POLL && kb_enabled)
       adb_keyboard_update();
-    else if(adb_status == ADB_KB_POLL_REG2)
+    else if(adb_status == ADB_KB_POLL_REG2 && kb_enabled)
       adb_send_response_16b(adb_kb_reg2);
     // else if(adb_status == ADB_KB_CHANGE_LED)
     // {
     //   printf("%x\n", adb_kb_reg2);
     // }
-
-    
   }
   /* USER CODE END 3 */
 

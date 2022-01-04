@@ -12,6 +12,7 @@ GPIO_TypeDef* adb_data_port;
 uint16_t adb_data_pin;
 uint16_t adb_kb_reg2;
 uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
+uint8_t kb_enabled, mouse_enabled;
 
 #define ADB_PSW_HI() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_SET)
 #define ADB_PSW_LOW() HAL_GPIO_WritePin(adb_psw_port, adb_psw_pin, GPIO_PIN_RESET)
@@ -390,7 +391,7 @@ uint8_t parse_adb_cmd(uint8_t data)
   if(addr == 0)
     return ADB_ERROR;
 
-  if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_mouse_current_addr)
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_mouse_current_addr && mouse_enabled)
   {
     uint16_t response = 0x6001; // 0110 0000 0000 0001, device handler 0x1, 100dps apple desktop bus mouse
     uint16_t rand_id = (rand() % 0xf) << 8;
@@ -398,7 +399,7 @@ uint8_t parse_adb_cmd(uint8_t data)
     adb_send_response_16b(response);
   }
 
-  if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_kb_current_addr)
+  if(cmd == ADB_CMD_TYPE_TALK && reg == 3 && addr == adb_kb_current_addr && kb_enabled)
   {
     uint16_t response = 0x6005; // 0110 0000 0000 0101, device handler 0x5, appledesign keyboard
     uint16_t rand_id = (rand() % 0xf) << 8;
