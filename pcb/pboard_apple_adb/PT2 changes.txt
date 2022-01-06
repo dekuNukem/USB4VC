@@ -3,3 +3,4 @@ ADB 5V detect on PA3
 Removed RX pin on debug header
 added a current limiting resistor on PB8
 fixed flipped ADB connector footprint
+added more debug headers

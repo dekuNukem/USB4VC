@@ -3750,6 +3750,66 @@ MAX3223-MAX3243.pdf</description>
 <rectangle x1="1.746" y1="-0.254" x2="2.254" y2="0.254" layer="51"/>
 <rectangle x1="3.746" y1="-0.254" x2="4.254" y2="0.254" layer="51"/>
 </package>
+<package name="1X03" urn="urn:adsk.eagle:footprint:22340/1" library_version="4">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<wire x1="-3.175" y1="1.27" x2="-1.905" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="1.27" x2="-1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="0.635" x2="-1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="-0.635" x2="-1.905" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="0.635" x2="-0.635" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="1.27" x2="0.635" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="1.27" x2="1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="0.635" x2="1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="-0.635" x2="0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="-1.27" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="-1.27" x2="-1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-3.81" y1="0.635" x2="-3.81" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-3.175" y1="1.27" x2="-3.81" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-3.81" y1="-0.635" x2="-3.175" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-1.27" x2="-3.175" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="0.635" x2="1.905" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="1.27" x2="3.175" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="1.27" x2="3.81" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="3.81" y1="0.635" x2="3.81" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="3.81" y1="-0.635" x2="3.175" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="3.175" y1="-1.27" x2="1.905" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="1.905" y1="-1.27" x2="1.27" y2="-0.635" width="0.1524" layer="21"/>
+<pad name="1" x="-2.54" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="2" x="0" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="3" x="2.54" y="0" drill="1.016" shape="long" rot="R90"/>
+<text x="-3.8862" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.81" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="51"/>
+<rectangle x1="-2.794" y1="-0.254" x2="-2.286" y2="0.254" layer="51"/>
+<rectangle x1="2.286" y1="-0.254" x2="2.794" y2="0.254" layer="51"/>
+</package>
+<package name="1X03/90" urn="urn:adsk.eagle:footprint:22341/1" library_version="4">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<wire x1="-3.81" y1="-1.905" x2="-1.27" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="-1.905" x2="-1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="0.635" x2="-3.81" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-3.81" y1="0.635" x2="-3.81" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="6.985" x2="-2.54" y2="1.27" width="0.762" layer="21"/>
+<wire x1="-1.27" y1="-1.905" x2="1.27" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="-1.905" x2="1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="0.635" x2="-1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="0" y1="6.985" x2="0" y2="1.27" width="0.762" layer="21"/>
+<wire x1="1.27" y1="-1.905" x2="3.81" y2="-1.905" width="0.1524" layer="21"/>
+<wire x1="3.81" y1="-1.905" x2="3.81" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="3.81" y1="0.635" x2="1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="6.985" x2="2.54" y2="1.27" width="0.762" layer="21"/>
+<pad name="1" x="-2.54" y="-3.81" drill="1.016" shape="long" rot="R90"/>
+<pad name="2" x="0" y="-3.81" drill="1.016" shape="long" rot="R90"/>
+<pad name="3" x="2.54" y="-3.81" drill="1.016" shape="long" rot="R90"/>
+<text x="-4.445" y="-3.81" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="5.715" y="-3.81" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
+<rectangle x1="-2.921" y1="0.635" x2="-2.159" y2="1.143" layer="21"/>
+<rectangle x1="-0.381" y1="0.635" x2="0.381" y2="1.143" layer="21"/>
+<rectangle x1="2.159" y1="0.635" x2="2.921" y2="1.143" layer="21"/>
+<rectangle x1="-2.921" y1="-2.921" x2="-2.159" y2="-1.905" layer="21"/>
+<rectangle x1="-0.381" y1="-2.921" x2="0.381" y2="-1.905" layer="21"/>
+<rectangle x1="2.159" y1="-2.921" x2="2.921" y2="-1.905" layer="21"/>
+</package>
 </packages>
 <packages3d>
 <package3d name="1X04" urn="urn:adsk.eagle:package:22407/2" type="model" library_version="4">
@@ -3794,6 +3854,18 @@ MAX3223-MAX3243.pdf</description>
 <packageinstance name="1_05X2MM"/>
 </packageinstances>
 </package3d>
+<package3d name="1X03" urn="urn:adsk.eagle:package:22458/2" type="model" library_version="4">
+<description>PIN HEADER</description>
+<packageinstances>
+<packageinstance name="1X03"/>
+</packageinstances>
+</package3d>
+<package3d name="1X03/90" urn="urn:adsk.eagle:package:22459/2" type="model" library_version="4">
+<description>PIN HEADER</description>
+<packageinstances>
+<packageinstance name="1X03/90"/>
+</packageinstances>
+</package3d>
 </packages3d>
 <symbols>
 <symbol name="PINHD4" urn="urn:adsk.eagle:symbol:22257/1" library_version="4">
@@ -3834,6 +3906,17 @@ MAX3223-MAX3243.pdf</description>
 <pin name="3" x="-2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="4" x="-2.54" y="-2.54" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="5" x="-2.54" y="-5.08" visible="pad" length="short" direction="pas" function="dot"/>
+</symbol>
+<symbol name="PINHD3" urn="urn:adsk.eagle:symbol:22339/1" library_version="4">
+<wire x1="-6.35" y1="-5.08" x2="1.27" y2="-5.08" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="-5.08" x2="1.27" y2="5.08" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="5.08" x2="-6.35" y2="5.08" width="0.4064" layer="94"/>
+<wire x1="-6.35" y1="5.08" x2="-6.35" y2="-5.08" width="0.4064" layer="94"/>
+<text x="-6.35" y="5.715" size="1.778" layer="95">&gt;NAME</text>
+<text x="-6.35" y="-7.62" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="1" x="-2.54" y="2.54" visible="pad" length="short" direction="pas" function="dot"/>
+<pin name="2" x="-2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
+<pin name="3" x="-2.54" y="-2.54" visible="pad" length="short" direction="pas" function="dot"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -3980,6 +4063,44 @@ MAX3223-MAX3243.pdf</description>
 </device>
 </devices>
 </deviceset>
+<deviceset name="PINHD-1X3" urn="urn:adsk.eagle:component:22524/4" prefix="JP" uservalue="yes" library_version="4">
+<description>&lt;b&gt;PIN HEADER&lt;/b&gt;</description>
+<gates>
+<gate name="A" symbol="PINHD3" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="1X03">
+<connects>
+<connect gate="A" pin="1" pad="1"/>
+<connect gate="A" pin="2" pad="2"/>
+<connect gate="A" pin="3" pad="3"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:22458/2"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="POPULARITY" value="92" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="/90" package="1X03/90">
+<connects>
+<connect gate="A" pin="1" pad="1"/>
+<connect gate="A" pin="2" pad="2"/>
+<connect gate="A" pin="3" pad="3"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:22459/2"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="POPULARITY" value="17" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
 </devicesets>
 </library>
 </libraries>
@@ -4045,6 +4166,10 @@ MAX3223-MAX3243.pdf</description>
 <part name="+3V13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="JP5" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2"/>
 <part name="R7" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="12K"/>
+<part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X3" device="" package3d_urn="urn:adsk.eagle:package:22458/2"/>
+<part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="JP6" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X3" device="" package3d_urn="urn:adsk.eagle:package:22458/2"/>
+<part name="JP7" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X4" device="" package3d_urn="urn:adsk.eagle:package:22407/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -4207,6 +4332,21 @@ MAX3223-MAX3243.pdf</description>
 <attribute name="NAME" x="138.43" y="-120.8786" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="138.43" y="-116.078" size="1.778" layer="96" rot="R180"/>
 </instance>
+<instance part="JP2" gate="A" x="124.46" y="-111.76" smashed="yes">
+<attribute name="NAME" x="118.11" y="-106.045" size="1.778" layer="95"/>
+<attribute name="VALUE" x="118.11" y="-119.38" size="1.778" layer="96"/>
+</instance>
+<instance part="GND14" gate="1" x="129.54" y="-111.76" smashed="yes">
+<attribute name="VALUE" x="127" y="-114.3" size="1.778" layer="96"/>
+</instance>
+<instance part="JP6" gate="A" x="149.86" y="-20.32" smashed="yes">
+<attribute name="NAME" x="143.51" y="-14.605" size="1.778" layer="95"/>
+<attribute name="VALUE" x="143.51" y="-27.94" size="1.778" layer="96"/>
+</instance>
+<instance part="JP7" gate="A" x="165.1" y="10.16" smashed="yes">
+<attribute name="NAME" x="158.75" y="18.415" size="1.778" layer="95"/>
+<attribute name="VALUE" x="158.75" y="2.54" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -4364,6 +4504,9 @@ MAX3223-MAX3243.pdf</description>
 <wire x1="86.36" y1="5.08" x2="86.36" y2="2.54" width="0.1524" layer="91"/>
 <junction x="96.52" y="5.08"/>
 <junction x="86.36" y="2.54"/>
+<pinref part="JP7" gate="A" pin="4"/>
+<wire x1="142.24" y1="7.62" x2="162.56" y2="7.62" width="0.1524" layer="91"/>
+<junction x="142.24" y="7.62"/>
 </segment>
 <segment>
 <pinref part="U$1" gate="J1" pin="GND"/>
@@ -4394,6 +4537,11 @@ MAX3223-MAX3243.pdf</description>
 <pinref part="JP4" gate="A" pin="6"/>
 <wire x1="-2.54" y1="-60.96" x2="5.08" y2="-60.96" width="0.1524" layer="91"/>
 <junction x="-2.54" y="-60.96"/>
+</segment>
+<segment>
+<pinref part="JP2" gate="A" pin="1"/>
+<pinref part="GND14" gate="1" pin="GND"/>
+<wire x1="121.92" y1="-109.22" x2="129.54" y2="-109.22" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$29" class="0">
@@ -4528,6 +4676,11 @@ MAX3223-MAX3243.pdf</description>
 <wire x1="22.86" y1="-111.76" x2="22.86" y2="-106.68" width="0.1524" layer="91"/>
 <pinref part="J4" gate="J1" pin="D+"/>
 <wire x1="22.86" y1="-106.68" x2="5.08" y2="-106.68" width="0.1524" layer="91"/>
+<wire x1="81.28" y1="-111.76" x2="106.68" y2="-111.76" width="0.1524" layer="91"/>
+<wire x1="106.68" y1="-111.76" x2="106.68" y2="-114.3" width="0.1524" layer="91"/>
+<junction x="81.28" y="-111.76"/>
+<pinref part="JP2" gate="A" pin="3"/>
+<wire x1="106.68" y1="-114.3" x2="121.92" y2="-114.3" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$4" class="0">
@@ -4535,6 +4688,11 @@ MAX3223-MAX3243.pdf</description>
 <pinref part="IC3" gate="G$1" pin="PA9/PA11"/>
 <pinref part="J4" gate="J1" pin="D-"/>
 <wire x1="81.28" y1="-109.22" x2="5.08" y2="-109.22" width="0.1524" layer="91"/>
+<wire x1="81.28" y1="-109.22" x2="109.22" y2="-109.22" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="-109.22" x2="109.22" y2="-111.76" width="0.1524" layer="91"/>
+<junction x="81.28" y="-109.22"/>
+<pinref part="JP2" gate="A" pin="2"/>
+<wire x1="109.22" y1="-111.76" x2="121.92" y2="-111.76" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$5" class="0">
@@ -4570,9 +4728,13 @@ MAX3223-MAX3243.pdf</description>
 <wire x1="96.52" y1="-20.32" x2="76.2" y2="-20.32" width="0.1524" layer="91"/>
 <wire x1="76.2" y1="-20.32" x2="76.2" y2="-7.62" width="0.1524" layer="91"/>
 <wire x1="76.2" y1="-7.62" x2="134.62" y2="-7.62" width="0.1524" layer="91"/>
-<wire x1="134.62" y1="-7.62" x2="134.62" y2="-101.6" width="0.1524" layer="91"/>
+<wire x1="134.62" y1="-7.62" x2="134.62" y2="-17.78" width="0.1524" layer="91"/>
 <pinref part="IC3" gate="G$1" pin="PF0/OSC_IN"/>
+<wire x1="134.62" y1="-17.78" x2="134.62" y2="-101.6" width="0.1524" layer="91"/>
 <wire x1="134.62" y1="-101.6" x2="119.38" y2="-101.6" width="0.1524" layer="91"/>
+<pinref part="JP6" gate="A" pin="1"/>
+<wire x1="147.32" y1="-17.78" x2="134.62" y2="-17.78" width="0.1524" layer="91"/>
+<junction x="134.62" y="-17.78"/>
 </segment>
 </net>
 <net name="N$11" class="0">
@@ -4581,9 +4743,13 @@ MAX3223-MAX3243.pdf</description>
 <wire x1="96.52" y1="-22.86" x2="73.66" y2="-22.86" width="0.1524" layer="91"/>
 <wire x1="73.66" y1="-22.86" x2="73.66" y2="-5.08" width="0.1524" layer="91"/>
 <wire x1="73.66" y1="-5.08" x2="137.16" y2="-5.08" width="0.1524" layer="91"/>
-<wire x1="137.16" y1="-5.08" x2="137.16" y2="-104.14" width="0.1524" layer="91"/>
+<wire x1="137.16" y1="-5.08" x2="137.16" y2="-20.32" width="0.1524" layer="91"/>
 <pinref part="IC3" gate="G$1" pin="PF1/OSC_OUT"/>
+<wire x1="137.16" y1="-20.32" x2="137.16" y2="-104.14" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="-104.14" x2="119.38" y2="-104.14" width="0.1524" layer="91"/>
+<pinref part="JP6" gate="A" pin="2"/>
+<wire x1="147.32" y1="-20.32" x2="137.16" y2="-20.32" width="0.1524" layer="91"/>
+<junction x="137.16" y="-20.32"/>
 </segment>
 </net>
 <net name="N$12" class="0">
@@ -4614,6 +4780,9 @@ MAX3223-MAX3243.pdf</description>
 <junction x="78.74" y="17.78"/>
 <pinref part="IC3" gate="G$1" pin="PA3"/>
 <wire x1="38.1" y1="-96.52" x2="81.28" y2="-96.52" width="0.1524" layer="91"/>
+<pinref part="JP7" gate="A" pin="1"/>
+<wire x1="142.24" y1="15.24" x2="162.56" y2="15.24" width="0.1524" layer="91"/>
+<junction x="142.24" y="15.24"/>
 </segment>
 </net>
 <net name="N$15" class="0">
@@ -4631,6 +4800,9 @@ MAX3223-MAX3243.pdf</description>
 <wire x1="45.72" y1="-121.92" x2="45.72" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="12.7" x2="96.52" y2="12.7" width="0.1524" layer="91"/>
 <junction x="96.52" y="12.7"/>
+<pinref part="JP7" gate="A" pin="2"/>
+<wire x1="152.4" y1="12.7" x2="162.56" y2="12.7" width="0.1524" layer="91"/>
+<junction x="152.4" y="12.7"/>
 </segment>
 </net>
 <net name="N$17" class="0">
@@ -4661,6 +4833,9 @@ MAX3223-MAX3243.pdf</description>
 <wire x1="50.8" y1="10.16" x2="96.52" y2="10.16" width="0.1524" layer="91"/>
 <junction x="96.52" y="10.16"/>
 <junction x="154.94" y="38.1"/>
+<pinref part="JP7" gate="A" pin="3"/>
+<wire x1="154.94" y1="10.16" x2="162.56" y2="10.16" width="0.1524" layer="91"/>
+<junction x="154.94" y="10.16"/>
 </segment>
 </net>
 <net name="N$9" class="0">
