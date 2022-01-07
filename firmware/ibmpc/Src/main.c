@@ -71,7 +71,6 @@ const uint8_t version_patch = 0;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
-uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
 kb_buf my_kb_buf;
 mouse_buf my_mouse_buf;
@@ -152,6 +151,9 @@ void handle_protocol_switch(uint8_t spi_byte)
   // trying to change a protocol that is not available on this board
   if(protocol_status_lookup[index] == PROTOCOL_STATUS_NOT_AVAILABLE)
     return;
+  kb_buf_reset(&my_kb_buf);
+  mouse_buf_reset(&my_mouse_buf);
+  gamepad_buf_reset(&my_gamepad_buf);
   // switching protocol ON
   if(onoff && protocol_status_lookup[index] == PROTOCOL_STATUS_DISABLED)
   {
@@ -215,53 +217,52 @@ void handle_protocol_switch(uint8_t spi_byte)
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_SET);
-  memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
 
-  if(backup_spi1_recv_buf[0] != 0xde)
+  if(spi_recv_buf[0] != 0xde)
   {
     spi_error_occured = 1;
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
   {
-    kb_buf_add(&my_kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
+    kb_buf_add(&my_kb_buf, spi_recv_buf[4], spi_recv_buf[6]);
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
   {
-    latest_mouse_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
-    latest_mouse_event.movement_y = -1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
-    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(backup_spi1_recv_buf[8], backup_spi1_recv_buf[9]);
-    latest_mouse_event.button_left = backup_spi1_recv_buf[13];
-    latest_mouse_event.button_right = backup_spi1_recv_buf[14];
-    latest_mouse_event.button_middle = backup_spi1_recv_buf[15];
-    latest_mouse_event.button_side = backup_spi1_recv_buf[16];
-    latest_mouse_event.button_extra = backup_spi1_recv_buf[17];
+    latest_mouse_event.movement_x = byte_to_int16_t(spi_recv_buf[4], spi_recv_buf[5]);
+    latest_mouse_event.movement_y = -1 * byte_to_int16_t(spi_recv_buf[6], spi_recv_buf[7]);
+    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(spi_recv_buf[8], spi_recv_buf[9]);
+    latest_mouse_event.button_left = spi_recv_buf[13];
+    latest_mouse_event.button_right = spi_recv_buf[14];
+    latest_mouse_event.button_middle = spi_recv_buf[15];
+    latest_mouse_event.button_side = spi_recv_buf[16];
+    latest_mouse_event.button_extra = spi_recv_buf[17];
     mouse_buf_add(&my_mouse_buf, &latest_mouse_event);
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED_IBMPC)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED_IBMPC)
   {
-    latest_gamepad_event.button_1 = backup_spi1_recv_buf[4];
-    latest_gamepad_event.button_2 = backup_spi1_recv_buf[5];
-    latest_gamepad_event.button_3 = backup_spi1_recv_buf[6];
-    latest_gamepad_event.button_4 = backup_spi1_recv_buf[7];
+    latest_gamepad_event.button_1 = spi_recv_buf[4];
+    latest_gamepad_event.button_2 = spi_recv_buf[5];
+    latest_gamepad_event.button_3 = spi_recv_buf[6];
+    latest_gamepad_event.button_4 = spi_recv_buf[7];
     latest_gamepad_event.button_lt = 0;
     latest_gamepad_event.button_rt = 0;
     latest_gamepad_event.button_lt2 = 0;
     latest_gamepad_event.button_rt2 = 0;
-    latest_gamepad_event.axis_x = backup_spi1_recv_buf[8];
-    latest_gamepad_event.axis_y = backup_spi1_recv_buf[9];
-    latest_gamepad_event.axis_rx = backup_spi1_recv_buf[10];
-    latest_gamepad_event.axis_ry = backup_spi1_recv_buf[11];
+    latest_gamepad_event.axis_x = spi_recv_buf[8];
+    latest_gamepad_event.axis_y = spi_recv_buf[9];
+    latest_gamepad_event.axis_rx = spi_recv_buf[10];
+    latest_gamepad_event.axis_ry = spi_recv_buf[11];
     gamepad_buf_add(&my_gamepad_buf, &latest_gamepad_event);
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
   {
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
   {
     memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
     spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
-    spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+    spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = spi_recv_buf[SPI_BUF_INDEX_SEQNUM];
     spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_INFO_REQUEST;
     spi_transmit_buf[3] = board_id;
     spi_transmit_buf[4] = hw_revision;
@@ -280,13 +281,13 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
       curr_index++;
     }
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
+  else if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
   {
     for (int i = 3; i < SPI_BUF_SIZE; ++i)
     {
-      if(backup_spi1_recv_buf[i] == 0)
+      if(spi_recv_buf[i] == 0)
         break;
-      handle_protocol_switch(backup_spi1_recv_buf[i]);
+      handle_protocol_switch(spi_recv_buf[i]);
     }
   }
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -341,7 +342,7 @@ void ps2kb_update(void)
     {
       memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
       spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
-      spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = backup_spi1_recv_buf[SPI_BUF_INDEX_SEQNUM];
+      spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = spi_recv_buf[SPI_BUF_INDEX_SEQNUM];
       spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_KB_LED_REQUEST;
       if(ps2kb_leds & 0x1) // scroll lock LED
         spi_transmit_buf[3] = 1;
@@ -414,7 +415,7 @@ void spi_error_dump_reboot(void)
 {
   printf("SPI ERROR\n");
   for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    printf("%d ", backup_spi1_recv_buf[i]);
+    printf("%d ", spi_recv_buf[i]);
   printf("\nrebooting...\n");
   for (int i = 0; i < 100; ++i)
   {
@@ -554,15 +555,21 @@ int main(void)
       ps2mouse_update();
     else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
       serial_mouse_update();
+    else
+      mouse_buf_reset(&my_mouse_buf);
 
     // If both enabled, PS2 keyboard takes priority
     if(is_protocol_enabled(PROTOCOL_AT_PS2_KB) && IS_KB_PRESENT())
       ps2kb_update();
     else if(is_protocol_enabled(PROTOCOL_XT_KB) && IS_KB_PRESENT())
       xtkb_update();
+    else
+      kb_buf_reset(&my_kb_buf);
 
     if(is_protocol_enabled(PROTOCOL_GENERIC_GAMEPORT_GAMEPAD))
       gamepad_update();
+    else
+      gamepad_buf_reset(&my_gamepad_buf);
 
     if(spi_error_occured)
       spi_error_dump_reboot();

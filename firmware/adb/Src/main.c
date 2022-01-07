@@ -203,7 +203,9 @@ uint8_t temp_spi_msg_buf[SPI_BUF_SIZE];
 
 /*
   a full rundown of this ISR takes around 30us, so if it comes in 
-  while reading or writing ADB message, it will mess up the timing
+  while host reading or writing ADB message, it will mess up the timing.
+
+  As communication is exclusively initiated from host, we can't delay it either
   
   solution: cache the data and return immediately, only takes around 6us,
   then process the data in main loop.
@@ -216,7 +218,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     spi_error_occured = 1;
   if(adb_rw_in_progress)
   {
-    // don't want to miss ANY keyboard events, so put them in a seperate buffer
+    // don't want to miss ANY keyboard events, so put them in a separate buffer
     if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
     {
       temp_kb_code_buf[temp_kb_buf_index] = spi_recv_buf[4];
@@ -276,10 +278,10 @@ uint8_t int16_to_uint6(int16_t value)
 
 void adb_mouse_update(void)
 {
+  uint16_t response = 0;
   mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
   if(this_mouse_event == NULL)
     return;
-  uint16_t response = 0;
   if(this_mouse_event->button_left == 0)
     response |= 0x8000;
   if(this_mouse_event->button_right == 0)
@@ -317,10 +319,10 @@ void adb_keyboard_update(void)
     if(adb_code == ADB_KEY_UNKNOWN)
       goto adb_kb_end;
     /*
-    adb mac keyboard capslock key seems to behave differently than PC keyboards
-    On PC: Capslock down then up = Caps lock on, Capslock down then up again = Caps lock off
-    on adb mac: Capslock down = Capslock on, Capslock up = Caps lock off
-    looks like mac keyboard uses a locking capslock, so need to convert the PC code to suit
+      adb mac keyboard capslock key seems to behave differently than PC keyboards
+      On PC: Capslock down then up = Caps lock on, Capslock down then up again = Caps lock off
+      on adb mac: Capslock down = Capslock on, Capslock up = Caps lock off
+      looks like mac keyboard uses a locking capslock, so need to convert the PC code to suit
     */
     if(adb_code == ADB_KEY_CAPSLOCK)
     {
