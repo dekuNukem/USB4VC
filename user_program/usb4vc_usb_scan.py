@@ -503,6 +503,7 @@ def raw_input_event_worker():
                         time.sleep(0.001)
                         pcard_spi.xfer(mouse_to_transfer)
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
+            usb4vc_ui.oled_sleep_refresh()
 # ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):
             slave_result = None
