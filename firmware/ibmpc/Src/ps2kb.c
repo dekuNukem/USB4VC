@@ -326,7 +326,7 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
 
 void keyboard_reply(uint8_t cmd, uint8_t *leds)
 {
-  uint8_t received;
+  uint8_t received = 255;
   switch (cmd)
   {
 	  case 0xFF: //reset
@@ -362,9 +362,12 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	    PS2KB_SENDACK();
 	    if(ps2kb_read(&received, 30) == 0)
       {
-	    	PS2KB_SENDACK();
-        printf("sc: %d\n", received);
-        ps2kb_current_scancode_set = received;
+        PS2KB_SENDACK();
+        if(received == 0)
+          ps2kb_write(ps2kb_current_scancode_set, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+        else if(received <= 3)
+          ps2kb_current_scancode_set = received;
+        // printf("sc: %d\n", received);
       }
 	    break;
 	  case 0xEE: //echo
