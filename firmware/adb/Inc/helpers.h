@@ -82,6 +82,7 @@ uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value);
 uint8_t kb_buf_peek(kb_buf *lb, uint8_t* code, uint8_t* value);
 void kb_buf_pop(kb_buf *lb);
 uint8_t kb_buf_is_empty(kb_buf *lb);
+void kb_buf_reset(kb_buf *lb);
 
 void mouse_buf_init(mouse_buf *lb, uint8_t size);
 uint8_t mouse_buf_add(mouse_buf *lb, mouse_event* event);
