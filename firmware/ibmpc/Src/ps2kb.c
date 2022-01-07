@@ -324,11 +324,6 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   return ps2kb_write_nowait(data);
 }
 
-void ps2kb_change_scancode_set(uint8_t set_number)
-{
-  ;
-}
-
 void keyboard_reply(uint8_t cmd, uint8_t *leds)
 {
   uint8_t received;
@@ -368,7 +363,8 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	    if(ps2kb_read(&received, 30) == 0)
       {
 	    	PS2KB_SENDACK();
-        ps2kb_change_scancode_set(received);
+        printf("sc: %d\n", received);
+        ps2kb_current_scancode_set = received;
       }
 	    break;
 	  case 0xEE: //echo
@@ -382,13 +378,26 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
   }
 }
 
-uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
+#define LINUX_KEYCODE_F11 87
+#define LINUX_KEYCODE_F12 88
+uint8_t ps2kb_press_key_scancode_1(uint8_t linux_keycode, uint8_t linux_keyvalue)
+{
+  // XT codes
+  if(linux_keycode <= 83 || linux_keycode == LINUX_KEYCODE_F11 || linux_keycode == LINUX_KEYCODE_F12)
+  {
+    if(linux_keyvalue)
+      ps2kb_write(linux_keycode, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    else
+      ps2kb_write(linux_keycode | 0x80, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    return 0;
+  }
+  return 2;
+}
+
+uint8_t ps2kb_press_key_scancode_2(uint8_t linux_keycode, uint8_t linux_keyvalue)
 {
   // linux_keyvalue: release 0 press 1 autorepeat 2
   uint8_t lookup_result;
-
-  if(ps2kb_data_reporting_enabled == 0)
-    return 1;
 
   if(linux_keycode < LINUX_KEYCODE_TO_PS2_SCANCODE_SINGLE_SIZE)
   {
@@ -462,3 +471,18 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
   return 3;
 }
 
+uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
+{
+  if(ps2kb_data_reporting_enabled == 0)
+    return 1;
+  switch(ps2kb_current_scancode_set)
+  {
+    case 1:
+      return ps2kb_press_key_scancode_1(linux_keycode, linux_keyvalue);
+    case 2:
+      return ps2kb_press_key_scancode_2(linux_keycode, linux_keyvalue);
+    default:
+      return 9;
+  }
+  return 9;
+}
