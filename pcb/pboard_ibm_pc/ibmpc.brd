@@ -1447,13 +1447,13 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="C7" library="clock" package="0805@1" value="100nF" x="26.5684" y="33.6804" smashed="yes" rot="R270">
 <attribute name="NAME" x="27.6225" y="34.0614" size="0.8128" layer="25" rot="R270"/>
 </element>
-<element name="R9" library="SparkFun-Passives" package="0805" value="12K" x="12.192" y="37.338" smashed="yes">
+<element name="R9" library="SparkFun-Passives" package="0805" value="5.1K" x="12.192" y="37.338" smashed="yes">
 <attribute name="NAME" x="9.3726" y="36.9189" size="0.8128" layer="25"/>
 </element>
 <element name="C8" library="clock" package="0805@1" value="100nF" x="28.829" y="42.8752" smashed="yes" rot="R270">
 <attribute name="NAME" x="27.0637" y="43.4848" size="0.8128" layer="25" rot="R270"/>
 </element>
-<element name="C9" library="clock" package="0805@1" value="1uF" x="17.5768" y="44.3992" smashed="yes" rot="R270">
+<element name="C9" library="clock" package="0805@1" value="100nF" x="17.5768" y="44.3992" smashed="yes" rot="R270">
 <attribute name="NAME" x="18.6055" y="45.4406" size="0.8128" layer="25" rot="R270"/>
 </element>
 <element name="LED2" library="adafruit" package="CHIP-LED0805" value="" x="26.543" y="49.022" smashed="yes" rot="R90">
@@ -1490,26 +1490,26 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="POPULARITY" value="47" x="38.1" y="43.434" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="33.655" y="47.244" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R13" library="SparkFun-Passives" package="0805" value="5.1k" x="49.657" y="46.355" smashed="yes" rot="R180">
+<element name="R13" library="SparkFun-Passives" package="0805" value="5.1K" x="49.657" y="46.355" smashed="yes" rot="R180">
 <attribute name="NAME" x="49.149" y="44.6405" size="0.8128" layer="25"/>
 </element>
-<element name="R14" library="SparkFun-Passives" package="0805" value="5.1k" x="53.0606" y="46.355" smashed="yes">
+<element name="R14" library="SparkFun-Passives" package="0805" value="5.1K" x="53.0606" y="46.355" smashed="yes">
 <attribute name="NAME" x="52.6288" y="44.6913" size="0.8128" layer="25"/>
 </element>
 <element name="SW2" library="3pos_slide_switch_centered" package="342_SWICH_FOOT" value="324_SW" x="12.192" y="45.085" smashed="yes" rot="R180"/>
-<element name="R11" library="SparkFun-Passives" package="0805" value="12K" x="12.192" y="48.006" smashed="yes" rot="R180">
+<element name="R11" library="SparkFun-Passives" package="0805" value="5.1K" x="12.192" y="48.006" smashed="yes" rot="R180">
 <attribute name="NAME" x="10.414" y="48.3235" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R5" library="SparkFun-Passives" package="0805" value="2K" x="36.83" y="13.843" smashed="yes">
+<element name="R5" library="SparkFun-Passives" package="0805" value="390K" x="36.83" y="13.843" smashed="yes">
 <attribute name="NAME" x="38.735" y="13.3985" size="0.8128" layer="25"/>
 </element>
-<element name="R6" library="SparkFun-Passives" package="0805" value="2K" x="19.304" y="13.843" smashed="yes" rot="R180">
+<element name="R6" library="SparkFun-Passives" package="0805" value="390K" x="19.304" y="13.843" smashed="yes" rot="R180">
 <attribute name="NAME" x="17.526" y="14.2875" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R8" library="SparkFun-Passives" package="0805" value="2K" x="33.274" y="13.843" smashed="yes" rot="R180">
+<element name="R8" library="SparkFun-Passives" package="0805" value="390K" x="33.274" y="13.843" smashed="yes" rot="R180">
 <attribute name="NAME" x="31.242" y="14.2875" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R10" library="SparkFun-Passives" package="0805" value="2K" x="23.368" y="13.843" smashed="yes">
+<element name="R10" library="SparkFun-Passives" package="0805" value="390K" x="23.368" y="13.843" smashed="yes">
 <attribute name="NAME" x="25.146" y="13.3985" size="0.8128" layer="25"/>
 </element>
 <element name="U$5" library="ps2" package="TSSOP20" value="MCP4451" x="18.3642" y="24.9428" smashed="yes" rot="R180">
@@ -1526,7 +1526,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="C6" library="clock" package="0805@1" value="100nF" x="22.733" y="25.019" smashed="yes" rot="R270">
 <attribute name="NAME" x="23.6855" y="26.67" size="0.8128" layer="25" rot="R270"/>
 </element>
-<element name="R4" library="SparkFun-Passives" package="0805" value="2K" x="21.3868" y="29.972" smashed="yes">
+<element name="R4" library="SparkFun-Passives" package="0805" value="5.1K" x="21.3868" y="29.972" smashed="yes">
 <attribute name="NAME" x="20.6248" y="30.7975" size="0.8128" layer="25"/>
 </element>
 <element name="U$10" library="adafruit_changed" package="1X04-CLEANBIG" value="PINHD1X4" x="12.954" y="34.29" smashed="yes"/>
@@ -1534,17 +1534,17 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="POPULARITY" value="1" x="20.574" y="37.084" size="1.778" layer="28" rot="MR0" display="off"/>
 <attribute name="TP_SIGNAL_NAME" value="" x="20.574" y="37.084" size="1.778" layer="28" rot="MR0" display="off"/>
 </element>
-<element name="R1" library="SparkFun-Passives" package="0805" value="5.1k" x="10.16" y="29.972" smashed="yes">
+<element name="R1" library="SparkFun-Passives" package="0805" value="5.1K" x="10.16" y="29.972" smashed="yes">
 <attribute name="NAME" x="8.509" y="30.2895" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R2" library="SparkFun-Passives" package="0805" value="5.1k" x="10.16" y="28.067" smashed="yes">
+<element name="R2" library="SparkFun-Passives" package="0805" value="5.1K" x="10.16" y="28.067" smashed="yes">
 <attribute name="NAME" x="8.509" y="28.5115" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="2X03" package3d_urn="urn:adsk.eagle:package:22462/2" value="" x="8.58" y="18.53" smashed="yes" rot="R90">
 <attribute name="POPULARITY" value="62" x="8.58" y="18.53" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="11.755" y="14.72" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="R3" library="SparkFun-Passives" package="0805" value="2K" x="18.542" y="20.2692" smashed="yes" rot="R180">
+<element name="R3" library="SparkFun-Passives" package="0805" value="5.1K" x="18.542" y="20.2692" smashed="yes" rot="R180">
 <attribute name="NAME" x="22.1488" y="20.9423" size="0.8128" layer="25" rot="R180"/>
 </element>
 </elements>

@@ -6226,12 +6226,12 @@ With round pins</description>
 </class>
 </classes>
 <parts>
-<part name="PCB1" library="e14_Rpi3_RevA" deviceset="RPI3" device="NO-CONNECTORS"/>
+<part name="P1" library="e14_Rpi3_RevA" deviceset="RPI3" device="NO-CONNECTORS"/>
 <part name="IC1" library="v-reg" library_urn="urn:adsk.eagle:library:409" deviceset="LD117A?*" device="S" package3d_urn="urn:adsk.eagle:package:30370/1" technology="33TR" value="LD117AS33TR"/>
 <part name="R1" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="R9" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
-<part name="C29" library="clock" deviceset="CAP" device="0805" value="10uF"/>
+<part name="C29" library="clock" deviceset="CAP" device="0805" value="2.2uF"/>
 <part name="GND16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C27" library="clock" deviceset="C-US" device="C1210" value="47uF"/>
 <part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
@@ -6253,18 +6253,18 @@ With round pins</description>
 <part name="C23" library="clock" deviceset="CAP" device="0805" value="2.2uF"/>
 <part name="GND28" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND29" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R8" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="12K"/>
+<part name="R8" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="GND30" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="SW20" library="3pos_slide_switch_centered" deviceset="324_SW" device="" value="324_SW"/>
 <part name="GND21" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="SW1" library="3pos_slide_switch_centered" deviceset="324_SW" device="" value="324_SW"/>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="JP1" library="adafruit_changed" deviceset="PINHD-2X20" device="-BIG"/>
+<part name="P2" library="adafruit_changed" deviceset="PINHD-2X20" device="-BIG"/>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="+3V2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="JP2" library="adafruit_changed" deviceset="PINHD-2X20" device="-BIG"/>
+<part name="P3" library="adafruit_changed" deviceset="PINHD-2X20" device="-BIG"/>
 <part name="+3V10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="C5" library="clock" deviceset="CAP" device="0805" value="100nF"/>
 <part name="GND22" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -6273,8 +6273,8 @@ With round pins</description>
 <part name="GND7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="R2" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="390K"/>
-<part name="R3" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="390K"/>
+<part name="R2" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
+<part name="R3" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="JP5" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2"/>
@@ -6285,12 +6285,12 @@ With round pins</description>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="SW3" library="3pos_slide_switch_centered" deviceset="324_SW" device="" value="324_SW"/>
 <part name="GND9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R5" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="390K"/>
+<part name="R5" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="+3V7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="JP7" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-2X2" device="" package3d_urn="urn:adsk.eagle:package:22455/2"/>
 <part name="SW4" library="3pos_slide_switch_centered" deviceset="324_SW" device="" value="324_SW"/>
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R6" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="390K"/>
+<part name="R6" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="+3V8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="R10" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="R11" library="joyAnalog" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
@@ -6311,7 +6311,7 @@ With round pins</description>
 <plain>
 </plain>
 <instances>
-<instance part="PCB1" gate="G$1" x="637.54" y="48.26" smashed="yes"/>
+<instance part="P1" gate="G$1" x="637.54" y="48.26" smashed="yes"/>
 <instance part="IC1" gate="G$1" x="850.9" y="-17.78" smashed="yes">
 <attribute name="NAME" x="848.36" y="-10.16" size="1.778" layer="95"/>
 <attribute name="VALUE" x="843.28" y="-12.7" size="1.778" layer="96"/>
@@ -6418,7 +6418,7 @@ With round pins</description>
 <instance part="GND3" gate="1" x="495.3" y="91.44" smashed="yes" rot="R90">
 <attribute name="VALUE" x="497.84" y="88.9" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="JP1" gate="A" x="637.54" y="-40.64" smashed="yes">
+<instance part="P2" gate="A" x="637.54" y="-40.64" smashed="yes">
 <attribute name="NAME" x="631.19" y="-14.605" size="1.778" layer="95"/>
 <attribute name="VALUE" x="631.19" y="-71.12" size="1.778" layer="96"/>
 </instance>
@@ -6434,7 +6434,7 @@ With round pins</description>
 <instance part="GND12" gate="1" x="624.84" y="-73.66" smashed="yes">
 <attribute name="VALUE" x="622.3" y="-76.2" size="1.778" layer="96"/>
 </instance>
-<instance part="JP2" gate="A" x="637.54" y="-40.64" smashed="yes">
+<instance part="P3" gate="A" x="637.54" y="-40.64" smashed="yes">
 <attribute name="VALUE" x="631.19" y="-71.12" size="1.778" layer="96"/>
 </instance>
 <instance part="+3V10" gate="G$1" x="947.42" y="-22.86" smashed="yes" rot="MR0">
@@ -6643,54 +6643,54 @@ With round pins</description>
 <pinref part="GND3" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="6"/>
+<pinref part="P2" gate="A" pin="6"/>
 <pinref part="GND11" gate="1" pin="GND"/>
 <wire x1="642.62" y1="-22.86" x2="652.78" y2="-22.86" width="0.1524" layer="91"/>
 <wire x1="652.78" y1="-22.86" x2="652.78" y2="-33.02" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="14"/>
+<pinref part="P2" gate="A" pin="14"/>
 <wire x1="652.78" y1="-33.02" x2="652.78" y2="-40.64" width="0.1524" layer="91"/>
 <wire x1="652.78" y1="-40.64" x2="652.78" y2="-53.34" width="0.1524" layer="91"/>
 <wire x1="652.78" y1="-53.34" x2="652.78" y2="-58.42" width="0.1524" layer="91"/>
 <wire x1="652.78" y1="-58.42" x2="652.78" y2="-71.12" width="0.1524" layer="91"/>
 <wire x1="642.62" y1="-33.02" x2="652.78" y2="-33.02" width="0.1524" layer="91"/>
 <junction x="652.78" y="-33.02"/>
-<pinref part="JP1" gate="A" pin="20"/>
+<pinref part="P2" gate="A" pin="20"/>
 <wire x1="642.62" y1="-40.64" x2="652.78" y2="-40.64" width="0.1524" layer="91"/>
 <junction x="652.78" y="-40.64"/>
-<pinref part="JP1" gate="A" pin="30"/>
+<pinref part="P2" gate="A" pin="30"/>
 <wire x1="642.62" y1="-53.34" x2="652.78" y2="-53.34" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="34"/>
+<pinref part="P2" gate="A" pin="34"/>
 <wire x1="642.62" y1="-58.42" x2="652.78" y2="-58.42" width="0.1524" layer="91"/>
 <junction x="652.78" y="-58.42"/>
-<pinref part="JP2" gate="A" pin="6"/>
+<pinref part="P3" gate="A" pin="6"/>
 <junction x="642.62" y="-22.86"/>
-<pinref part="JP2" gate="A" pin="14"/>
+<pinref part="P3" gate="A" pin="14"/>
 <junction x="642.62" y="-33.02"/>
-<pinref part="JP2" gate="A" pin="20"/>
+<pinref part="P3" gate="A" pin="20"/>
 <junction x="642.62" y="-40.64"/>
-<pinref part="JP2" gate="A" pin="30"/>
+<pinref part="P3" gate="A" pin="30"/>
 <junction x="642.62" y="-53.34"/>
-<pinref part="JP2" gate="A" pin="34"/>
+<pinref part="P3" gate="A" pin="34"/>
 <junction x="642.62" y="-58.42"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="39"/>
+<pinref part="P2" gate="A" pin="39"/>
 <pinref part="GND12" gate="1" pin="GND"/>
 <wire x1="635" y1="-66.04" x2="624.84" y2="-66.04" width="0.1524" layer="91"/>
 <wire x1="624.84" y1="-66.04" x2="624.84" y2="-71.12" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="25"/>
+<pinref part="P2" gate="A" pin="25"/>
 <wire x1="635" y1="-48.26" x2="624.84" y2="-48.26" width="0.1524" layer="91"/>
 <wire x1="624.84" y1="-48.26" x2="624.84" y2="-66.04" width="0.1524" layer="91"/>
 <junction x="624.84" y="-66.04"/>
-<pinref part="JP1" gate="A" pin="9"/>
+<pinref part="P2" gate="A" pin="9"/>
 <wire x1="635" y1="-27.94" x2="624.84" y2="-27.94" width="0.1524" layer="91"/>
 <wire x1="624.84" y1="-27.94" x2="624.84" y2="-48.26" width="0.1524" layer="91"/>
 <junction x="624.84" y="-48.26"/>
-<pinref part="JP2" gate="A" pin="9"/>
+<pinref part="P3" gate="A" pin="9"/>
 <junction x="635" y="-27.94"/>
-<pinref part="JP2" gate="A" pin="25"/>
+<pinref part="P3" gate="A" pin="25"/>
 <junction x="635" y="-48.26"/>
-<pinref part="JP2" gate="A" pin="39"/>
+<pinref part="P3" gate="A" pin="39"/>
 <junction x="635" y="-66.04"/>
 </segment>
 <segment>
@@ -6702,36 +6702,36 @@ With round pins</description>
 </segment>
 <segment>
 <pinref part="GND8" gate="1" pin="GND"/>
-<pinref part="PCB1" gate="G$1" pin="GND@9"/>
+<pinref part="P1" gate="G$1" pin="GND@9"/>
 <wire x1="614.68" y1="-2.54" x2="614.68" y2="0" width="0.1524" layer="91"/>
 <wire x1="614.68" y1="0" x2="614.68" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="614.68" y1="35.56" x2="614.68" y2="76.2" width="0.1524" layer="91"/>
 <wire x1="614.68" y1="76.2" x2="624.84" y2="76.2" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GND@39"/>
+<pinref part="P1" gate="G$1" pin="GND@39"/>
 <wire x1="614.68" y1="0" x2="624.84" y2="0" width="0.1524" layer="91"/>
 <junction x="614.68" y="0"/>
-<pinref part="PCB1" gate="G$1" pin="GND@25"/>
+<pinref part="P1" gate="G$1" pin="GND@25"/>
 <wire x1="614.68" y1="35.56" x2="624.84" y2="35.56" width="0.1524" layer="91"/>
 <junction x="614.68" y="35.56"/>
 </segment>
 <segment>
 <pinref part="GND7" gate="1" pin="GND"/>
-<pinref part="PCB1" gate="G$1" pin="GND@14"/>
+<pinref part="P1" gate="G$1" pin="GND@14"/>
 <wire x1="665.48" y1="-2.54" x2="665.48" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="665.48" y1="15.24" x2="665.48" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="665.48" y1="25.4" x2="665.48" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="665.48" y1="50.8" x2="665.48" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="665.48" y1="66.04" x2="652.78" y2="66.04" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GND@20"/>
+<pinref part="P1" gate="G$1" pin="GND@20"/>
 <wire x1="665.48" y1="50.8" x2="652.78" y2="50.8" width="0.1524" layer="91"/>
 <junction x="665.48" y="50.8"/>
-<pinref part="PCB1" gate="G$1" pin="GND@30"/>
+<pinref part="P1" gate="G$1" pin="GND@30"/>
 <wire x1="652.78" y1="25.4" x2="665.48" y2="25.4" width="0.1524" layer="91"/>
 <junction x="665.48" y="25.4"/>
-<pinref part="PCB1" gate="G$1" pin="GND@34"/>
+<pinref part="P1" gate="G$1" pin="GND@34"/>
 <wire x1="652.78" y1="15.24" x2="665.48" y2="15.24" width="0.1524" layer="91"/>
 <junction x="665.48" y="15.24"/>
-<pinref part="PCB1" gate="G$1" pin="GND@6"/>
+<pinref part="P1" gate="G$1" pin="GND@6"/>
 <wire x1="665.48" y1="66.04" x2="665.48" y2="86.36" width="0.1524" layer="91"/>
 <wire x1="665.48" y1="86.36" x2="652.78" y2="86.36" width="0.1524" layer="91"/>
 <junction x="665.48" y="66.04"/>
@@ -6797,23 +6797,23 @@ With round pins</description>
 </segment>
 <segment>
 <pinref part="P+2" gate="1" pin="+5V"/>
-<pinref part="JP1" gate="A" pin="2"/>
+<pinref part="P2" gate="A" pin="2"/>
 <wire x1="652.78" y1="-17.78" x2="642.62" y2="-17.78" width="0.1524" layer="91"/>
 <wire x1="652.78" y1="-17.78" x2="652.78" y2="-20.32" width="0.1524" layer="91"/>
 <junction x="652.78" y="-17.78"/>
-<pinref part="JP1" gate="A" pin="4"/>
+<pinref part="P2" gate="A" pin="4"/>
 <wire x1="652.78" y1="-20.32" x2="642.62" y2="-20.32" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="2"/>
+<pinref part="P3" gate="A" pin="2"/>
 <junction x="642.62" y="-17.78"/>
-<pinref part="JP2" gate="A" pin="4"/>
+<pinref part="P3" gate="A" pin="4"/>
 <junction x="642.62" y="-20.32"/>
 </segment>
 <segment>
-<pinref part="PCB1" gate="G$1" pin="5V@2"/>
+<pinref part="P1" gate="G$1" pin="5V@2"/>
 <pinref part="P+4" gate="1" pin="+5V"/>
 <wire x1="652.78" y1="96.52" x2="665.48" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="665.48" y1="96.52" x2="665.48" y2="99.06" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="5V@4"/>
+<pinref part="P1" gate="G$1" pin="5V@4"/>
 <wire x1="652.78" y1="91.44" x2="665.48" y2="91.44" width="0.1524" layer="91"/>
 <wire x1="665.48" y1="91.44" x2="665.48" y2="96.52" width="0.1524" layer="91"/>
 <junction x="665.48" y="96.52"/>
@@ -6862,9 +6862,9 @@ With round pins</description>
 </segment>
 <segment>
 <pinref part="+3V2" gate="G$1" pin="+3V3"/>
-<pinref part="JP1" gate="A" pin="1"/>
+<pinref part="P2" gate="A" pin="1"/>
 <wire x1="624.84" y1="-17.78" x2="635" y2="-17.78" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="1"/>
+<pinref part="P3" gate="A" pin="1"/>
 <junction x="635" y="-17.78"/>
 </segment>
 <segment>
@@ -6884,8 +6884,8 @@ With round pins</description>
 <pinref part="+3V4" gate="G$1" pin="+3V3"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="A" pin="17"/>
-<pinref part="JP2" gate="A" pin="17"/>
+<pinref part="P2" gate="A" pin="17"/>
+<pinref part="P3" gate="A" pin="17"/>
 <pinref part="+3V3" gate="G$1" pin="+3V3"/>
 <wire x1="614.68" y1="-38.1" x2="635" y2="-38.1" width="0.1524" layer="91"/>
 <junction x="635" y="-38.1"/>
@@ -6947,16 +6947,16 @@ With round pins</description>
 <net name="RPI_RX" class="0">
 <segment>
 <pinref part="U5" gate="U1" pin="TXO"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO15"/>
+<pinref part="P1" gate="G$1" pin="GPIO15"/>
 <wire x1="708.66" y1="-43.18" x2="708.66" y2="-15.24" width="0.1524" layer="91"/>
 <wire x1="708.66" y1="-15.24" x2="708.66" y2="76.2" width="0.1524" layer="91"/>
 <wire x1="708.66" y1="76.2" x2="670.56" y2="76.2" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="10"/>
+<pinref part="P2" gate="A" pin="10"/>
 <wire x1="670.56" y1="76.2" x2="652.78" y2="76.2" width="0.1524" layer="91"/>
 <wire x1="670.56" y1="76.2" x2="670.56" y2="-27.94" width="0.1524" layer="91"/>
 <wire x1="670.56" y1="-27.94" x2="642.62" y2="-27.94" width="0.1524" layer="91"/>
 <junction x="670.56" y="76.2"/>
-<pinref part="JP2" gate="A" pin="10"/>
+<pinref part="P3" gate="A" pin="10"/>
 <junction x="642.62" y="-27.94"/>
 <pinref part="JP7" gate="A" pin="1"/>
 <wire x1="708.66" y1="-15.24" x2="718.82" y2="-15.24" width="0.1524" layer="91"/>
@@ -6969,17 +6969,17 @@ With round pins</description>
 <net name="RPI_TX" class="0">
 <segment>
 <pinref part="U5" gate="U1" pin="RXI"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO14"/>
+<pinref part="P1" gate="G$1" pin="GPIO14"/>
 <wire x1="652.78" y1="81.28" x2="668.02" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="668.02" y1="81.28" x2="706.12" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="706.12" y1="81.28" x2="706.12" y2="-17.78" width="0.1524" layer="91"/>
 <wire x1="706.12" y1="-17.78" x2="706.12" y2="-45.72" width="0.1524" layer="91"/>
 <wire x1="706.12" y1="-45.72" x2="708.66" y2="-45.72" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="8"/>
+<pinref part="P2" gate="A" pin="8"/>
 <wire x1="668.02" y1="81.28" x2="668.02" y2="-25.4" width="0.1524" layer="91"/>
 <wire x1="668.02" y1="-25.4" x2="642.62" y2="-25.4" width="0.1524" layer="91"/>
 <junction x="668.02" y="81.28"/>
-<pinref part="JP2" gate="A" pin="8"/>
+<pinref part="P3" gate="A" pin="8"/>
 <junction x="642.62" y="-25.4"/>
 <pinref part="JP7" gate="A" pin="3"/>
 <wire x1="706.12" y1="-17.78" x2="718.82" y2="-17.78" width="0.1524" layer="91"/>
@@ -7049,12 +7049,12 @@ With round pins</description>
 <wire x1="706.12" y1="154.94" x2="553.72" y2="154.94" width="0.1524" layer="91"/>
 <wire x1="553.72" y1="154.94" x2="553.72" y2="20.32" width="0.1524" layer="91"/>
 <junction x="706.12" y="154.94"/>
-<pinref part="JP1" gate="A" pin="31"/>
+<pinref part="P2" gate="A" pin="31"/>
 <wire x1="635" y1="-55.88" x2="581.66" y2="-55.88" width="0.1524" layer="91"/>
 <wire x1="581.66" y1="-55.88" x2="581.66" y2="20.32" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO6"/>
+<pinref part="P1" gate="G$1" pin="GPIO6"/>
 <wire x1="581.66" y1="20.32" x2="624.84" y2="20.32" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="31"/>
+<pinref part="P3" gate="A" pin="31"/>
 <junction x="635" y="-55.88"/>
 <wire x1="553.72" y1="20.32" x2="581.66" y2="20.32" width="0.1524" layer="91"/>
 <junction x="581.66" y="20.32"/>
@@ -7080,12 +7080,12 @@ With round pins</description>
 </net>
 <net name="N$5" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO2"/>
+<pinref part="P1" gate="G$1" pin="GPIO2"/>
 <wire x1="624.84" y1="91.44" x2="609.6" y2="91.44" width="0.1524" layer="91"/>
 <wire x1="609.6" y1="91.44" x2="609.6" y2="-20.32" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="3"/>
+<pinref part="P2" gate="A" pin="3"/>
 <wire x1="609.6" y1="-20.32" x2="635" y2="-20.32" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="3"/>
+<pinref part="P3" gate="A" pin="3"/>
 <junction x="635" y="-20.32"/>
 <pinref part="R11" gate="G$1" pin="2"/>
 <wire x1="632.46" y1="106.68" x2="632.46" y2="91.44" width="0.1524" layer="91"/>
@@ -7095,12 +7095,12 @@ With round pins</description>
 </net>
 <net name="N$6" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO3"/>
+<pinref part="P1" gate="G$1" pin="GPIO3"/>
 <wire x1="624.84" y1="86.36" x2="607.06" y2="86.36" width="0.1524" layer="91"/>
 <wire x1="607.06" y1="86.36" x2="607.06" y2="-22.86" width="0.1524" layer="91"/>
 <wire x1="607.06" y1="-22.86" x2="635" y2="-22.86" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="5"/>
-<pinref part="JP2" gate="A" pin="5"/>
+<pinref part="P2" gate="A" pin="5"/>
+<pinref part="P3" gate="A" pin="5"/>
 <junction x="635" y="-22.86"/>
 <pinref part="SW2" gate="G$1" pin="3"/>
 <pinref part="SW2" gate="G$1" pin="2"/>
@@ -7119,34 +7119,34 @@ With round pins</description>
 </net>
 <net name="N$8" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO4"/>
+<pinref part="P1" gate="G$1" pin="GPIO4"/>
 <wire x1="624.84" y1="81.28" x2="604.52" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="604.52" y1="81.28" x2="604.52" y2="-25.4" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="7"/>
+<pinref part="P2" gate="A" pin="7"/>
 <wire x1="604.52" y1="-25.4" x2="635" y2="-25.4" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="7"/>
+<pinref part="P3" gate="A" pin="7"/>
 <junction x="635" y="-25.4"/>
 </segment>
 </net>
 <net name="N$9" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO17"/>
+<pinref part="P1" gate="G$1" pin="GPIO17"/>
 <wire x1="624.84" y1="71.12" x2="601.98" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="601.98" y1="71.12" x2="601.98" y2="-30.48" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="11"/>
+<pinref part="P2" gate="A" pin="11"/>
 <wire x1="601.98" y1="-30.48" x2="635" y2="-30.48" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="11"/>
+<pinref part="P3" gate="A" pin="11"/>
 <junction x="635" y="-30.48"/>
 </segment>
 </net>
 <net name="ENTER_BUTTON" class="0">
 <segment>
-<pinref part="JP1" gate="A" pin="15"/>
+<pinref part="P2" gate="A" pin="15"/>
 <wire x1="635" y1="-35.56" x2="596.9" y2="-35.56" width="0.1524" layer="91"/>
 <wire x1="596.9" y1="-35.56" x2="596.9" y2="60.96" width="0.1524" layer="91"/>
 <wire x1="596.9" y1="60.96" x2="624.84" y2="60.96" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO22"/>
-<pinref part="JP2" gate="A" pin="15"/>
+<pinref part="P1" gate="G$1" pin="GPIO22"/>
+<pinref part="P3" gate="A" pin="15"/>
 <junction x="635" y="-35.56"/>
 <wire x1="596.9" y1="60.96" x2="510.54" y2="60.96" width="0.1524" layer="91"/>
 <wire x1="510.54" y1="60.96" x2="510.54" y2="43.18" width="0.1524" layer="91"/>
@@ -7166,12 +7166,12 @@ With round pins</description>
 </net>
 <net name="N$12" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO10"/>
+<pinref part="P1" gate="G$1" pin="GPIO10"/>
 <wire x1="624.84" y1="50.8" x2="594.36" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="594.36" y1="50.8" x2="594.36" y2="-40.64" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="19"/>
+<pinref part="P2" gate="A" pin="19"/>
 <wire x1="594.36" y1="-40.64" x2="635" y2="-40.64" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="19"/>
+<pinref part="P3" gate="A" pin="19"/>
 <junction x="635" y="-40.64"/>
 <pinref part="U2" gate="G$1" pin="SDIN"/>
 <wire x1="706.12" y1="147.32" x2="594.36" y2="147.32" width="0.1524" layer="91"/>
@@ -7181,23 +7181,23 @@ With round pins</description>
 </net>
 <net name="N$13" class="0">
 <segment>
-<pinref part="JP1" gate="A" pin="21"/>
+<pinref part="P2" gate="A" pin="21"/>
 <wire x1="635" y1="-43.18" x2="591.82" y2="-43.18" width="0.1524" layer="91"/>
 <wire x1="591.82" y1="-43.18" x2="591.82" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="591.82" y1="45.72" x2="624.84" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO9"/>
-<pinref part="JP2" gate="A" pin="21"/>
+<pinref part="P1" gate="G$1" pin="GPIO9"/>
+<pinref part="P3" gate="A" pin="21"/>
 <junction x="635" y="-43.18"/>
 </segment>
 </net>
 <net name="N$14" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO11"/>
+<pinref part="P1" gate="G$1" pin="GPIO11"/>
 <wire x1="624.84" y1="40.64" x2="589.28" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="589.28" y1="40.64" x2="589.28" y2="-45.72" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="23"/>
+<pinref part="P2" gate="A" pin="23"/>
 <wire x1="589.28" y1="-45.72" x2="635" y2="-45.72" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="23"/>
+<pinref part="P3" gate="A" pin="23"/>
 <junction x="635" y="-45.72"/>
 <pinref part="U2" gate="G$1" pin="SCLK"/>
 <wire x1="706.12" y1="149.86" x2="589.28" y2="149.86" width="0.1524" layer="91"/>
@@ -7207,23 +7207,23 @@ With round pins</description>
 </net>
 <net name="N$15" class="0">
 <segment>
-<pinref part="JP1" gate="A" pin="27"/>
+<pinref part="P2" gate="A" pin="27"/>
 <wire x1="635" y1="-50.8" x2="586.74" y2="-50.8" width="0.1524" layer="91"/>
 <wire x1="586.74" y1="-50.8" x2="586.74" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="586.74" y1="30.48" x2="624.84" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="ID_SD*"/>
-<pinref part="JP2" gate="A" pin="27"/>
+<pinref part="P1" gate="G$1" pin="ID_SD*"/>
+<pinref part="P3" gate="A" pin="27"/>
 <junction x="635" y="-50.8"/>
 </segment>
 </net>
 <net name="N$16" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO5"/>
+<pinref part="P1" gate="G$1" pin="GPIO5"/>
 <wire x1="624.84" y1="25.4" x2="584.2" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="584.2" y1="25.4" x2="584.2" y2="-53.34" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="29"/>
+<pinref part="P2" gate="A" pin="29"/>
 <wire x1="584.2" y1="-53.34" x2="635" y2="-53.34" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="29"/>
+<pinref part="P3" gate="A" pin="29"/>
 <junction x="635" y="-53.34"/>
 <pinref part="U2" gate="G$1" pin="DC"/>
 <wire x1="706.12" y1="152.4" x2="584.2" y2="152.4" width="0.1524" layer="91"/>
@@ -7233,23 +7233,23 @@ With round pins</description>
 </net>
 <net name="N$19" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO13"/>
+<pinref part="P1" gate="G$1" pin="GPIO13"/>
 <wire x1="624.84" y1="15.24" x2="579.12" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="579.12" y1="15.24" x2="579.12" y2="-58.42" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="33"/>
+<pinref part="P2" gate="A" pin="33"/>
 <wire x1="579.12" y1="-58.42" x2="635" y2="-58.42" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="33"/>
+<pinref part="P3" gate="A" pin="33"/>
 <junction x="635" y="-58.42"/>
 </segment>
 </net>
 <net name="MINUS_BUTTON" class="0">
 <segment>
-<pinref part="JP1" gate="A" pin="35"/>
+<pinref part="P2" gate="A" pin="35"/>
 <wire x1="635" y1="-60.96" x2="576.58" y2="-60.96" width="0.1524" layer="91"/>
 <wire x1="576.58" y1="-60.96" x2="576.58" y2="10.16" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO19"/>
+<pinref part="P1" gate="G$1" pin="GPIO19"/>
 <wire x1="576.58" y1="10.16" x2="624.84" y2="10.16" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="35"/>
+<pinref part="P3" gate="A" pin="35"/>
 <junction x="635" y="-60.96"/>
 <pinref part="SW4" gate="G$1" pin="3"/>
 <pinref part="SW4" gate="G$1" pin="2"/>
@@ -7268,67 +7268,67 @@ With round pins</description>
 </net>
 <net name="N$21" class="0">
 <segment>
-<pinref part="JP1" gate="A" pin="37"/>
+<pinref part="P2" gate="A" pin="37"/>
 <wire x1="635" y1="-63.5" x2="574.04" y2="-63.5" width="0.1524" layer="91"/>
 <wire x1="574.04" y1="-63.5" x2="574.04" y2="5.08" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO26"/>
+<pinref part="P1" gate="G$1" pin="GPIO26"/>
 <wire x1="574.04" y1="5.08" x2="624.84" y2="5.08" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="37"/>
+<pinref part="P3" gate="A" pin="37"/>
 <junction x="635" y="-63.5"/>
 </segment>
 </net>
 <net name="N$22" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO18"/>
+<pinref part="P1" gate="G$1" pin="GPIO18"/>
 <wire x1="652.78" y1="71.12" x2="673.1" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="673.1" y1="71.12" x2="673.1" y2="-30.48" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="12"/>
+<pinref part="P2" gate="A" pin="12"/>
 <wire x1="673.1" y1="-30.48" x2="642.62" y2="-30.48" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="12"/>
+<pinref part="P3" gate="A" pin="12"/>
 <junction x="642.62" y="-30.48"/>
 </segment>
 </net>
 <net name="N$23" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO23"/>
+<pinref part="P1" gate="G$1" pin="GPIO23"/>
 <wire x1="652.78" y1="60.96" x2="675.64" y2="60.96" width="0.1524" layer="91"/>
 <wire x1="675.64" y1="60.96" x2="675.64" y2="-35.56" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="16"/>
+<pinref part="P2" gate="A" pin="16"/>
 <wire x1="675.64" y1="-35.56" x2="642.62" y2="-35.56" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="16"/>
+<pinref part="P3" gate="A" pin="16"/>
 <junction x="642.62" y="-35.56"/>
 </segment>
 </net>
 <net name="N$24" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO24"/>
+<pinref part="P1" gate="G$1" pin="GPIO24"/>
 <wire x1="652.78" y1="55.88" x2="678.18" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="678.18" y1="55.88" x2="678.18" y2="-38.1" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="18"/>
+<pinref part="P2" gate="A" pin="18"/>
 <wire x1="678.18" y1="-38.1" x2="642.62" y2="-38.1" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="18"/>
+<pinref part="P3" gate="A" pin="18"/>
 <junction x="642.62" y="-38.1"/>
 </segment>
 </net>
 <net name="N$25" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO25"/>
+<pinref part="P1" gate="G$1" pin="GPIO25"/>
 <wire x1="652.78" y1="45.72" x2="680.72" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="680.72" y1="45.72" x2="680.72" y2="-43.18" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="22"/>
+<pinref part="P2" gate="A" pin="22"/>
 <wire x1="680.72" y1="-43.18" x2="642.62" y2="-43.18" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="22"/>
+<pinref part="P3" gate="A" pin="22"/>
 <junction x="642.62" y="-43.18"/>
 </segment>
 </net>
 <net name="N$26" class="0">
 <segment>
-<pinref part="JP1" gate="A" pin="24"/>
+<pinref part="P2" gate="A" pin="24"/>
 <wire x1="642.62" y1="-45.72" x2="683.26" y2="-45.72" width="0.1524" layer="91"/>
 <wire x1="683.26" y1="-45.72" x2="683.26" y2="40.64" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO8"/>
+<pinref part="P1" gate="G$1" pin="GPIO8"/>
 <wire x1="683.26" y1="40.64" x2="652.78" y2="40.64" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="24"/>
+<pinref part="P3" gate="A" pin="24"/>
 <junction x="642.62" y="-45.72"/>
 <pinref part="R4" gate="G$1" pin="2"/>
 <wire x1="683.26" y1="40.64" x2="716.28" y2="40.64" width="0.1524" layer="91"/>
@@ -7338,12 +7338,12 @@ With round pins</description>
 </net>
 <net name="N$27" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO7"/>
+<pinref part="P1" gate="G$1" pin="GPIO7"/>
 <wire x1="652.78" y1="35.56" x2="685.8" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="685.8" y1="35.56" x2="685.8" y2="-48.26" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="26"/>
+<pinref part="P2" gate="A" pin="26"/>
 <wire x1="685.8" y1="-48.26" x2="642.62" y2="-48.26" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="26"/>
+<pinref part="P3" gate="A" pin="26"/>
 <junction x="642.62" y="-48.26"/>
 <pinref part="U2" gate="G$1" pin="/CS"/>
 <wire x1="706.12" y1="157.48" x2="703.58" y2="157.48" width="0.1524" layer="91"/>
@@ -7358,56 +7358,56 @@ With round pins</description>
 </net>
 <net name="N$28" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="ID_SC*"/>
+<pinref part="P1" gate="G$1" pin="ID_SC*"/>
 <wire x1="652.78" y1="30.48" x2="688.34" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="688.34" y1="30.48" x2="688.34" y2="-50.8" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="28"/>
+<pinref part="P2" gate="A" pin="28"/>
 <wire x1="688.34" y1="-50.8" x2="642.62" y2="-50.8" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="28"/>
+<pinref part="P3" gate="A" pin="28"/>
 <junction x="642.62" y="-50.8"/>
 </segment>
 </net>
 <net name="N$29" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO12"/>
+<pinref part="P1" gate="G$1" pin="GPIO12"/>
 <wire x1="652.78" y1="20.32" x2="690.88" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="690.88" y1="20.32" x2="690.88" y2="-55.88" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="32"/>
+<pinref part="P2" gate="A" pin="32"/>
 <wire x1="690.88" y1="-55.88" x2="642.62" y2="-55.88" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="32"/>
+<pinref part="P3" gate="A" pin="32"/>
 <junction x="642.62" y="-55.88"/>
 </segment>
 </net>
 <net name="N$30" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO16"/>
+<pinref part="P1" gate="G$1" pin="GPIO16"/>
 <wire x1="652.78" y1="10.16" x2="693.42" y2="10.16" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="36"/>
+<pinref part="P2" gate="A" pin="36"/>
 <wire x1="693.42" y1="10.16" x2="693.42" y2="-60.96" width="0.1524" layer="91"/>
 <wire x1="693.42" y1="-60.96" x2="642.62" y2="-60.96" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="36"/>
+<pinref part="P3" gate="A" pin="36"/>
 <junction x="642.62" y="-60.96"/>
 </segment>
 </net>
 <net name="N$31" class="0">
 <segment>
-<pinref part="JP1" gate="A" pin="38"/>
+<pinref part="P2" gate="A" pin="38"/>
 <wire x1="642.62" y1="-63.5" x2="695.96" y2="-63.5" width="0.1524" layer="91"/>
 <wire x1="695.96" y1="-63.5" x2="695.96" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="695.96" y1="5.08" x2="652.78" y2="5.08" width="0.1524" layer="91"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO20"/>
-<pinref part="JP2" gate="A" pin="38"/>
+<pinref part="P1" gate="G$1" pin="GPIO20"/>
+<pinref part="P3" gate="A" pin="38"/>
 <junction x="642.62" y="-63.5"/>
 </segment>
 </net>
 <net name="N$32" class="0">
 <segment>
-<pinref part="PCB1" gate="G$1" pin="GPIO21"/>
+<pinref part="P1" gate="G$1" pin="GPIO21"/>
 <wire x1="652.78" y1="0" x2="698.5" y2="0" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="40"/>
+<pinref part="P2" gate="A" pin="40"/>
 <wire x1="698.5" y1="0" x2="698.5" y2="-66.04" width="0.1524" layer="91"/>
 <wire x1="698.5" y1="-66.04" x2="642.62" y2="-66.04" width="0.1524" layer="91"/>
-<pinref part="JP2" gate="A" pin="40"/>
+<pinref part="P3" gate="A" pin="40"/>
 <junction x="642.62" y="-66.04"/>
 <pinref part="SW3" gate="G$1" pin="3"/>
 <pinref part="SW3" gate="G$1" pin="2"/>
@@ -7426,10 +7426,10 @@ With round pins</description>
 </net>
 <net name="PLUS_BUTTON" class="0">
 <segment>
-<pinref part="JP1" gate="A" pin="13"/>
-<pinref part="JP2" gate="A" pin="13"/>
+<pinref part="P2" gate="A" pin="13"/>
+<pinref part="P3" gate="A" pin="13"/>
 <junction x="635" y="-33.02"/>
-<pinref part="PCB1" gate="G$1" pin="GPIO27"/>
+<pinref part="P1" gate="G$1" pin="GPIO27"/>
 <wire x1="624.84" y1="66.04" x2="599.44" y2="66.04" width="0.1524" layer="91"/>
 <wire x1="599.44" y1="66.04" x2="599.44" y2="-33.02" width="0.1524" layer="91"/>
 <wire x1="599.44" y1="-33.02" x2="635" y2="-33.02" width="0.1524" layer="91"/>

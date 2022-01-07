@@ -1230,21 +1230,21 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="R6" library="SparkFun-Passives" package="0805" value="2K" x="9.779" y="26.543" smashed="yes">
 <attribute name="NAME" x="7.8613" y="26.1874" size="0.8128" layer="25" rot="R90"/>
 </element>
-<element name="R1" library="SparkFun-Passives" package="0805" value="12K" x="10.795" y="40.005" smashed="yes" rot="R90">
+<element name="R1" library="SparkFun-Passives" package="0805" value="5.1K" x="10.795" y="40.005" smashed="yes" rot="R90">
 <attribute name="NAME" x="9.8171" y="39.9796" size="0.8128" layer="25" rot="R90"/>
 </element>
 <element name="J4" library="SparkFun-Connectors" package="USB-C-16P" value="" x="48.26" y="35.306" smashed="yes" rot="R90">
 <attribute name="PROD_ID" value="CONN-14122" x="48.0822" y="35.306" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="52.07" y="35.306" size="0.762" layer="27" rot="R90" align="center"/>
 </element>
-<element name="R3" library="SparkFun-Passives" package="0805" value="5.1k" x="50.165" y="28.575" smashed="yes" rot="R180">
+<element name="R3" library="SparkFun-Passives" package="0805" value="5.1K" x="50.165" y="28.575" smashed="yes" rot="R180">
 <attribute name="NAME" x="50.673" y="27.6225" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R4" library="SparkFun-Passives" package="0805" value="5.1k" x="53.594" y="28.575" smashed="yes">
+<element name="R4" library="SparkFun-Passives" package="0805" value="5.1kK" x="53.594" y="28.575" smashed="yes">
 <attribute name="NAME" x="54.0258" y="27.5717" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="SW1" library="3pos_slide_switch_centered" package="342_SWICH_FOOT" value="324_SW" x="15.494" y="42.291" smashed="yes" rot="R180"/>
-<element name="R5" library="SparkFun-Passives" package="0805" value="12K" x="8.001" y="43.942" smashed="yes" rot="R90">
+<element name="R5" library="SparkFun-Passives" package="0805" value="5.1K" x="8.001" y="43.942" smashed="yes" rot="R90">
 <attribute name="NAME" x="8.3185" y="45.847" size="0.8128" layer="25" rot="R90"/>
 </element>
 <element name="C8" library="clock" package="0805@1" value="100nF" x="35.052" y="39.116" smashed="yes" rot="R90">
@@ -1275,7 +1275,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="POPULARITY" value="69" x="51.435" y="48.26" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="48.26" y="54.61" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R7" library="SparkFun-Passives" package="0805" value="12K" x="21.1328" y="43.4086" smashed="yes">
+<element name="R7" library="SparkFun-Passives" package="0805" value="2K" x="21.1328" y="43.4086" smashed="yes">
 <attribute name="NAME" x="20.6248" y="41.5671" size="0.8128" layer="25"/>
 </element>
 <element name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="1X03" package3d_urn="urn:adsk.eagle:package:22458/2" value="" x="41.148" y="35.56" smashed="yes" rot="R90">
