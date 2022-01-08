@@ -358,16 +358,15 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	    ps2kb_write(0xAB, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
 	    ps2kb_write(0x83, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
-	  case 0xF0: //set scan code set
+	  case 0xF0: //get/change scan code set
 	    PS2KB_SENDACK();
 	    if(ps2kb_read(&received, 30) == 0)
       {
-        PS2KB_SENDACK();
+	    	PS2KB_SENDACK();
         if(received == 0)
           ps2kb_write(ps2kb_current_scancode_set, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
         else if(received <= 3)
           ps2kb_current_scancode_set = received;
-        // printf("sc: %d\n", received);
       }
 	    break;
 	  case 0xEE: //echo
@@ -487,5 +486,4 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
     default:
       return 9;
   }
-  return 9;
 }

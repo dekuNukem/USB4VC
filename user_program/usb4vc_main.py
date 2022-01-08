@@ -23,7 +23,8 @@ def reset_pboard():
 
 GPIO.setup(PBOARD_DFU_PIN, GPIO.IN)
 # GPIO.output(PBOARD_DFU_PIN, GPIO.LOW)
-# reset_pboard()
+
+reset_pboard()
 
 # use sudo -E to preserve environmental variables for python3
 
