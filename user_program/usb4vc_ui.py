@@ -372,7 +372,7 @@ class usb4vc_menu(object):
         self.pairing_result = ''
         self.bt_scan_timeout_sec = 10
         self.paired_devices_list = []
-        self.send_spi()
+        self.send_protocol_set_spi_msg()
 
     def switch_page(self, amount):
         self.current_page = (self.current_page + amount) % self.page_size[self.current_level]
@@ -483,11 +483,11 @@ class usb4vc_menu(object):
                     oled_print_centered("Exit", font_medium, 10, draw)
             else:
                 with canvas(oled_device) as draw:
-                    oled_print_centered(f"Remove this device?", font_regular, 0, draw)
+                    oled_print_centered(f"Remove this?", font_regular, 0, draw)
                     oled_print_centered(f"{self.paired_devices_list[page][1]}", font_regular, 10, draw)
                     oled_print_centered(f"{self.paired_devices_list[page][0]}", font_regular, 20, draw)
 
-    def send_spi(self):
+    def send_protocol_set_spi_msg(self):
         status_dict = {}
         for index, item in enumerate(self.kb_opts):
             if item['pid'] & 0x7f in status_dict and status_dict[item['pid'] & 0x7f] == 1:
@@ -526,8 +526,8 @@ class usb4vc_menu(object):
         self.current_mouse_protocol = self.mouse_opts[self.current_mouse_protocol_index]
         self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
 
-        print('this', this_msg)
-        print('last', self.last_spi_message)
+        # print('this', this_msg)
+        # print('last', self.last_spi_message)
         if this_msg == self.last_spi_message:
             print("SPI: no need to send")
             return
@@ -562,7 +562,7 @@ class usb4vc_menu(object):
                 configuration_dict[this_pboard_id]["gamepad_protocol_index"] = self.current_gamepad_protocol_index
                 print(configuration_dict)
                 save_config()
-                self.send_spi()
+                self.send_protocol_set_spi_msg()
                 self.goto_level(0)
         if level == 2:
             if page == 0:
@@ -664,11 +664,11 @@ class oled_sleep_control(object):
 my_menu = None
 def ui_worker():
     global my_menu
+    print(configuration_dict)
     print("ui_worker started")
     my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id), configuration_dict[this_pboard_id])
     my_menu.display_page(0, 0)
     my_oled = oled_sleep_control()
-    print(configuration_dict)
     while 1: 
         time.sleep(0.1)
         if my_oled.is_sleeping is False:

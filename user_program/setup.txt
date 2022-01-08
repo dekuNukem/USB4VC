@@ -47,10 +47,16 @@ sudo systemctl daemon-reload
 
 run script on launch:
 
+MAKE SURE SERIAL LOGIN SHELL IS TURNED OFF
+
 https://raspberrypi-guide.github.io/programming/run-script-on-boot
+
+sudo su
+
+pip3 install evdev
 
 sudo nano /etc/rc.local
 
-cd /home/pi/usb4vc; sudo python3 usb4vc_main.py &
+cd /home/pi/usb4vc; python3 usb4vc_main.py &
 
 kill -SIGINT pid
