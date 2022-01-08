@@ -9,6 +9,19 @@ ssh-keygen
 copy PC pub key to rpi ~/.ssh/authorized_keys
 
 --------------
+
+Serial setup:
+
+serial clock is tied to GPU clock, need to fix it for it to be stable
+
+sudo nano /boot/config.txt, add:
+force_turbo=1
+gpu_freq=250
+gpu_freq_min=250
+
+also, use /dev/serial0 to maintain compatibility for all models of pi
+
+--------------
 Luma OLED driver
 
 https://luma-oled.readthedocs.io/en/latest/software.html
