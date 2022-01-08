@@ -716,7 +716,7 @@ def ui_worker():
 def get_gamepad_protocol():
     return my_menu.current_gamepad_protocol
 
-ui_worker = threading.Thread(target=ui_worker, daemon=True)
+ui_thread = threading.Thread(target=ui_worker, daemon=True)
 
 def oled_sleep_refresh():
     global last_input_event
