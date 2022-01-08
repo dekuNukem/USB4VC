@@ -46,7 +46,6 @@ class my_button(object):
         self.prev_state = current_state
         return result
         
-
 OLED_WIDTH = 128
 OLED_HEIGHT = 32
 
@@ -250,8 +249,6 @@ configuration_dict = {}
 
 LINUX_EXIT_CODE_TIMEOUT = 124
 
-last_input_event = time.time()
-
 def bt_setup():
     rfkill_str = subprocess.getoutput("/usr/sbin/rfkill -n")
     if 'bluetooth' not in rfkill_str:
@@ -301,11 +298,8 @@ def pair_device(mac_addr):
                     oled_print_centered(line.split('PIN code:')[-1], font_medium, 15, draw)
             if '(yes/no)' in line:
                 p.stdin.write('yes\n')
-            # if 'number in 0-999999' in line:
-            #     with canvas(oled_device) as draw:
-            #         oled_print_centered("Enter PIN code:", font_medium, 0, draw)
-            #         oled_print_centered("123456", font_medium, 15, draw)
-            #     p.stdin.write('123456\n')
+            if 'number in 0-999999' in line:
+                return False, "Error: Passkey needed"
             if 'successful' in line_lo:
                 p.stdin.write('exit\n')
                 return True, 'Success!'
@@ -663,6 +657,7 @@ class oled_sleep_control(object):
     def __init__(self):
         super(oled_sleep_control, self).__init__()
         self.is_sleeping = False
+        self.last_input_event = time.time()
     def sleep(self):
         if self.is_sleeping is False:
             print("sleeping!")
@@ -672,10 +667,17 @@ class oled_sleep_control(object):
         if self.is_sleeping:
             print("waking up!")
             my_menu.display_curent_page()
+            self.last_input_event = time.time()
             self.is_sleeping = False
-    def is_sleeping(self):
-        return self.is_sleeping
+    def check_sleep(self):
+        if time.time() - self.last_input_event > 180:
+            self.sleep()
+        else:
+            self.wakeup()
+    def kick(self):
+        self.last_input_event = time.time()
 
+my_oled = oled_sleep_control()
 my_menu = None
 def ui_worker():
     global my_menu
@@ -683,41 +685,46 @@ def ui_worker():
     print("ui_worker started")
     my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id), configuration_dict[this_pboard_id])
     my_menu.display_page(0, 0)
-    my_oled = oled_sleep_control()
     while 1: 
         time.sleep(0.1)
         if my_oled.is_sleeping is False:
             my_menu.update_usb_status();
 
         if plus_button.is_pressed():
+            my_oled.kick()
             print(time.time(), "PLUS_BUTTON pressed!")
-            if my_menu.current_level != 2:
+            if my_oled.is_sleeping:
+                my_oled.wakeup()
+            elif my_menu.current_level != 2:
                 my_menu.switch_page(1)
                 my_menu.display_curent_page()
 
         if minus_button.is_pressed():
+            my_oled.kick()
             print(time.time(), "MINUS_BUTTON pressed!")
-            if my_menu.current_level != 2:
+            if my_oled.is_sleeping:
+                my_oled.wakeup()
+            elif my_menu.current_level != 2:
                 my_menu.switch_page(-1)
                 my_menu.display_curent_page()
 
         if enter_button.is_pressed():
+            my_oled.kick()
             print(time.time(), "ENTER_BUTTON pressed!")
-            my_menu.action_current_page()
+            if my_oled.is_sleeping:
+                my_oled.wakeup()
+            else:
+                my_menu.action_current_page()
 
         if shutdown_button.is_pressed():
+            my_oled.kick()
             print(time.time(), "SHUTDOWN_BUTTON pressed!")
+            if my_oled.is_sleeping:
+                my_oled.wakeup()
 
-        if time.time() - last_input_event > 120:
-            my_oled.sleep()
-        else:
-            my_oled.wakeup()
+        my_oled.check_sleep()
 
 def get_gamepad_protocol():
     return my_menu.current_gamepad_protocol
 
 ui_thread = threading.Thread(target=ui_worker, daemon=True)
-
-def oled_sleep_refresh():
-    global last_input_event
-    last_input_event = time.time()

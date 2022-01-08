@@ -1,4 +1,9 @@
-# print('-------', is_successful, result_message, self.pairing_result, '----------')
+            if 'number in 0-999999' in line:
+                # with canvas(oled_device) as draw:
+                #     oled_print_centered("Enter PIN code:", font_medium, 0, draw)
+                #     oled_print_centered("123456", font_medium, 15, draw)
+                # p.stdin.write('123456\n')
+                return False, "Error: Passkey needed"# print('-------', is_successful, result_message, self.pairing_result, '----------')
 
 
 """----------bluetooth---------
