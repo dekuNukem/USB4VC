@@ -73,3 +73,29 @@ sudo nano /etc/rc.local
 cd /home/pi/usb4vc; python3 usb4vc_main.py &
 
 kill -SIGINT pid
+
+
+---------------
+
+relaunch if exits:
+
+while true; do echo think; sleep 1; done
+
+---------
+
+serial format:
+
+U4 CMD_TYPE PAYLOAD
+
+U4 header, any command not beginning with U4 is ignored
+
+CMD TYPE:
+SC: Shell Command, execute whatever follows in shell
+RF: Read File
+WF: Write File
+GG: get gamepad file
+QUIT: quit program
+
+U4 RF /home/pi/usb4vc_data/config.json
+
+U4 WF /home/pi/usb4vc_data/test.txt c3NoIHBpQDE5Mi4xNjguMS41Ng==
