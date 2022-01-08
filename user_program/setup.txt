@@ -97,5 +97,4 @@ GG: get gamepad file
 QUIT: quit program
 
 U4 RF /home/pi/usb4vc_data/config.json
-
 U4 WF /home/pi/usb4vc_data/test.txt c3NoIHBpQDE5Mi4xNjguMS41Ng==
