@@ -2,7 +2,7 @@
 Fresh install setup
 
 raspbi-config
-enable SPI, I2C, Serial, auto login
+enable SPI, I2C, Serial (NO LOGIN SHELL)
 
 set up ssh:
 ssh-keygen

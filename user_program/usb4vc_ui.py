@@ -152,18 +152,33 @@ custom_profile_1 = {
 }
 
 custom_profile_2 = {
-    'name':'map2kb',
+    'name':'Map to KB/Mouse',
     'type':'plist_gamepad',
-    'bid':PBOARD_ID_IBMPC,
-    'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
+    'bid':PBOARD_ID_ADB,
+    'pid':PROTOCOL_OFF['pid'],
     'mapping':
     {
-        # USBGP_BTN_X: KB_KEY_LEFT,
-        # USBGP_BTN_B: KB_KEY_RIGHT,
-        # USBGP_BTN_Y: KB_KEY_UP,
-        # USBGP_BTN_A: KB_KEY_DOWN,
-        # USBGP_BTN_TL: KB_KEY_LCTRL,
-        # USBGP_BTN_TR: KB_KEY_LCTRL,
+        # buttons to buttons
+        USBGP_BTN_X: {'code':usb4vc_shared.MOUSE_BTN_LEFT[0], 'type':usb4vc_shared.MOUSE_BTN_LEFT[1]},
+        USBGP_BTN_B: {'code':usb4vc_shared.MOUSE_BTN_RIGHT[0], 'type':usb4vc_shared.MOUSE_BTN_RIGHT[1]},
+        USBGP_BTN_Y: {'code':usb4vc_shared.MOUSE_BTN_MIDDLE[0], 'type':usb4vc_shared.MOUSE_BTN_MIDDLE[1]},
+        USBGP_BTN_A: {'code':usb4vc_shared.MOUSE_BTN_MIDDLE[0], 'type':usb4vc_shared.MOUSE_BTN_MIDDLE[1]},
+        # analog stick to analog stick
+        USBGP_ABS_X: {'code':usb4vc_shared.MOUSE_X[0], 'type':usb4vc_shared.MOUSE_X[1], 'deadzone_percent':15},
+        USBGP_ABS_Y: {'code':usb4vc_shared.MOUSE_Y[0], 'type':usb4vc_shared.MOUSE_Y[1], 'deadzone_percent':15},
+        USBGP_ABS_HAT0X: {'code':usb4vc_shared.IBMPC_GGP_JS1_X[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X[1]},
+        USBGP_ABS_HAT0Y: {'code':usb4vc_shared.IBMPC_GGP_JS1_Y[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_Y[1]},
+        # buttons to analog stick
+        USBGP_BTN_TL: {'code':usb4vc_shared.IBMPC_GGP_BTN_1[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_1[1]},
+        USBGP_BTN_TR: {'code':usb4vc_shared.IBMPC_GGP_BTN_2[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_2[1]},
+        # buttons to keyboard key
+        USBGP_BTN_START: {'code':usb4vc_shared.KB_KEY_A[0], 'type':usb4vc_shared.KB_KEY_A[1]},
+        USBGP_BTN_SELECT: {'code':usb4vc_shared.KB_KEY_B[0], 'type':usb4vc_shared.KB_KEY_B[1]},
+        USBGP_BTN_TL: {'code':usb4vc_shared.IBMPC_GGP_JS1_X_NEG[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X_NEG[1]},
+        USBGP_BTN_TR: {'code':usb4vc_shared.IBMPC_GGP_JS1_X_POS[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X_POS[1]},
+        # analog stick to keyboard key
+        USBGP_ABS_RX: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_RIGHT[0], 'code_neg':usb4vc_shared.KB_KEY_LEFT[0], 'deadzone_percent':15},
+        USBGP_ABS_RY: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_DOWN[0], 'code_neg':usb4vc_shared.KB_KEY_UP[0], 'deadzone_percent':15},
     }
 }
 
