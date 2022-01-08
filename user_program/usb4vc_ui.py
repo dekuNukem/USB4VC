@@ -181,6 +181,9 @@ custom_profile_2 = {
     }
 }
 
+with open('custom_profile_1.txt', 'w', encoding='utf8') as save_file:
+    save_file.write(json.dumps(custom_profile_1))
+
 custom_profile_list = [custom_profile_1, custom_profile_2]
 
 """
@@ -692,7 +695,7 @@ def ui_worker():
 
         if plus_button.is_pressed():
             my_oled.kick()
-            print(time.time(), "PLUS_BUTTON pressed!")
+            # print(time.time(), "PLUS_BUTTON pressed!")
             if my_oled.is_sleeping:
                 my_oled.wakeup()
             elif my_menu.current_level != 2:
@@ -701,7 +704,7 @@ def ui_worker():
 
         if minus_button.is_pressed():
             my_oled.kick()
-            print(time.time(), "MINUS_BUTTON pressed!")
+            # print(time.time(), "MINUS_BUTTON pressed!")
             if my_oled.is_sleeping:
                 my_oled.wakeup()
             elif my_menu.current_level != 2:
@@ -710,7 +713,7 @@ def ui_worker():
 
         if enter_button.is_pressed():
             my_oled.kick()
-            print(time.time(), "ENTER_BUTTON pressed!")
+            # print(time.time(), "ENTER_BUTTON pressed!")
             if my_oled.is_sleeping:
                 my_oled.wakeup()
             else:
@@ -718,7 +721,7 @@ def ui_worker():
 
         if shutdown_button.is_pressed():
             my_oled.kick()
-            print(time.time(), "SHUTDOWN_BUTTON pressed!")
+            # print(time.time(), "SHUTDOWN_BUTTON pressed!")
             if my_oled.is_sleeping:
                 my_oled.wakeup()
 
