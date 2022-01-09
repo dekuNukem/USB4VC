@@ -127,28 +127,31 @@ custom_profile_1 = {
     'protocol_name':'GAMEPORT_GENERIC_GAMEPAD',
     'mapping':
     {
-        # buttons to buttons
-        'BTN_X': {'code':'BTN_LEFT'},
-        'BTN_B': {'code':'BTN_RIGHT'},
-        'BTN_Y': {'code':'BTN_MIDDLE'},
-        'BTN_A': {'code':'BTN_MIDDLE'},
-        # analog stick to analog stick
-        'ABS_X': {'code':'REL_X', 'deadzone_percent':15},
-        'ABS_Y': {'code':'REL_Y', 'deadzone_percent':15},
-        'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
-        'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
-        # buttons to analog stick
+        # usb gamepad button to generic gamepad button
+        'BTN_NORTH': {'code':'IBM_GGP_BTN_1'},
+        'BTN_WEST': {'code':'IBM_GGP_BTN_2'},
+        # usb analog axes to generic gamepad analog axes
+        'ABS_X': {'code':'IBM_GGP_JS1_X'},
+        'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
+        # usb gamepad button to generic gamepad analog axes
         'BTN_TL': {'code':'IBM_GGP_JS1_XN'},
         'BTN_TR': {'code':'IBM_GGP_JS1_XP'},
-        # buttons to keyboard key
+        # usb gamepad button to keyboard key
         'BTN_START': {'code':'KEY_A'},
         'BTN_SELECT': {'code':'KEY_B'},
-        # analog stick to keyboard key
-        'ABS_RX': {'code':'KEY_RIGHT', 'code_neg':'KEY_LEFT', 'deadzone_percent':15},
-        'ABS_RY': {'code':'KEY_DOWN', 'code_neg':'KEY_UP', 'deadzone_percent':15},
+        # usb gamepad analog axes to keyboard key
+        # 'ABS_HAT0X': {'code':'KEY_RIGHT', 'code_neg':'KEY_LEFT', 'deadzone_percent':15},
+        # 'ABS_HAT0Y': {'code':'KEY_DOWN', 'code_neg':'KEY_UP', 'deadzone_percent':15},
+        'ABS_HAT0X': {'code':'KEY_1', 'code_neg':'KEY_2', 'deadzone_percent':15},
+        'ABS_HAT0Y': {'code':'KEY_3', 'code_neg':'KEY_4', 'deadzone_percent':15},
+        # usb gamepad button to mouse buttons
+        'BTN_SOUTH': {'code':'BTN_LEFT'},
+        'BTN_EAST': {'code':'BTN_RIGHT'},
+        # usb gamepad analog axes to mouse axes
+        'ABS_Z': {'code':'REL_X', 'deadzone_percent':15},
+        'ABS_RZ': {'code':'REL_Y', 'deadzone_percent':15},
     }
 }
-
 custom_profile_list = [custom_profile_1]
 
 """
@@ -332,17 +335,17 @@ class usb4vc_menu(object):
         self.current_page = 0
         self.level_size = 5
         self.page_size = [4, 5, 4, 1, 1]
-        self.kb_opts = list(pboard['protocol_list_keyboard'])
-        self.mouse_opts = list(pboard['protocol_list_mouse'])
-        self.gamepad_opts = list(pboard['protocol_list_gamepad'])
+        self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
+        self.mouse_protocol_list = list(pboard['protocol_list_mouse'])
+        self.gamepad_protocol_list = list(pboard['protocol_list_gamepad'])
         self.pb_info = dict(pboard)
-        self.current_keyboard_protocol_index = self.cap_index(conf_dict['keyboard_protocol_index'], len(self.kb_opts))
-        self.current_mouse_protocol_index = self.cap_index(conf_dict["mouse_protocol_index"], len(self.mouse_opts))
+        self.current_keyboard_protocol_index = self.cap_index(conf_dict['keyboard_protocol_index'], len(self.kb_protocol_list))
+        self.current_mouse_protocol_index = self.cap_index(conf_dict["mouse_protocol_index"], len(self.mouse_protocol_list))
         self.current_mouse_sensitivity_offset_index = self.cap_index(conf_dict["mouse_sensitivity_index"], len(mouse_sensitivity_list))
-        self.current_gamepad_protocol_index = self.cap_index(conf_dict["gamepad_protocol_index"], len(self.gamepad_opts))
-        self.current_keyboard_protocol = self.kb_opts[self.current_keyboard_protocol_index]
-        self.current_mouse_protocol = self.mouse_opts[self.current_mouse_protocol_index]
-        self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
+        self.current_gamepad_protocol_index = self.cap_index(conf_dict["gamepad_protocol_index"], len(self.gamepad_protocol_list))
+        self.current_keyboard_protocol = self.kb_protocol_list[self.current_keyboard_protocol_index]
+        self.current_mouse_protocol = self.mouse_protocol_list[self.current_mouse_protocol_index]
+        self.current_gamepad_protocol = self.gamepad_protocol_list[self.current_gamepad_protocol_index]
         self.last_spi_message = []
         self.bluetooth_device_list = None
         self.error_message = ''
@@ -393,15 +396,15 @@ class usb4vc_menu(object):
             if page == 0:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Keyboard Protocol", font_medium, 0, draw)
-                    oled_print_centered(self.kb_opts[self.current_keyboard_protocol_index]['display_name'], font_medium, 15, draw)
+                    oled_print_centered(self.kb_protocol_list[self.current_keyboard_protocol_index]['display_name'], font_medium, 15, draw)
             if page == 1:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Mouse Protocol", font_medium, 0, draw)
-                    oled_print_centered(self.mouse_opts[self.current_mouse_protocol_index]['display_name'], font_medium, 15, draw)
+                    oled_print_centered(self.mouse_protocol_list[self.current_mouse_protocol_index]['display_name'], font_medium, 15, draw)
             if page == 2:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Gamepad Protocol", font_medium, 0, draw)
-                    oled_print_centered(self.gamepad_opts[self.current_gamepad_protocol_index]['display_name'], font_medium, 15, draw)
+                    oled_print_centered(self.gamepad_protocol_list[self.current_gamepad_protocol_index]['display_name'], font_medium, 15, draw)
             if page == 3:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Mouse Sensitivity", font_medium, 0, draw)
@@ -466,21 +469,21 @@ class usb4vc_menu(object):
 
     def send_protocol_set_spi_msg(self):
         status_dict = {}
-        for index, item in enumerate(self.kb_opts):
+        for index, item in enumerate(self.kb_protocol_list):
             if item['pid'] & 0x7f in status_dict and status_dict[item['pid'] & 0x7f] == 1:
                 continue
             status_dict[item['pid'] & 0x7f] = 0
             if index == self.current_keyboard_protocol_index:
                 status_dict[item['pid'] & 0x7f] = 1
 
-        for index, item in enumerate(self.mouse_opts):
+        for index, item in enumerate(self.mouse_protocol_list):
             if item['pid'] & 0x7f in status_dict and status_dict[item['pid'] & 0x7f] == 1:
                 continue
             status_dict[item['pid'] & 0x7f] = 0
             if index == self.current_mouse_protocol_index:
                 status_dict[item['pid'] & 0x7f] = 1
 
-        for index, item in enumerate(self.gamepad_opts):
+        for index, item in enumerate(self.gamepad_protocol_list):
             if item['pid'] & 0x7f in status_dict and status_dict[item['pid'] & 0x7f] == 1:
                 continue
             status_dict[item['pid'] & 0x7f] = 0
@@ -499,9 +502,9 @@ class usb4vc_menu(object):
         this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
         this_msg[3:3+len(protocol_bytes)] = protocol_bytes
 
-        self.current_keyboard_protocol = self.kb_opts[self.current_keyboard_protocol_index]
-        self.current_mouse_protocol = self.mouse_opts[self.current_mouse_protocol_index]
-        self.current_gamepad_protocol = self.gamepad_opts[self.current_gamepad_protocol_index]
+        self.current_keyboard_protocol = self.kb_protocol_list[self.current_keyboard_protocol_index]
+        self.current_mouse_protocol = self.mouse_protocol_list[self.current_mouse_protocol_index]
+        self.current_gamepad_protocol = self.gamepad_protocol_list[self.current_gamepad_protocol_index]
 
         # print('this', this_msg)
         # print('last', self.last_spi_message)
@@ -525,11 +528,11 @@ class usb4vc_menu(object):
                 self.goto_level(1)
         if level == 1:
             if page == 0:
-                self.current_keyboard_protocol_index = (self.current_keyboard_protocol_index + 1) % len(self.kb_opts)
+                self.current_keyboard_protocol_index = (self.current_keyboard_protocol_index + 1) % len(self.kb_protocol_list)
             if page == 1:
-                self.current_mouse_protocol_index = (self.current_mouse_protocol_index + 1) % len(self.mouse_opts)
+                self.current_mouse_protocol_index = (self.current_mouse_protocol_index + 1) % len(self.mouse_protocol_list)
             if page == 2:
-                self.current_gamepad_protocol_index = (self.current_gamepad_protocol_index + 1) % len(self.gamepad_opts)
+                self.current_gamepad_protocol_index = (self.current_gamepad_protocol_index + 1) % len(self.gamepad_protocol_list)
             if page == 3:
                 self.current_mouse_sensitivity_offset_index = (self.current_mouse_sensitivity_offset_index + 1) % len(mouse_sensitivity_list)
             if page == 4:

@@ -7,6 +7,8 @@ import threading
 import RPi.GPIO as GPIO
 import usb4vc_ui
 import usb4vc_shared
+import code_mapping
+
 
 """
 sudo apt install stm32flash
@@ -110,7 +112,7 @@ ABS_HAT1X = 0x12
 ABS_HAT1Y = 0x13
 ABS_HAT2X = 0x14
 ABS_HAT2Y = 0x15
-ABS_HAT3Y = 0x16
+ABS_HAT3X = 0x16
 ABS_HAT3Y = 0x17
 
 BTN_LEFT = 0x110
@@ -174,14 +176,14 @@ def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
     return int((value / rmax) * 255) + 127
 
 IBMPC_GGP_SPI_LOOKUP = {
-    'IBMGBTN_1':4,
-    'IBMGBTN_2':5,
-    'IBMGBTN_3':6,
-    'IBMGBTN_4':7,
-    'IBMGGP_JS1_X':8,
-    'IBMGGP_JS1_Y':9,
-    'IBMGGP_JS2_X':10,
-    'IBMGGP_JS2_Y':11,
+    'IBM_GGP_BTN_1':4,
+    'IBM_GGP_BTN_2':5,
+    'IBM_GGP_BTN_3':6,
+    'IBM_GGP_BTN_4':7,
+    'IBM_GGP_JS1_X':8,
+    'IBM_GGP_JS1_Y':9,
+    'IBM_GGP_JS2_X':10,
+    'IBM_GGP_JS2_Y':11,
 }
 
 MOUSE_SPI_LOOKUP = {
@@ -195,16 +197,30 @@ MOUSE_SPI_LOOKUP = {
     REL_WHEEL:8,
 }
 
-def find_keycode_in_mapping(key_code, mapping_dict):
-    code_type = None
-    if ABS_X <= key_code <= ABS_HAT3Y:
-        code_type = 'usb_gp_axes'
-    elif BTN_SOUTH <= key_code <= BTN_THUMBR:
-        code_type = 'usb_gp_btn'
-    result = mapping_dict.get(key_code)
-    if code_type is None or result is None:
+def find_keycode_in_mapping(source_code, mapping_dict):
+    source_name = code_mapping.code_value_to_name_lookup.get(source_code)
+    if source_name is None:
         return None, None
-    return code_type, result
+    target_info = mapping_dict.get(source_name)
+    if target_info is None or 'code' not in target_info:
+        return None, None
+    target_info = dict(target_info) # make a copy so the lookup table itself won't get modified
+    lookup_result = code_mapping.code_name_to_value_lookup.get(target_info['code'])
+    if lookup_result is None:
+        return None, None
+    source_type = None
+    if ABS_X <= source_code <= ABS_HAT3Y:
+        source_type = 'usb_gp_axes'
+    elif BTN_SOUTH <= source_code <= BTN_THUMBR:
+        source_type = 'usb_gp_btn'
+    if source_type is None:
+        return None, None
+    target_info['code'] = lookup_result[0]
+    if 'code_neg' in target_info:
+        target_info['code_neg'] = code_mapping.code_name_to_value_lookup.get(target_info['code_neg'])[0]
+    target_info['type'] = lookup_result[1]
+    # print(source_name, source_type, target_info)
+    return source_type, target_info
 
 def find_furthest_from_midpoint(this_set):
     curr_best = None
@@ -225,14 +241,14 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     global curr_mouse_output
     this_gp_dict = gp_status_dict[gp_id]
     curr_gp_output = {
-        'IBMPC_GBTN_1':set([0]),
-        'IBMPC_GBTN_2':set([0]),
-        'IBMPC_GBTN_3':set([0]),
-        'IBMPC_GBTN_4':set([0]),
-        'IBMPC_GGP_JS1_X':set([127]),
-        'IBMPC_GGP_JS1_Y':set([127]),
-        'IBMPC_GGP_JS2_X':set([127]),
-        'IBMPC_GGP_JS2_Y':set([127]),
+        'IBM_GGP_BTN_1':set([0]),
+        'IBM_GGP_BTN_2':set([0]),
+        'IBM_GGP_BTN_3':set([0]),
+        'IBM_GGP_BTN_4':set([0]),
+        'IBM_GGP_JS1_X':set([127]),
+        'IBM_GGP_JS1_Y':set([127]),
+        'IBM_GGP_JS2_X':set([127]),
+        'IBM_GGP_JS2_Y':set([127]),
     }
     curr_kb_output = {}
     curr_mouse_output = {
@@ -254,26 +270,26 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         target_code = target_info['code']
         target_type = target_info['type']
         
-        # button to button
-        if source_type == 'usb_gp_btn' and target_type == 'pb_gp_btn' and target_code in curr_gp_output:
+        # usb gamepad button to generic gamepad button
+        if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_btn' and target_code in curr_gp_output:
             curr_gp_output[target_code].add(this_gp_dict[source_code])
-        # analog to analog
-        if source_type == 'usb_gp_axes' and target_type == 'pb_gp_axes' and target_code in curr_gp_output:
+        # usb gamepad analog axes to generic gamepad analog axes
+        if source_type == 'usb_gp_axes' and target_type == 'ibm_ggp_axis' and target_code in curr_gp_output:
             curr_gp_output[target_code].add(convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code))
-        # button to analog
-        if source_type == 'usb_gp_btn' and target_type == 'pb_gp_half_axes' and target_code[:-1] in curr_gp_output and this_gp_dict[source_code]:
+        # usb gamepad button to generic gamepad analog axes
+        if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_half_axis' and target_code[:-1] in curr_gp_output and this_gp_dict[source_code]:
             if target_code.endswith('P'):
                 axis_value = 255
             elif target_code.endswith('N'):
                 axis_value = 0
             curr_gp_output[target_code[:-1]].add(axis_value)
-        # button to keyboard key
-        if source_type == 'usb_gp_btn' and target_type == 'pb_kb':
+        # usb gamepad button to keyboard key
+        if source_type == 'usb_gp_btn' and target_type == 'kb_key':
             if target_code not in curr_kb_output:
                 curr_kb_output[target_code] = set()
             curr_kb_output[target_code].add(this_gp_dict[source_code])
-        # analog to keyboard key
-        if source_type == 'usb_gp_axes' and target_type == 'pb_kb':
+        # usb gamepad analog axes to keyboard key
+        if source_type == 'usb_gp_axes' and target_type == 'kb_key':
             if target_code not in curr_kb_output:
                 curr_kb_output[target_code] = set()
             is_activated = 0
@@ -288,12 +304,12 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) < 127 - deadzone_amount:
                 is_activated = 1
             curr_kb_output[target_info['code_neg']].add(is_activated)
-        # button to mouse buttons
+        # usb gamepad button to mouse buttons
         if source_type == 'usb_gp_btn' and target_type == 'mouse_btn' and target_code in curr_mouse_output:
             curr_mouse_output[target_code].add(this_gp_dict[source_code])
             curr_mouse_output['is_modified'] = True
-        # analog to mouse axes
-        if source_type == 'usb_gp_axes' and target_type == 'mouse_axes' and target_code in curr_mouse_output:
+        # usb gamepad analog axes to mouse axes
+        if source_type == 'usb_gp_axes' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output:
             movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
             deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
             if abs(movement) <= deadzone_amount:
@@ -319,12 +335,12 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     gp_spi_msg = list(gamepad_event_ibm_ggp_spi_msg_template)
     gp_spi_msg[3] = gp_id;
     for key in curr_gp_output:
-        if "IBMGBTN_" in key:
+        if "IBM_GGP_BTN_" in key:
             this_value = 0
             if 1 in curr_gp_output[key]:
                 this_value = 1
             gp_spi_msg[IBMPC_GGP_SPI_LOOKUP[key]] = this_value
-        if 'IBMGGP_JS' in key:
+        if 'IBM_GGP_JS1' in key:
             if key in prev_gp_output:
                 new_value_set = curr_gp_output[key] - prev_gp_output[key]
                 if len(new_value_set) > 0:

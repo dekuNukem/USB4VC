@@ -1,4 +1,4 @@
-code_lookup = {
+code_name_to_value_lookup = {
 	'KEY_RESERVED':(0, 'kb_key'),
 	'KEY_ESC':(1, 'kb_key'),
 	'KEY_1':(2, 'kb_key'),
@@ -279,6 +279,43 @@ code_lookup = {
 	'IBM_GGP_JS2_YN':('IBM_GGP_JS2_YN', 'ibm_ggp_half_axis'),
 }
 
+code_value_to_name_lookup = {
+	0x130:'BTN_SOUTH',
+	0x131:'BTN_EAST',
+	0x132:'BTN_C',
+	0x133:'BTN_NORTH',
+	0x134:'BTN_WEST',
+	0x135:'BTN_Z',
+	0x136:'BTN_TL',
+	0x137:'BTN_TR',
+	0x138:'BTN_TL2',
+	0x139:'BTN_TR2',
+	0x13a:'BTN_SELECT',
+	0x13b:'BTN_START',
+	0x13c:'BTN_MODE',
+	0x13d:'BTN_THUMBL',
+	0x13e:'BTN_THUMBR',
+	0x00:'ABS_X',
+	0x01:'ABS_Y',
+	0x02:'ABS_Z',
+	0x03:'ABS_RX',
+	0x04:'ABS_RY',
+	0x05:'ABS_RZ',
+	0x06:'ABS_THROTTLE',
+	0x07:'ABS_RUDDER',
+	0x08:'ABS_WHEEL',
+	0x09:'ABS_GAS',
+	0x0a:'ABS_BRAKE',
+	0x10:'ABS_HAT0X',
+	0x11:'ABS_HAT0Y',
+	0x12:'ABS_HAT1X',
+	0x13:'ABS_HAT1Y',
+	0x14:'ABS_HAT2X',
+	0x15:'ABS_HAT2Y',
+	0x16:'ABS_HAT3X',
+	0x17:'ABS_HAT3Y',
+}
+
 board_id_lookup = {
 	'IBMPC':1,
 	'ADB':2,
@@ -308,10 +345,10 @@ custom_profile_1 = {
     'mapping':
     {
         # buttons to buttons
-        'BTN_X': {'code':'BTN_LEFT'},
-        'BTN_B': {'code':'BTN_RIGHT'},
-        'BTN_Y': {'code':'BTN_MIDDLE'},
-        'BTN_A': {'code':'BTN_MIDDLE'},
+        'BTN_SOUTH': {'code':'BTN_LEFT'},
+        'BTN_EAST': {'code':'BTN_RIGHT'},
+        'BTN_NORTH': {'code':'IBM_GGP_BTN_1'},
+        'BTN_WEST': {'code':'BTN_MIDDLE'},
         # analog stick to analog stick
         'ABS_X': {'code':'REL_X', 'deadzone_percent':15},
         'ABS_Y': {'code':'REL_Y', 'deadzone_percent':15},
