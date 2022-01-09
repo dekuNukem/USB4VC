@@ -176,7 +176,10 @@ def find_keycode_in_mapping(source_code, mapping_dict):
     source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
-    target_info = mapping_dict.get(source_name)
+    target_info = None
+    for item in source_name:
+        if item in mapping_dict:
+            target_info = mapping_dict[item]
     if target_info is None or 'code' not in target_info:
         return None, None
     target_info = dict(target_info) # make a copy so the lookup table itself won't get modified
@@ -194,7 +197,6 @@ def find_keycode_in_mapping(source_code, mapping_dict):
     if 'code_neg' in target_info:
         target_info['code_neg'] = usb4vc_shared.code_name_to_value_lookup.get(target_info['code_neg'])[0]
     target_info['type'] = lookup_result[1]
-    # print(source_name, source_type, target_info)
     return source_type, target_info
 
 def find_furthest_from_midpoint(this_set):
@@ -353,6 +355,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
 
     prev_gp_output = curr_gp_output
     prev_kb_output = curr_kb_output
+    print(curr_gp_output)
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
