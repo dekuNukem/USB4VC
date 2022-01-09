@@ -6,6 +6,8 @@
                 return False, "Error: Passkey needed"# print('-------', is_successful, result_message, self.pairing_result, '----------')
 
 
+with open('custom_profile_1.txt', 'w', encoding='utf8') as save_file:
+    save_file.write(json.dumps(custom_profile_1))
 """----------bluetooth---------
 
 https://github.com/oscaracena/pygattlib

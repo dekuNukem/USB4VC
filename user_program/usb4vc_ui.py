@@ -13,6 +13,7 @@ import usb4vc_shared
 import json
 import subprocess
 from subprocess import Popen, PIPE
+import code_mapping
 
 data_dir_path = os.path.join(os.path.expanduser('~'), 'usb4vc_data')
 config_file_path = os.path.join(data_dir_path, 'config.json')
@@ -88,21 +89,21 @@ USBGP_ABS_RZ = 0x05 # right analog trigger
 USBGP_ABS_HAT0X = 0x10 # D-pad X
 USBGP_ABS_HAT0Y = 0x11 # D-pad Y
 
-IBMPC_GGP_DEAULT_MAPPING = {
+IBM_GGP_DEAULT_MAPPING = {
     # buttons to buttons
-    USBGP_BTN_X: {'code':usb4vc_shared.IBMPC_GGP_BTN_2[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_2[1]},
-    USBGP_BTN_B: {'code':usb4vc_shared.IBMPC_GGP_BTN_3[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_3[1]},
-    USBGP_BTN_Y: {'code':usb4vc_shared.IBMPC_GGP_BTN_4[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_4[1]},
-    USBGP_BTN_A: {'code':usb4vc_shared.IBMPC_GGP_BTN_1[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_1[1]},
-    USBGP_BTN_TL: {'code':usb4vc_shared.IBMPC_GGP_BTN_1[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_1[1]},
-    USBGP_BTN_TR: {'code':usb4vc_shared.IBMPC_GGP_BTN_2[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_2[1]},
+   'BTN_X': {'code':'IBM_GGP_BTN_2'},
+   'BTN_B': {'code':'IBM_GGP_BTN_3'},
+   'BTN_Y': {'code':'IBM_GGP_BTN_4'},
+   'BTN_A': {'code':'IBM_GGP_BTN_1'},
+   'BTN_TL': {'code':'IBM_GGP_BTN_1'},
+   'BTN_TR': {'code':'IBM_GGP_BTN_2'},
     # analog stick to analog stick
-    USBGP_ABS_X: {'code':usb4vc_shared.IBMPC_GGP_JS1_X[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X[1]},
-    USBGP_ABS_Y: {'code':usb4vc_shared.IBMPC_GGP_JS1_Y[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_Y[1]},
-    USBGP_ABS_HAT0X: {'code':usb4vc_shared.IBMPC_GGP_JS1_X[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X[1]},
-    USBGP_ABS_HAT0Y: {'code':usb4vc_shared.IBMPC_GGP_JS1_Y[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_Y[1]},
-    USBGP_ABS_RX: {'code':usb4vc_shared.IBMPC_GGP_JS2_X[0], 'type':usb4vc_shared.IBMPC_GGP_JS2_X[1]},
-    USBGP_ABS_RY: {'code':usb4vc_shared.IBMPC_GGP_JS2_Y[0], 'type':usb4vc_shared.IBMPC_GGP_JS2_Y[1]},
+   'ABS_X': {'code':'IBM_GGP_JS1_X'},
+   'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
+   'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
+   'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
+   'ABS_RX': {'code':'IBM_GGP_JS2_X'},
+   'ABS_RY': {'code':'IBM_GGP_JS2_Y'},
 }
 
 PROTOCOL_OFF = {'pid':0, 'display_name':"OFF"}
@@ -112,7 +113,7 @@ PROTOCOL_ADB_KB = {'pid':3, 'display_name':"ADB"}
 PROTOCOL_PS2_MOUSE = {'pid':4, 'display_name':"PS/2"}
 PROTOCOL_MICROSOFT_SERIAL_MOUSE = {'pid':5, 'display_name':"MS Serial"}
 PROTOCOL_ADB_MOUSE = {'pid':6, 'display_name':"ADB"}
-PROTOCOL_GENERIC_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic PC", 'mapping':IBMPC_GGP_DEAULT_MAPPING}
+PROTOCOL_GENERIC_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic PC", 'mapping':IBM_GGP_DEAULT_MAPPING}
 PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = {'pid':8, 'display_name':"Gravis Pro"}
 PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = {'pid':9, 'display_name':"MS Sidewinder"}
 PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
@@ -120,71 +121,35 @@ PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
 custom_profile_1 = {
-    'name':'test',
-    'type':'protocol_list_gamepad',
-    'bid':PBOARD_ID_IBMPC,
-    'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
+    'display_name':'my_map',
+    'device_type':'protocol_list_gamepad',
+    'protocol_board':'IBMPC',
+    'protocol_name':'GAMEPORT_GENERIC_GAMEPAD',
     'mapping':
     {
         # buttons to buttons
-        USBGP_BTN_X: {'code':usb4vc_shared.MOUSE_BTN_LEFT[0], 'type':usb4vc_shared.MOUSE_BTN_LEFT[1]},
-        USBGP_BTN_B: {'code':usb4vc_shared.MOUSE_BTN_RIGHT[0], 'type':usb4vc_shared.MOUSE_BTN_RIGHT[1]},
-        USBGP_BTN_Y: {'code':usb4vc_shared.MOUSE_BTN_MIDDLE[0], 'type':usb4vc_shared.MOUSE_BTN_MIDDLE[1]},
-        USBGP_BTN_A: {'code':usb4vc_shared.MOUSE_BTN_MIDDLE[0], 'type':usb4vc_shared.MOUSE_BTN_MIDDLE[1]},
+        'BTN_X': {'code':'BTN_LEFT'},
+        'BTN_B': {'code':'BTN_RIGHT'},
+        'BTN_Y': {'code':'BTN_MIDDLE'},
+        'BTN_A': {'code':'BTN_MIDDLE'},
         # analog stick to analog stick
-        USBGP_ABS_X: {'code':usb4vc_shared.MOUSE_X[0], 'type':usb4vc_shared.MOUSE_X[1], 'deadzone_percent':15},
-        USBGP_ABS_Y: {'code':usb4vc_shared.MOUSE_Y[0], 'type':usb4vc_shared.MOUSE_Y[1], 'deadzone_percent':15},
-        USBGP_ABS_HAT0X: {'code':usb4vc_shared.IBMPC_GGP_JS1_X[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X[1]},
-        USBGP_ABS_HAT0Y: {'code':usb4vc_shared.IBMPC_GGP_JS1_Y[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_Y[1]},
+        'ABS_X': {'code':'REL_X', 'deadzone_percent':15},
+        'ABS_Y': {'code':'REL_Y', 'deadzone_percent':15},
+        'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
+        'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
         # buttons to analog stick
-        USBGP_BTN_TL: {'code':usb4vc_shared.IBMPC_GGP_BTN_1[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_1[1]},
-        USBGP_BTN_TR: {'code':usb4vc_shared.IBMPC_GGP_BTN_2[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_2[1]},
+        'BTN_TL': {'code':'IBM_GGP_JS1_XN'},
+        'BTN_TR': {'code':'IBM_GGP_JS1_XP'},
         # buttons to keyboard key
-        USBGP_BTN_START: {'code':usb4vc_shared.KB_KEY_A[0], 'type':usb4vc_shared.KB_KEY_A[1]},
-        USBGP_BTN_SELECT: {'code':usb4vc_shared.KB_KEY_B[0], 'type':usb4vc_shared.KB_KEY_B[1]},
-        USBGP_BTN_TL: {'code':usb4vc_shared.IBMPC_GGP_JS1_X_NEG[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X_NEG[1]},
-        USBGP_BTN_TR: {'code':usb4vc_shared.IBMPC_GGP_JS1_X_POS[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X_POS[1]},
+        'BTN_START': {'code':'KEY_A'},
+        'BTN_SELECT': {'code':'KEY_B'},
         # analog stick to keyboard key
-        USBGP_ABS_RX: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_RIGHT[0], 'code_neg':usb4vc_shared.KB_KEY_LEFT[0], 'deadzone_percent':15},
-        USBGP_ABS_RY: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_DOWN[0], 'code_neg':usb4vc_shared.KB_KEY_UP[0], 'deadzone_percent':15},
+        'ABS_RX': {'code':'KEY_RIGHT', 'code_neg':'KEY_LEFT', 'deadzone_percent':15},
+        'ABS_RY': {'code':'KEY_DOWN', 'code_neg':'KEY_UP', 'deadzone_percent':15},
     }
 }
 
-custom_profile_2 = {
-    'name':'Map to KB/Mouse',
-    'type':'protocol_list_gamepad',
-    'bid':PBOARD_ID_ADB,
-    'pid':PROTOCOL_OFF['pid'],
-    'mapping':
-    {
-        # buttons to buttons
-        USBGP_BTN_X: {'code':usb4vc_shared.MOUSE_BTN_LEFT[0], 'type':usb4vc_shared.MOUSE_BTN_LEFT[1]},
-        USBGP_BTN_B: {'code':usb4vc_shared.MOUSE_BTN_RIGHT[0], 'type':usb4vc_shared.MOUSE_BTN_RIGHT[1]},
-        USBGP_BTN_Y: {'code':usb4vc_shared.MOUSE_BTN_MIDDLE[0], 'type':usb4vc_shared.MOUSE_BTN_MIDDLE[1]},
-        USBGP_BTN_A: {'code':usb4vc_shared.MOUSE_BTN_MIDDLE[0], 'type':usb4vc_shared.MOUSE_BTN_MIDDLE[1]},
-        # analog stick to analog stick
-        USBGP_ABS_X: {'code':usb4vc_shared.MOUSE_X[0], 'type':usb4vc_shared.MOUSE_X[1], 'deadzone_percent':15},
-        USBGP_ABS_Y: {'code':usb4vc_shared.MOUSE_Y[0], 'type':usb4vc_shared.MOUSE_Y[1], 'deadzone_percent':15},
-        USBGP_ABS_HAT0X: {'code':usb4vc_shared.IBMPC_GGP_JS1_X[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X[1]},
-        USBGP_ABS_HAT0Y: {'code':usb4vc_shared.IBMPC_GGP_JS1_Y[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_Y[1]},
-        # buttons to analog stick
-        USBGP_BTN_TL: {'code':usb4vc_shared.IBMPC_GGP_BTN_1[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_1[1]},
-        USBGP_BTN_TR: {'code':usb4vc_shared.IBMPC_GGP_BTN_2[0], 'type':usb4vc_shared.IBMPC_GGP_BTN_2[1]},
-        # buttons to keyboard key
-        USBGP_BTN_START: {'code':usb4vc_shared.KB_KEY_A[0], 'type':usb4vc_shared.KB_KEY_A[1]},
-        USBGP_BTN_SELECT: {'code':usb4vc_shared.KB_KEY_B[0], 'type':usb4vc_shared.KB_KEY_B[1]},
-        USBGP_BTN_TL: {'code':usb4vc_shared.IBMPC_GGP_JS1_X_NEG[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X_NEG[1]},
-        USBGP_BTN_TR: {'code':usb4vc_shared.IBMPC_GGP_JS1_X_POS[0], 'type':usb4vc_shared.IBMPC_GGP_JS1_X_POS[1]},
-        # analog stick to keyboard key
-        USBGP_ABS_RX: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_RIGHT[0], 'code_neg':usb4vc_shared.KB_KEY_LEFT[0], 'deadzone_percent':15},
-        USBGP_ABS_RY: {'type':'pb_kb', 'code':usb4vc_shared.KB_KEY_DOWN[0], 'code_neg':usb4vc_shared.KB_KEY_UP[0], 'deadzone_percent':15},
-    }
-}
-
-with open('custom_profile_1.txt', 'w', encoding='utf8') as save_file:
-    save_file.write(json.dumps(custom_profile_1))
-
-custom_profile_list = [custom_profile_1, custom_profile_2]
+custom_profile_list = [custom_profile_1]
 
 """
 OLED for USB4VC
@@ -641,9 +606,11 @@ def ui_init():
     if this_pboard_id in pboard_database:
         # load custom profile mapping into protocol list
         for item in custom_profile_list:
-            if item['bid'] == this_pboard_id and item['type'] in pboard_database[this_pboard_id]:
-                this_profile = {'pid':item['pid'], 'display_name':item['name'], 'mapping':item['mapping']}
-                pboard_database[this_pboard_id][item['type']].append(this_profile)
+            this_mapping_bid = code_mapping.board_id_lookup.get(item['protocol_board'], 0)
+            if this_mapping_bid == this_pboard_id and item['device_type'] in pboard_database[this_pboard_id]:
+                this_mapping_pid = code_mapping.protocol_id_lookup.get(item['protocol_name'])
+                this_profile = {'pid':this_mapping_pid, 'display_name':item['display_name'], 'mapping':item['mapping']}
+                pboard_database[this_pboard_id][item['device_type']].append(this_profile)
         pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
         pboard_database[this_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
     if 'rpi_app_ver' not in configuration_dict:

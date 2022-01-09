@@ -302,9 +302,9 @@ protocol_id_lookup = {
 
 custom_profile_1 = {
     'display_name':'my_map',
-    'type':'protocol_list_gamepad',
-    'board':'IBMPC',
-    'protocol':'GAMEPORT_GENERIC_GAMEPAD',
+    'device_type':'protocol_list_gamepad',
+    'protocol_board':'IBMPC',
+    'protocol_name':'GAMEPORT_GENERIC_GAMEPAD',
     'mapping':
     {
         # buttons to buttons
@@ -318,13 +318,11 @@ custom_profile_1 = {
         'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
         'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
         # buttons to analog stick
-        'BTN_TL': {'code':'IBM_GGP_BTN_1'},
-        'BTN_TR': {'code':'IBM_GGP_BTN_2'},
+        'BTN_TL': {'code':'IBM_GGP_JS1_XN'},
+        'BTN_TR': {'code':'IBM_GGP_JS1_XP'},
         # buttons to keyboard key
         'BTN_START': {'code':'KEY_A'},
         'BTN_SELECT': {'code':'KEY_B'},
-        'BTN_TL': {'code':'IBM_GGP_JS1_XN'},
-        'BTN_TR': {'code':'IBM_GGP_JS1_XP'},
         # analog stick to keyboard key
         'ABS_RX': {'code':'KEY_RIGHT', 'code_neg':'KEY_LEFT', 'deadzone_percent':15},
         'ABS_RY': {'code':'KEY_DOWN', 'code_neg':'KEY_UP', 'deadzone_percent':15},
