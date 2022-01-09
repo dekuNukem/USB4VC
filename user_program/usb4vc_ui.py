@@ -139,9 +139,9 @@ custom_profile_1 = {
         # usb gamepad button to keyboard key
         'BTN_START': {'code':'KEY_A'},
         'BTN_SELECT': {'code':'KEY_B'},
+        'KEY_HOMEPAGE': {'code':'KEY_C'},
+        'KEY_BACK': {'code':'KEY_D'},
         # usb gamepad analog axes to keyboard key
-        # 'ABS_HAT0X': {'code':'KEY_RIGHT', 'code_neg':'KEY_LEFT', 'deadzone_percent':15},
-        # 'ABS_HAT0Y': {'code':'KEY_DOWN', 'code_neg':'KEY_UP', 'deadzone_percent':15},
         'ABS_HAT0X': {'code':'KEY_1', 'code_neg':'KEY_2', 'deadzone_percent':15},
         'ABS_HAT0Y': {'code':'KEY_3', 'code_neg':'KEY_4', 'deadzone_percent':15},
         # usb gamepad button to mouse buttons
