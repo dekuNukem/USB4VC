@@ -79,39 +79,9 @@ SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
 
 BTN_SOUTH = 0x130
-BTN_EAST = 0x131
-BTN_C = 0x132
-BTN_NORTH = 0x133
-BTN_WEST = 0x134
-BTN_Z = 0x135
-BTN_TL = 0x136
-BTN_TR = 0x137
-BTN_TL2 = 0x138
-BTN_TR2 = 0x139
-BTN_SELECT = 0x13a
-BTN_START = 0x13b
-BTN_MODE = 0x13c
-BTN_THUMBL = 0x13d
 BTN_THUMBR = 0x13e
 
 ABS_X = 0x00
-ABS_Y = 0x01
-ABS_Z = 0x02
-ABS_RX = 0x03
-ABS_RY = 0x04
-ABS_RZ = 0x05
-ABS_THROTTLE = 0x06
-ABS_RUDDER = 0x07
-ABS_WHEEL = 0x08
-ABS_GAS = 0x09
-ABS_BRAKE = 0x0a
-ABS_HAT0X = 0x10
-ABS_HAT0Y = 0x11
-ABS_HAT1X = 0x12
-ABS_HAT1Y = 0x13
-ABS_HAT2X = 0x14
-ABS_HAT2Y = 0x15
-ABS_HAT3X = 0x16
 ABS_HAT3Y = 0x17
 
 BTN_LEFT = 0x110
@@ -122,6 +92,12 @@ BTN_EXTRA = 0x114
 BTN_FORWARD = 0x115
 BTN_BACK = 0x116
 BTN_TASK = 0x117
+
+# some gamepad buttons report as keyboard keys when connected via bluetooth, need to account for those
+gamepad_buttons_as_kb_codes = {
+    158, # KEY_BACK, share button, xbox one controller when connected via bluetooth
+    172, # KEY_HOMEPAGE, xbox logo button, xbox one controller when connected via bluetooth
+    }
 
 nop_spi_msg_template = [SPI_MOSI_MAGIC] + [0]*31
 info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUEST] + [0]*29
@@ -210,7 +186,7 @@ def find_keycode_in_mapping(source_code, mapping_dict):
     source_type = None
     if ABS_X <= source_code <= ABS_HAT3Y:
         source_type = 'usb_gp_axes'
-    elif BTN_SOUTH <= source_code <= BTN_THUMBR:
+    elif BTN_SOUTH <= source_code <= BTN_THUMBR or source_code in gamepad_buttons_as_kb_codes:
         source_type = 'usb_gp_btn'
     if source_type is None:
         return None, None
@@ -469,7 +445,7 @@ def raw_input_event_worker():
             # event is a key press
             if data[0] == EV_KEY:
                 # keyboard keys
-                if 0x1 <= event_code <= 248:
+                if 0x1 <= event_code <= 248 and event_code not in gamepad_buttons_as_kb_codes:
                     pcard_spi.xfer(make_keyboard_spi_packet(data, this_id))
                 # Mouse buttons
                 elif 0x110 <= event_code <= 0x117:
@@ -478,7 +454,7 @@ def raw_input_event_worker():
                     pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
                     next_gamepad_hold_check = now + gamepad_hold_check_interval
                 # Gamepad buttons
-                elif BTN_SOUTH <= event_code <= BTN_THUMBR:
+                elif BTN_SOUTH <= event_code <= BTN_THUMBR or event_code in gamepad_buttons_as_kb_codes:
                     gamepad_status_dict[this_id][event_code] = data[4]
 
             # event is relative axes AKA mouse
