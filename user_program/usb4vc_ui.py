@@ -121,7 +121,7 @@ PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
 custom_profile_1 = {
     'name':'test',
-    'type':'plist_gamepad',
+    'type':'protocol_list_gamepad',
     'bid':PBOARD_ID_IBMPC,
     'pid':PROTOCOL_GENERIC_GAMEPORT_GAMEPAD['pid'],
     'mapping':
@@ -152,7 +152,7 @@ custom_profile_1 = {
 
 custom_profile_2 = {
     'name':'Map to KB/Mouse',
-    'type':'plist_gamepad',
+    'type':'protocol_list_gamepad',
     'bid':PBOARD_ID_ADB,
     'pid':PROTOCOL_OFF['pid'],
     'mapping':
@@ -224,17 +224,17 @@ def oled_print_centered(text, font, y, this_canvas):
         start_x = 0
     this_canvas.text((start_x, y), text, font=font, fill="white")
 
-keyboard_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
-mouse_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE]
-gamepad_protocol_options_ibmpc = [PROTOCOL_OFF, PROTOCOL_GENERIC_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER]
+ibmpc_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
+ibmpc_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE]
+ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_GENERIC_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER]
 
-keyboard_protocol_options_adb = [PROTOCOL_OFF, PROTOCOL_ADB_KB]
-mouse_protocol_options_adb = [PROTOCOL_OFF, PROTOCOL_ADB_MOUSE]
-gamepad_protocol_options_adb = [PROTOCOL_OFF]
+adb_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_KB]
+adb_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_MOUSE]
+adb_gamepad_protocols = [PROTOCOL_OFF]
 
-keyboard_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_KEYBOARD]
-mouse_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_MOUSE]
-gamepad_protocol_options_raw = [PROTOCOL_OFF, PROTOCOL_RAW_GAMEPAD]
+raw_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_RAW_KEYBOARD]
+raw_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_RAW_MOUSE]
+raw_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_RAW_GAMEPAD]
 
 mouse_sensitivity_list = [1, 1.25, 1.5, 1.75, 0.25, 0.5, 0.75]
 
@@ -367,9 +367,9 @@ class usb4vc_menu(object):
         self.current_page = 0
         self.level_size = 5
         self.page_size = [4, 5, 4, 1, 1]
-        self.kb_opts = list(pboard['plist_keyboard'])
-        self.mouse_opts = list(pboard['plist_mouse'])
-        self.gamepad_opts = list(pboard['plist_gamepad'])
+        self.kb_opts = list(pboard['protocol_list_keyboard'])
+        self.mouse_opts = list(pboard['protocol_list_mouse'])
+        self.gamepad_opts = list(pboard['protocol_list_gamepad'])
         self.pb_info = dict(pboard)
         self.current_keyboard_protocol_index = self.cap_index(conf_dict['keyboard_protocol_index'], len(self.kb_opts))
         self.current_mouse_protocol_index = self.cap_index(conf_dict["mouse_protocol_index"], len(self.mouse_opts))
@@ -619,9 +619,9 @@ class usb4vc_menu(object):
             self.display_page(0, 0)
 
 pboard_database = {
-    PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_raw, 'plist_mouse':mouse_protocol_options_raw, 'plist_gamepad':gamepad_protocol_options_raw},
-    PBOARD_ID_IBMPC:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_ibmpc, 'plist_mouse':mouse_protocol_options_ibmpc, 'plist_gamepad':gamepad_protocol_options_ibmpc},
-    PBOARD_ID_ADB:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'plist_keyboard':keyboard_protocol_options_adb, 'plist_mouse':mouse_protocol_options_adb, 'plist_gamepad':gamepad_protocol_options_adb},
+    PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown', 'hw_rev':0, 'protocol_list_keyboard':raw_keyboard_protocols, 'protocol_list_mouse':raw_mouse_protocols, 'protocol_list_gamepad':raw_gamepad_protocols},
+    PBOARD_ID_IBMPC:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'protocol_list_keyboard':ibmpc_keyboard_protocols, 'protocol_list_mouse':ibmpc_mouse_protocols, 'protocol_list_gamepad':ibmpc_gamepad_protocols},
+    PBOARD_ID_ADB:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'protocol_list_keyboard':adb_keyboard_protocols, 'protocol_list_mouse':adb_mouse_protocols, 'protocol_list_gamepad':adb_gamepad_protocols},
 }
 
 def get_pboard_dict(pid):

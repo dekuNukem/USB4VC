@@ -301,8 +301,8 @@ protocol_id_lookup = {
 }
 
 custom_profile_1 = {
-    'name':'my_map',
-    'type':'plist_gamepad',
+    'display_name':'my_map',
+    'type':'protocol_list_gamepad',
     'board':'IBMPC',
     'protocol':'GAMEPORT_GENERIC_GAMEPAD',
     'mapping':
