@@ -13,7 +13,6 @@ import usb4vc_shared
 import json
 import subprocess
 from subprocess import Popen, PIPE
-import code_mapping
 
 data_dir_path = os.path.join(os.path.expanduser('~'), 'usb4vc_data')
 config_file_path = os.path.join(data_dir_path, 'config.json')
@@ -31,6 +30,10 @@ ENTER_BUTTON_PIN = 22
 SHUTDOWN_BUTTON_PIN = 21
 
 GPIO.setmode(GPIO.BCM)
+
+SPI_MOSI_MAGIC = 0xde
+SPI_MOSI_MSG_TYPE_SET_PROTOCOL = 2
+set_protocl_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_SET_PROTOCOL] + [0]*29
 
 class my_button(object):
     def __init__(self, bcm_pin):
@@ -499,7 +502,7 @@ class usb4vc_menu(object):
             else:
                 protocol_bytes.append(key)
 
-        this_msg = list(usb4vc_shared.set_protocl_spi_msg_template)
+        this_msg = list(set_protocl_spi_msg_template)
         this_msg[3:3+len(protocol_bytes)] = protocol_bytes
 
         self.current_keyboard_protocol = self.kb_protocol_list[self.current_keyboard_protocol_index]
@@ -609,9 +612,9 @@ def ui_init():
     if this_pboard_id in pboard_database:
         # load custom profile mapping into protocol list
         for item in custom_profile_list:
-            this_mapping_bid = code_mapping.board_id_lookup.get(item['protocol_board'], 0)
+            this_mapping_bid = usb4vc_shared.board_id_lookup.get(item['protocol_board'], 0)
             if this_mapping_bid == this_pboard_id and item['device_type'] in pboard_database[this_pboard_id]:
-                this_mapping_pid = code_mapping.protocol_id_lookup.get(item['protocol_name'])
+                this_mapping_pid = usb4vc_shared.protocol_id_lookup.get(item['protocol_name'])
                 this_profile = {'pid':this_mapping_pid, 'display_name':item['display_name'], 'mapping':item['mapping']}
                 pboard_database[this_pboard_id][item['device_type']].append(this_profile)
         pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]

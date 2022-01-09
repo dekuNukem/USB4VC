@@ -7,7 +7,6 @@ import threading
 import RPi.GPIO as GPIO
 import usb4vc_ui
 import usb4vc_shared
-import code_mapping
 
 
 """
@@ -198,14 +197,14 @@ MOUSE_SPI_LOOKUP = {
 }
 
 def find_keycode_in_mapping(source_code, mapping_dict):
-    source_name = code_mapping.code_value_to_name_lookup.get(source_code)
+    source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
     target_info = mapping_dict.get(source_name)
     if target_info is None or 'code' not in target_info:
         return None, None
     target_info = dict(target_info) # make a copy so the lookup table itself won't get modified
-    lookup_result = code_mapping.code_name_to_value_lookup.get(target_info['code'])
+    lookup_result = usb4vc_shared.code_name_to_value_lookup.get(target_info['code'])
     if lookup_result is None:
         return None, None
     source_type = None
@@ -217,7 +216,7 @@ def find_keycode_in_mapping(source_code, mapping_dict):
         return None, None
     target_info['code'] = lookup_result[0]
     if 'code_neg' in target_info:
-        target_info['code_neg'] = code_mapping.code_name_to_value_lookup.get(target_info['code_neg'])[0]
+        target_info['code_neg'] = usb4vc_shared.code_name_to_value_lookup.get(target_info['code_neg'])[0]
     target_info['type'] = lookup_result[1]
     # print(source_name, source_type, target_info)
     return source_type, target_info
