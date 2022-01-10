@@ -15,7 +15,6 @@ Serial setup:
 serial clock is tied to GPU clock, need to fix it for it to be stable
 
 sudo nano /boot/config.txt, add:
-force_turbo=1
 gpu_freq=250
 gpu_freq_min=250
 
@@ -98,3 +97,28 @@ QUIT: quit program
 
 U4 RF /home/pi/usb4vc_data/config.json
 U4 WF /home/pi/usb4vc_data/test.txt c3NoIHBpQDE5Mi4xNjguMS41Ng==
+
+------------
+boot speedup:
+
+sudo nano /boot/config.txt
+disable_splash=1
+boot_delay=0
+
+sudo nano /boot/cmdline.txt
+
+Add quiet after rootwait
+
+raspberry pi 3
+before speedup:
+
+19.16
+18.07
+19.11
+18.37
+
+
+after speedup:
+
+16.95
+16.45
