@@ -338,8 +338,8 @@ class usb4vc_menu(object):
         super(usb4vc_menu, self).__init__()
         self.current_level = 0
         self.current_page = 0
-        self.level_size = 5
-        self.page_size = [4, 5, 4, 1, 1]
+        self.level_size = 6
+        self.page_size = [4, 5, 4, 1, 1, 4]
         self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
         self.mouse_protocol_list = list(pboard['protocol_list_mouse'])
         self.gamepad_protocol_list = list(pboard['protocol_list_gamepad'])
@@ -471,6 +471,19 @@ class usb4vc_menu(object):
                     oled_print_centered(f"Remove this?", font_regular, 0, draw)
                     oled_print_centered(f"{self.paired_devices_list[page][1]}", font_regular, 10, draw)
                     oled_print_centered(f"{self.paired_devices_list[page][0]}", font_regular, 20, draw)
+        if level == 5:
+            if page == 0:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Power Down", font_medium, 10, draw)
+            if page == 1:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Relaunch", font_medium, 10, draw)
+            if page == 2:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Reboot", font_medium, 10, draw)
+            if page == 3:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Cancel", font_medium, 10, draw)
 
     def send_protocol_set_spi_msg(self):
         status_dict = {}
@@ -579,6 +592,24 @@ class usb4vc_menu(object):
                 os.system(f'timeout 5 bluetoothctl --agent NoInputNoOutput untrust {self.paired_devices_list[page][0]}')
                 os.system(f'timeout 5 bluetoothctl --agent NoInputNoOutput remove {self.paired_devices_list[page][0]}')
                 self.goto_level(0)
+        if level == 5:
+            if page == 0:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Shutting down...", font_medium, 10, draw)
+                os.system("sudo halt")
+                while 1:
+                    time.sleep(1)
+            if page == 1:
+                oled_device.clear()
+                os._exit(0)
+            if page == 2:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Rebooting...", font_medium, 10, draw)
+                os.system("sudo reboot")
+                while 1:
+                    time.sleep(1)
+            if page == 3:
+                self.goto_level(0)
         self.display_curent_page()
 
     def action_current_page(self):
@@ -670,7 +701,6 @@ def ui_worker():
 
         if plus_button.is_pressed():
             my_oled.kick()
-            # print(time.time(), "PLUS_BUTTON pressed!")
             if my_oled.is_sleeping:
                 my_oled.wakeup()
             elif my_menu.current_level != 2:
@@ -679,7 +709,6 @@ def ui_worker():
 
         if minus_button.is_pressed():
             my_oled.kick()
-            # print(time.time(), "MINUS_BUTTON pressed!")
             if my_oled.is_sleeping:
                 my_oled.wakeup()
             elif my_menu.current_level != 2:
@@ -688,7 +717,6 @@ def ui_worker():
 
         if enter_button.is_pressed():
             my_oled.kick()
-            # print(time.time(), "ENTER_BUTTON pressed!")
             if my_oled.is_sleeping:
                 my_oled.wakeup()
             else:
@@ -696,10 +724,10 @@ def ui_worker():
 
         if shutdown_button.is_pressed():
             my_oled.kick()
-            # print(time.time(), "SHUTDOWN_BUTTON pressed!")
             if my_oled.is_sleeping:
                 my_oled.wakeup()
-
+            my_menu.goto_level(5)
+            my_menu.display_curent_page()
         my_oled.check_sleep()
 
 def get_gamepad_protocol():

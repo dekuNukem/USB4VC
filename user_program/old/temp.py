@@ -1,3 +1,8 @@
+# print(time.time(), "PLUS_BUTTON pressed!")
+# print(time.time(), "MINUS_BUTTON pressed!")
+# print(time.time(), "ENTER_BUTTON pressed!")
+# print(time.time(), "SHUTDOWN_BUTTON pressed!")
+
             if 'number in 0-999999' in line:
                 # with canvas(oled_device) as draw:
                 #     oled_print_centered("Enter PIN code:", font_medium, 0, draw)
