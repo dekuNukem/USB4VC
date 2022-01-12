@@ -1,3 +1,83 @@
+def apply_curve(x_0_255, y_0_255):
+    x_neg127_127 = x_0_255 - 127
+    y_neg127_127 = y_0_255 - 127
+    total = math.sqrt(abs(x_neg127_127) ** 2 + abs(y_neg127_127) ** 2) / 127
+    if total > 1:
+        total = 1
+    max_axis = max(abs(x_neg127_127), abs(y_neg127_127))
+    try:
+        deficit = (127 * total) / max_axis
+        # print(x_neg127_127, y_neg127_127, total, deficit)
+        xxxxx = int(x_neg127_127*deficit)
+        yyyyy = int(y_neg127_127*deficit)
+        xxxxx = usb4vc_ui.get_joystick_curve().get(abs(xxxxx), abs(xxxxx))
+        if x_neg127_127 < 0:
+            xxxxx *= -1
+        yyyyy = usb4vc_ui.get_joystick_curve().get(abs(yyyyy), abs(yyyyy))
+        if y_neg127_127 < 0:
+            yyyyy *= -1
+        return xxxxx + 127, yyyyy + 127
+    except:
+        pass
+    return x_0_255, y_0_255
+
+def apply_curve(x_0_255, y_0_255):
+    x_neg127_127 = x_0_255 - 127
+    y_neg127_127 = y_0_255 - 127
+    try:
+        curve_influence = my_fade(abs(x_neg127_127) / abs(y_neg127_127))
+        lookup_x = usb4vc_ui.get_joystick_curve().get(abs(x_neg127_127), abs(x_neg127_127))
+        if x_neg127_127 < 0:
+            lookup_x *= -1
+        lookup_y = usb4vc_ui.get_joystick_curve().get(abs(y_neg127_127), abs(y_neg127_127))
+        if y_neg127_127 < 0:
+            lookup_y *= -1
+        weighted_x = int(curve_influence * lookup_x + (1 - curve_influence) * x_neg127_127)
+        weighted_y = int(curve_influence * lookup_y + (1 - curve_influence) * y_neg127_127)
+        print(x_neg127_127, y_neg127_127, lookup_x, lookup_y, weighted_x, weighted_y)
+        return weighted_x + 127, weighted_y + 127
+    except:
+        pass
+    return x_0_255, y_0_255
+    
+def apply_curve(x_0_255, y_0_255):
+    x_neg127_127 = x_0_255 - 127
+    y_neg127_127 = y_0_255 - 127
+    total = math.sqrt(abs(x_neg127_127) ** 2 + abs(y_neg127_127) ** 2) / 127
+    if total > 1:
+        total = 1
+    max_axis = max(abs(x_neg127_127), abs(y_neg127_127))
+    try:
+        curve_influence = my_fade(abs(x_neg127_127) / abs(y_neg127_127))
+        deficit = (127 * total) / max_axis
+        xxxxx = int(x_neg127_127*deficit)
+        yyyyy = int(y_neg127_127*deficit)
+        xxxxx = usb4vc_ui.get_joystick_curve().get(abs(xxxxx), abs(xxxxx))
+        if x_neg127_127 < 0:
+            xxxxx *= -1
+        yyyyy = usb4vc_ui.get_joystick_curve().get(abs(yyyyy), abs(yyyyy))
+        if y_neg127_127 < 0:
+            yyyyy *= -1
+
+        weighted_x = int(curve_influence * xxxxx + (1 - curve_influence) * x_neg127_127)
+        weighted_y = int(curve_influence * yyyyy + (1 - curve_influence) * y_neg127_127)
+        return weighted_x + 127, weighted_y + 127
+    except:
+        pass
+    return x_0_255, y_0_255
+    
+def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
+    rmax, rmid = get_range_max_and_midpoint(axes_dict, axis_key)
+    if rmax is None:
+        return 127
+    value -= rmid
+    # print(usb4vc_ui.get_joystick_curve())
+    clean_result_neg127_to_127 = int((value / rmax) * 255)
+    curve_applied = usb4vc_ui.get_joystick_curve().get(abs(clean_result_neg127_to_127), clean_result_neg127_to_127)
+    if clean_result_neg127_to_127 < 0:
+        curve_applied *= -1
+    return curve_applied + 127
+
 # print(time.time(), "PLUS_BUTTON pressed!")
 # print(time.time(), "MINUS_BUTTON pressed!")
 # print(time.time(), "ENTER_BUTTON pressed!")

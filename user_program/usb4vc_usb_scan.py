@@ -148,12 +148,7 @@ def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
     if rmax is None:
         return 127
     value -= rmid
-    # print(usb4vc_ui.get_joystick_curve())
-    clean_result_neg127_to_127 = int((value / rmax) * 255)
-    curve_applied = usb4vc_ui.get_joystick_curve().get(abs(clean_result_neg127_to_127), clean_result_neg127_to_127)
-    if clean_result_neg127_to_127 < 0:
-        curve_applied *= -1
-    return curve_applied + 127
+    return int((value / rmax) * 255) + 127
 
 IBMPC_GGP_SPI_LOOKUP = {
     'IBM_GGP_BTN_1':4,
@@ -213,6 +208,32 @@ def find_furthest_from_midpoint(this_set):
             diff_max = this_diff
             curr_best = item
     return curr_best
+
+import math
+
+def my_fade(value):
+    if 0 < value < 1:
+        return -1 * value + 1
+    if 1 <= value < 2:
+        return value - 1
+    return 1
+
+def apply_curve(x_0_255, y_0_255):
+    x_neg127_127 = x_0_255 - 127
+    y_neg127_127 = y_0_255 - 127
+    try:
+        real_amount = int(math.sqrt(abs(x_neg127_127) ** 2 + abs(y_neg127_127) ** 2))
+        if real_amount > 127:
+            real_amount = 127
+        lookup_result = usb4vc_ui.get_joystick_curve().get(real_amount, real_amount)
+        ratio = real_amount / lookup_result
+        xxxxx = int(x_neg127_127 / ratio)
+        yyyyy = int(y_neg127_127 / ratio)
+        return xxxxx + 127, yyyyy + 127
+    except Exception as e:
+        # print('apply_curve:', e)
+        pass
+    return x_0_255, y_0_255
 
 prev_gp_output = {}
 prev_kb_output = {}
@@ -322,7 +343,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             if 1 in curr_gp_output[key]:
                 this_value = 1
             gp_spi_msg[IBMPC_GGP_SPI_LOOKUP[key]] = this_value
-        if 'IBM_GGP_JS1' in key:
+        if 'IBM_GGP_JS' in key:
             if key in prev_gp_output:
                 new_value_set = curr_gp_output[key] - prev_gp_output[key]
                 if len(new_value_set) > 0:
@@ -360,7 +381,8 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
 
     prev_gp_output = curr_gp_output
     prev_kb_output = curr_kb_output
-    print(gp_spi_msg)
+    gp_spi_msg[8], gp_spi_msg[9] = apply_curve(gp_spi_msg[8], gp_spi_msg[9])
+    gp_spi_msg[10], gp_spi_msg[11] = apply_curve(gp_spi_msg[10], gp_spi_msg[11])
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
