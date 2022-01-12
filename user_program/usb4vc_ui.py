@@ -329,6 +329,15 @@ def save_config():
     except Exception as e:
         print("config save failed!", e)
 
+curve_vertial_axis_x_pos = 80
+curve_horizontal_axis_width = 32
+
+curve_linear = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15, 16: 16, 17: 17, 18: 18, 19: 19, 20: 20, 21: 21, 22: 22, 23: 23, 24: 24, 25: 25, 26: 26, 27: 27, 28: 28, 29: 29, 30: 30, 31: 31, 32: 32, 33: 33, 34: 34, 35: 35, 36: 36, 37: 37, 38: 38, 39: 39, 40: 40, 41: 41, 42: 42, 43: 43, 44: 44, 45: 45, 46: 46, 47: 47, 48: 48, 49: 49, 50: 50, 51: 51, 52: 52, 53: 53, 54: 54, 55: 55, 56: 56, 57: 57, 58: 58, 59: 59, 60: 60, 61: 61, 62: 62, 63: 63, 64: 64, 65: 65, 66: 66, 67: 67, 68: 68, 69: 69, 70: 70, 71: 71, 72: 72, 73: 73, 74: 74, 75: 75, 76: 76, 77: 77, 78: 78, 79: 79, 80: 80, 81: 81, 82: 82, 83: 83, 84: 84, 85: 85, 86: 86, 87: 87, 88: 88, 89: 89, 90: 90, 91: 91, 92: 92, 93: 93, 94: 94, 95: 95, 96: 96, 97: 97, 98: 98, 99: 99, 100: 100, 101: 101, 102: 102, 103: 103, 104: 104, 105: 105, 106: 106, 107: 107, 108: 108, 109: 109, 110: 110, 111: 111, 112: 112, 113: 113, 114: 114, 115: 115, 116: 116, 117: 117, 118: 118, 119: 119, 120: 120, 121: 121, 122: 122, 123: 123, 124: 124, 125: 125, 126: 126, 127: 127}
+curve1 = {0: 1, 1: 1, 2: 2, 3: 2, 4: 3, 5: 4, 6: 4, 7: 5, 8: 5, 9: 6, 10: 6, 11: 7, 12: 7, 13: 8, 14: 8, 15: 9, 16: 9, 17: 10, 18: 11, 19: 11, 20: 12, 21: 12, 22: 13, 23: 13, 24: 14, 25: 15, 26: 15, 27: 16, 28: 16, 29: 17, 30: 18, 31: 18, 32: 19, 33: 19, 34: 20, 35: 21, 36: 21, 37: 22, 38: 22, 39: 23, 40: 24, 41: 24, 42: 25, 43: 26, 44: 26, 45: 27, 46: 28, 47: 28, 48: 29, 49: 30, 50: 30, 51: 31, 52: 32, 53: 33, 54: 33, 55: 34, 56: 35, 57: 36, 58: 36, 59: 37, 60: 38, 61: 39, 62: 39, 63: 40, 64: 41, 65: 42, 66: 43, 67: 44, 68: 45, 69: 46, 70: 46, 71: 47, 72: 48, 73: 49, 74: 50, 75: 51, 76: 52, 77: 53, 78: 55, 79: 56, 80: 57, 81: 58, 82: 59, 83: 60, 84: 61, 85: 62, 86: 63, 87: 65, 88: 66, 89: 67, 90: 68, 91: 70, 92: 71, 93: 72, 94: 73, 95: 75, 96: 76, 97: 77, 98: 79, 99: 80, 100: 81, 101: 83, 102: 84, 103: 86, 104: 87, 105: 89, 106: 90, 107: 92, 108: 93, 109: 95, 110: 96, 111: 98, 112: 100, 113: 101, 114: 103, 115: 105, 116: 106, 117: 108, 118: 110, 119: 112, 120: 113, 121: 115, 122: 117, 123: 119, 124: 121, 125: 123, 126: 125, 127: 127}
+curve2 = {0: 1, 1: 1, 2: 1, 3: 1, 4: 2, 5: 2, 6: 2, 7: 2, 8: 2, 9: 3, 10: 3, 11: 3, 12: 3, 13: 4, 14: 4, 15: 4, 16: 4, 17: 5, 18: 5, 19: 5, 20: 5, 21: 6, 22: 6, 23: 6, 24: 7, 25: 7, 26: 7, 27: 8, 28: 8, 29: 8, 30: 8, 31: 9, 32: 9, 33: 9, 34: 10, 35: 10, 36: 10, 37: 11, 38: 11, 39: 12, 40: 12, 41: 12, 42: 13, 43: 13, 44: 13, 45: 14, 46: 14, 47: 15, 48: 15, 49: 15, 50: 16, 51: 16, 52: 17, 53: 17, 54: 18, 55: 18, 56: 19, 57: 19, 58: 20, 59: 20, 60: 21, 61: 21, 62: 22, 63: 22, 64: 23, 65: 23, 66: 24, 67: 24, 68: 25, 69: 26, 70: 26, 71: 27, 72: 28, 73: 28, 74: 29, 75: 30, 76: 30, 77: 31, 78: 32, 79: 33, 80: 34, 81: 35, 82: 36, 83: 37, 84: 38, 85: 39, 86: 40, 87: 41, 88: 42, 89: 43, 90: 44, 91: 45, 92: 47, 93: 48, 94: 49, 95: 51, 96: 52, 97: 53, 98: 55, 99: 56, 100: 58, 101: 59, 102: 61, 103: 63, 104: 64, 105: 66, 106: 68, 107: 70, 108: 71, 109: 73, 110: 75, 111: 78, 112: 80, 113: 82, 114: 84, 115: 86, 116: 89, 117: 92, 118: 94, 119: 96, 120: 100, 121: 102, 122: 106, 123: 110, 124: 112, 125: 116, 126: 120, 127: 125}
+curve3 = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1, 16: 1, 17: 1, 18: 1, 19: 1, 20: 1, 21: 2, 22: 2, 23: 2, 24: 2, 25: 2, 26: 2, 27: 2, 28: 2, 29: 2, 30: 2, 31: 3, 32: 3, 33: 3, 34: 3, 35: 3, 36: 3, 37: 3, 38: 4, 39: 4, 40: 4, 41: 4, 42: 4, 43: 4, 44: 5, 45: 5, 46: 5, 47: 5, 48: 5, 49: 6, 50: 6, 51: 6, 52: 6, 53: 7, 54: 7, 55: 7, 56: 7, 57: 8, 58: 8, 59: 8, 60: 8, 61: 9, 62: 9, 63: 9, 64: 10, 65: 10, 66: 10, 67: 11, 68: 11, 69: 11, 70: 12, 71: 12, 72: 12, 73: 13, 74: 13, 75: 14, 76: 14, 77: 15, 78: 15, 79: 16, 80: 16, 81: 17, 82: 17, 83: 18, 84: 19, 85: 19, 86: 20, 87: 21, 88: 21, 89: 22, 90: 23, 91: 24, 92: 25, 93: 26, 94: 27, 95: 28, 96: 29, 97: 30, 98: 32, 99: 33, 100: 34, 101: 35, 102: 37, 103: 38, 104: 40, 105: 41, 106: 43, 107: 45, 108: 46, 109: 48, 110: 50, 111: 52, 112: 54, 113: 56, 114: 59, 115: 61, 116: 64, 117: 66, 118: 69, 119: 72, 120: 76, 121: 79, 122: 83, 123: 87, 124: 92, 125: 99, 126: 104, 127: 118}
+joystick_curve_list = [curve_linear, curve1, curve2, curve3]
+
 class usb4vc_menu(object):
     def cap_index(self, index, list_size):
         if index >= list_size:
@@ -339,18 +348,19 @@ class usb4vc_menu(object):
         self.current_level = 0
         self.current_page = 0
         self.level_size = 6
-        self.page_size = [4, 5, 4, 1, 1, 4]
+        self.page_size = [4, 6, 4, 1, 1, 4]
         self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
         self.mouse_protocol_list = list(pboard['protocol_list_mouse'])
         self.gamepad_protocol_list = list(pboard['protocol_list_gamepad'])
         self.pb_info = dict(pboard)
-        self.current_keyboard_protocol_index = self.cap_index(conf_dict['keyboard_protocol_index'], len(self.kb_protocol_list))
-        self.current_mouse_protocol_index = self.cap_index(conf_dict["mouse_protocol_index"], len(self.mouse_protocol_list))
-        self.current_mouse_sensitivity_offset_index = self.cap_index(conf_dict["mouse_sensitivity_index"], len(mouse_sensitivity_list))
-        self.current_gamepad_protocol_index = self.cap_index(conf_dict["gamepad_protocol_index"], len(self.gamepad_protocol_list))
+        self.current_keyboard_protocol_index =  self.cap_index(conf_dict.get('keyboard_protocol_index', 0), len(self.kb_protocol_list))
+        self.current_mouse_protocol_index =  self.cap_index(conf_dict.get("mouse_protocol_index", 0), len(self.mouse_protocol_list))
+        self.current_mouse_sensitivity_offset_index =  self.cap_index(conf_dict.get("mouse_sensitivity_index", 0), len(mouse_sensitivity_list))
+        self.current_gamepad_protocol_index =  self.cap_index(conf_dict.get("gamepad_protocol_index", 0), len(self.gamepad_protocol_list))
         self.current_keyboard_protocol = self.kb_protocol_list[self.current_keyboard_protocol_index]
         self.current_mouse_protocol = self.mouse_protocol_list[self.current_mouse_protocol_index]
         self.current_gamepad_protocol = self.gamepad_protocol_list[self.current_gamepad_protocol_index]
+        self.current_joystick_curve_index =  self.cap_index(conf_dict.get("joystick_curve_index", 0), len(joystick_curve_list))
         self.last_spi_message = []
         self.bluetooth_device_list = None
         self.error_message = ''
@@ -370,6 +380,19 @@ class usb4vc_menu(object):
         if new_level < self.level_size:
             self.current_level = new_level
             self.current_page = 0
+
+    def draw_joystick_curve(self):
+        this_curve = joystick_curve_list[self.current_joystick_curve_index % len(joystick_curve_list)]
+        with canvas(oled_device) as draw:
+            draw.text((0, 0), "Joystick", font=font_medium, fill="white")
+            draw.text((0, 15), "Curve", font=font_medium, fill="white")
+            draw.line((curve_vertial_axis_x_pos, 0, curve_vertial_axis_x_pos, curve_vertial_axis_x_pos), fill="white")
+            draw.line((curve_vertial_axis_x_pos, 31, curve_vertial_axis_x_pos+curve_horizontal_axis_width, 31), fill="white")
+            for xxx in range(curve_horizontal_axis_width):
+                dict_key = xxx*4
+                this_point_x = xxx + curve_vertial_axis_x_pos
+                this_point_y = OLED_HEIGHT - this_curve[dict_key]//4 - 1
+                draw.line((this_point_x,this_point_y,this_point_x,this_point_y), fill="white")
 
     def display_page(self, level, page):
         if level == 0:
@@ -415,6 +438,8 @@ class usb4vc_menu(object):
                     oled_print_centered("Mouse Sensitivity", font_medium, 0, draw)
                     oled_print_centered(f"{mouse_sensitivity_list[self.current_mouse_sensitivity_offset_index]}", font_medium, 15, draw)
             if page == 4:
+                self.draw_joystick_curve()
+            if page == 5:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Save & Quit", font_medium, 10, draw)
         if level == 2:
@@ -554,10 +579,14 @@ class usb4vc_menu(object):
             if page == 3:
                 self.current_mouse_sensitivity_offset_index = (self.current_mouse_sensitivity_offset_index + 1) % len(mouse_sensitivity_list)
             if page == 4:
+                self.current_joystick_curve_index = (self.current_joystick_curve_index + 1) % len(joystick_curve_list)
+                self.draw_joystick_curve()
+            if page == 5:
                 configuration_dict[this_pboard_id]["keyboard_protocol_index"] = self.current_keyboard_protocol_index
                 configuration_dict[this_pboard_id]["mouse_protocol_index"] = self.current_mouse_protocol_index
                 configuration_dict[this_pboard_id]["mouse_sensitivity_index"] = self.current_mouse_sensitivity_offset_index
                 configuration_dict[this_pboard_id]["gamepad_protocol_index"] = self.current_gamepad_protocol_index
+                configuration_dict[this_pboard_id]["joystick_curve_index"] = self.current_joystick_curve_index
                 print(configuration_dict)
                 save_config()
                 self.send_protocol_set_spi_msg()
