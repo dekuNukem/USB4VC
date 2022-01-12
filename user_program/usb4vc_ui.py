@@ -670,6 +670,7 @@ def ui_init():
     global this_pboard_id
     load_config()
     pboard_info_spi_msg = usb4vc_usb_scan.get_pboard_info()
+    print("PB INFO:", pboard_info_spi_msg)
     this_pboard_id = pboard_info_spi_msg[3]
     if this_pboard_id in pboard_database:
         # load custom profile mapping into protocol list
@@ -761,5 +762,8 @@ def ui_worker():
 
 def get_gamepad_protocol():
     return my_menu.current_gamepad_protocol
+
+def get_joystick_curve():
+    return joystick_curve_list[my_menu.current_joystick_curve_index]
 
 ui_thread = threading.Thread(target=ui_worker, daemon=True)

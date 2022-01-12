@@ -148,7 +148,12 @@ def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
     if rmax is None:
         return 127
     value -= rmid
-    return int((value / rmax) * 255) + 127
+    # print(usb4vc_ui.get_joystick_curve())
+    clean_result_neg127_to_127 = int((value / rmax) * 255)
+    curve_applied = usb4vc_ui.get_joystick_curve().get(abs(clean_result_neg127_to_127), clean_result_neg127_to_127)
+    if clean_result_neg127_to_127 < 0:
+        curve_applied *= -1
+    return curve_applied + 127
 
 IBMPC_GGP_SPI_LOOKUP = {
     'IBM_GGP_BTN_1':4,
@@ -355,7 +360,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
 
     prev_gp_output = curr_gp_output
     prev_kb_output = curr_kb_output
-    print(curr_gp_output)
+    print(gp_spi_msg)
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
