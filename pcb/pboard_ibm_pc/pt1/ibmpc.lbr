@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="50" unitdist="mil" unit="mm" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -229,12 +229,12 @@ by exp-lbrs.ulp</description>
 <wire x1="-7.5" y1="-8.3" x2="7.5" y2="-8.3" width="0.127" layer="21"/>
 <wire x1="7.5" y1="-8.3" x2="7.5" y2="-2.45" width="0.127" layer="21"/>
 <wire x1="-7.5" y1="-8.3" x2="-7.5" y2="-2.45" width="0.127" layer="21"/>
-<pad name="1_DATA" x="-1.3" y="-3.8" drill="0.9"/>
-<pad name="2_NC" x="1.3" y="-3.8" drill="0.9"/>
-<pad name="3_GND" x="-3.4" y="-3.8" drill="0.9"/>
-<pad name="4_5V" x="3.4" y="-3.8" drill="0.9"/>
-<pad name="5_CLK" x="-3.4" y="-6.3" drill="0.9"/>
-<pad name="6_NC" x="3.4" y="-6.3" drill="0.9"/>
+<pad name="1_DATA" x="-1.3" y="-3.8" drill="0.9" diameter="1.5"/>
+<pad name="2_NC" x="1.3" y="-3.8" drill="0.9" diameter="1.5"/>
+<pad name="3_GND" x="-3.4" y="-3.8" drill="0.9" diameter="1.5"/>
+<pad name="4_5V" x="3.4" y="-3.8" drill="0.9" diameter="1.5"/>
+<pad name="5_CLK" x="-3.4" y="-6.3" drill="0.9" diameter="1.5"/>
+<pad name="6_NC" x="3.4" y="-6.3" drill="0.9" diameter="1.5"/>
 <pad name="SHIELD1" x="-6.75" y="-0.8" drill="2.2"/>
 <pad name="SHIELD2" x="0" y="0" drill="2.2"/>
 <pad name="SHIELD3" x="6.75" y="-0.8" drill="2.2"/>

@@ -1,2 +1,5 @@
 added sleeping LED
 adjusted silkscreen
+adjusted OLED box position
+adjusted OLED connector position, closer to edge
+adjusted 5V header marking so it won't get covered up by connector

@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="50" unitdist="mil" unit="mm" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -407,10 +407,10 @@ by exp-lbrs.ulp</description>
 <wire x1="-7.5" y1="-8.3" x2="7.5" y2="-8.3" width="0.127" layer="21"/>
 <wire x1="7.5" y1="-8.3" x2="7.5" y2="-2.45" width="0.127" layer="21"/>
 <wire x1="-7.5" y1="-8.3" x2="-7.5" y2="-2.45" width="0.127" layer="21"/>
-<pad name="ADB" x="-3.4" y="-3.8" drill="0.9"/>
-<pad name="PSW" x="3.4" y="-3.8" drill="0.9"/>
-<pad name="5V" x="-3.4" y="-6.3" drill="0.9"/>
-<pad name="GND" x="3.4" y="-6.3" drill="0.9"/>
+<pad name="ADB" x="-3.4" y="-3.8" drill="0.9" diameter="1.5"/>
+<pad name="PSW" x="3.4" y="-3.8" drill="0.9" diameter="1.5"/>
+<pad name="5V" x="-3.4" y="-6.3" drill="0.9" diameter="1.5"/>
+<pad name="GND" x="3.4" y="-6.3" drill="0.9" diameter="1.5"/>
 <pad name="SHIELD1" x="-6.75" y="-0.8" drill="2.2"/>
 <pad name="SHIELD2" x="0" y="0" drill="2.2"/>
 <pad name="SHIELD3" x="6.75" y="-0.8" drill="2.2"/>

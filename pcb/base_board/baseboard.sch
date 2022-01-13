@@ -4494,13 +4494,10 @@ by exp-lbrs.ulp</description>
 <text x="-5.647" y="-4.969" size="0.8128" layer="52" font="vector" rot="R90">15</text>
 <smd name="17" x="-5.7" y="-2.24" dx="2.5" dy="3" layer="1" rot="R90"/>
 <smd name="16" x="5.75" y="-2.24" dx="2.5" dy="3" layer="1" rot="R90"/>
-<wire x1="-5" y1="-2" x2="5" y2="-2" width="0.1524" layer="51"/>
-<wire x1="5" y1="-2" x2="5" y2="-14" width="0.1524" layer="51"/>
-<wire x1="5" y1="-14" x2="5" y2="-44" width="0.1524" layer="25"/>
-<wire x1="5" y1="-44" x2="-5" y2="-44" width="0.1524" layer="25"/>
-<wire x1="-5" y1="-44" x2="-5" y2="-14" width="0.1524" layer="25"/>
-<wire x1="-5" y1="-14" x2="-5" y2="-2" width="0.1524" layer="51"/>
-<wire x1="-5" y1="-14" x2="5" y2="-14" width="0.1524" layer="25"/>
+<wire x1="4" y1="-14" x2="4" y2="-44" width="0.1524" layer="25"/>
+<wire x1="4" y1="-44" x2="-6" y2="-44" width="0.1524" layer="25"/>
+<wire x1="-6" y1="-44" x2="-6" y2="-14" width="0.1524" layer="25"/>
+<wire x1="-6" y1="-14" x2="4" y2="-14" width="0.1524" layer="25"/>
 </package>
 </packages>
 <symbols>
