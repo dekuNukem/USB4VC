@@ -108,7 +108,9 @@ IBM_GGP_DEAULT_MAPPING = {
    'ABS_RX': {'code':'IBM_GGP_JS2_X'},
    'ABS_RY': {'code':'IBM_GGP_JS2_Y'},
    'ABS_Z': {'code':'IBM_GGP_JS2_X'},
-   'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
+   # 'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
+   'ABS_GAS':{'code':'IBM_GGP_JS2_YN'},
+   'ABS_BRAKE':{'code':'IBM_GGP_JS2_YP'},
 }
 
 PROTOCOL_OFF = {'pid':0, 'display_name':"OFF"}

@@ -188,7 +188,7 @@ def find_keycode_in_mapping(source_code, mapping_dict):
         return None, None
     source_type = None
     if ABS_X <= source_code <= ABS_HAT3Y:
-        source_type = 'usb_gp_axes'
+        source_type = 'usb_abs_axis'
     elif BTN_SOUTH <= source_code <= BTN_THUMBR or source_code in gamepad_buttons_as_kb_codes:
         source_type = 'usb_gp_btn'
     if source_type is None:
@@ -272,13 +272,23 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             continue
         target_code = target_info['code']
         target_type = target_info['type']
-        
+
         # usb gamepad button to generic gamepad button
         if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_btn' and target_code in curr_gp_output:
             curr_gp_output[target_code].add(this_gp_dict[source_code])
         # usb gamepad analog axes to generic gamepad analog axes
-        if source_type == 'usb_gp_axes' and target_type == 'ibm_ggp_axis' and target_code in curr_gp_output:
+        if source_type == 'usb_abs_axis' and target_type == 'ibm_ggp_axis' and target_code in curr_gp_output:
             curr_gp_output[target_code].add(convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code))
+        # usb gamepad analog axes to generic gamepad analog half axes
+        # only use to map USB analog trigger to generic gameport gamepad half axes
+        if source_type == 'usb_abs_axis' and target_type == 'ibm_ggp_half_axis' and target_code[:-1] in curr_gp_output:
+            source_value = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code)//2
+            axis_value = 127
+            if target_code.endswith('P'):
+                axis_value += abs(source_value)
+            elif target_code.endswith('N'):
+                axis_value -= abs(source_value)
+            curr_gp_output[target_code[:-1]].add(axis_value)
         # usb gamepad button to generic gamepad analog axes
         if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_half_axis' and target_code[:-1] in curr_gp_output and this_gp_dict[source_code]:
             if target_code.endswith('P'):
@@ -292,7 +302,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                 curr_kb_output[target_code] = set()
             curr_kb_output[target_code].add(this_gp_dict[source_code])
         # usb gamepad analog axes to keyboard key
-        if source_type == 'usb_gp_axes' and target_type == 'kb_key':
+        if source_type == 'usb_abs_axis' and target_type == 'kb_key':
             if target_code not in curr_kb_output:
                 curr_kb_output[target_code] = set()
             is_activated = 0
@@ -312,7 +322,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             curr_mouse_output[target_code].add(this_gp_dict[source_code])
             curr_mouse_output['is_modified'] = True
         # usb gamepad analog axes to mouse axes
-        if source_type == 'usb_gp_axes' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output:
+        if source_type == 'usb_abs_axis' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output:
             movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
             deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
             if abs(movement) <= deadzone_amount:
