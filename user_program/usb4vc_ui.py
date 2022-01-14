@@ -127,7 +127,7 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
-custom_profile_list = []
+custom_profile_set = set()
 
 mypath = '/home/pi/usb4vc_data'
 mypath = './'
@@ -137,7 +137,7 @@ try:
     json_map_files = [os.path.join(mypath, x) for x in onlyfiles if x.lower().startswith('usb4vc_map') and x.lower().endswith(".json")]
     for item in json_map_files:
         with open(item) as json_file:
-            custom_profile_list.append(json.load(json_file))
+            custom_profile_set.add(json.load(json_file))
 except Exception as e:
     print('load json maps:', e)
 
@@ -656,7 +656,7 @@ def ui_init():
     this_pboard_id = pboard_info_spi_msg[3]
     if this_pboard_id in pboard_database:
         # load custom profile mapping into protocol list
-        for item in custom_profile_list:
+        for item in custom_profile_set:
             this_mapping_bid = usb4vc_shared.board_id_lookup.get(item['protocol_board'], 0)
             if this_mapping_bid == this_pboard_id and item['device_type'] in pboard_database[this_pboard_id]:
                 this_mapping_pid = usb4vc_shared.protocol_id_lookup.get(item['protocol_name'])

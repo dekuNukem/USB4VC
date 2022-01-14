@@ -132,3 +132,19 @@ sudo apt install usbmount
 sudo nano /lib/systemd/system/systemd-udevd.service
 
 change to PrivateMounts=no
+
+-----------
+
+usb folder format:
+
+usb root:
+
+usb4vc_data
+	rpi_app
+		source code of raspberry pi application
+	firmware
+		dfu file for protocol boards
+		naming format: PBFW_IBMPC_PBID1_V0_1_0.dfu
+	config
+		config and mapping files
+		
