@@ -127,39 +127,19 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
-custom_profile_1 = {
-    'display_name':'my_map',
-    'device_type':'protocol_list_gamepad',
-    'protocol_board':'IBMPC',
-    'protocol_name':'GAMEPORT_GENERIC_GAMEPAD',
-    'mapping':
-    {
-        # usb gamepad button to generic gamepad button
-        'BTN_NORTH': {'code':'IBM_GGP_BTN_1'},
-        'BTN_WEST': {'code':'IBM_GGP_BTN_2'},
-        # usb analog axes to generic gamepad analog axes
-        'ABS_X': {'code':'IBM_GGP_JS1_X'},
-        'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
-        # usb gamepad button to generic gamepad analog axes
-        'BTN_TL': {'code':'IBM_GGP_JS1_XN'},
-        'BTN_TR': {'code':'IBM_GGP_JS1_XP'},
-        # usb gamepad button to keyboard key
-        'BTN_START': {'code':'KEY_A'},
-        'BTN_SELECT': {'code':'KEY_B'},
-        'KEY_HOMEPAGE': {'code':'KEY_C'},
-        'KEY_BACK': {'code':'KEY_D'},
-        # usb gamepad analog axes to keyboard key
-        'ABS_HAT0X': {'code':'KEY_1', 'code_neg':'KEY_2', 'deadzone_percent':15},
-        'ABS_HAT0Y': {'code':'KEY_3', 'code_neg':'KEY_4', 'deadzone_percent':15},
-        # usb gamepad button to mouse buttons
-        'BTN_SOUTH': {'code':'BTN_LEFT'},
-        'BTN_EAST': {'code':'BTN_RIGHT'},
-        # usb gamepad analog axes to mouse axes
-        'ABS_Z': {'code':'REL_X', 'deadzone_percent':15},
-        'ABS_RZ': {'code':'REL_Y', 'deadzone_percent':15},
-    }
-}
-custom_profile_list = [custom_profile_1]
+custom_profile_list = []
+
+mypath = '/home/pi/usb4vc_data'
+mypath = './'
+
+try:
+    onlyfiles = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
+    json_map_files = [os.path.join(mypath, x) for x in onlyfiles if x.lower().startswith('usb4vc_map') and x.lower().endswith(".json")]
+    for item in json_map_files:
+        with open(item) as json_file:
+            custom_profile_list.append(json.load(json_file))
+except Exception as e:
+    print('load json maps:', e)
 
 """
 OLED for USB4VC
@@ -326,7 +306,7 @@ def get_ip_name():
 
 def save_config():
     try:
-        with open(config_file_path, 'w', encoding='utf8') as save_file:
+        with open(config_file_path, 'w', encoding='utf-8') as save_file:
            save_file.write(json.dumps(configuration_dict))
     except Exception as e:
         print("config save failed!", e)
