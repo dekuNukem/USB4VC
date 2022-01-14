@@ -638,4 +638,6 @@ def get_pboard_info():
     return response
 
 def set_protocol(raw_msg):
+    time.sleep(0.05)
     pcard_spi.xfer(list(raw_msg))
+    time.sleep(0.05)

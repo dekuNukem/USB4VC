@@ -122,3 +122,13 @@ after speedup:
 
 16.95
 16.45
+
+-------------
+
+usb auto mount:
+
+sudo apt install usbmount
+
+sudo nano /lib/systemd/system/systemd-udevd.service
+
+change to PrivateMounts=no
