@@ -672,20 +672,16 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, DEBUG0_Pin|DEBUG1_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ADB_PSW_GPIO_Port, ADB_PSW_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, SLAVE_REQ_Pin|DEBUG1_Pin|DEBUG0_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ADB_DATA_GPIO_Port, ADB_DATA_Pin, GPIO_PIN_SET);
@@ -697,13 +693,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(USER_LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : DEBUG0_Pin DEBUG1_Pin */
-  GPIO_InitStruct.Pin = DEBUG0_Pin|DEBUG1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-
   /*Configure GPIO pin : ADB_PSW_Pin */
   GPIO_InitStruct.Pin = ADB_PSW_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
@@ -711,12 +700,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ADB_PSW_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SLAVE_REQ_Pin */
-  GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
+  /*Configure GPIO pins : SLAVE_REQ_Pin DEBUG1_Pin DEBUG0_Pin */
+  GPIO_InitStruct.Pin = SLAVE_REQ_Pin|DEBUG1_Pin|DEBUG0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ADB_5V_DET_Pin */
   GPIO_InitStruct.Pin = ADB_5V_DET_Pin;

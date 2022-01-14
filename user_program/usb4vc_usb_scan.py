@@ -463,6 +463,7 @@ def raw_input_event_worker():
             joystick_hold_update()
             next_gamepad_hold_check = now + gamepad_hold_check_interval
 
+        got_data = False
         for key in list(opened_device_dict):
             this_device = opened_device_dict[key]
             this_id = this_device['id']
@@ -476,6 +477,7 @@ def raw_input_event_worker():
             if data is None:
                 continue
 
+            got_data = True
             if this_device['is_gp'] and this_id not in gamepad_status_dict:
                 gamepad_status_dict[this_id] = {}
 
@@ -535,7 +537,7 @@ def raw_input_event_worker():
                         pcard_spi.xfer(mouse_to_transfer)
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
             usb4vc_ui.my_oled.kick()
-# ----------------- PBOARD INTERRUPT -----------------
+        # ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):
             slave_result = None
             for x in range(2):
@@ -547,7 +549,9 @@ def raw_input_event_worker():
                     change_kb_led(slave_result[3], slave_result[4], slave_result[5])
                 except Exception as e:
                     print('change_kb_led exception:', e)
-
+        # --------------
+        if got_data is False:
+            time.sleep(0.005)
 def get_input_devices():
     result = []
     available_devices = [evdev.InputDevice(path) for path in evdev.list_devices()]

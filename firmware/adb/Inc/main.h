@@ -51,10 +51,6 @@
 
 #define USER_LED_Pin GPIO_PIN_8
 #define USER_LED_GPIO_Port GPIOB
-#define DEBUG0_Pin GPIO_PIN_0
-#define DEBUG0_GPIO_Port GPIOF
-#define DEBUG1_Pin GPIO_PIN_1
-#define DEBUG1_GPIO_Port GPIOF
 #define ADB_PSW_Pin GPIO_PIN_0
 #define ADB_PSW_GPIO_Port GPIOA
 #define SLAVE_REQ_Pin GPIO_PIN_1
@@ -63,6 +59,10 @@
 #define ADB_5V_DET_GPIO_Port GPIOA
 #define ADB_DATA_Pin GPIO_PIN_1
 #define ADB_DATA_GPIO_Port GPIOB
+#define DEBUG1_Pin GPIO_PIN_11
+#define DEBUG1_GPIO_Port GPIOA
+#define DEBUG0_Pin GPIO_PIN_12
+#define DEBUG0_GPIO_Port GPIOA
 
 /* ########################## Assert Selection ############################## */
 /**

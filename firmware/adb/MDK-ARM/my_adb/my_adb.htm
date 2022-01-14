@@ -3,7 +3,7 @@
 <title>Static Call Graph - [my_adb\my_adb.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image my_adb\my_adb.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jan 07 19:58:17 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jan 14 01:03:32 2022
 <BR><P>
 <H3>Maximum Stack Usage =        180 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -867,7 +867,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 </UL>
 
-<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 488 bytes, Stack size 16 bytes, main.o(i.main))
+<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 492 bytes, Stack size 16 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 180<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
@@ -960,7 +960,7 @@ Global Symbols
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_init
 </UL>
 
-<P><STRONG><a name="[92]"></a>parse_adb_cmd</STRONG> (Thumb, 262 bytes, Stack size 24 bytes, adb.o(i.parse_adb_cmd))
+<P><STRONG><a name="[92]"></a>parse_adb_cmd</STRONG> (Thumb, 266 bytes, Stack size 24 bytes, adb.o(i.parse_adb_cmd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = parse_adb_cmd &rArr; adb_listen_16b &rArr; adb_read_bit &rArr; wait_until_change
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1032,7 +1032,7 @@ Global Symbols
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[5b]"></a>MX_GPIO_Init</STRONG> (Thumb, 226 bytes, Stack size 48 bytes, main.o(i.MX_GPIO_Init))
+<P><STRONG><a name="[5b]"></a>MX_GPIO_Init</STRONG> (Thumb, 184 bytes, Stack size 48 bytes, main.o(i.MX_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = MX_GPIO_Init &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[48]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
