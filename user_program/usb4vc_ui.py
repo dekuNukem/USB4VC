@@ -14,15 +14,17 @@ import json
 import subprocess
 from subprocess import Popen, PIPE
 
-data_dir_path = os.path.join(os.path.expanduser('~'), 'usb4vc_data')
-config_file_path = os.path.join(data_dir_path, 'config.json')
+config_dir_path = "/home/pi/usb4vc/config"
+firmware_dir_path = "/home/pi/usb4vc/firmware"
+config_file_path = os.path.join(config_dir_path, 'config.json')
 
 def ensure_dir(dir_path):
     print('ensure_dir', dir_path)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
-ensure_dir(data_dir_path)
+ensure_dir(config_dir_path)
+ensure_dir(firmware_dir_path)
 
 PLUS_BUTTON_PIN = 27
 MINUS_BUTTON_PIN = 19
@@ -127,7 +129,7 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
-custom_profile_set = set()
+custom_profile_list = []
 
 mypath = '/home/pi/usb4vc_data'
 mypath = './'
@@ -137,10 +139,45 @@ try:
     json_map_files = [os.path.join(mypath, x) for x in onlyfiles if x.lower().startswith('usb4vc_map') and x.lower().endswith(".json")]
     for item in json_map_files:
         with open(item) as json_file:
-            custom_profile_set.add(json.load(json_file))
+            custom_profile_list.append(json.load(json_file))
 except Exception as e:
     print('load json maps:', e)
 
+def update_from_usb():
+    usb_data_dir_path = ''
+    try:
+        usb_drive_path = subprocess.getoutput(f"timeout 2 df -h | grep -i usb").replace('\r', '').split('\n')[0].split(' ')[-1]
+        usb_data_dir_path = os.path.join(usb_drive_path, 'usb4vc')
+    except Exception as e:
+        print("usb str:", e)
+        return False, 'Path error'
+    if len(usb_data_dir_path) < 5:
+        return False, 'USB Drive Not Found'
+
+    usb_rpi_src_path = os.path.join(usb_data_dir_path, 'rpi_app')
+    usb_firmware_path = os.path.join(usb_data_dir_path, 'firmware')
+    usb_config_path = os.path.join(usb_data_dir_path, 'config')
+
+    if os.path.isdir(usb_rpi_src_path):
+        os.system('rm -rfv /home/pi/usb4vc/rpi_app/*')
+        os.system(f"cp -v {os.path.join(usb_rpi_src_path, '*')} /home/pi/usb4vc/rpi_app")
+
+    if os.path.isdir(usb_rpi_src_path):
+        os.system('rm -rfv /home/pi/usb4vc/firmware/*')
+        os.system(f"cp -v {os.path.join(usb_firmware_path, '*')} /home/pi/usb4vc/firmware")
+
+    if os.path.isdir(usb_config_path):
+        os.system('cp -v /home/pi/usb4vc/config/config.json /home/pi/usb4vc/config.json')
+        os.system(f'sudo cp -v /home/pi/usb4vc/config.json {usb_config_path}')
+        os.system('rm -rfv /home/pi/usb4vc/config/*')
+        os.system(f"cp -v {os.path.join(usb_config_path, '*')} /home/pi/usb4vc/config")
+        os.system(f"mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
+
+    return True, ''
+
+print(update_from_usb())
+
+os._exit(0)
 """
 OLED for USB4VC
 128*32
@@ -656,7 +693,7 @@ def ui_init():
     this_pboard_id = pboard_info_spi_msg[3]
     if this_pboard_id in pboard_database:
         # load custom profile mapping into protocol list
-        for item in custom_profile_set:
+        for item in custom_profile_list:
             this_mapping_bid = usb4vc_shared.board_id_lookup.get(item['protocol_board'], 0)
             if this_mapping_bid == this_pboard_id and item['device_type'] in pboard_database[this_pboard_id]:
                 this_mapping_pid = usb4vc_shared.protocol_id_lookup.get(item['protocol_name'])

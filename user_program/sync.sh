@@ -1,1 +1,1 @@
-scp ./* pi@192.168.1.56:~/usb4vc
+scp ./* pi@192.168.1.56:~/usb4vc/rpi_app
