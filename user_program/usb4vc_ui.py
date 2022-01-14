@@ -108,9 +108,9 @@ IBM_GGP_DEAULT_MAPPING = {
    'ABS_RX': {'code':'IBM_GGP_JS2_X'},
    'ABS_RY': {'code':'IBM_GGP_JS2_Y'},
    'ABS_Z': {'code':'IBM_GGP_JS2_X'},
-   # 'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
-   'ABS_GAS':{'code':'IBM_GGP_JS2_YN'},
-   'ABS_BRAKE':{'code':'IBM_GGP_JS2_YP'},
+   'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
+   # 'ABS_GAS':{'code':'IBM_GGP_JS2_YN'},
+   # 'ABS_BRAKE':{'code':'IBM_GGP_JS2_YP'},
 }
 
 PROTOCOL_OFF = {'pid':0, 'display_name':"OFF"}
@@ -699,6 +699,7 @@ class oled_sleep_control(object):
         super(oled_sleep_control, self).__init__()
         self.is_sleeping = False
         self.last_input_event = time.time()
+        self.ui_loop_count = 0
     def sleep(self):
         if self.is_sleeping is False:
             print("sleeping!")
@@ -711,6 +712,10 @@ class oled_sleep_control(object):
             self.last_input_event = time.time()
             self.is_sleeping = False
     def check_sleep(self):
+        # time.time() might jump ahead a ton when RPi gets its time from network
+        # this ensures OLED won't go to sleep too early
+        if self.ui_loop_count <= 1500:
+            return
         if time.time() - self.last_input_event > 180:
             self.sleep()
         else:
@@ -728,6 +733,7 @@ def ui_worker():
     my_menu.display_page(0, 0)
     while 1: 
         time.sleep(0.1)
+        my_oled.ui_loop_count += 1
         if my_oled.is_sleeping is False:
             my_menu.update_usb_status();
 
@@ -758,8 +764,9 @@ def ui_worker():
             my_oled.kick()
             if my_oled.is_sleeping:
                 my_oled.wakeup()
-            my_menu.goto_level(5)
-            my_menu.display_curent_page()
+            else:
+                my_menu.goto_level(5)
+                my_menu.display_curent_page()
         my_oled.check_sleep()
 
 def get_gamepad_protocol():
