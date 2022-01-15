@@ -14,6 +14,7 @@ import json
 import subprocess
 from subprocess import Popen, PIPE
 
+this_app_dir_path = "/home/pi/usb4vc/rpi_app"
 config_dir_path = "/home/pi/usb4vc/config"
 firmware_dir_path = "/home/pi/usb4vc/firmware"
 config_file_path = os.path.join(config_dir_path, 'config.json')
@@ -23,6 +24,7 @@ def ensure_dir(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
+ensure_dir(this_app_dir_path)
 ensure_dir(config_dir_path)
 ensure_dir(firmware_dir_path)
 
@@ -148,8 +150,8 @@ except Exception as e:
 def get_list_of_usb_drive():
     usb_drive_set = set()
     try:
-        usb_drive_path = subprocess.getoutput(f"timeout 2 df -h | grep -i usb").replace('\r', '').split('\n')    
-        for item in usb_drive_path:
+        usb_drive_path = subprocess.getoutput(f"timeout 2 df -h | grep -i usb").replace('\r', '').split('\n')
+        for item in [x for x in usb_drive_path if len(x) > 2]:
             usb_drive_set.add(os.path.join(item.split(' ')[-1], 'usb4vc'))
     except Exception as e:
         print("get_list_of_usb_drive:", e)
