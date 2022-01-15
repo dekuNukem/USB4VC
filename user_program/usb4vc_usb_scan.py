@@ -55,6 +55,7 @@ SYN_REPORT = 0
 
 REL_X = 0x00
 REL_Y = 0x01
+REL_HWHEEL = 0x06
 REL_WHEEL = 0x08
 
 SPI_BUF_INDEX_MAGIC = 0
@@ -126,7 +127,8 @@ def make_mouse_spi_packet(mouse_dict, mouse_id):
     to_transfer[3] = mouse_id
     to_transfer[4:6] = mouse_dict['x']
     to_transfer[6:8] = mouse_dict['y']
-    to_transfer[8:10] = mouse_dict['scroll']
+    to_transfer[8] = mouse_dict['scroll']
+    to_transfer[9] = mouse_dict['hscroll']
     to_transfer[13] = mouse_dict[BTN_LEFT]
     to_transfer[14] = mouse_dict[BTN_RIGHT]
     to_transfer[15] = mouse_dict[BTN_MIDDLE]
@@ -422,7 +424,8 @@ def change_kb_led(scrolllock, numlock, capslock):
 def clear_mouse_movement(mdict):
     mdict['x'] = [0, 0]
     mdict['y'] = [0, 0]
-    mdict['scroll'] = [0, 0]
+    mdict['scroll'] = 0
+    mdict['hscroll'] = 0
 
 def joystick_hold_update():
     needs_update = 0
@@ -452,9 +455,10 @@ def multiply_round_up_0(number, multi):
 
 gamepad_hold_check_interval = 0.02
 def raw_input_event_worker():
-    mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': [0, 0], BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
+    mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': 0, 'hscroll': 0, BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
     gamepad_status_dict = {}
     next_gamepad_hold_check = time.time() + gamepad_hold_check_interval
+    last_mouse_msg = []
     print("raw_input_event_worker started")
     while 1:
         now = time.time()
@@ -510,7 +514,9 @@ def raw_input_event_worker():
                 rawy = multiply_round_up_0(rawy, usb4vc_ui.get_mouse_sensitivity()) & 0xffff
                 mouse_status_dict["y"] = list(rawy.to_bytes(2, byteorder='little'))
             elif data[0] == EV_REL and event_code == REL_WHEEL:
-                mouse_status_dict["scroll"] = data[4:6]
+                mouse_status_dict['scroll'] = data[4]
+            elif data[0] == EV_REL and event_code == REL_HWHEEL:
+                mouse_status_dict['hscroll'] = data[4]
 
             # event is absolute axes AKA joystick
             elif this_device['is_gp'] and data[0] == EV_ABS:
@@ -522,10 +528,12 @@ def raw_input_event_worker():
                 if this_device['is_mouse']:
                     this_mouse_msg = make_mouse_spi_packet(mouse_status_dict, this_id)
                     # send spi mouse message if there is moment, or the button is not typematic
-                    if max(this_mouse_msg[13:18]) != 2 or sum(this_mouse_msg[4:10]) != 0:
+                    if (max(this_mouse_msg[13:18]) != 2 or sum(this_mouse_msg[4:10]) != 0) and (this_mouse_msg[4:] != last_mouse_msg[4:] or sum(this_mouse_msg[4:]) != 0):
+                        print(this_mouse_msg)
                         pcard_spi.xfer(list(this_mouse_msg))
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
                         clear_mouse_movement(mouse_status_dict)
+                    last_mouse_msg = list(this_mouse_msg)
                 if this_device['is_gp']:
                     gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device['axes_info'])
                     pcard_spi.xfer(gp_to_transfer)
