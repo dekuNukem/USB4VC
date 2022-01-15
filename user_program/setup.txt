@@ -16,6 +16,9 @@ sudo apt install stm32flash
 /usr/local/bin/stm32flash -r hhh -a 0x3b /dev/i2c-1
 stm32flash -r PBFW_IBMPC_PBID1_V0_2_0.dfu -a 0x3b /dev/i2c-1
 
+sudo apt install dfu-util
+sudo dfu-util --device ,0483:df11 -a 0 -D ~/usb4vc/firmware/PBFW_ADB_PBID2_V0_1_1.dfu
+
 --------------
 
 Serial setup:

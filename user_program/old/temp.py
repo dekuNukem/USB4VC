@@ -1,6 +1,11 @@
 GPIO.setup(PBOARD_RESET_PIN, GPIO.OUT)
 GPIO.output(PBOARD_RESET_PIN, 1)
-
+# print(check_usb_drive())
+# get_list_of_usb_drive()
+# update_pboard_firmware()
+# fw_update('/home/pi/usb4vc/firmware/PBFW_IBMPC_PBID1_V0_2_0.dfu')
+# print('bye!')
+# os._exit(0)
 def check_usb_drive():
     usb_data_dir_path = ''
 
