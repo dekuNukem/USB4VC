@@ -195,6 +195,16 @@ def get_pbid_and_version(dfu_file_name):
 i2c_bootloader_pbid = [1]
 usb_bootloader_pbid = [2]
 
+def reset_pboard():
+    print("resetting protocol board...")
+    GPIO.setup(PBOARD_BOOT0_PIN, GPIO.IN)
+    GPIO.setup(PBOARD_RESET_PIN, GPIO.OUT)
+    GPIO.output(PBOARD_RESET_PIN, GPIO.LOW)
+    time.sleep(0.05)
+    GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
+    time.sleep(0.05)
+    print("done")
+
 def fw_update(fw_path, pbid):
     # RESET LOW: Enter reset
     GPIO.setup(PBOARD_RESET_PIN, GPIO.OUT)
@@ -228,10 +238,6 @@ def fw_update(fw_path, pbid):
     # Release RESET, BOOT0 is LOW, STM32 boots in normal mode
     GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
     time.sleep(0.05)
-
-# fw_update('/home/pi/usb4vc/firmware/PBFW_ADB_PBID2_V0_1_0.dfu')
-# print('bye!')
-# os._exit(0)
 
 def update_pboard_firmware():
     pboard_firmware_path_local = '/home/pi/usb4vc/firmware'
@@ -341,7 +347,7 @@ def bt_setup():
         return 1, "no BT receiver found"
     os.system('/usr/sbin/rfkill unblock bluetooth')
     time.sleep(0.1)
-    exit_code = os.system('timeout 1 bluetoothctl agent NoInputNoOutput')
+    exit_code = os.system('timeout 1 bluetoothctl agent NoInputNoOutput') >> 8
     if exit_code == LINUX_EXIT_CODE_TIMEOUT:
         return 2, 'bluetoothctl stuck'
     return 0, ''
@@ -458,7 +464,7 @@ class usb4vc_menu(object):
         self.current_level = 0
         self.current_page = 0
         self.level_size = 6
-        self.page_size = [5, 6, 4, 1, 1, 4]
+        self.page_size = [5, 6, 4, 1, 1, 5]
         self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
         self.mouse_protocol_list = list(pboard['protocol_list_mouse'])
         self.gamepad_protocol_list = list(pboard['protocol_list_gamepad'])
@@ -613,11 +619,14 @@ class usb4vc_menu(object):
                     oled_print_centered("Power Down", font_medium, 10, draw)
             if page == 1:
                 with canvas(oled_device) as draw:
-                    oled_print_centered("Relaunch", font_medium, 10, draw)
+                    oled_print_centered("Reboot", font_medium, 10, draw)
             if page == 2:
                 with canvas(oled_device) as draw:
-                    oled_print_centered("Reboot", font_medium, 10, draw)
+                    oled_print_centered("Relaunch", font_medium, 10, draw)
             if page == 3:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Exit to Linux", font_medium, 10, draw)
+            if page == 4:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Cancel", font_medium, 10, draw)
 
@@ -684,7 +693,7 @@ class usb4vc_menu(object):
                     update_from_usb(*result)
                     with canvas(oled_device) as draw:
                         oled_print_centered("Update complete!", font_medium, 0, draw)
-                        oled_print_centered("Restarting...", font_medium, 16, draw)
+                        oled_print_centered("Relaunching...", font_medium, 16, draw)
                     time.sleep(4)
                     oled_device.clear()
                     os._exit(0)
@@ -755,15 +764,18 @@ class usb4vc_menu(object):
                 while 1:
                     time.sleep(1)
             if page == 1:
-                oled_device.clear()
-                os._exit(0)
-            if page == 2:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Rebooting...", font_medium, 10, draw)
                 os.system("sudo reboot")
                 while 1:
                     time.sleep(1)
+            if page == 2:
+                oled_device.clear()
+                os._exit(0)
             if page == 3:
+                oled_device.clear()
+                os._exit(169)
+            if page == 4:
                 self.goto_level(0)
         self.display_curent_page()
 

@@ -9,6 +9,7 @@ ssh-keygen
 copy PC pub key to rpi ~/.ssh/authorized_keys
 
 ---
+# use sudo -E to preserve environmental variables for python3
 
 sudo apt-get install i2c-tools
 sudo apt install stm32flash
