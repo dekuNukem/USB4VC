@@ -529,7 +529,6 @@ def raw_input_event_worker():
                     this_mouse_msg = make_mouse_spi_packet(mouse_status_dict, this_id)
                     # send spi mouse message if there is moment, or the button is not typematic
                     if (max(this_mouse_msg[13:18]) != 2 or sum(this_mouse_msg[4:10]) != 0) and (this_mouse_msg[4:] != last_mouse_msg[4:] or sum(this_mouse_msg[4:]) != 0):
-                        print(this_mouse_msg)
                         pcard_spi.xfer(list(this_mouse_msg))
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
                         clear_mouse_movement(mouse_status_dict)
