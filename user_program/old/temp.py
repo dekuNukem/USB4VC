@@ -1,3 +1,10 @@
+                    
+
+                    # if this_mouse_msg[13:18] == 
+
+                    # if not (this_mouse_msg[4:] == last_mouse_msg[4:] and sum(this_mouse_msg[4:]) == 0):
+                        # print(mouse_status_dict["x"])
+
 GPIO.setup(PBOARD_RESET_PIN, GPIO.OUT)
 GPIO.output(PBOARD_RESET_PIN, 1)
 # print(check_usb_drive())
