@@ -491,7 +491,7 @@ def raw_input_event_worker():
                 if 0x1 <= event_code <= 248 and event_code not in gamepad_buttons_as_kb_codes:
                     pcard_spi.xfer(make_keyboard_spi_packet(data, this_id))
                 # Mouse buttons
-                elif 0x110 <= event_code <= 0x117:
+                elif 0x110 <= event_code <= 0x117 and data[4] != 2:
                     mouse_status_dict[event_code] = data[4]
                     clear_mouse_movement(mouse_status_dict)
                     pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
