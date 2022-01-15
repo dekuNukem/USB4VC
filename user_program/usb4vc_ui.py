@@ -31,7 +31,12 @@ MINUS_BUTTON_PIN = 19
 ENTER_BUTTON_PIN = 22
 SHUTDOWN_BUTTON_PIN = 21
 
+PBOARD_RESET_PIN = 25
+PBOARD_BOOT0_PIN = 12
+
 GPIO.setmode(GPIO.BCM)
+GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
+GPIO.setup(PBOARD_BOOT0_PIN, GPIO.IN)
 
 SPI_MOSI_MAGIC = 0xde
 SPI_MOSI_MSG_TYPE_SET_PROTOCOL = 2
@@ -131,50 +136,117 @@ PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
 custom_profile_list = []
 
-mypath = '/home/pi/usb4vc_data'
-mypath = './'
-
 try:
-    onlyfiles = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
-    json_map_files = [os.path.join(mypath, x) for x in onlyfiles if x.lower().startswith('usb4vc_map') and x.lower().endswith(".json")]
+    onlyfiles = [f for f in os.listdir(config_dir_path) if os.path.isfile(os.path.join(config_dir_path, f))]
+    json_map_files = [os.path.join(config_dir_path, x) for x in onlyfiles if x.lower().startswith('usb4vc_map') and x.lower().endswith(".json")]
     for item in json_map_files:
         with open(item) as json_file:
             custom_profile_list.append(json.load(json_file))
 except Exception as e:
     print('load json maps:', e)
 
-def check_usb_drive():
-    return False, 'USB Drive Not Found'
-    usb_data_dir_path = ''
+def get_list_of_usb_drive():
+    usb_drive_set = set()
     try:
-        usb_drive_path = subprocess.getoutput(f"timeout 2 df -h | grep -i usb").replace('\r', '').split('\n')[0].split(' ')[-1]
-        usb_data_dir_path = os.path.join(usb_drive_path, 'usb4vc')
+        usb_drive_path = subprocess.getoutput(f"timeout 2 df -h | grep -i usb").replace('\r', '').split('\n')    
+        for item in usb_drive_path:
+            usb_drive_set.add(os.path.join(item.split(' ')[-1], 'usb4vc'))
     except Exception as e:
-        print("usb str:", e)
-        return False, 'Path error'
-    if len(usb_data_dir_path) < 5:
+        print("get_list_of_usb_drive:", e)
+    return usb_drive_set
+
+def check_usb_drive():
+    usb_drive_set = get_list_of_usb_drive()
+
+    if len(usb_drive_set) == 0:
         return False, 'USB Drive Not Found'
 
-    usb_rpi_src_path = os.path.join(usb_data_dir_path, 'rpi_app')
-    usb_firmware_path = os.path.join(usb_data_dir_path, 'firmware')
-    usb_config_path = os.path.join(usb_data_dir_path, 'config')
+    for this_path in usb_drive_set:
+        usb_rpi_src_path = os.path.join(this_path, 'rpi_app')
+        usb_firmware_path = os.path.join(this_path, 'firmware')
+        usb_config_path = os.path.join(this_path, 'config')
 
-    if not os.path.isdir(usb_rpi_src_path):
-        usb_rpi_src_path = None
-    if not os.path.isdir(usb_firmware_path):
-        usb_firmware_path = None
-    if not os.path.isdir(usb_config_path):
-        usb_config_path = None
+        if not os.path.isdir(usb_rpi_src_path):
+            usb_rpi_src_path = None
+        if not os.path.isdir(usb_firmware_path):
+            usb_firmware_path = None
+        if not os.path.isdir(usb_config_path):
+            usb_config_path = None
 
-    if usb_rpi_src_path is None and usb_firmware_path is None and usb_config_path is None:
-        return False, 'No update data found'
+        if usb_rpi_src_path or usb_firmware_path or usb_config_path:
+            return True, (usb_rpi_src_path, usb_firmware_path, usb_config_path)
 
-    return True, (usb_rpi_src_path, usb_firmware_path, usb_config_path)
+    return False, 'No Update Data Found'
+
+def get_pbid_and_version(dfu_file_name):
+    pbid = None
+    try:
+        pbid = int(dfu_file_name.split('PBID')[-1].split('_')[0])
+    except Exception as e:
+        print("fw pbid parse:", e)
+    fw_ver_tuple = None
+    try:
+        fw_ver = dfu_file_name.split('_V')[-1].split('.')[0].split('_')
+        fw_ver_tuple = (int(fw_ver[0]), int(fw_ver[1]), int(fw_ver[2]))
+    except Exception as e:
+        print('fw ver parse:', e)
+    return pbid, fw_ver_tuple
+
+def fw_update(fw_path):
+    # RESET LOW: Enter reset
+    GPIO.setup(PBOARD_RESET_PIN, GPIO.OUT)
+    GPIO.output(PBOARD_RESET_PIN, GPIO.LOW)
+    time.sleep(0.05)
+    # BOOT0 HIGH: Boot to DFU mode
+    GPIO.setup(PBOARD_BOOT0_PIN, GPIO.OUT)
+    GPIO.output(PBOARD_BOOT0_PIN, GPIO.HIGH)
+    time.sleep(0.05)
+    # Release RESET, BOOT0 still HIGH, STM32 now in DFU mode
+    GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
+    time.sleep(0.05)
+    os.system(f'stm32flash -r {fw_path} -a 0x3b /dev/i2c-1')
+    print("FW UPDATE DONE!")
+    # Release BOOT0
+    GPIO.setup(PBOARD_BOOT0_PIN, GPIO.IN)
+    # Activate RESET
+    GPIO.setup(PBOARD_RESET_PIN, GPIO.OUT)
+    GPIO.output(PBOARD_RESET_PIN, GPIO.LOW)
+    time.sleep(0.05)
+    # Release RESET, BOOT0 is LOW, STM32 boots in normal mode
+    GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
+    time.sleep(0.05)
+
+def update_pboard_firmware():
+    pboard_firmware_path_local = '/home/pi/usb4vc/firmware'
+    onlyfiles = [f for f in os.listdir(pboard_firmware_path_local) if os.path.isfile(os.path.join(pboard_firmware_path_local, f))]
+    dfu_files = [x for x in onlyfiles if x.startswith("PBFW_") and x.lower().endswith(".dfu") and "PBID" in x]
+    this_pboard_id = pboard_info_spi_msg[3]
+    this_pboard_version_tuple = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
+    # print("this board:", this_pboard_id, this_pboard_version_tuple)
+    for item in dfu_files:
+        pbid, fw_ver_tuple = get_pbid_and_version(item)
+        if pbid is None or fw_ver_tuple is None:
+            continue
+        # print(pbid, fw_ver_tuple)
+        if pbid == this_pboard_id and fw_ver_tuple > this_pboard_version_tuple:
+            with canvas(oled_device) as draw:
+                oled_print_centered("Updating P-Board", font_medium, 0, draw)
+                oled_print_centered("Firmware....", font_medium, 16, draw)
+            fw_update(os.path.join(pboard_firmware_path_local, item))
+            return
+
+# print(check_usb_drive())
+# get_list_of_usb_drive()
+# update_pboard_firmware()
+# fw_update('/home/pi/usb4vc/firmware/PBFW_IBMPC_PBID1_V0_2_0.dfu')
+# print('bye!')
+# os._exit(0)
 
 def update_from_usb(usb_rpi_src_path, usb_firmware_path, usb_config_path):
     if usb_firmware_path is not None:
         os.system('rm -rfv /home/pi/usb4vc/firmware/*')
         os.system(f"cp -v {os.path.join(usb_firmware_path, '*')} /home/pi/usb4vc/firmware")
+        update_pboard_firmware()
 
     if usb_rpi_src_path is not None:
         os.system('rm -rfv /home/pi/usb4vc/rpi_app/*')
@@ -594,16 +666,16 @@ class usb4vc_menu(object):
                 usb_present, result = check_usb_drive()
                 if usb_present is False:
                     with canvas(oled_device) as draw:
-                        oled_print_centered("Update error:", font_medium, 0, draw)
+                        oled_print_centered("Error:", font_medium, 0, draw)
                         oled_print_centered(result, font_regular, 16, draw)
-                    time.sleep(2)
-                    self.goto_level(1)
+                    time.sleep(4)
+                    self.goto_level(0)
                 else:
                     update_from_usb(*result)
                     with canvas(oled_device) as draw:
                         oled_print_centered("Update complete!", font_medium, 0, draw)
                         oled_print_centered("Restarting...", font_medium, 16, draw)
-                    time.sleep(2)
+                    time.sleep(4)
                     oled_device.clear()
                     os._exit(0)
             elif page == 3:
@@ -632,7 +704,6 @@ class usb4vc_menu(object):
                 configuration_dict[this_pboard_id]["mouse_sensitivity_index"] = self.current_mouse_sensitivity_offset_index
                 configuration_dict[this_pboard_id]["gamepad_protocol_index"] = self.current_gamepad_protocol_index
                 configuration_dict[this_pboard_id]["joystick_curve_index"] = self.current_joystick_curve_index
-                print(configuration_dict)
                 save_config()
                 self.send_protocol_set_spi_msg()
                 self.goto_level(0)

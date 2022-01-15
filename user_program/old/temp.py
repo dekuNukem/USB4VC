@@ -1,3 +1,27 @@
+GPIO.setup(PBOARD_RESET_PIN, GPIO.OUT)
+GPIO.output(PBOARD_RESET_PIN, 1)
+
+def check_usb_drive():
+    usb_data_dir_path = ''
+
+    if len(usb_data_dir_path) < 5:
+        return False, 'USB Drive Not Found'
+
+    usb_rpi_src_path = os.path.join(usb_data_dir_path, 'rpi_app')
+    usb_firmware_path = os.path.join(usb_data_dir_path, 'firmware')
+    usb_config_path = os.path.join(usb_data_dir_path, 'config')
+
+    if not os.path.isdir(usb_rpi_src_path):
+        usb_rpi_src_path = None
+    if not os.path.isdir(usb_firmware_path):
+        usb_firmware_path = None
+    if not os.path.isdir(usb_config_path):
+        usb_config_path = None
+
+    if usb_rpi_src_path is None and usb_firmware_path is None and usb_config_path is None:
+        return False, 'No Update Data Found'
+
+    return True, (usb_rpi_src_path, usb_firmware_path, usb_config_path)
 def apply_curve(x_0_255, y_0_255):
     x_neg127_127 = x_0_255 - 127
     y_neg127_127 = y_0_255 - 127

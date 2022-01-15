@@ -8,6 +8,14 @@ set up ssh:
 ssh-keygen
 copy PC pub key to rpi ~/.ssh/authorized_keys
 
+---
+
+sudo apt-get install i2c-tools
+sudo apt install stm32flash
+
+/usr/local/bin/stm32flash -r hhh -a 0x3b /dev/i2c-1
+stm32flash -r PBFW_IBMPC_PBID1_V0_2_0.dfu -a 0x3b /dev/i2c-1
+
 --------------
 
 Serial setup:
