@@ -143,7 +143,8 @@ try:
 except Exception as e:
     print('load json maps:', e)
 
-def update_from_usb():
+def check_usb_drive():
+    return False, 'USB Drive Not Found'
     usb_data_dir_path = ''
     try:
         usb_drive_path = subprocess.getoutput(f"timeout 2 df -h | grep -i usb").replace('\r', '').split('\n')[0].split(' ')[-1]
@@ -158,26 +159,34 @@ def update_from_usb():
     usb_firmware_path = os.path.join(usb_data_dir_path, 'firmware')
     usb_config_path = os.path.join(usb_data_dir_path, 'config')
 
-    if os.path.isdir(usb_rpi_src_path):
-        os.system('rm -rfv /home/pi/usb4vc/rpi_app/*')
-        os.system(f"cp -v {os.path.join(usb_rpi_src_path, '*')} /home/pi/usb4vc/rpi_app")
+    if not os.path.isdir(usb_rpi_src_path):
+        usb_rpi_src_path = None
+    if not os.path.isdir(usb_firmware_path):
+        usb_firmware_path = None
+    if not os.path.isdir(usb_config_path):
+        usb_config_path = None
 
-    if os.path.isdir(usb_rpi_src_path):
+    if usb_rpi_src_path is None and usb_firmware_path is None and usb_config_path is None:
+        return False, 'No update data found'
+
+    return True, (usb_rpi_src_path, usb_firmware_path, usb_config_path)
+
+def update_from_usb(usb_rpi_src_path, usb_firmware_path, usb_config_path):
+    if usb_firmware_path is not None:
         os.system('rm -rfv /home/pi/usb4vc/firmware/*')
         os.system(f"cp -v {os.path.join(usb_firmware_path, '*')} /home/pi/usb4vc/firmware")
 
-    if os.path.isdir(usb_config_path):
+    if usb_rpi_src_path is not None:
+        os.system('rm -rfv /home/pi/usb4vc/rpi_app/*')
+        os.system(f"cp -v {os.path.join(usb_rpi_src_path, '*')} /home/pi/usb4vc/rpi_app")
+
+    if usb_config_path is not None:
+        os.system(f'sudo cp -v /home/pi/usb4vc/config/config.json {usb_config_path}')
         os.system('cp -v /home/pi/usb4vc/config/config.json /home/pi/usb4vc/config.json')
-        os.system(f'sudo cp -v /home/pi/usb4vc/config.json {usb_config_path}')
         os.system('rm -rfv /home/pi/usb4vc/config/*')
         os.system(f"cp -v {os.path.join(usb_config_path, '*')} /home/pi/usb4vc/config")
         os.system(f"mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
 
-    return True, ''
-
-print(update_from_usb())
-
-os._exit(0)
 """
 OLED for USB4VC
 128*32
@@ -367,7 +376,7 @@ class usb4vc_menu(object):
         self.current_level = 0
         self.current_page = 0
         self.level_size = 6
-        self.page_size = [4, 6, 4, 1, 1, 4]
+        self.page_size = [5, 6, 4, 1, 1, 4]
         self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
         self.mouse_protocol_list = list(pboard['protocol_list_mouse'])
         self.gamepad_protocol_list = list(pboard['protocol_list_gamepad'])
@@ -429,15 +438,16 @@ class usb4vc_menu(object):
                         draw.text((0, 0), f"{self.pb_info['full_name']}", font=font_regular, fill="white")
                     draw.text((0, 10), f"PB {self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  RPi {usb4vc_shared.RPI_APP_VERSION_TUPLE[0]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[1]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[2]}", font=font_regular, fill="white")
                     draw.text((0, 20), f"IP: {get_ip_name()}", font=font_regular, fill="white")
-                    
             if page == 2:
                 with canvas(oled_device) as draw:
-                    oled_print_centered("Remove BT Device", font_medium, 0, draw)
-                    oled_print_centered("(experimental)", font_regular, 20, draw)
+                    oled_print_centered("Update via", font_medium, 0, draw)
+                    oled_print_centered("USB Flashdrive", font_medium, 16, draw)
             if page == 3:
                 with canvas(oled_device) as draw:
-                    oled_print_centered("Pair Bluetooth", font_medium, 0, draw)
-                    oled_print_centered("(experimental)", font_regular, 20, draw)
+                    oled_print_centered("Remove BT Device", font_medium, 10, draw)
+            if page == 4:
+                with canvas(oled_device) as draw:
+                    oled_print_centered("Pair Bluetooth", font_medium, 10, draw)
 
         if level == 1:
             if page == 0:
@@ -581,10 +591,26 @@ class usb4vc_menu(object):
     def action(self, level, page):
         if level == 0:
             if page == 2:
+                usb_present, result = check_usb_drive()
+                if usb_present is False:
+                    with canvas(oled_device) as draw:
+                        oled_print_centered("Update error:", font_medium, 0, draw)
+                        oled_print_centered(result, font_regular, 16, draw)
+                    time.sleep(2)
+                    self.goto_level(1)
+                else:
+                    update_from_usb(*result)
+                    with canvas(oled_device) as draw:
+                        oled_print_centered("Update complete!", font_medium, 0, draw)
+                        oled_print_centered("Restarting...", font_medium, 16, draw)
+                    time.sleep(2)
+                    oled_device.clear()
+                    os._exit(0)
+            elif page == 3:
                 self.paired_devices_list = list(get_paired_devices())
                 self.page_size[4] = len(self.paired_devices_list) + 1
                 self.goto_level(4)
-            elif page == 3:
+            elif page == 4:
                 self.goto_level(2)
             else:
                 self.goto_level(1)
