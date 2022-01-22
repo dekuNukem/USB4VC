@@ -29,9 +29,9 @@ Two Protocol Cards are available at launch (Feb 2022):
 * ADB Mouse
 * Mapping USB Gamepad to ADB Mouse/Keyboard
 
-Of course, more Protocol Cards are planned after launch!
+Of course, more are planned after launch!
 
-## Launch Timeline / Stay in Touch!
+## I Want One! / Stay in Touch
 
 [Clickable small banners here]
 
@@ -39,31 +39,43 @@ Of course, more Protocol Cards are planned after launch!
 
 **`Questions and Comments?`** Feel free to ask in Discord/Twitter, raise a Github issue, or via `dekunukem` `gmail.com`!
 
-Current launch timeline is:
+want one for review or testing? or more information about launch: [Link to Launch timeline ]
 
-#### Feb - March 2022
+## Highlights
 
-* Public Beta Testing
+* USB inputs on retro computers!
 
-* Gather Feedback, Fix Bugs, Finishing Touches.
+* Modular & swappable Protocol Cards
 
-#### March - April 2022
+* Wireless / Bluetooth supported
 
-* Kickstarter
+* Ultra low latency (0.5ms)
 
-* Arrange Production Run
+* OLED display showing settings and status
 
-#### April 2022 Onwards
+* USB-C powered
 
-* Public Release
+* Fully open-source
 
-* Work on Improvements, More Protocols and Protocol Cards
+## How it Works
+
+USB4VC consists of two parts: **Baseboard** and swappable **Protocol Cards**.
+
+[Photo of USB4VC parts with 3 RPi generations]
+
+Connect your peripheral via USB/WiFi, plug in the cable from P-Card to your computer, and off you go!
+
+Baseboard incorporates a Raspberry Pi Model B. It handles UI and input events, which are processed and sent to Protocol Card. 
+
+Each Protocol Card has a dedicated microcontroller and the appropriate connectors for the target computer.
+
+By splitting duties, RPi can focus on input parsing, and P-Card handles timing critical output generation, resulting in stable performance and a flexible architecture.
 
 ## Why?
 
 Before the homogeneity of USB peripherals today, computer input devices were a wild west. Different platforms used their own connectors and protocols for keyboards, mice, and gamepads.
 
-[Photo of collection of my keyboards and mice]
+![Alt text](photos/keyboards.jpeg)
 
 With the popularity of retro computing today, it poses several issues:
 
@@ -75,21 +87,49 @@ With the popularity of retro computing today, it poses several issues:
 
 * On the other hand, high quality USB peripherals can be had for a very reasonable price today with vastly **superior tactility, precision, and ergonomics**.
 
-* So I wanted to enjoy my machines with latest
+* Thus, this project aims to make retro computers simply more enjoyable to use.
 
-* I also hope that it can put computers without proprietary peripherals back in action, lower the entry barrier of certain machines, and generally help more people get into this hobby!
+* I also hope it can put more computers back in action, lower the barrier of entry for certain machines, and generally help more people get into this hobby!
 
-wanted enjoy more, bring more people, save computers without keybaords, 
-
-can argue part of the experience, but enjoy more without the drawback
+But of course, one can argue that using period-correct peripherals is simply part of the experience, but just like the HDMI mods or floppy emus, it's nice to have the option to enhance the experience.
 
 [Gaming DOS PC with RGB keyboard and duckypad here]
 
-## How it works
+## Getting Started
 
-two part: baseboard and swappable protocol card.
+[Click me](kit_assembly.md)
 
-raspberry pi based, drives OLED read buttons, read USB periphrials. sends event to protocol card, who handles keyboard emulation.
+## Technical Details
 
-by splitting dutis, rpi can do general stuff, while dedicated mcu on protocol card handles timing critical tasks. also modular and swappable.
+## Q & A
+
+### When can I get one?
+
+A kickstarter is planned, see [page] for details
+
+### How is the latency?
+
+Additional latency from USB4VC is almost negligible. Depending on the Raspberry Pi generation, it can be from 0.5 to 1ms. [See details here]
+
+### Which Raspberry Pi can I use?
+
+2,3,4 tested
+pi zero should work, but would need usb hub
+
+### Can you develop a Protocol Card for ___ ?
+
+Yes, but I can only work on so many at once, so in the beginning i will be focusing on popular retro computers. 
+
+If you're in UK and happy to let me your computer, let me know!
+
+## Roadmap / Future Plans
+
+Launch with IBM PC and ADB because most popular, but look into more computers, and more protocols.
+
+P-Card planned:
+
+Olivetii M24
+SUN workstation
+Early macintoshes
+
 
