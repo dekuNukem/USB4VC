@@ -51,7 +51,7 @@ want one for review or testing? or more information about launch: [Link to Launc
 
 * Ultra low latency (0.5ms)
 
-* OLED display showing settings and status
+* OLED display
 
 * USB-C powered
 
@@ -97,11 +97,11 @@ But of course, one can argue that using period-correct peripherals is simply par
 
 ## Getting Started
 
-[Click me](kit_assembly.md)
+[Click me](getting_started.md)
 
 ## Technical Details
 
-## Q & A
+## Q&A
 
 ### When can I get one?
 
@@ -109,7 +109,15 @@ A kickstarter is planned, see [page] for details
 
 ### How is the latency?
 
-Additional latency from USB4VC is almost negligible. Depending on the Raspberry Pi generation, it can be from 0.5 to 1ms. [See details here]
+Depends on the Raspberry Pi you use:
+
+| RPi Generation | Latency |
+|----------------|---------|
+| 2              | 1ms     |
+| 3              | 0.63ms  |
+| 4              | 0.5ms   |
+
+1ms is *one thousandth* of a second. Hence, the delay from USB4VC is all but negligible.
 
 ### Which Raspberry Pi can I use?
 
@@ -122,6 +130,10 @@ Yes, but I can only work on so many at once, so in the beginning i will be focus
 
 If you're in UK and happy to let me your computer, let me know!
 
+### What does USB4VC stand for?
+
+USB for Vintage Computers, although there's nothing stopping it for vintage consoles too 🤔.
+
 ## Roadmap / Future Plans
 
 Launch with IBM PC and ADB because most popular, but look into more computers, and more protocols.
@@ -131,5 +143,4 @@ P-Card planned:
 Olivetii M24
 SUN workstation
 Early macintoshes
-
 
