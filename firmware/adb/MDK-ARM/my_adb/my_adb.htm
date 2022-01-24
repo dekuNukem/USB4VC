@@ -3,7 +3,7 @@
 <title>Static Call Graph - [my_adb\my_adb.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image my_adb\my_adb.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Jan 15 14:42:51 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Jan 24 13:32:43 2022
 <BR><P>
 <H3>Maximum Stack Usage =        180 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -867,7 +867,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 </UL>
 
-<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 492 bytes, Stack size 16 bytes, main.o(i.main))
+<P><STRONG><a name="[21]"></a>main</STRONG> (Thumb, 488 bytes, Stack size 16 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 180<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
@@ -972,7 +972,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[21]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4d]"></a>parse_spi_buf</STRONG> (Thumb, 212 bytes, Stack size 16 bytes, main.o(i.parse_spi_buf))
+<P><STRONG><a name="[4d]"></a>parse_spi_buf</STRONG> (Thumb, 208 bytes, Stack size 16 bytes, main.o(i.parse_spi_buf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = parse_spi_buf &rArr; mouse_buf_add &rArr; mouse_buf_is_full &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch

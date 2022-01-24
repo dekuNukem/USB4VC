@@ -53,7 +53,7 @@
 #define PROTOCOL_STATUS_DISABLED 2
 #define PROTOCOL_LOOKUP_SIZE 16
 
-#define IS_ADB_DEVICE_PRESENT() HAL_GPIO_ReadPin(ADB_5V_DET_GPIO_Port, ADB_5V_DET_Pin)
+#define IS_ADB_HOST_PRESENT() HAL_GPIO_ReadPin(ADB_5V_DET_GPIO_Port, ADB_5V_DET_Pin)
 
 /* USER CODE END Includes */
 
@@ -69,7 +69,7 @@ UART_HandleTypeDef huart2;
 const uint8_t board_id = 2;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 1;
-const uint8_t version_patch = 0;
+const uint8_t version_patch = 1;
 uint8_t hw_revision = 0;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -148,7 +148,7 @@ void parse_spi_buf(uint8_t* spibuf)
   {
     latest_mouse_event.movement_x = byte_to_int16_t(spibuf[4], spibuf[5]);
     latest_mouse_event.movement_y = 1 * byte_to_int16_t(spibuf[6], spibuf[7]);
-    latest_mouse_event.scroll_vertical = -1 * byte_to_int16_t(spibuf[8], spibuf[9]);
+    latest_mouse_event.scroll_vertical = -1 * spibuf[8];
     latest_mouse_event.button_left = spibuf[13];
     latest_mouse_event.button_right = spibuf[14];
     latest_mouse_event.button_middle = spibuf[15];
@@ -234,7 +234,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   parse_spi_buf(spi_recv_buf);
   spi_isr_end:
   if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
-      HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 }
@@ -470,7 +470,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    if(IS_ADB_DEVICE_PRESENT() == 0)
+    if(IS_ADB_HOST_PRESENT() == 0)
       continue;
 
     kb_enabled = is_protocol_enabled(PROTOCOL_ADB_KB);
