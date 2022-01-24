@@ -219,9 +219,9 @@ def fw_update(fw_path, pbid):
     # Release RESET, BOOT0 still HIGH, STM32 now in DFU mode
     GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
     time.sleep(1)
-    if pbid in i2c_bootloader_pbid:
-        os.system(f'stm32flash -r {fw_path} -a 0x3b /dev/i2c-1')
-    elif pbid in usb_bootloader_pbid:
+    if pbid in i2c_bootloader_pbid and fw_path.lower().endswith('.hex'):
+        os.system(f'sudo stm32flash -w {fw_path} -a 0x3b /dev/i2c-1')
+    elif pbid in usb_bootloader_pbid and fw_path.lower().endswith('.dfu'):
         lsusb_str = subprocess.getoutput("lsusb")
         if 'in DFU'.lower() not in lsusb_str.lower():
             with canvas(oled_device) as draw:
@@ -244,10 +244,10 @@ def fw_update(fw_path, pbid):
 def update_pboard_firmware():
     pboard_firmware_path_local = '/home/pi/usb4vc/firmware'
     onlyfiles = [f for f in os.listdir(pboard_firmware_path_local) if os.path.isfile(os.path.join(pboard_firmware_path_local, f))]
-    dfu_files = [x for x in onlyfiles if x.startswith("PBFW_") and x.lower().endswith(".dfu") and "PBID" in x]
+    firmware_files = [x for x in onlyfiles if x.startswith("PBFW_") and (x.lower().endswith(".dfu") or x.lower().endswith(".hex")) and "PBID" in x]
     this_pboard_id = pboard_info_spi_msg[3]
     this_pboard_version_tuple = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
-    for item in dfu_files:
+    for item in firmware_files:
         pbid, fw_ver_tuple = get_pbid_and_version(item)
         if pbid is None or fw_ver_tuple is None:
             continue
@@ -256,8 +256,9 @@ def update_pboard_firmware():
             print("DOING IT NOW")
             with canvas(oled_device) as draw:
                 oled_print_centered("Loading Firmware:", font_medium, 0, draw)
-                oled_print_centered(item.strip("PBFW_").strip(".dfu"), font_regular, 16, draw)
+                oled_print_centered(item.strip("PBFW_").strip(".dfu").strip(".hex"), font_regular, 16, draw)
             fw_update(os.path.join(pboard_firmware_path_local, item), this_pboard_id)
+            time.sleep(2)
             return
 
 def update_from_usb(usb_rpi_src_path, usb_firmware_path, usb_config_path):
@@ -697,7 +698,7 @@ class usb4vc_menu(object):
                     with canvas(oled_device) as draw:
                         oled_print_centered("Update complete!", font_medium, 0, draw)
                         oled_print_centered("Relaunching...", font_medium, 16, draw)
-                    time.sleep(4)
+                    time.sleep(3)
                     oled_device.clear()
                     os._exit(0)
             elif page == 3:
