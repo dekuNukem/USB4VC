@@ -1,25 +1,63 @@
 
-## How USB4VC Works
 
-USB4VC uses a Raspberry Pi running Linux, 
+This document gives a overview of the technical aspects of USB4VC, which should be helpful for tinkering, contributing, and making your own Protocol Cards.
 
-input event codes
+## Linux Input Event Codes
 
-parsed
+Raspberry Pi runs Linux, which uses **Input Event Codes**. Here's a very simplified description:
 
-mapping
+* Connected input devices show up in `/dev/input` as files:
+
+```
+$ ls /dev/input/
+event0  event1  event2  mice  mouse0  mouse1
+```
+
+* Reading from one of those files returns input events. Try `cat /dev/input/mice`!
+
+
+* On RPi, **16 Bytes** are returned each time there is an event. They are arranged as follows:
+
+| Byte  | Name        |
+|-------|-------------|
+| 0-7   | Timestamp   |
+| 8-9   | Event Type  |
+| 10-11 | Event Code  |
+| 12-15 | Event Value |
+
+* A list of all Event Type, Code and Values [can be found here](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h)
+
+* Keyboard keys and mouse/gamepad buttons are EV_KEY type, mouse moments are EV_REL (relative) type, and joystick moments are EV_ABS (absolute) type.
+
+* Once you know the Event Type, you can look up Event Code to see which key/button/axes is being updated.
+
+* Event Value will be 1 (pressed) or 0 (released) for buttons, and a signed value for relative or absolute axes.
+
+* [Here's a good article](https://thehackerdiary.wordpress.com/2017/04/21/exploring-devinput-1/) that goes into a bit more details.
+
+* You can install `evtest` and see what your device is returning in real time.
+
+* USB4VC reads those events from all input devices, processes them, and send them out to the Protocol Card.
+
+## Hardware Pinout
+
+The Protocol Card connector is the same as the Raspberry Pi Header, although the pins are flipped around.
+
+Most of the pins are already in use:
+
+![Alt text](photos/rpi_pinout.png)
+
 
 ## SPI Communication Protocol
 
 Raspberri Pi communicates with Protocol Card through SPI. [Here's a quick introduction](https://www.circuitbasics.com/basics-of-the-spi-communication-protocol/) if you're unfamiliar.
 
-RPi is master, P-card is slave. SPI mode 0 (CPOL and CPHA both 0), SCLK is 2MHz.
+RPi is master, P-card is slave. Mode 0 is used (CPOL and CPHA both 0), SCLK is 2MHz.
 
-include a sample capture.
+[include a sample capture.]
 
-RPi and P-card talks via fixed-length 32-byte packets.
-
-Generally, first byte is magic number, second byte sequence number, thrid byte message type
+RPi and P-Card communicates via fixed-length 32-byte packets. Detailed description of messaging protocol [can be found here](https://docs.google.com/spreadsheets/d/e/2PACX-1vTDylIwis3GZrhakGK0uXJGc_SAZ_QwySmlMfZXpSdFDH6zoIXs1kHX7-4wUTeShZth_n6tJH8l3dJ3/pubhtml#
+).
 
 ## Latency Information
 
@@ -59,6 +97,10 @@ You can find the [capture files here](captures/latency), open with [saleae app](
 
 
 ## Developing your own Protocol Card
+
+USB4VC will send out keyboard and mouse event on SPI regardless of whether a protocol card is inserted or not. Although it will display appropriate options for switching protocols if the protocol card ID is recognized.
+
+If you want to 
 
 SPI Format, AVR based arduino probably wont work, suggested to use STM32, include link.
 

@@ -31,6 +31,10 @@ Two Protocol Cards are available at launch (Feb 2022):
 
 Of course, more are planned after launch!
 
+## Testers / Reviewers Wanted!
+
+Assembled around 7 by hand, can send it out.
+
 ## I Want One! / Stay in Touch
 
 [Clickable small banners here]
@@ -56,20 +60,6 @@ want one for review or testing? or more information about launch: [Link to Launc
 * USB-C powered
 
 * Fully open-source
-
-## How it Works
-
-USB4VC consists of two parts: **Baseboard** and swappable **Protocol Cards**.
-
-[Photo of USB4VC parts with 3 RPi generations]
-
-Connect your peripheral via USB/WiFi, plug in the cable from P-Card to your computer, and off you go!
-
-Baseboard incorporates a Raspberry Pi Model B. It handles UI and input events, which are processed and sent to Protocol Card. 
-
-Each Protocol Card has a dedicated microcontroller and the appropriate connectors for the target computer.
-
-By splitting duties, RPi can focus on input parsing, and P-Card handles timing critical output generation, resulting in stable performance and a flexible architecture.
 
 ## Why?
 
@@ -101,6 +91,8 @@ But of course, one can argue that using period-correct peripherals is simply par
 
 ## Technical Details
 
+[Click me](technical_notes.md)
+
 ## Q&A
 
 ### When can I get one?
@@ -117,7 +109,9 @@ Depends on the Raspberry Pi you use:
 | 3              | 0.63ms  |
 | 4              | 0.5ms   |
 
-1ms is *one thousandth* of a second. Hence, the delay from USB4VC is all but negligible.
+1ms is *one thousandth* of a second.
+
+The delay from USB4VC is all but negligible.
 
 ### Which Raspberry Pi can I use?
 
@@ -129,6 +123,13 @@ pi zero should work, but would need usb hub
 Yes, but I can only work on so many at once, so in the beginning i will be focusing on popular retro computers. 
 
 If you're in UK and happy to let me your computer, let me know!
+
+Link to make your own P-Card too!
+
+### Can I use multiple Keyboards/Mouse/Gamepad?
+
+Yes
+
 
 ### What does USB4VC stand for?
 

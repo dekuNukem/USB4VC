@@ -6,7 +6,7 @@
 
 Congratulations on your new toy! Here is a short guide on how to use your USB4VC.
 
-## SD card Preparation
+## Prepare SD card
 
 If your USB4VC already comes with a SD card, feel free to [skip this step](#test-out-raspberry-pi)!
 
@@ -16,13 +16,15 @@ Burn through ethcher or rufus
 
 ## Test out Raspberry Pi
 
-It's good practice to make sure your RPi works before mounting it into USB4VC.
+It's good practice to make sure your Raspberry Pi works before mounting it into USB4VC. 
+
+USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B/B+**. You don't have to get the latest model, even the earliest RPi B+ is plenty fast enough.
 
 Insert SD card in Raspberry Pi, and hook it up to a monitor. No need for anything else.
 
-Power it on, and it should boot and end up with the program running, showing a bunch of information like this:
+Power on, and it should boot and execute the program, showing a bunch of information:
 
-[Photo Here]
+![Alt text](photos/rpitest.jpeg)
 
 If so, congrats! Power off and continue.
 
@@ -32,41 +34,63 @@ If your USB4VC has not been assembled yet, [see this guide](/kit_assembly_guide.
 
 ## Cable Connection
 
-**Keep your computer off for now!**
+**Keep both your computer and USB4VC OFF for now!**
 
 Using the appropriate cable, connect the desired port from Protocol Card to your computer.
 
-Most of the peripherals are **NOT hot pluggable**, so make sure **all cables are connected before using!**
+![Alt text](photos/connection.jpeg)
 
-Also plug in any USB Keyboard, Mouse, and Gamepad you're planning to use.
+Most retro peripherals are **NOT hot pluggable**, so make sure **all cables are connected before using!**
+
+Also plug in any USB Keyboard, Mouse, and Gamepad into the Raspberry Pi.
 
 If using Bluetooth, we can pair it later.
 
 ## USB4VC Power On
 
-Power up USB4VC using a USB-C cable, you can do it from Protocol Card, Baseboard, or even RPi itself. All will work!
+With cables connected, power up USB4VC with a USB-C cable.
 
-[Top-down photo with arrows pointing to power ports]
+You can do it from Protocol Card, Baseboard, or even RPi itself. All will work!
 
-After a few seconds, the OLED screen should light up, showing some information:
+![Alt text](photos/powerports.jpeg)
 
-[photo of OLED showing home screen, with legends and arrows]
+After a few seconds, the OLED screen should light up, showing home screen:
 
-Press `+` or `-` to switch pages, and `enter` button to enter the submenu. If you have a Bluetooth device, you can pair it in the menu.
+![Alt text](photos/oledhome.jpeg)
+
+Press `+` or `-` to switch pages, and `enter` button to enter the submenu.
+
+If you have a Bluetooth device, you can pair it in the "Pair Bluetooth" menu.
 
 ## Protocol Setup
 
 Looking at home screen, if displayed protocol is what you want, you're good to go!
 
-Otherwise, press `Enter` button, and you can switch protocols, adjust mouse sensitivity and gamepad linearity.
+Otherwise, press `Enter` button to adjust protocols, mouse sensitivity, and gamepad linearity.
 
-I would suggest leaving the mouse sensitivity at 1 and adjust in the system if possible. Same with gamepads.
+![Alt text](photos/msserial.jpeg)
+
+I would suggest leaving the mouse and gamepads adjustments at default, and change them in the OS or games first. Only do it on USB4VC if that is not possible.
 
 ## Try it out!
 
 With protocol set up, and cable connected, time to power on the computer!
 
-You should be able to use it as normal, now with USB inputs!
+If everything goes well, you should be able to use it as normal, now with USB inputs!
+
+[video clip here]
+
+## Powering Off/On
+
+You can turn off/reboot the Raspberry Pi by pressing the `POWER OFF` button:
+
+When the RPi is off, you can press `POWER ON` button to turn it back on.
+
+
+
+## Software Updates
+
+
 
 ## Advanced Features: Mapping gamepad to keyboard/mouse
 
