@@ -8,6 +8,7 @@ import usb4vc_ui
 
 # usb4vc_ui.reset_pboard()
 
+os.system('echo 1 > /sys/module/bluetooth/parameters/disable_ertm')
 os.system('sudo bash -c "echo 1 > /sys/module/bluetooth/parameters/disable_ertm"')
 
 usb4vc_ui.ui_init()

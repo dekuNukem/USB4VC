@@ -118,8 +118,8 @@ IBM_GGP_DEAULT_MAPPING = {
    'ABS_RY': {'code':'IBM_GGP_JS2_Y'},
    'ABS_Z': {'code':'IBM_GGP_JS2_X'},
    'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
-   # 'ABS_GAS':{'code':'IBM_GGP_JS2_YN'},
-   # 'ABS_BRAKE':{'code':'IBM_GGP_JS2_YP'},
+   'ABS_GAS':{'code':'IBM_GGP_JS2_YN'},
+   'ABS_BRAKE':{'code':'IBM_GGP_JS2_YP'},
 }
 
 PROTOCOL_OFF = {'pid':0, 'display_name':"OFF"}
@@ -623,10 +623,10 @@ class usb4vc_menu(object):
                     oled_print_centered("Power Down", font_medium, 10, draw)
             if page == 1:
                 with canvas(oled_device) as draw:
-                    oled_print_centered("Reboot", font_medium, 10, draw)
+                    oled_print_centered("Relaunch", font_medium, 10, draw)
             if page == 2:
                 with canvas(oled_device) as draw:
-                    oled_print_centered("Relaunch", font_medium, 10, draw)
+                    oled_print_centered("Reboot", font_medium, 10, draw)
             if page == 3:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Exit to Linux", font_medium, 10, draw)
@@ -732,6 +732,8 @@ class usb4vc_menu(object):
                 self.goto_level(0)
         if level == 2:
             if page == 0:
+                os.system('echo 1 > /sys/module/bluetooth/parameters/disable_ertm')
+                os.system('sudo bash -c "echo 1 > /sys/module/bluetooth/parameters/disable_ertm"')
                 self.switch_page(1)
             if page == 2:
                 self.goto_level(0)
@@ -763,19 +765,21 @@ class usb4vc_menu(object):
         if level == 5:
             if page == 0:
                 with canvas(oled_device) as draw:
-                    oled_print_centered("Shutting down...", font_medium, 10, draw)
+                    oled_print_centered("Wait Until Green", font_medium, 0, draw)
+                    oled_print_centered("LED Turns Off", font_medium, 15, draw)
+                time.sleep(1)
                 os.system("sudo halt")
                 while 1:
                     time.sleep(1)
             if page == 1:
+                oled_device.clear()
+                os._exit(0)
+            if page == 2:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Rebooting...", font_medium, 10, draw)
                 os.system("sudo reboot")
                 while 1:
                     time.sleep(1)
-            if page == 2:
-                oled_device.clear()
-                os._exit(0)
             if page == 3:
                 oled_device.clear()
                 os._exit(169)
