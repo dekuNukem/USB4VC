@@ -289,6 +289,7 @@ Section Cross References
     xt_kb.o(i.xtkb_enable) refers to stm32f0xx_hal.o(i.HAL_GetTick) for HAL_GetTick
     xt_kb.o(i.xtkb_enable) refers to xt_kb.o(.data) for .data
     xt_kb.o(i.xtkb_init) refers to xt_kb.o(.data) for .data
+    xt_kb.o(i.xtkb_press_key) refers to ps2kb.o(i.__ARM_common_switch8) for __ARM_common_switch8
     xt_kb.o(i.xtkb_press_key) refers to stm32f0xx_hal.o(i.HAL_GetTick) for HAL_GetTick
     xt_kb.o(i.xtkb_press_key) refers to xt_kb.o(i.xtkb_write) for xtkb_write
     xt_kb.o(i.xtkb_press_key) refers to xt_kb.o(.data) for .data
@@ -2035,15 +2036,15 @@ Image Symbol Table
     i.xtkb_enable                            0x08003d78   Section        0  xt_kb.o(i.xtkb_enable)
     i.xtkb_init                              0x08003d8c   Section        0  xt_kb.o(i.xtkb_init)
     i.xtkb_press_key                         0x08003da0   Section        0  xt_kb.o(i.xtkb_press_key)
-    i.xtkb_release_lines                     0x08003ddc   Section        0  xt_kb.o(i.xtkb_release_lines)
-    i.xtkb_reset_bus                         0x08003dfc   Section        0  xt_kb.o(i.xtkb_reset_bus)
-    i.xtkb_update                            0x08003e1c   Section        0  main.o(i.xtkb_update)
-    i.xtkb_write                             0x08003e58   Section        0  xt_kb.o(i.xtkb_write)
-    .constdata                               0x08003f18   Section      121  ps2kb.o(.constdata)
-    .constdata                               0x08003f91   Section        4  mcp4451.o(.constdata)
-    .constdata                               0x08003f95   Section       55  main.o(.constdata)
-    .constdata                               0x08003fcc   Section       16  system_stm32f0xx.o(.constdata)
-    .constdata                               0x08003fdc   Section        8  system_stm32f0xx.o(.constdata)
+    i.xtkb_release_lines                     0x08003e18   Section        0  xt_kb.o(i.xtkb_release_lines)
+    i.xtkb_reset_bus                         0x08003e38   Section        0  xt_kb.o(i.xtkb_reset_bus)
+    i.xtkb_update                            0x08003e58   Section        0  main.o(i.xtkb_update)
+    i.xtkb_write                             0x08003e94   Section        0  xt_kb.o(i.xtkb_write)
+    .constdata                               0x08003f54   Section      121  ps2kb.o(.constdata)
+    .constdata                               0x08003fcd   Section        4  mcp4451.o(.constdata)
+    .constdata                               0x08003fd1   Section       55  main.o(.constdata)
+    .constdata                               0x08004008   Section       16  system_stm32f0xx.o(.constdata)
+    .constdata                               0x08004018   Section        8  system_stm32f0xx.o(.constdata)
     .data                                    0x20000000   Section        4  delay_us.o(.data)
     .data                                    0x20000004   Section       20  ps2kb.o(.data)
     .data                                    0x20000018   Section       32  ps2mouse.o(.data)
@@ -2310,19 +2311,19 @@ Image Symbol Table
     xtkb_check_for_softreset                 0x08003d39   Thumb Code    60  xt_kb.o(i.xtkb_check_for_softreset)
     xtkb_enable                              0x08003d79   Thumb Code    16  xt_kb.o(i.xtkb_enable)
     xtkb_init                                0x08003d8d   Thumb Code    14  xt_kb.o(i.xtkb_init)
-    xtkb_press_key                           0x08003da1   Thumb Code    56  xt_kb.o(i.xtkb_press_key)
-    xtkb_release_lines                       0x08003ddd   Thumb Code    26  xt_kb.o(i.xtkb_release_lines)
-    xtkb_reset_bus                           0x08003dfd   Thumb Code    26  xt_kb.o(i.xtkb_reset_bus)
-    xtkb_update                              0x08003e1d   Thumb Code    50  main.o(i.xtkb_update)
-    xtkb_write                               0x08003e59   Thumb Code   186  xt_kb.o(i.xtkb_write)
-    linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2 0x08003f18   Data          89  ps2kb.o(.constdata)
-    linux_keycode_to_ps2_scancode_lookup_special_codeset2 0x08003f71   Data          32  ps2kb.o(.constdata)
-    mcp4451_wiper_id_to_reg_addr_lookup      0x08003f91   Data           4  mcp4451.o(.constdata)
-    boot_message                             0x08003f95   Data          55  main.o(.constdata)
-    AHBPrescTable                            0x08003fcc   Data          16  system_stm32f0xx.o(.constdata)
-    APBPrescTable                            0x08003fdc   Data           8  system_stm32f0xx.o(.constdata)
-    Region$$Table$$Base                      0x08003fe4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08004004   Number         0  anon$$obj.o(Region$$Table)
+    xtkb_press_key                           0x08003da1   Thumb Code   116  xt_kb.o(i.xtkb_press_key)
+    xtkb_release_lines                       0x08003e19   Thumb Code    26  xt_kb.o(i.xtkb_release_lines)
+    xtkb_reset_bus                           0x08003e39   Thumb Code    26  xt_kb.o(i.xtkb_reset_bus)
+    xtkb_update                              0x08003e59   Thumb Code    50  main.o(i.xtkb_update)
+    xtkb_write                               0x08003e95   Thumb Code   186  xt_kb.o(i.xtkb_write)
+    linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2 0x08003f54   Data          89  ps2kb.o(.constdata)
+    linux_keycode_to_ps2_scancode_lookup_special_codeset2 0x08003fad   Data          32  ps2kb.o(.constdata)
+    mcp4451_wiper_id_to_reg_addr_lookup      0x08003fcd   Data           4  mcp4451.o(.constdata)
+    boot_message                             0x08003fd1   Data          55  main.o(.constdata)
+    AHBPrescTable                            0x08004008   Data          16  system_stm32f0xx.o(.constdata)
+    APBPrescTable                            0x08004018   Data           8  system_stm32f0xx.o(.constdata)
+    Region$$Table$$Base                      0x08004020   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08004040   Number         0  anon$$obj.o(Region$$Table)
     us_timer                                 0x20000000   Data           4  delay_us.o(.data)
     ps2kb_current_scancode_set               0x20000004   Data           1  ps2kb.o(.data)
     ps2kb_data_reporting_enabled             0x20000005   Data           1  ps2kb.o(.data)
@@ -2396,9 +2397,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000c1
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00004084, Max: 0x00010000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000040c0, Max: 0x00010000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00004004, Max: 0x00010000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00004040, Max: 0x00010000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2605,35 +2606,35 @@ Memory Map of the image
     0x08003d38   0x08003d38   0x00000040   Code   RO          829    i.xtkb_check_for_softreset  xt_kb.o
     0x08003d78   0x08003d78   0x00000014   Code   RO          830    i.xtkb_enable       xt_kb.o
     0x08003d8c   0x08003d8c   0x00000014   Code   RO          831    i.xtkb_init         xt_kb.o
-    0x08003da0   0x08003da0   0x0000003c   Code   RO          832    i.xtkb_press_key    xt_kb.o
-    0x08003ddc   0x08003ddc   0x00000020   Code   RO          833    i.xtkb_release_lines  xt_kb.o
-    0x08003dfc   0x08003dfc   0x00000020   Code   RO          834    i.xtkb_reset_bus    xt_kb.o
-    0x08003e1c   0x08003e1c   0x0000003c   Code   RO          545    i.xtkb_update       main.o
-    0x08003e58   0x08003e58   0x000000c0   Code   RO          835    i.xtkb_write        xt_kb.o
-    0x08003f18   0x08003f18   0x00000079   Data   RO          308    .constdata          ps2kb.o
-    0x08003f91   0x08003f91   0x00000004   Data   RO          487    .constdata          mcp4451.o
-    0x08003f95   0x08003f95   0x00000037   Data   RO          551    .constdata          main.o
-    0x08003fcc   0x08003fcc   0x00000010   Data   RO         3892    .constdata          system_stm32f0xx.o
-    0x08003fdc   0x08003fdc   0x00000008   Data   RO         3893    .constdata          system_stm32f0xx.o
-    0x08003fe4   0x08003fe4   0x00000020   Data   RO         4264    Region$$Table       anon$$obj.o
+    0x08003da0   0x08003da0   0x00000078   Code   RO          832    i.xtkb_press_key    xt_kb.o
+    0x08003e18   0x08003e18   0x00000020   Code   RO          833    i.xtkb_release_lines  xt_kb.o
+    0x08003e38   0x08003e38   0x00000020   Code   RO          834    i.xtkb_reset_bus    xt_kb.o
+    0x08003e58   0x08003e58   0x0000003c   Code   RO          545    i.xtkb_update       main.o
+    0x08003e94   0x08003e94   0x000000c0   Code   RO          835    i.xtkb_write        xt_kb.o
+    0x08003f54   0x08003f54   0x00000079   Data   RO          308    .constdata          ps2kb.o
+    0x08003fcd   0x08003fcd   0x00000004   Data   RO          487    .constdata          mcp4451.o
+    0x08003fd1   0x08003fd1   0x00000037   Data   RO          551    .constdata          main.o
+    0x08004008   0x08004008   0x00000010   Data   RO         3892    .constdata          system_stm32f0xx.o
+    0x08004018   0x08004018   0x00000008   Data   RO         3893    .constdata          system_stm32f0xx.o
+    0x08004020   0x08004020   0x00000020   Data   RO         4264    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08004004, Size: 0x000008f0, Max: 0x00004000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08004040, Size: 0x000008f0, Max: 0x00004000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08004004   0x00000004   Data   RW           15    .data               delay_us.o
-    0x20000004   0x08004008   0x00000014   Data   RW          309    .data               ps2kb.o
-    0x20000018   0x0800401c   0x00000020   Data   RW          399    .data               ps2mouse.o
-    0x20000038   0x0800403c   0x00000020   Data   RW          552    .data               main.o
-    0x20000058   0x0800405c   0x00000014   Data   RW          836    .data               xt_kb.o
-    0x2000006c   0x08004070   0x00000004   Data   RW         3187    .data               stm32f0xx_hal.o
-    0x20000070   0x08004074   0x00000004   Data   RW         3894    .data               system_stm32f0xx.o
-    0x20000074   0x08004078   0x00000004   Data   RW         4238    .data               mc_p.l(stdout.o)
-    0x20000078   0x0800407c   0x00000004   Data   RW         4241    .data               mc_p.l(mvars.o)
-    0x2000007c   0x08004080   0x00000004   Data   RW         4242    .data               mc_p.l(mvars.o)
+    0x20000000   0x08004040   0x00000004   Data   RW           15    .data               delay_us.o
+    0x20000004   0x08004044   0x00000014   Data   RW          309    .data               ps2kb.o
+    0x20000018   0x08004058   0x00000020   Data   RW          399    .data               ps2mouse.o
+    0x20000038   0x08004078   0x00000020   Data   RW          552    .data               main.o
+    0x20000058   0x08004098   0x00000014   Data   RW          836    .data               xt_kb.o
+    0x2000006c   0x080040ac   0x00000004   Data   RW         3187    .data               stm32f0xx_hal.o
+    0x20000070   0x080040b0   0x00000004   Data   RW         3894    .data               system_stm32f0xx.o
+    0x20000074   0x080040b4   0x00000004   Data   RW         4238    .data               mc_p.l(stdout.o)
+    0x20000078   0x080040b8   0x00000004   Data   RW         4241    .data               mc_p.l(mvars.o)
+    0x2000007c   0x080040bc   0x00000004   Data   RW         4242    .data               mc_p.l(mvars.o)
     0x20000080        -       0x0000026d   Zero   RW          546    .bss                main.o
-    0x200002ed   0x08004084   0x00000003   PAD
+    0x200002ed   0x080040c0   0x00000003   PAD
     0x200002f0        -       0x00000200   Zero   RW            2    HEAP                startup_stm32f072xb.o
     0x200004f0        -       0x00000400   Zero   RW            1    STACK               startup_stm32f072xb.o
 
@@ -2668,10 +2669,10 @@ Image component sizes
          2          0          0          0          0        976   stm32f0xx_hal_uart_ex.o
         62         12          0          0          0       3420   stm32f0xx_it.o
         92         16         24          4          0       1131   system_stm32f0xx.o
-       468         40          0         20          0       5698   xt_kb.o
+       528         52          0         20          0       5910   xt_kb.o
 
     ----------------------------------------------------------------------
-     15158        906        428        116       2160     645886   Object Totals
+     15218        918        428        116       2160     646098   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         34          0          0          0          3          0   (incl. Padding)
 
@@ -2717,15 +2718,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     15960        950        428        128       2160     639146   Grand Totals
-     15960        950        428        128       2160     639146   ELF Image Totals
-     15960        950        428        128          0          0   ROM Totals
+     16020        962        428        128       2160     639358   Grand Totals
+     16020        962        428        128       2160     639358   ELF Image Totals
+     16020        962        428        128          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                16388 (  16.00kB)
+    Total RO  Size (Code + RO Data)                16448 (  16.06kB)
     Total RW  Size (RW Data + ZI Data)              2288 (   2.23kB)
-    Total ROM Size (Code + RO Data + RW Data)      16516 (  16.13kB)
+    Total ROM Size (Code + RO Data + RW Data)      16576 (  16.19kB)
 
 ==============================================================================
 

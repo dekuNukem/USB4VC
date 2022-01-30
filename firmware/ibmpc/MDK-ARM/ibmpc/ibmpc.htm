@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ibmpc\ibmpc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ibmpc\ibmpc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Jan 24 13:33:23 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Jan 30 15:20:49 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -843,7 +843,8 @@ Global Symbols
 <P><STRONG><a name="[a0]"></a>__ARM_common_switch8</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, ps2kb.o(i.__ARM_common_switch8))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __ARM_common_switch8
 </UL>
-<BR>[Called By]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_press_key
+<LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keyboard_reply
 </UL>
@@ -1491,10 +1492,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[d6]"></a>xtkb_press_key</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, xt_kb.o(i.xtkb_press_key))
+<P><STRONG><a name="[d6]"></a>xtkb_press_key</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, xt_kb.o(i.xtkb_press_key))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = xtkb_press_key &rArr; xtkb_write &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_update
