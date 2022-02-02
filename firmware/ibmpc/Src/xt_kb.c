@@ -130,7 +130,8 @@ void xtkb_check_for_softreset(void)
 // status 1 pressed 0 released
 uint8_t xtkb_press_key(uint8_t code, uint8_t status)
 {
-  // on XT keyboard those keys are on numpads, so need to translate over
+  // on XT keyboard those keys are shared with numpads.
+  // so need to translate them from linux keycode
   switch(code)
   {
     case KEY_UP:
@@ -167,7 +168,7 @@ uint8_t xtkb_press_key(uint8_t code, uint8_t status)
 
   if(code > 83) // not on XT keyboard
     return 0;
-  if(status == 2) // typematic
+  if(status == 2) // typematic, XT can't handle fast repeats, so slow it down a bit
   {
     if(HAL_GetTick() - last_typematic <= 80)
       return 0;

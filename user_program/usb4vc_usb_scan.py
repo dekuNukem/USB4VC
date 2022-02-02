@@ -308,7 +308,11 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             if target_code not in curr_kb_output:
                 curr_kb_output[target_code] = set()
             is_activated = 0
-            deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
+            deadzone_amount = 19
+            try:
+                deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
+            except Exception:
+                pass
             if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) > 127 + deadzone_amount:
                 is_activated = 1
             curr_kb_output[target_code].add(is_activated)
@@ -326,7 +330,11 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         # usb gamepad analog axes to mouse axes
         if source_type == 'usb_abs_axis' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output:
             movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
-            deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
+            deadzone_amount = 19
+            try:
+                deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
+            except Exception:
+                pass
             if abs(movement) <= deadzone_amount:
                 movement = 0
             joystick_to_mouse_slowdown = 20
@@ -455,6 +463,7 @@ def multiply_round_up_0(number, multi):
 
 gamepad_hold_check_interval = 0.02
 def raw_input_event_worker():
+    last_usb_event = 0
     mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': 0, 'hscroll': 0, BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
     gamepad_status_dict = {}
     next_gamepad_hold_check = time.time() + gamepad_hold_check_interval
@@ -466,7 +475,7 @@ def raw_input_event_worker():
             joystick_hold_update()
             next_gamepad_hold_check = now + gamepad_hold_check_interval
 
-        if now - usb4vc_ui.my_oled.last_input_event > 1:
+        if now - last_usb_event > 1:
             time.sleep(0.005)
 
         for key in list(opened_device_dict):
@@ -481,6 +490,9 @@ def raw_input_event_worker():
                 continue
             if data is None:
                 continue
+
+            usb4vc_ui.my_oled.kick()
+            last_usb_event = now
 
             if this_device['is_gp'] and this_id not in gamepad_status_dict:
                 gamepad_status_dict[this_id] = {}
@@ -543,7 +555,7 @@ def raw_input_event_worker():
                         time.sleep(0.001)
                         pcard_spi.xfer(mouse_to_transfer)
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
-            usb4vc_ui.my_oled.kick()
+            
         # ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):
             slave_result = None
