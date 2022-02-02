@@ -10,9 +10,9 @@ USB4VC is an **active protocol converter** that let you use **USB keyboard, mous
 
 With a **modular design**, different platforms are supported by swapping out **Protocol Cards**:
 
-[video clip here]
+![Alt text](photos/header.gif)
 
-Two Protocol Cards are available at launch (Feb 2022):
+Two Protocol Cards are available at launch (March 2022):
 
 #### IBM PC Compatible
 
@@ -47,11 +47,11 @@ want one for review or testing? or more information about launch: [Link to Launc
 
 ## Highlights
 
-* USB inputs on retro computers!
+* USB Keyboard/Mouse/Gamepads on retro computers!
 
 * Modular & swappable Protocol Cards
 
-* Wireless / Bluetooth supported
+* Wireless / Bluetooth
 
 * Ultra low latency (0.5ms)
 
@@ -83,7 +83,7 @@ With the popularity of retro computing today, it poses several issues:
 
 But of course, one can argue that using period-correct peripherals is simply part of the experience, but just like the HDMI mods or floppy emus, it's nice to have the option to enhance the experience.
 
-[Gaming DOS PC with RGB keyboard and duckypad here]
+![Alt text](photos/duke3d.jpeg)
 
 ## Getting Started
 
