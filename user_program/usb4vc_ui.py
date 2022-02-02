@@ -157,6 +157,16 @@ def get_list_of_usb_drive():
         print("get_list_of_usb_drive:", e)
     return usb_drive_set
 
+def copy_debug_log():
+    usb_drive_set = get_list_of_usb_drive()
+    if len(usb_drive_set) == 0:
+        return False
+    for this_path in usb_drive_set:
+        if os.path.isdir(this_path):
+            print('copying debug log to', this_path)
+            os.system(f'sudo cp -v /home/pi/usb4vc/usb4vc_debug_log.txt {this_path}')
+    return True
+
 def check_usb_drive():
     usb_drive_set = get_list_of_usb_drive()
 
@@ -226,7 +236,7 @@ def fw_update(fw_path, pbid):
         if 'in DFU'.lower() not in lsusb_str.lower():
             with canvas(oled_device) as draw:
                 oled_print_centered("Connect a USB cable", font_regular, 0, draw)
-                oled_print_centered("from P-board to RPi", font_regular, 10, draw)
+                oled_print_centered("from P-Card to RPi", font_regular, 10, draw)
                 oled_print_centered("and try again", font_regular, 20, draw)
             time.sleep(5)
         else:
@@ -272,11 +282,11 @@ def update_from_usb(usb_rpi_src_path, usb_firmware_path, usb_config_path):
         os.system(f"cp -v {os.path.join(usb_rpi_src_path, '*')} /home/pi/usb4vc/rpi_app")
 
     if usb_config_path is not None:
-        os.system(f'sudo cp -v /home/pi/usb4vc/config/config.json {usb_config_path}')
-        os.system('cp -v /home/pi/usb4vc/config/config.json /home/pi/usb4vc/config.json')
+        os.system(f'cp -v /home/pi/usb4vc/config/config.json {usb_config_path}')
+        os.system('mv -v /home/pi/usb4vc/config/config.json /home/pi/usb4vc/config.json')
         os.system('rm -rfv /home/pi/usb4vc/config/*')
         os.system(f"cp -v {os.path.join(usb_config_path, '*')} /home/pi/usb4vc/config")
-        os.system(f"mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
+        os.system("mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
 
 """
 OLED for USB4VC
@@ -686,14 +696,22 @@ class usb4vc_menu(object):
     def action(self, level, page):
         if level == 0:
             if page == 2:
+                if copy_debug_log():
+                    with canvas(oled_device) as draw:
+                        oled_print_centered("Copying", font_medium, 0, draw)
+                        oled_print_centered("Debug Log...", font_medium, 16, draw)
+                    time.sleep(2)
                 usb_present, result = check_usb_drive()
                 if usb_present is False:
                     with canvas(oled_device) as draw:
                         oled_print_centered("Error:", font_medium, 0, draw)
                         oled_print_centered(result, font_regular, 16, draw)
-                    time.sleep(4)
+                    time.sleep(3)
                     self.goto_level(0)
                 else:
+                    with canvas(oled_device) as draw:
+                        oled_print_centered("Updating...", font_medium, 10, draw)
+                    time.sleep(2)
                     update_from_usb(*result)
                     with canvas(oled_device) as draw:
                         oled_print_centered("Update complete!", font_medium, 0, draw)
