@@ -137,6 +137,7 @@ def make_mouse_spi_packet(mouse_dict, mouse_id):
     return to_transfer
 
 PID_GENERIC_GAMEPORT_GAMEPAD = 7
+PID_PROTOCOL_OFF = 0
 
 def get_range_max_and_midpoint(axes_dict, axis_key):
     try:
@@ -407,7 +408,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
-    if current_protocol['pid'] == PID_GENERIC_GAMEPORT_GAMEPAD:
+    if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
         return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
     return list(nop_spi_msg_template), None, None
 
