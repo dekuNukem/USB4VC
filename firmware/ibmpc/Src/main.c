@@ -561,11 +561,10 @@ int main(void)
   /* USER CODE BEGIN 3 */
 
     // If both enabled, PS2 mouse takes priority
-    // if(is_protocol_enabled(PROTOCOL_PS2_MOUSE) && IS_PS2MOUSE_PRESENT())
-    //   ps2mouse_update();
-    // else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
-    //   microsoft_serial_mouse_update();
-    microsoft_serial_mouse_update();
+    if(is_protocol_enabled(PROTOCOL_PS2_MOUSE) && IS_PS2MOUSE_PRESENT())
+      ps2mouse_update();
+    else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
+      microsoft_serial_mouse_update();
     // If both enabled, PS2 keyboard takes priority
     if(is_protocol_enabled(PROTOCOL_AT_PS2_KB) && IS_KB_PRESENT())
       ps2kb_update();
