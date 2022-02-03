@@ -230,6 +230,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     latest_mouse_event.movement_x = byte_to_int16_t(backup_spi1_recv_buf[4], backup_spi1_recv_buf[5]);
     latest_mouse_event.movement_y = -1 * byte_to_int16_t(backup_spi1_recv_buf[6], backup_spi1_recv_buf[7]);
     latest_mouse_event.scroll_vertical = -1 * backup_spi1_recv_buf[8];
+    latest_mouse_event.scroll_horizontal = backup_spi1_recv_buf[9];
     latest_mouse_event.button_left = backup_spi1_recv_buf[13];
     latest_mouse_event.button_right = backup_spi1_recv_buf[14];
     latest_mouse_event.button_middle = backup_spi1_recv_buf[15];
