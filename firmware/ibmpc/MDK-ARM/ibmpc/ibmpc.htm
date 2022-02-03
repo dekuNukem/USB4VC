@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ibmpc\ibmpc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ibmpc\ibmpc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Jan 30 15:20:49 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Feb 03 11:47:11 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -195,7 +195,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
-<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
+<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_is_full
@@ -233,8 +233,9 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;protocol_status_lookup_init
-<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_outgoing_data
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;microsoft_serial_mouse_update
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_outgoing_data
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_reset
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gamepad_buf_reset
 </UL>
@@ -311,12 +312,12 @@ Global Symbols
 <P><STRONG><a name="[b5]"></a>HAL_GPIO_ReadPin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_ReadPin))
 <BR><BR>[Called By]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_check_for_softreset
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_read
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_write
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_clk_high
 </UL>
@@ -334,10 +335,10 @@ Global Symbols
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mcp4451_reset
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_release_lines
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_release_lines
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_read
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_write
@@ -354,8 +355,8 @@ Global Symbols
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Mem_Write
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_IsDeviceReady
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_read
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitFlagStateUntilTimeout
@@ -560,7 +561,7 @@ Global Symbols
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 </UL>
 
-<P><STRONG><a name="[57]"></a>HAL_SPI_TxRxCpltCallback</STRONG> (Thumb, 358 bytes, Stack size 24 bytes, main.o(i.HAL_SPI_TxRxCpltCallback))
+<P><STRONG><a name="[57]"></a>HAL_SPI_TxRxCpltCallback</STRONG> (Thumb, 362 bytes, Stack size 24 bytes, main.o(i.HAL_SPI_TxRxCpltCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = HAL_SPI_TxRxCpltCallback &rArr; handle_protocol_switch &rArr; gameport_init &rArr; mcp4451_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
@@ -695,13 +696,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fputc
 </UL>
 
-<P><STRONG><a name="[d0]"></a>HAL_UART_Transmit_IT</STRONG> (Thumb, 88 bytes, Stack size 12 bytes, stm32f0xx_hal_uart.o(i.HAL_UART_Transmit_IT))
+<P><STRONG><a name="[bb]"></a>HAL_UART_Transmit_IT</STRONG> (Thumb, 88 bytes, Stack size 12 bytes, stm32f0xx_hal_uart.o(i.HAL_UART_Transmit_IT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = HAL_UART_Transmit_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;serial_mouse_update
+<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;microsoft_serial_mouse_update
 </UL>
 
-<P><STRONG><a name="[8c]"></a>HAL_UART_TxCpltCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, main.o(i.HAL_UART_TxCpltCallback))
+<P><STRONG><a name="[8c]"></a>HAL_UART_TxCpltCallback</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, main.o(i.HAL_UART_TxCpltCallback))
 <BR><BR>[Called By]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndTransmit_IT
 </UL>
 
@@ -845,7 +846,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_press_key
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keyboard_reply
 </UL>
 
@@ -864,10 +865,10 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_delay_start
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
+<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_delay_start
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_read
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_write
@@ -1003,7 +1004,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_add
 </UL>
 
-<P><STRONG><a name="[c2]"></a>kb_buf_peek</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_peek))
+<P><STRONG><a name="[c4]"></a>kb_buf_peek</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_peek))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = kb_buf_peek
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_update
@@ -1048,10 +1049,10 @@ Global Symbols
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_update
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;serial_mouse_update
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_update
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;protocol_status_lookup_init
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;microsoft_serial_mouse_update
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_protocol_enabled
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gamepad_update
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
@@ -1112,10 +1113,21 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 
+<P><STRONG><a name="[b7]"></a>microsoft_serial_mouse_update</STRONG> (Thumb, 194 bytes, Stack size 16 bytes, main.o(i.microsoft_serial_mouse_update))
+<BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = microsoft_serial_mouse_update &rArr; mouse_buf_pop &rArr; __aeabi_uidivmod
+</UL>
+<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_IT
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
+<LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
+</UL>
+<BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
 <P><STRONG><a name="[5c]"></a>mouse_buf_add</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, helpers.o(i.mouse_buf_add))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = mouse_buf_add &rArr; mouse_buf_is_full &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
+<BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 <LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
@@ -1125,13 +1137,13 @@ Global Symbols
 <P><STRONG><a name="[b3]"></a>mouse_buf_init</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = mouse_buf_init &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
+<BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[bb]"></a>mouse_buf_is_full</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_is_full))
+<P><STRONG><a name="[be]"></a>mouse_buf_is_full</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_is_full))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = mouse_buf_is_full &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
@@ -1139,9 +1151,9 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
 </UL>
 
-<P><STRONG><a name="[cd]"></a>mouse_buf_peek</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, helpers.o(i.mouse_buf_peek))
-<BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;serial_mouse_update
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
+<P><STRONG><a name="[bc]"></a>mouse_buf_peek</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, helpers.o(i.mouse_buf_peek))
+<BR><BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;microsoft_serial_mouse_update
 </UL>
 
 <P><STRONG><a name="[bd]"></a>mouse_buf_pop</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_pop))
@@ -1149,11 +1161,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;serial_mouse_update
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
+<BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;microsoft_serial_mouse_update
 </UL>
 
-<P><STRONG><a name="[bc]"></a>mouse_buf_reset</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_reset))
+<P><STRONG><a name="[bf]"></a>mouse_buf_reset</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = mouse_buf_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
@@ -1169,7 +1181,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[be]"></a>ps2kb_get_bus_status</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, ps2kb.o(i.ps2kb_get_bus_status))
+<P><STRONG><a name="[c0]"></a>ps2kb_get_bus_status</STRONG> (Thumb, 62 bytes, Stack size 16 bytes, ps2kb.o(i.ps2kb_get_bus_status))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ps2kb_get_bus_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
@@ -1189,29 +1201,29 @@ Global Symbols
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
-<P><STRONG><a name="[bf]"></a>ps2kb_press_key</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key))
+<P><STRONG><a name="[c1]"></a>ps2kb_press_key</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = ps2kb_press_key &rArr; ps2kb_press_key_scancode_2 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; delay_us
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_2
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_1
+<BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_2
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_1
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_update
 </UL>
 
-<P><STRONG><a name="[c0]"></a>ps2kb_press_key_scancode_1</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key_scancode_1))
+<P><STRONG><a name="[c2]"></a>ps2kb_press_key_scancode_1</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key_scancode_1))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = ps2kb_press_key_scancode_1 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
 </UL>
-<BR>[Called By]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
+<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
 </UL>
 
-<P><STRONG><a name="[c1]"></a>ps2kb_press_key_scancode_2</STRONG> (Thumb, 302 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key_scancode_2))
+<P><STRONG><a name="[c3]"></a>ps2kb_press_key_scancode_2</STRONG> (Thumb, 302 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key_scancode_2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = ps2kb_press_key_scancode_2 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
 </UL>
-<BR>[Called By]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
+<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
 </UL>
 
 <P><STRONG><a name="[af]"></a>ps2kb_read</STRONG> (Thumb, 246 bytes, Stack size 32 bytes, ps2kb.o(i.ps2kb_read))
@@ -1220,7 +1232,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_update
@@ -1249,11 +1261,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_release_lines
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_read
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keyboard_reply
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -1263,16 +1275,16 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = ps2kb_write &rArr; ps2kb_write_nowait &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_2
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_1
+<BR>[Called By]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_2
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_1
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keyboard_reply
 </UL>
 
-<P><STRONG><a name="[c3]"></a>ps2kb_write_nowait</STRONG> (Thumb, 282 bytes, Stack size 24 bytes, ps2kb.o(i.ps2kb_write_nowait))
+<P><STRONG><a name="[c5]"></a>ps2kb_write_nowait</STRONG> (Thumb, 282 bytes, Stack size 24 bytes, ps2kb.o(i.ps2kb_write_nowait))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = ps2kb_write_nowait &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1282,17 +1294,17 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
 </UL>
 
-<P><STRONG><a name="[c4]"></a>ps2mouse_get_bus_status</STRONG> (Thumb, 92 bytes, Stack size 8 bytes, ps2mouse.o(i.ps2mouse_get_bus_status))
+<P><STRONG><a name="[c6]"></a>ps2mouse_get_bus_status</STRONG> (Thumb, 92 bytes, Stack size 8 bytes, ps2mouse.o(i.ps2mouse_get_bus_status))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ps2mouse_get_bus_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
 </UL>
 
-<P><STRONG><a name="[c5]"></a>ps2mouse_get_outgoing_data</STRONG> (Thumb, 166 bytes, Stack size 16 bytes, ps2mouse.o(i.ps2mouse_get_outgoing_data))
+<P><STRONG><a name="[c7]"></a>ps2mouse_get_outgoing_data</STRONG> (Thumb, 166 bytes, Stack size 16 bytes, ps2mouse.o(i.ps2mouse_get_outgoing_data))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ps2mouse_get_outgoing_data
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
@@ -1300,15 +1312,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
 </UL>
 
-<P><STRONG><a name="[c6]"></a>ps2mouse_host_req_reply</STRONG> (Thumb, 402 bytes, Stack size 24 bytes, ps2mouse.o(i.ps2mouse_host_req_reply))
+<P><STRONG><a name="[c8]"></a>ps2mouse_host_req_reply</STRONG> (Thumb, 402 bytes, Stack size 24 bytes, ps2mouse.o(i.ps2mouse_host_req_reply))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = ps2mouse_host_req_reply &rArr; ps2mouse_read &rArr; ps2mouse_get_bus_status
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_accumulators
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_delay_start
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
-<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_restore_defaults
+<BR>[Calls]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_accumulators
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_delay_start
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
+<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_restore_defaults
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_reset
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
@@ -1324,17 +1336,17 @@ Global Symbols
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
-<P><STRONG><a name="[cb]"></a>ps2mouse_read</STRONG> (Thumb, 244 bytes, Stack size 32 bytes, ps2mouse.o(i.ps2mouse_read))
+<P><STRONG><a name="[cd]"></a>ps2mouse_read</STRONG> (Thumb, 244 bytes, Stack size 32 bytes, ps2mouse.o(i.ps2mouse_read))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = ps2mouse_read &rArr; ps2mouse_get_bus_status
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
+<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
 </UL>
 
 <P><STRONG><a name="[a8]"></a>ps2mouse_release_lines</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, ps2mouse.o(i.ps2mouse_release_lines))
@@ -1350,26 +1362,26 @@ Global Symbols
 <P><STRONG><a name="[a7]"></a>ps2mouse_reset</STRONG> (Thumb, 20 bytes, Stack size 4 bytes, ps2mouse.o(i.ps2mouse_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ps2mouse_reset &rArr; ps2mouse_restore_defaults
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_restore_defaults
+<BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_restore_defaults
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_init
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
 </UL>
 
-<P><STRONG><a name="[c9]"></a>ps2mouse_restore_defaults</STRONG> (Thumb, 30 bytes, Stack size 4 bytes, ps2mouse.o(i.ps2mouse_restore_defaults))
+<P><STRONG><a name="[cb]"></a>ps2mouse_restore_defaults</STRONG> (Thumb, 30 bytes, Stack size 4 bytes, ps2mouse.o(i.ps2mouse_restore_defaults))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = ps2mouse_restore_defaults
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_accumulators
+<BR>[Calls]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_accumulators
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_reset
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
 </UL>
 
-<P><STRONG><a name="[cc]"></a>ps2mouse_send_update</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, ps2mouse.o(i.ps2mouse_send_update))
+<P><STRONG><a name="[ce]"></a>ps2mouse_send_update</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, ps2mouse.o(i.ps2mouse_send_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = ps2mouse_send_update &rArr; ps2mouse_write &rArr; ps2mouse_write_nowait &rArr; delay_us
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
+<BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
 </UL>
@@ -1377,72 +1389,62 @@ Global Symbols
 <P><STRONG><a name="[b6]"></a>ps2mouse_update</STRONG> (Thumb, 90 bytes, Stack size 8 bytes, main.o(i.ps2mouse_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = ps2mouse_update &rArr; ps2mouse_host_req_reply &rArr; ps2mouse_read &rArr; ps2mouse_get_bus_status
 </UL>
-<BR>[Calls]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_send_update
+<BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_send_update
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_release_lines
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
-<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_outgoing_data
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_read
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_outgoing_data
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[ce]"></a>ps2mouse_wait_for_idle</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, ps2mouse.o(i.ps2mouse_wait_for_idle))
+<P><STRONG><a name="[cf]"></a>ps2mouse_wait_for_idle</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, ps2mouse.o(i.ps2mouse_wait_for_idle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = ps2mouse_wait_for_idle &rArr; ps2mouse_get_bus_status
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
+<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_delay_start
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
+<BR>[Called By]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_delay_start
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
 </UL>
 
-<P><STRONG><a name="[c8]"></a>ps2mouse_write</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, ps2mouse.o(i.ps2mouse_write))
+<P><STRONG><a name="[ca]"></a>ps2mouse_write</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, ps2mouse.o(i.ps2mouse_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = ps2mouse_write &rArr; ps2mouse_write_nowait &rArr; delay_us
 </UL>
-<BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
+<BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_send_update
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
+<BR>[Called By]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_send_update
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
 </UL>
 
-<P><STRONG><a name="[c7]"></a>ps2mouse_write_delay_start</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, ps2mouse.o(i.ps2mouse_write_delay_start))
+<P><STRONG><a name="[c9]"></a>ps2mouse_write_delay_start</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, ps2mouse.o(i.ps2mouse_write_delay_start))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = ps2mouse_write_delay_start &rArr; ps2mouse_write_nowait &rArr; delay_us
 </UL>
-<BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
+<BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_nowait
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
+<BR>[Called By]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
 </UL>
 
-<P><STRONG><a name="[cf]"></a>ps2mouse_write_nowait</STRONG> (Thumb, 282 bytes, Stack size 24 bytes, ps2mouse.o(i.ps2mouse_write_nowait))
+<P><STRONG><a name="[d0]"></a>ps2mouse_write_nowait</STRONG> (Thumb, 282 bytes, Stack size 24 bytes, ps2mouse.o(i.ps2mouse_write_nowait))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = ps2mouse_write_nowait &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_delay_start
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
+<BR>[Called By]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write_delay_start
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
 </UL>
 
-<P><STRONG><a name="[ca]"></a>reset_accumulators</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, ps2mouse.o(i.reset_accumulators))
-<BR><BR>[Called By]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_restore_defaults
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
-</UL>
-
-<P><STRONG><a name="[b7]"></a>serial_mouse_update</STRONG> (Thumb, 170 bytes, Stack size 16 bytes, main.o(i.serial_mouse_update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = serial_mouse_update &rArr; mouse_buf_pop &rArr; __aeabi_uidivmod
-</UL>
-<BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_IT
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
-</UL>
-<BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<P><STRONG><a name="[cc]"></a>reset_accumulators</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, ps2mouse.o(i.reset_accumulators))
+<BR><BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_restore_defaults
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_host_req_reply
 </UL>
 
 <P><STRONG><a name="[ba]"></a>spi_error_dump_reboot</STRONG> (Thumb, 72 bytes, Stack size 0 bytes, main.o(i.spi_error_dump_reboot))
@@ -1526,7 +1528,7 @@ Global Symbols
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_press_key
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_check_for_softreset
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>

@@ -1,3 +1,19 @@
+  for (int i = 0; i < 3; ++i)
+    printf("0x%x ", serial_mouse_output_buf[i]);
+  printf("\n");
+  // printf("%d 0x%x 0x%x\n", serial_y, serial_mouse_output_buf[0], serial_mouse_output_buf[2]);
+  // if(serial_y >= -1)
+  //   serial_y = 0;
+  // printf("%d\n", serial_y);
+  // printf("%d 0x%x\n", serial_y, serial_y);
+  uint8_t y_result = 0;
+  if(serial_mouse_output_buf[0] & 0x8)
+    y_result |= 0x80;
+  if(serial_mouse_output_buf[0] & 0x4)
+    y_result |= 0x40;
+  y_result |= serial_mouse_output_buf[2] & 0x3f;
+  printf("0x%x 0x%x\n", serial_y, y_result);
+
   for (int i = 0; i < SERIAL_MOUSE_BUF_SIZE; ++i)
     printf("0x%x ", serial_mouse_output_buf[i]);
   printf("\n");

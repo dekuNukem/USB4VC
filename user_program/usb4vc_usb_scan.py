@@ -476,6 +476,8 @@ def raw_input_event_worker():
             joystick_hold_update()
             next_gamepad_hold_check = now + gamepad_hold_check_interval
 
+        # give other threads some breathing room if 
+        # no USB input events
         if now - last_usb_event > 1:
             time.sleep(0.005)
 
