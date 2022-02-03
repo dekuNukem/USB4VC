@@ -4,7 +4,7 @@
 
 -----
 
-USB4VC is an **active protocol converter** that let you use **USB keyboard, mouse, and gamepads** on retro computers.
+USB4VC is an **active protocol converter** that let you use **USB keyboard, mouse, and gamepads** on a wide range of retro computers.
 
 ![Alt text](photos/header.jpeg)
 
@@ -30,6 +30,18 @@ Two Protocol Cards are available at launch (March 2022):
 * Mapping USB Gamepad to ADB Mouse/Keyboard
 
 Of course, more are planned after launch!
+
+## Promo Video
+
+Click to see USB4VC in action!
+
+![Alt text](photos/video_thumb.png)
+
+<table>
+  <tr>
+    <td><a href="https://www.youtube.com/watch?v=H8XEUh1vhFY" title="YouTube" rel="noopener"><img src="https://i.imgur.com/767Nnyt.png"></a></td>
+  </tr>
+</table>
 
 ## Testers / Reviewers Wanted!
 
@@ -63,7 +75,7 @@ want one for review or testing? or more information about launch: [Link to Launc
 
 ## Why?
 
-Before the homogeneity of USB peripherals today, computer input devices were a wild west. Different platforms used their own connectors and protocols for keyboards, mice, and gamepads.
+Before the homogeneity of USB peripherals today, computer input devices were a wild west of proprietary connectors and protocols, as different platforms used their own keyboards, mice, and gamepads.
 
 ![Alt text](photos/keyboards.jpeg)
 
@@ -73,7 +85,7 @@ With the popularity of retro computing today, it poses several issues:
 
 * After 3 or 4 decades of service, many can be **degraded and unreliable** (e.g. foam & foil keyboards), requiring extensive restoration.
 
-* Let's be honest here, most early peripherals simply **does not feel that great**. Mushy membrane keyboards, sticky ball mice, plasticky gamepads, etc. And of course, high quality ones [gets *very expensive*](https://www.ebay.com/sch/i.html?_nkw=ibm+model+f&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1).
+* Let's be honest here, most early peripherals simply **does not feel that great**. Mushy membrane keyboards, sticky ball mice, plasticky gamepads, etc. And of course, the good ones gets [*very expensive*](https://www.ebay.com/sch/i.html?_nkw=ibm+model+f&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1).
 
 * On the other hand, high quality USB peripherals can be had for a very reasonable price today with vastly **superior tactility, precision, and ergonomics**.
 
