@@ -784,7 +784,7 @@ class usb4vc_menu(object):
             if page == 0:
                 with canvas(oled_device) as draw:
                     oled_print_centered("Wait Until Green", font_medium, 0, draw)
-                    oled_print_centered("LED Turns Off", font_medium, 15, draw)
+                    oled_print_centered("LED Stays Off", font_medium, 15, draw)
                 time.sleep(1)
                 os.system("sudo halt")
                 while 1:
