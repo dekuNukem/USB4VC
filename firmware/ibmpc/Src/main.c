@@ -67,7 +67,7 @@ UART_HandleTypeDef huart3;
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 1;
-const uint8_t version_patch = 3;
+const uint8_t version_patch = 4;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -367,13 +367,15 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     rts_active = 1;
 }
 
+uint8_t serial_mouse_is_tx_in_progress;
+
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-  ;
+  serial_mouse_is_tx_in_progress = 0;
 }
 
 // https://everything2.com/title/Mouse+protocol
-void serial_mouse_update(void)
+void microsoft_serial_mouse_update(void)
 {
   if(rts_active)
   {
@@ -386,6 +388,12 @@ void serial_mouse_update(void)
   if(this_mouse_event == NULL)
     return;
 
+  if(serial_mouse_is_tx_in_progress)
+  {
+    mouse_buf_pop(&my_mouse_buf);
+    return;
+  }
+
   memset(serial_mouse_output_buf, 0, SERIAL_MOUSE_BUF_SIZE);
   serial_mouse_output_buf[0] = 0xc0;
   if(this_mouse_event->button_left)
@@ -393,21 +401,23 @@ void serial_mouse_update(void)
   if(this_mouse_event->button_right)
     serial_mouse_output_buf[0] |= 0x10;
 
-  int8_t serial_y = -1 * this_mouse_event->movement_y;
+  int16_t serial_x = this_mouse_event->movement_x;
+  int16_t serial_y = -1* this_mouse_event->movement_y;
+
   if(serial_y & 0x80)
     serial_mouse_output_buf[0] |= 0x8;
   if(serial_y & 0x40)
     serial_mouse_output_buf[0] |= 0x4;
-  if(this_mouse_event->movement_x & 0x80)
+  if(serial_x & 0x80)
     serial_mouse_output_buf[0] |= 0x2;
-  if(this_mouse_event->movement_x & 0x40)
+  if(serial_x & 0x40)
     serial_mouse_output_buf[0] |= 0x1;
 
-  serial_mouse_output_buf[1] = 0x3f & this_mouse_event->movement_x;
+  serial_mouse_output_buf[1] = 0x3f & serial_x;
   serial_mouse_output_buf[2] = 0x3f & serial_y;
-  
   mouse_buf_pop(&my_mouse_buf);
   HAL_UART_Transmit_IT(&huart3, serial_mouse_output_buf, 3);
+  serial_mouse_is_tx_in_progress = 1;
 }
 
 void spi_error_dump_reboot(void)
@@ -550,11 +560,11 @@ int main(void)
   /* USER CODE BEGIN 3 */
 
     // If both enabled, PS2 mouse takes priority
-    if(is_protocol_enabled(PROTOCOL_PS2_MOUSE) && IS_PS2MOUSE_PRESENT())
-      ps2mouse_update();
-    else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
-      serial_mouse_update();
-
+    // if(is_protocol_enabled(PROTOCOL_PS2_MOUSE) && IS_PS2MOUSE_PRESENT())
+    //   ps2mouse_update();
+    // else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
+    //   microsoft_serial_mouse_update();
+    microsoft_serial_mouse_update();
     // If both enabled, PS2 keyboard takes priority
     if(is_protocol_enabled(PROTOCOL_AT_PS2_KB) && IS_KB_PRESENT())
       ps2kb_update();
