@@ -30,7 +30,7 @@ If so, congrats! Power off and continue.
 
 ## Kit Assembly
 
-If your USB4VC has not been assembled yet, [see this guide](/kit_assembly_guide.md) to put it together.
+If your USB4VC has not been assembled yet, [see this guide](/kit_assembly.md) to put it together.
 
 ## Cable Connection
 

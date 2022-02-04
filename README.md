@@ -35,11 +35,9 @@ Of course, more are planned after launch!
 
 Click to see USB4VC in action!
 
-![Alt text](photos/video_thumb.png)
-
 <table>
   <tr>
-    <td><a href="https://www.youtube.com/watch?v=H8XEUh1vhFY" title="YouTube" rel="noopener"><img src="https://i.imgur.com/767Nnyt.png"></a></td>
+    <td><a href="https://www.youtube.com/watch?v=H8XEUh1vhFY" title="YouTube" rel="noopener"><img src="https://i.imgur.com/pFqa7sO.png"></a></td>
   </tr>
 </table>
 
@@ -59,23 +57,23 @@ want one for review or testing? or more information about launch: [Link to Launc
 
 ## Highlights
 
-* USB Keyboard/Mouse/Gamepads on retro computers!
+* USB Keyboard/Mouse/Gamepads on Vintage Computers!
 
-* Modular & swappable Protocol Cards
+* Modular & Swappable Protocol Cards
 
 * Wireless / Bluetooth
 
-* Ultra low latency (0.5ms)
+* Ultra Low Latency (0.5ms)
 
-* OLED display
+* OLED Display
 
-* USB-C powered
+* USB-C Powered
 
-* Fully open-source
+* Fully Open-source
 
 ## Why?
 
-Before the homogeneity of USB peripherals today, computer input devices were a wild west of proprietary connectors and protocols, as different platforms used their own keyboards, mice, and gamepads.
+Before the homogeneity of USB peripherals today, computer input devices were a wild west of proprietary protocols and connectors, as different platforms used their own keyboards, mice, and gamepads.
 
 ![Alt text](photos/keyboards.jpeg)
 
@@ -111,19 +109,15 @@ But of course, one can argue that using period-correct peripherals is simply par
 
 A kickstarter is planned, see [page] for details
 
-### How is the latency?
+### What do I need to get started?
 
-Depends on the Raspberry Pi you use:
 
-| RPi Generation | Latency |
-|----------------|---------|
-| 2              | 1ms     |
-| 3              | 0.63ms  |
-| 4              | 0.5ms   |
 
-1ms is *one thousandth* of a second.
+### How much is the latency?
 
-The delay from USB4VC is all but negligible.
+0.5ms to 1ms depending on the Raspberry Pi generation.
+
+1ms is *one thousandth* of a second. More detailed [info here](technical_notes.md#latency-information).
 
 ### Which Raspberry Pi can I use?
 
