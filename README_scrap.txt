@@ -1,3 +1,15 @@
+## Testers / Reviewers Wanted!
+
+Assembled around 7 by hand, can send it out.
+
+want more game controllers
+IBM PC AT
+
+**`Interested?`** Please follow the project Discord/Twitter, or join Kickstarter waiting list to be notified with latest updates!
+
+**`Questions and Comments?`** 
+want one for review or testing? or more information about launch: [Link to Launch timeline ]
+
 ## How it Works
 
 USB4VC consists of two parts: **Baseboard** and swappable **Protocol Cards**.

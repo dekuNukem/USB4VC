@@ -1,4 +1,8 @@
+# USB4VC Technical Notes
 
+[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | Table of Contents
+
+-----
 
 This document gives a overview of the technical aspects of USB4VC, which should be helpful for tinkering, contributing, and making your own Protocol Cards.
 

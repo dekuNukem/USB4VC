@@ -1,6 +1,6 @@
 # USB4VC: USB Inputs on Retro Computers!
 
-[Get USB4VC](https://www.tindie.com/) | [Official Discord](https://discord.gg/4sJCBx5) | [Getting Started](getting_started.md) | Table of Contents
+[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | Table of Contents
 
 -----
 
@@ -23,7 +23,7 @@ Two Protocol Cards are available at launch (March 2022):
 * 15-pin Gameport Gamepad
 * Mapping USB Gamepad to PC Mouse/Keyboard
 
-#### Apple Desktop Bus
+#### Apple Desktop Bus (ADB)
 
 * ADB Keyboard
 * ADB Mouse
@@ -41,19 +41,31 @@ Click to see USB4VC in action!
   </tr>
 </table>
 
-## Testers / Reviewers Wanted!
-
-Assembled around 7 by hand, can send it out.
-
-## I Want One! / Stay in Touch
+## Get One / Stay in Touch
 
 [Clickable small banners here]
 
-**`Interested?`** Please follow the project Discord/Twitter, or join Kickstarter/Tindie waiting list to be notified with latest updates!
+A [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) is planned for USB4VC around **early March 2022**.
 
-**`Questions and Comments?`** Feel free to ask in Discord/Twitter, raise a Github issue, or via `dekunukem` `gmail.com`!
+Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested! More Protocol Cards are on the way!
 
-want one for review or testing? or more information about launch: [Link to Launch timeline ]
+**Questions or comments?** Feel free to ask in the official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
+
+## Beta Testing
+
+I would love to test USB4VC on more machines before public release, therefore I have hand-assembled around 7 complete units.
+
+If you have a decent working PC/Mac collection, let me know and I can send you one for testing!
+
+Especially looking for:
+
+* Testing on IBM PC XT/AT original and clones
+
+* PS4/PS5/Xbox Series X/S controllers for compatibility testing
+
+Everyone welcome, but **UK** users preferred due to shipping time and cost. 
+
+Let me know in [Discord Chatroom](https://discord.gg/HAuuh3pAmB), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
 ## Highlights
 
