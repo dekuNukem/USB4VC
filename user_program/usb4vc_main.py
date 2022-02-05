@@ -22,4 +22,4 @@ while 1:
         print("Disabling ERTM....")
         subprocess.call('echo 1 > /sys/module/bluetooth/parameters/disable_ertm')
         print("DONE")
-    time.sleep(5)
+    time.sleep(2)
