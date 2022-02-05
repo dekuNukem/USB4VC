@@ -45,7 +45,7 @@ Click to see USB4VC in action!
 
 A [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) is planned for USB4VC around **early March 2022**.
 
-Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested! More Protocol Cards are on the way!
+Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested! More Protocol Cards are on the way! [More information](kickstarter_info.md) here.
 
 **Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
@@ -158,7 +158,6 @@ Earlier Pis might lack built-in Bluetooth.
 0.5ms to 1ms depending on the Raspberry Pi generation.
 
 1ms is *one thousandth* of a second. [More info here](technical_notes.md#latency-information).
-
 
 ### Can you develop a Protocol Card for ___ ?
 

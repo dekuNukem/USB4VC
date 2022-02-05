@@ -12,3 +12,12 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 
 [Clickable small banners here]
+
+
+![Alt text](photos/macclassic.jpeg)
+
+![Alt text](photos/duke3d.jpeg)
+
+More details will become available 
+
+* There will be **`100 early bird`** slots with a **`discount`** AND **`immediate shipping`**.

@@ -6,10 +6,6 @@
 
 Thanks for getting USB4VC! Here is a quick guide on how to put everything together.
 
-## Questions or Comments?
-
-Join our Discord, etc, etc.
-
 ## Recommended Tools
 
 A small Phillips-head screwdriver (`+`shape) should be included in the package.
@@ -18,13 +14,13 @@ A pair of pliers would make tightening the fasteners easier, but not required.
 
 ## Handling Bare Circuit Boards
 
+To reduce the risk of damage from static discharge:
+
 * Wash your hands first
 
 * Always hold the circuit board by its edge
 
 * Don't touch the components
-
-This reduces the risk of static discharge damaging the board.
 
 ## Assembly Steps
 
@@ -34,7 +30,7 @@ By now, you should have:
 
 * USB4VC Protocol Card(s)
 
-* Raspberry Pi 2/3/4 Model B
+* Raspberry Pi 1/2/3/4 Model B
 
 * Acrylic Plates
 
@@ -58,7 +54,7 @@ Orient plate the plate as shown, insert four `8mm Screws` into the marked holes:
 
 ![Alt text](photos/first4.jpeg)
 
-Put something rigid (cardboard, etc) over the plate, and flip the whole thing over.
+Put something rigid (cardboard, etc) over the screws, and flip the whole thing over.
 
 The screws should stay in place, insert four `2.5mm Standoffs` over the screws:
 
@@ -105,3 +101,5 @@ Head on down to the [Quick Start Guide] to see how to use it.
 ## Table of Contents
 
 ## Questions or Comments?
+
+Feel free to ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
