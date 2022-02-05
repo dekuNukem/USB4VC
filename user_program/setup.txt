@@ -85,7 +85,10 @@ echo 1 > /sys/module/bluetooth/parameters/disable_ertm
 cd /home/pi/usb4vc/rpi_app; python3 keep_alive.py 2>&1 | tee -a /home/pi/usb4vc/usb4vc_debug_log.txt &
 kill -SIGINT pid
 
+-----------
+xbox one bluetooth driver
 
+sudo apt install xboxdrv
 ---------------
 
 relaunch if exits:

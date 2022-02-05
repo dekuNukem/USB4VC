@@ -616,7 +616,11 @@ def usb_device_scan_worker():
     print("usb_device_scan_worker started")
     while 1:
         time.sleep(0.75)
-        device_list = get_input_devices()
+        try:
+            device_list = get_input_devices()
+        except Exception as e:
+            print('exception at get_input_devices:', e)
+            continue
         if len(device_list) == 0:
             print('No input devices found')
             continue
@@ -639,9 +643,6 @@ def usb_device_scan_worker():
 
 raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)
 usb_device_scan_thread = threading.Thread(target=usb_device_scan_worker, daemon=True)
-
-# raw_input_event_parser_thread.start()
-# usb_device_scan_thread.start()
 
 def get_pboard_info():
     # send request
