@@ -408,8 +408,11 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
-    if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
-        return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
+    try:
+        if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
+            return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
+    except Exception as e:
+        print("make_generic_gamepad_spi_packet:", e)
     return list(nop_spi_msg_template), None, None
 
 def change_kb_led(scrolllock, numlock, capslock):

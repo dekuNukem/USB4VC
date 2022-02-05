@@ -16,10 +16,10 @@ usb4vc_usb_scan.usb_device_scan_thread.start()
 usb4vc_usb_scan.raw_input_event_parser_thread.start()
 
 while 1:
+    time.sleep(2)
     ertm_status = subprocess.getoutput("cat /sys/module/bluetooth/parameters/disable_ertm").replace('\n', '').replace('\r', '').strip()
     if ertm_status != 'Y':
         print('ertm_status:', ertm_status)
         print("Disabling ERTM....")
         subprocess.call('echo 1 > /sys/module/bluetooth/parameters/disable_ertm')
         print("DONE")
-    time.sleep(2)
