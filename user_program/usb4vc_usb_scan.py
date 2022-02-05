@@ -408,8 +408,11 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
 
 def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
-    if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
-        return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
+    try:
+        if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
+            return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
+    except Exception as e:
+        print("make_generic_gamepad_spi_packet:", e)
     return list(nop_spi_msg_template), None, None
 
 def change_kb_led(scrolllock, numlock, capslock):
@@ -616,7 +619,11 @@ def usb_device_scan_worker():
     print("usb_device_scan_worker started")
     while 1:
         time.sleep(0.75)
-        device_list = get_input_devices()
+        try:
+            device_list = get_input_devices()
+        except Exception as e:
+            print('exception at get_input_devices:', e)
+            continue
         if len(device_list) == 0:
             print('No input devices found')
             continue
@@ -639,9 +646,6 @@ def usb_device_scan_worker():
 
 raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)
 usb_device_scan_thread = threading.Thread(target=usb_device_scan_worker, daemon=True)
-
-# raw_input_event_parser_thread.start()
-# usb_device_scan_thread.start()
 
 def get_pboard_info():
     # send request
