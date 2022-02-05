@@ -21,3 +21,5 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 More details will become available 
 
 * There will be **`100 early bird`** slots with a **`discount`** AND **`immediate shipping`**.
+
+ [More information](kickstarter_info.md) here.

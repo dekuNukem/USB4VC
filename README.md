@@ -45,7 +45,7 @@ Click to see USB4VC in action!
 
 A [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) is planned for USB4VC around **early March 2022**.
 
-Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested! More Protocol Cards are on the way! [More information](kickstarter_info.md) here.
+Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested! More Protocol Cards are on the way!
 
 **Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
@@ -81,9 +81,9 @@ Let me know via [Discord](https://discord.gg/HAuuh3pAmB), [Twitter DM](https://t
 
 ## How it Works
 
-USB4VC consists of two parts: **Baseboard** and swappable **Protocol Cards**.
+USB4VC consists of two halves: **Baseboard** and swappable **Protocol Cards**.
 
-[Photo of USB4VC parts with 3 RPi generations]
+![Alt text](photos/pcards.jpeg)
 
 The Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It handles UI and input events, which are processed and sent to Protocol Card.
 
