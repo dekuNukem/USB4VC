@@ -30,11 +30,11 @@ If so, congrats! Power off and continue.
 
 ## Kit Assembly
 
-If your USB4VC has not been assembled yet, [see this guide](/kit_assembly.md) to put it together.
+If your USB4VC hasn't been assembled yet, [see this guide](/kit_assembly.md) to put it together.
 
 ## Cable Connection
 
-**Keep both your computer and USB4VC OFF for now!**
+**Keep everything OFF for now!**
 
 Using the appropriate cable, connect the desired port from Protocol Card to your computer.
 
