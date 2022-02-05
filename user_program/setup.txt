@@ -89,6 +89,9 @@ kill -SIGINT pid
 xbox one bluetooth driver
 
 sudo apt install xboxdrv
+
+echo 'options bluetooth disable_ertm=Y' | sudo tee -a /etc/modprobe.d/bluetooth.conf
+
 ---------------
 
 relaunch if exits:
