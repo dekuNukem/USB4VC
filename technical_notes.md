@@ -4,7 +4,13 @@
 
 -----
 
-This document gives a overview of the technical aspects of USB4VC, which should be helpful for tinkering, contributing, and making your own Protocol Cards.
+This document contains technical information for USB4VC, which should be helpful for tinkering, contributing, and making your own Protocol Cards.
+
+## IBM Protocol Card
+
+## Apple Desktop Bus (ADB) Protocol Card
+
+## Baseboard
 
 ## Linux Input Event Codes
 
@@ -50,7 +56,6 @@ The Protocol Card connector is the same as the Raspberry Pi Header, although the
 Most of the pins are already in use:
 
 ![Alt text](photos/rpi_pinout.png)
-
 
 ## SPI Communication Protocol
 
@@ -98,7 +103,6 @@ I tested out different generations of Raspberry Pis, and here is the result:
 | 4              | 0.5ms   |
 
 You can find the [capture files here](captures/latency), open with [saleae app](https://www.saleae.com/downloads/), search `PID ACK` for USB input events, more info [in this video](https://www.youtube.com/watch?v=wdgULBpRoXk)
-
 
 ## Developing your own Protocol Card
 

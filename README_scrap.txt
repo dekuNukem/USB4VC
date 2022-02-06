@@ -22,4 +22,6 @@ More details will become available
 
 * There will be **`100 early bird`** slots with a **`discount`** AND **`immediate shipping`**.
 
- [More information](kickstarter_info.md) here.
+[More information](kickstarter_info.md) here.
+
+#questions-or-comments

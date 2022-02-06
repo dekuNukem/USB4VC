@@ -22,9 +22,9 @@ USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
 
 * You don't have to get the latest model, even the earliest RPi B+ is plenty fast enough.
 
-* Older Pis might not have built-in Bluetooth, so you may need a USB dongle if you want Bluetooth.
+* Older Pis might not have built-in Bluetooth, so you may need a USB BT dongle.
 
-* Pi Zeros *might* work, but you need to solder a header to it, and use a USB hub.
+* Pi Zeros *might* work, but you need to solder a male header, and use a USB hub.
 
 ![Alt text](photos/rpis.jpeg)
 
@@ -39,6 +39,36 @@ If so, congrats! Power off and continue.
 ## Kit Assembly
 
 If your USB4VC hasn't been assembled yet, [see this guide](/kit_assembly.md) to put it together.
+
+## Protocol Card Overview: IBM PC
+
+Let's take a quick look at what we have:
+
+![Alt text](photos/ibmpcpc.jpeg)
+
+* All cables can be purchased as add-ons during [Kickstarter campaign](kickstarter_info.md) and on Tindie store.
+
+* For PS/2 keyboard and mouse, a **male to male** PS/2 cable is needed.
+
+* For XT and AT keyboards, a PS/2 to AT adapter is needed.
+
+* The 9-Pin serial mouse requires a **female-to-female straight-through** cable.
+
+* The 15-Pin gameport requires a **male-to-male** cable.
+
+* DFU button is used for firmware updates.
+
+## Protocol Card Overview: Apple Desktop Bus (ADB)
+
+![Alt text](photos/adbpc.jpeg)
+
+* A **male to male** 4-Pin mini-DIN cable is needed. Same as S-Video cable!
+
+* You can use either ADB ports, and the other for daisy-chaining.
+
+* Press the ADB Power button to turn on.
+
+* ADB Power Button can also be activated from the microcontroller.
 
 ## Cable Connection
 
@@ -58,11 +88,11 @@ If using Bluetooth, we can pair it later.
 
 With cables connected, power up USB4VC with a USB-C cable.
 
-You can do it from Protocol Card, Baseboard, or even RPi itself. All will work!
+You can do it from Baseboard, Protocol Card, or even RPi itself. All will work!
 
 ![Alt text](photos/powerports.jpeg)
 
-After a few seconds, the OLED screen should light up, showing home screen:
+After a few seconds, the OLED screen should light up, showing **home screen**:
 
 ![Alt text](photos/oledhome.jpeg)
 
@@ -78,7 +108,7 @@ Otherwise, press `Enter` button to adjust protocols, mouse sensitivity, and game
 
 ![Alt text](photos/msserial.jpeg)
 
-I would suggest leaving the mouse and gamepads adjustments at default, and change them in the OS or games first. Only do it on USB4VC if that is not possible.
+It is recommended to leave the mouse and gamepads adjustments at default, and change them inside the OS or game first. Only do it on USB4VC if that is not possible.
 
 ## Try it out!
 
@@ -86,14 +116,15 @@ With protocol set up, and cable connected, time to power on the computer!
 
 If everything goes well, you should be able to use it as normal, now with USB inputs!
 
-[video clip here]
+![Alt text](photos/guide.gif)
 
 ## Powering Off/On
 
-You can turn off/reboot the Raspberry Pi by pressing the `POWER OFF` button:
+You can turn off/reboot the Raspberry Pi by pressing the `POWER OFF` button.
 
 When the RPi is off, you can press `POWER ON` button to turn it back on.
 
+![Alt text](photos/power_buttons.jpeg)
 
 
 ## Software Updates
@@ -106,4 +137,7 @@ json file
 
 
 
+## Questions or Comments?
+
+Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 

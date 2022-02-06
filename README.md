@@ -1,6 +1,6 @@
 # USB4VC: USB Inputs on Retro Computers!
 
-[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | Table of Contents
+[Get USB4VC](kickstarter_info.md) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | Table of Contents
 
 -----
 
@@ -43,7 +43,7 @@ Click to see USB4VC in action!
 
 ## Get One / Stay in Touch
 
-A [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) is planned for USB4VC around **early March 2022**.
+A [Kickstarter campaign](kickstarter_info.md) is planned for USB4VC around **early March 2022**.
 
 Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested! More Protocol Cards are on the way!
 
@@ -127,9 +127,9 @@ But of course, one can argue that using period-correct peripherals is simply par
 
 ## Roadmap / Future Plans
 
-Current focus is having a smooth project launch. So for the first few months I will mostly be working on maintaining Kickstarter campaign, shipping orders, and providing updates and bug fixes for IBM PC and ADB Protocol Cards.
+Current focus is having a smooth project launch. So for the first few months I will mostly be working on maintaining Kickstarter campaign, shipping orders, and providing updates and bug fixes for existing Protocol Cards.
 
-Of course, more Protocol Cards are planned for later 2022. Not making any guarantees at this moment, but a shortlist include:
+Of course, more Protocol Cards are planned. Not making any guarantees at this moment, but a shortlist include:
 
 * OG Macintosh/128K/512K/Mac Plus
 * Olivetti M24 / AT&T PC 6300
@@ -141,7 +141,7 @@ Want more? Feel free to [get in touch](#get-one--stay-in-touch) and make suggest
 
 ### Where can I get one?
 
-A [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) is planned around **March 2022**. Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested!
+A [Kickstarter campaign](kickstarter_info.md) is planned around **March 2022**. Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested!
 
 Public release will commence after all Kickstarter orders have been fulfilled, probably around April or May 2022.
 

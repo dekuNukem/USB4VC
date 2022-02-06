@@ -1,0 +1,96 @@
+very useful video:
+https://youtu.be/wdgULBpRoXk
+
+search for PID ACK for data packet
+
+from keypress to PID ACK on USB line: 10 to 20ms
+
+catting /dev/input/event0 in bash: 490us
+printing via python3: 1ms
+
+script below:
+
+fff = open("/dev/input/event0", "rb" )
+while 1:
+  data = fff.read(24)
+  print(data)
+
+using queue to despatch SPI on raspberry 3: 700 to 800us
+on lichee 3.5ms 
+
+libevdev is SUPER SLOW! 20ms delay in parsing keyboard events. might write about it or do some more testing.
+
+hand parse raw dev/input: 470us on pi3, 1ms on lichee
+
+black PS2 extension cable both male:
+
+purple clk
+black data
+brown GND
+
+ps2 driver based on https://github.com/Harvie/ps2dev
+no parity check for speed
+
+raspberry pi gpio linux pin numbers is BCM pin number, check use `gpio readall`
+
+in allwinner chips, linux gpio number = (position of letter in alphabet - 1) * 32 + pin number
+
+PA3 = (1-1) * 32 + 3 = gpio3
+
+PE3 = (5-1) * 32 + 3 = 128+3 = gpio131
+
+echo 131 > /sys/class/gpio/export
+
+echo in > /sys/class/gpio/gpio131/direction
+
+cat /sys/class/gpio/gpio131/value
+
+to see list of all interrupts
+cat /proc/interrupts
+
+change keyboard LED
+sudo bash -c 'echo 1 > /sys/class/leds/input5\:\:capslock/brightness'
+
+
+run script on launch:
+
+https://raspberrypi-guide.github.io/programming/run-script-on-boot
+
+sudo nano /etc/rc.local
+
+cd /home/pi/usb4vc; sudo python3 usb4vc_main.py &
+
+kill -SIGINT pid
+
+ps2 mouse todo:
+
+add remote mode data report
+add scale/resolution change
+test remote/wrap mode
+
+
+supported protocols:
+
+PS/2 Keyboard:
+Scancode set 2
+
+PS/2 Mouse:
+generic id0
+MS intellimouse id3
+
+Serial Mouse:
+Microsoft serial mouse (3 byte 1200bps 7n1)
+
+
+
+rfkill returns nothing with no bluetooth on rpi 2
+
+bluetoothctrl gets stuck if no bluetooth
+
+check rfkill first, then put a timeout on first btctl command
+
+
+bluetoothctl --agent NoInputNoOutput
+scan on
+trust <MAC-Address>
+connect <MAC-Address>

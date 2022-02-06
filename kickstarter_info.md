@@ -22,6 +22,8 @@ Please note this is a rough estimate, timing might change depending on circumsta
 
 * Gather Feedback, Fix Bugs, Finishing Touches.
 
+* Write Documentations
+
 #### March - April 2022
 
 * Kickstarter Campaign
