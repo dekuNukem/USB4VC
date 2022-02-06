@@ -31,7 +31,7 @@ From the very first IBM PC in 1981 until the end of PS/2 ports in early 2000s, t
 * ADB Mouse
 * Mapping USB Gamepad to ADB Mouse/Keyboard
 
-From Apple IIGS in 1986 to PowerMac G3 in 1999, and everything inbetween!
+From Apple IIGS in 1986 to PowerMac G3 in 1999, and everything in-between!
 
 #### More to Come!
 
@@ -57,13 +57,15 @@ Please [sign up for launch notification](https://www.kickstarter.com/projects/de
 
 ## Beta Testing
 
-I would love to test USB4VC on more machines before public release, so if you have a decent working PC/Mac collection, let me know and I can send you one for testing!
+I would love to test USB4VC on more machines before public release, to gather feedbacks and fix bugs.
+
+If you have a decent working PC/Mac collection, let me know and I can send you one for testing!
 
 Especially looking for:
 
-* Testing on IBM PC XT/AT original and clones
+* Testing on IBM PC XT/AT original and clones.
 
-* PS4/PS5/Xbox Series X/S controllers for compatibility testing
+* PS4/PS5/Xbox Series X/S controllers for compatibility testing.
 
 Everyone welcome, but **UK** users preferred due to shipping time and cost. 
 
@@ -121,7 +123,7 @@ With the popularity of retro computing today, it poses several issues:
 
 * I also hope it can put more computers back in action, lower the barrier of entry for certain machines, and generally help more people get into this hobby!
 
-But of course, one can argue that using period-correct peripherals is simply part of the experience, but just like the HDMI upscalers or floppy emus, it's nice to have the option to enhance the experience.
+But of course, one can argue that using period-correct peripherals is simply part of the hobby, but just like HDMI upscalers or floppy emus, it's nice to have the option to enhance the experience.
 
 ![Alt text](photos/duke3d.jpeg)
 
@@ -135,7 +137,7 @@ But of course, one can argue that using period-correct peripherals is simply par
 
 ## Roadmap / Future Plans
 
-Current focus is having a smooth project launch. So for the first few months I will mostly be working on maintaining Kickstarter campaign, shipping orders, and providing updates and bug fixes for existing Protocol Cards.
+Current focus is having a smooth project launch. So for the first few months I will mostly be working on maintaining the [Kickstarter campaign](kickstarter_info.md), shipping orders, and providing updates and bug fixes for existing Protocol Cards.
 
 Of course, more Protocol Cards are planned. Not making any guarantees at this moment, but a shortlist include:
 
@@ -177,7 +179,7 @@ Also, as I can only work on so many at once, I'll probably focus on the popular 
 
 ### Can I make my own Protocol Cards?
 
-Of course! Detailed instructions will be provided after public availability.
+Of course! Detailed instructions will be provided shortly before public availability.
 
 Feel free take a look at [technical notes in the meantime](technical_notes.md).
 

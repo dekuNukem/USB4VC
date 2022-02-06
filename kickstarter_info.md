@@ -8,7 +8,7 @@ Thank you very much for the interest and support of USB4VC!
 
 Please consider [signing up launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for the latest news and updates!
 
-More information will become available as I finalise the launch plan.
+More information will become available as launch plan is finalised. [Click me](README.md) to learn more about USB4VC itself!
 
 ![Alt text](photos/duke3d.jpeg)
 
@@ -46,7 +46,7 @@ Duration should be around 25 days, with campaign ending in **early April**.
 
 Funding goal is planned to be around **5000GBP** for the first production run. Costs include components, manufacturing, accessories, shipping and expenses.
 
-As mentioned before, more details will become available as I finalise the launch plan. So please consider [signing up launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for latest developments.
+As mentioned before, more details will become available as launch plan is finalised. So please consider [signing up launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for latest developments.
 
 ## Rewards
 

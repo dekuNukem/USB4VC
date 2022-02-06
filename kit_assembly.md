@@ -94,7 +94,7 @@ Flip it over, clean the area if dirty, and stick on the anti-slip feet on the co
 
 And you're done! Congratulations!
 
-Head back to the [Getting Started Guide](getting_started.md) to see how to use it.
+Head back to the [Getting Started Guide](getting_started.md#kit-assembly) to see how to use it.
 
 ![Alt text](photos/done.jpeg)
 
