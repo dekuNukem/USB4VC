@@ -1,6 +1,6 @@
 # USB4VC Kit Assembly
 
-[Get USB4VC](https://www.tindie.com/) | [Official Discord](https://discord.gg/4sJCBx5) | [Getting Started](getting_started.md) | Table of Contents
+[Get USB4VC](https://www.tindie.com/) | [Official Discord](https://discord.gg/4sJCBx5) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
 ----
 
@@ -98,8 +98,22 @@ Head back to the [Getting Started Guide](getting_started.md#kit-assembly) to see
 
 ![Alt text](photos/done.jpeg)
 
-## Table of Contents
-
 ## Questions or Comments?
 
 Feel free to ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
+
+## Table of Contents
+
+[Main page](README.md)
+
+[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=H8XEUh1vhFY)
+
+[Getting Started Guide](getting_started.md)
+
+[Kit Assembly Guide](kit_assembly.md)
+
+[Technical Notes](technical_notes.md)
+
+[Launch Plan / Kickstarter Info](kickstarter_info.md)
+
+

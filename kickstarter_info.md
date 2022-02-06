@@ -1,6 +1,6 @@
 # USB4VC Launch Plan
 
-[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | Table of Contents
+[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
 ---
 
@@ -8,7 +8,7 @@ Thank you very much for the interest and support of USB4VC!
 
 Please consider [signing up launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for the latest news and updates!
 
-More information will become available as launch plan is finalised. [Click me](README.md) to learn more about USB4VC itself!
+More information will become available as launch plan is finalised. [Click me](README.md) to learn more about USB4VC itself, including the [ongoing beta testing program](README.md#beta-testing)!
 
 ![Alt text](photos/duke3d.jpeg)
 
@@ -131,3 +131,18 @@ Finally, you can also upgrade to **[`DHL Express Worldwide`](https://www.dhl.co.
 Please consider [signing up launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for the latest news and updates!
 
 You can also raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`
+
+## Table of Contents
+
+[Main page](README.md)
+
+[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=H8XEUh1vhFY)
+
+[Getting Started Guide](getting_started.md)
+
+[Kit Assembly Guide](kit_assembly.md)
+
+[Technical Notes](technical_notes.md)
+
+[Launch Plan / Kickstarter Info](kickstarter_info.md)
+

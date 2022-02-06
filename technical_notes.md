@@ -1,6 +1,6 @@
 # USB4VC Technical Notes
 
-[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | Table of Contents
+[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
 -----
 
@@ -113,3 +113,18 @@ Current limits etc.
 ## Questions or Comments?
 
 Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
+
+## Table of Contents
+
+[Main page](README.md)
+
+[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=H8XEUh1vhFY)
+
+[Getting Started Guide](getting_started.md)
+
+[Kit Assembly Guide](kit_assembly.md)
+
+[Technical Notes](technical_notes.md)
+
+[Launch Plan / Kickstarter Info](kickstarter_info.md)
+
