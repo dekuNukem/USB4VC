@@ -18,7 +18,15 @@ Burn through ethcher or rufus
 
 It's good practice to make sure your Raspberry Pi works before mounting it into USB4VC. 
 
-USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B/B+**. You don't have to get the latest model, even the earliest RPi B+ is plenty fast enough.
+USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
+
+* You don't have to get the latest model, even the earliest RPi B+ is plenty fast enough.
+
+* Older Pis might not have built-in Bluetooth, so you may need a USB dongle if you want Bluetooth.
+
+* Pi Zeros *might* work, but you need to solder a header to it, and use a USB hub.
+
+![Alt text](photos/rpis.jpeg)
 
 Insert SD card in Raspberry Pi, and hook it up to a monitor. No need for anything else.
 
