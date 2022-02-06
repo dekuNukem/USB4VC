@@ -6,11 +6,7 @@
 
 This document contains technical information for USB4VC, which should be helpful for tinkering, contributing, and making your own Protocol Cards.
 
-## IBM Protocol Card
-
-## Apple Desktop Bus (ADB) Protocol Card
-
-## Baseboard
+Still mostly under construction, aiming to added more details before public release in April. In the meantime, if you have any particular technical questions or comments, l[et me know!](#questions-or-comments)
 
 ## Linux Input Event Codes
 
@@ -108,11 +104,12 @@ You can find the [capture files here](captures/latency), open with [saleae app](
 
 USB4VC will send out keyboard and mouse event on SPI regardless of whether a protocol card is inserted or not. Although it will display appropriate options for switching protocols if the protocol card ID is recognized.
 
-If you want to 
-
 SPI Format, AVR based arduino probably wont work, suggested to use STM32, include link.
 
 RPi Header pinout, explain what each pin does.
 
 Current limits etc.
 
+## Questions or Comments?
+
+Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!

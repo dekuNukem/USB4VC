@@ -133,7 +133,7 @@ When the RPi is off, you can press `POWER ON` button to turn it back on.
 
 ## Software Updates
 
-Once up and running, you can now update USB4VC via **a USB flash drive** instead of burning entire SD cards.
+Once up and running, you can now update USB4VC via **a USB flash drive** instead of burning SD cards from scratch.
 
 This process will be streamlined via a [PC companion app](pc_configurator) that I'm working on, but for now let's do it manually!
 

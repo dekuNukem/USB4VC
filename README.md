@@ -23,13 +23,19 @@ Two Protocol Cards are available at launch (March 2022):
 * 15-pin Gameport Gamepad
 * Mapping USB Gamepad to PC Mouse/Keyboard
 
+From the very first IBM PC in 1981 until the end of PS/2 ports in early 2000s, this Protocol Card covers it all!
+
 #### Apple Desktop Bus (ADB)
 
 * ADB Keyboard
 * ADB Mouse
 * Mapping USB Gamepad to ADB Mouse/Keyboard
 
-Of course, more are planned after launch!
+From Apple IIGS in 1986 to PowerMac G3 in 1999, and everything inbetween!
+
+#### More to Come!
+
+Of course, more Protocol Cards are planned after launch!
 
 ## Promo Video
 
@@ -79,17 +85,19 @@ Let me know via [Discord](https://discord.gg/HAuuh3pAmB), [Twitter DM](https://t
 
 * Fully Open-source
 
+* Powered by Raspberry Pi
+
 ## How it Works
 
 USB4VC consists of two halves: **Baseboard** and swappable **Protocol Cards**.
 
 ![Alt text](photos/pcards.jpeg)
 
-The Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It handles UI and input events, which are processed and sent to Protocol Card.
+Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It handles UI and input events, which are processed and sent to Protocol Card.
 
-Each Protocol Card has a dedicated microcontroller and the appropriate connectors for the target computer.
+Protocol Cards plug into the Baseboard. Each has a dedicated microcontroller and the appropriate connectors for the target computer.
 
-By splitting duties, RPi can focus on input parsing, and P-Card handles timing critical signal generation, resulting in a flexible architecture and reliable performance.
+By splitting duties, RPi can focus on input parsing, and Protocol Card handles timing critical signal generation, resulting in a flexible architecture and reliable performance.
 
 USB peripherals can be connected via cables, wireless dongles, or Bluetooth.
 
@@ -175,5 +183,8 @@ Feel free take a look at [technical notes in the meantime](technical_notes.md).
 
 ### What does USB4VC stand for?
 
-USB for Vintage Computers. Although come to think of it, it's perfect for vintage consoles too 🤔!
+USB for Vintage Computers. Although come to think of it, it's perfect for vintage consoles too! 🤔
 
+## Questions or Comments?
+
+Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!

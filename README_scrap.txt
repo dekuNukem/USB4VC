@@ -42,3 +42,5 @@ Screw heads too high: will switch to lower ones
 PC app for USB flash drive updates and gamepad mapping
 
 USB gamepad only tested on xbox one controller, very likely will not fully work on others
+
+complete technical information
