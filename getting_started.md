@@ -8,21 +8,26 @@ Congratulations on your new toy! Here is a short guide on how to use your USB4VC
 
 ## Prepare SD card
 
-If your USB4VC already comes with a SD card, feel free to [skip this step](#test-out-raspberry-pi)!
+A Micro SD card more than 4GB in size is needed. A fast card will reduce boot time.
 
-Download image
+[Download the latest boot image here](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
 
-Burn through ethcher or rufus
+Burn the image to your SD card. I use [Rufus](https://rufus.ie/en/), which is free and open-source. [Etcher](https://www.balena.io/etcher/) is another cross-platform option.
+
+Select your SD card, then the image file, then press `START` to begin writing.
+
+![Alt text](photos/rufus.png)
+
 
 ## Test out Raspberry Pi
 
-It's good practice to make sure your Raspberry Pi works before mounting it into USB4VC. 
+This step is optional, but it's good practice to make sure your Raspberry Pi works first. 
 
 USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
 
 * You don't have to get the latest model, even the earliest RPi B+ is plenty fast enough.
 
-* Older Pis might not have built-in Bluetooth, so you may need a USB BT dongle.
+* Older Pis might not have built-in Bluetooth. So if you want BT, a USB dongle is needed.
 
 * Pi Zeros *might* work, but you need to solder a male header, and use a USB hub.
 
@@ -42,7 +47,7 @@ If your USB4VC hasn't been assembled yet, [see this guide](/kit_assembly.md) to 
 
 ## Protocol Card Overview: IBM PC
 
-Let's take a quick look at what we have:
+Let's take a quick look:
 
 ![Alt text](photos/ibmpcpc.jpeg)
 
@@ -50,7 +55,7 @@ Let's take a quick look at what we have:
 
 * For PS/2 keyboard and mouse, a **male to male** PS/2 cable is needed.
 
-* For XT and AT keyboards, a PS/2 to AT adapter is needed.
+* For XT and AT keyboards, a **PS/2 female to AT male** adapter is needed.
 
 * The 9-Pin serial mouse requires a **female-to-female straight-through** cable.
 
@@ -62,7 +67,7 @@ Let's take a quick look at what we have:
 
 ![Alt text](photos/adbpc.jpeg)
 
-* A **male to male** 4-Pin mini-DIN cable is needed. Same as S-Video cable!
+* A **male to male** 4-Pin mini-DIN cable is needed. S-Video cable works!
 
 * You can use either ADB ports, and the other for daisy-chaining.
 
@@ -126,16 +131,31 @@ When the RPi is off, you can press `POWER ON` button to turn it back on.
 
 ![Alt text](photos/power_buttons.jpeg)
 
-
 ## Software Updates
 
+Once up and running, you can now update USB4VC via **a USB flash drive** instead of burning entire SD cards.
 
+This process will be streamlined via a [PC companion app](pc_configurator) that I'm working on, but for now let's do it manually!
 
-## Advanced Features: Mapping gamepad to keyboard/mouse
+[Download the latest USB update file](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
 
-json file
+Get a USB flash drive, format it in FAT32, then drag the `usb4vc` folder to the `root level` of the drive:
 
+![Alt text](photos/usbdisk.png)
 
+Insert the drive into Raspberry Pi, and select `Update via USB Flashdrive` in the main menu.
+
+![Alt text](photos/usboled.jpeg)
+
+It will update the source code, configuration, and Protocol Card firmware to the latest version.
+
+## Mapping Gamepad to Keyboard/Mouse
+
+This feature will become available via the [PC companion app](pc_configurator) that I'm working on.
+
+In the meantime, you can manually edit the JSON file.
+
+Under construction...
 
 ## Questions or Comments?
 

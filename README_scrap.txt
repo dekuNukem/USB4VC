@@ -25,3 +25,20 @@ More details will become available
 [More information](kickstarter_info.md) here.
 
 #questions-or-comments
+
+If your USB4VC already comes with a SD card, feel free to [skip this step](#test-out-raspberry-pi)!
+
+
+To do / Known issues:
+
+Protocol card hole on the back plate is slightly off: only on prototype, will be fixed in the production run.
+
+RPi boot time around 16 seconds. will need to look to reduce.
+
+ADB collision detection not fully implemented.
+
+Screw heads too high: will switch to lower ones
+
+PC app for USB flash drive updates and gamepad mapping
+
+USB gamepad only tested on xbox one controller, very likely will not fully work on others
