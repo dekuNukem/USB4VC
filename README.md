@@ -44,7 +44,7 @@ Click to see USB4VC in action!
 
 <table>
   <tr>
-    <td><a href="https://www.youtube.com/watch?v=H8XEUh1vhFY" title="YouTube" rel="noopener"><img src="https://i.imgur.com/pFqa7sO.png"></a></td>
+    <td><a href="https://www.youtube.com/watch?v=54sdPELuu4g" title="YouTube" rel="noopener"><img src="https://i.imgur.com/pFqa7sO.png"></a></td>
   </tr>
 </table>
 
