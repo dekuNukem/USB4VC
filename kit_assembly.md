@@ -106,7 +106,7 @@ Feel free to ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [
 
 [Main page](README.md)
 
-[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=H8XEUh1vhFY)
+[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=54sdPELuu4g)
 
 [Getting Started Guide](getting_started.md)
 

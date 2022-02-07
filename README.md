@@ -18,6 +18,7 @@ Two Protocol Cards are available at launch (March 2022):
 
 * PS/2 Keyboard
 * PS/2 Mouse
+* AT Keyboard
 * XT Keyboard
 * Serial Mouse
 * 15-pin Gameport Gamepad
@@ -57,9 +58,9 @@ Please [sign up for launch notification](https://www.kickstarter.com/projects/de
 
 ## Beta Testing
 
-I would love to test USB4VC on more machines before public release, to gather feedbacks and fix bugs.
+I would love to have USB4VC tested on more machines before public release, to gather feedback and fix bugs.
 
-If you have a decent working PC/Mac collection, let me know and I can send you one for testing!
+If you have a decent working PC/Mac collection, let me know and I maybe can send you one!
 
 Especially looking for:
 
@@ -161,7 +162,7 @@ USB4VC is tested on **Raspberry Pi 1/2/3/4 Model B**.
 
 Raspberry Pi Zeros should work too, but would need a USB hub.
 
-Earlier Pis might lack built-in Bluetooth.
+No need to get the latest and greatest. An older RPi is plenty fast enough for this!
 
 ### What about latency?
 
@@ -175,13 +176,13 @@ I'd love to! But I would need a working machine with working peripherals.
 
 So if you're in UK and is happy to lend me one for a while, [let me know!](#get-one--stay-in-touch)
 
-Also, as I can only work on so many at once, I'll probably focus on the popular machines at first, but still, do let me know! 
+Also, as I can only work on so many at once, I'll probably focus on the more popular machines at first, but still, do let me know! 
 
 ### Can I make my own Protocol Cards?
 
 Of course! Detailed instructions will be provided shortly before public availability.
 
-Feel free take a look at [technical notes in the meantime](technical_notes.md).
+Feel free take a look at [technical notes](technical_notes.md) in the meantime.
 
 ### What does USB4VC stand for?
 
@@ -195,7 +196,7 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Main page](README.md)
 
-[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=H8XEUh1vhFY)
+[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=54sdPELuu4g)
 
 [Getting Started Guide](getting_started.md)
 

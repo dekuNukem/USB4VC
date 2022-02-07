@@ -8,7 +8,7 @@ Congratulations on your new toy! Here is a short guide on how to use your USB4VC
 
 ## Prepare SD card
 
-A Micro SD card more than 4GB in size is needed. A fast card will reduce boot time.
+A Micro SD card at least 4GB in size is needed. A fast card will reduce boot time.
 
 [Download the latest boot image here](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
 
@@ -51,7 +51,7 @@ Let's take a quick look:
 
 ![Alt text](photos/ibmpcpc.jpeg)
 
-* All cables can be purchased as add-ons during [Kickstarter campaign](kickstarter_info.md) and on Tindie store.
+* All cables can be purchased as add-ons during [Kickstarter campaign](kickstarter_info.md) and in Tindie store.
 
 * For PS/2 keyboard and mouse, a **male to male** PS/2 cable is needed.
 
@@ -113,7 +113,7 @@ Otherwise, press `Enter` button to adjust protocols, mouse sensitivity, and game
 
 ![Alt text](photos/msserial.jpeg)
 
-It is recommended to leave the mouse and gamepads adjustments at default, and change them inside the OS or game first. Only do it on USB4VC if that is not possible.
+It is recommended to leave the mouse and gamepads adjustments at default, and change them inside the OS or game first. Only do it on USB4VC if that's not possible.
 
 ## Try it out!
 
@@ -165,7 +165,7 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Main page](README.md)
 
-[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=H8XEUh1vhFY)
+[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=54sdPELuu4g)
 
 [Getting Started Guide](getting_started.md)
 

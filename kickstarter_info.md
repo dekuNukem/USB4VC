@@ -136,7 +136,7 @@ You can also raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues),
 
 [Main page](README.md)
 
-[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=H8XEUh1vhFY)
+[(Youtube Video) USB4VC in Action](https://www.youtube.com/watch?v=54sdPELuu4g)
 
 [Getting Started Guide](getting_started.md)
 
