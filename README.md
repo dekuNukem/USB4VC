@@ -104,7 +104,7 @@ By splitting duties, RPi can focus on input parsing, and Protocol Card handles t
 
 USB peripherals can be connected via cables, wireless dongles, or Bluetooth.
 
-## Why?
+## Why / Project Goals
 
 Before the homogeneity of USB peripherals today, computer input devices were a wild west of proprietary protocols and connectors, as different platforms used their own keyboards, mice, and gamepads.
 
@@ -122,7 +122,7 @@ With the popularity of retro computing today, it poses several issues:
 
 * Thus, this project aims to make retro computers simply **more enjoyable to use**.
 
-* I also hope it can put more computers back in action, lower the barrier of entry for certain machines, and generally help more people get into this hobby!
+* I also hope it can lower the barrier of entry for certain machines, put more computers back in action, help preserving existing rare peripherals, and generally help more people get into this hobby!
 
 But of course, one can argue that using period-correct peripherals is simply part of the hobby, but just like HDMI upscalers or floppy emus, it's nice to have the option to enhance the experience.
 
