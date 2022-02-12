@@ -50,27 +50,11 @@ Click to see USB4VC in action!
 
 ## Get One / Stay in Touch
 
-A [Kickstarter campaign](kickstarter_info.md) is planned for USB4VC around **early March 2022**.
+A [Kickstarter campaign](kickstarter_info.md) is planned for USB4VC around **March 2022**.
 
 Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested! More Protocol Cards are on the way!
 
 **Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
-
-## Beta Testing
-
-I would love to have USB4VC tested on more machines before public release, to gather feedback and fix bugs.
-
-If you have a decent working PC/Mac collection, let me know and I maybe can send you one!
-
-Especially looking for:
-
-* Testing on IBM PC XT/AT original and clones.
-
-* PS4/PS5/Xbox Series X/S controllers for compatibility testing.
-
-Everyone welcome, but **UK** users preferred due to shipping time and cost. 
-
-Let me know via [Discord](https://discord.gg/HAuuh3pAmB), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
 ## Highlights
 
@@ -89,20 +73,6 @@ Let me know via [Discord](https://discord.gg/HAuuh3pAmB), [Twitter DM](https://t
 * Fully Open-source
 
 * Powered by Raspberry Pi
-
-## How it Works
-
-USB4VC consists of two halves: **Baseboard** and swappable **Protocol Cards**.
-
-![Alt text](photos/pcards.jpeg)
-
-Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It handles UI and input events, which are processed and sent to Protocol Card.
-
-Protocol Cards plug into the Baseboard. Each has a dedicated microcontroller and the appropriate connectors for the target computer.
-
-By splitting duties, RPi can focus on input parsing, and Protocol Card handles timing critical signal generation, resulting in a flexible architecture and reliable performance.
-
-USB peripherals can be connected via cables, wireless dongles, or Bluetooth.
 
 ## Why / Project Goals
 
@@ -127,6 +97,36 @@ With the popularity of retro computing today, it poses several issues:
 But of course, one can argue that using period-correct peripherals is simply part of the hobby, but just like HDMI upscalers or floppy emus, it's nice to have the option to enhance the experience.
 
 ![Alt text](photos/duke3d.jpeg)
+
+## How it Works
+
+USB4VC consists of two halves: **Baseboard** and swappable **Protocol Cards**.
+
+![Alt text](photos/pcards.jpeg)
+
+Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It handles UI and input events, which are processed and sent to Protocol Card.
+
+Protocol Cards plug into the Baseboard. Each has a dedicated microcontroller and the appropriate connectors for the target computer.
+
+By splitting duties, RPi can focus on input parsing, and Protocol Card handles timing critical signal generation, resulting in a flexible architecture and reliable performance.
+
+USB peripherals can be connected via cables, wireless dongles, or Bluetooth.
+
+## Beta Testing
+
+I would love to have USB4VC tested on more machines before public release, to gather feedback and fix bugs.
+
+If you have a decent working PC/Mac collection, let me know and I maybe can send you one!
+
+Especially looking for:
+
+* Testing on IBM PC XT/AT original and clones.
+
+* PS4/PS5/Xbox Series X/S controllers for compatibility testing.
+
+Everyone welcome, but **UK** users preferred due to shipping time and cost. 
+
+Let me know via [Discord](https://discord.gg/HAuuh3pAmB), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
 ## Getting Started
 

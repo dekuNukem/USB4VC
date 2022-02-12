@@ -129,7 +129,7 @@ PROTOCOL_ADB_KB = {'pid':3, 'display_name':"ADB"}
 PROTOCOL_PS2_MOUSE = {'pid':4, 'display_name':"PS/2"}
 PROTOCOL_MICROSOFT_SERIAL_MOUSE = {'pid':5, 'display_name':"Microsft Serial"}
 PROTOCOL_ADB_MOUSE = {'pid':6, 'display_name':"ADB"}
-PROTOCOL_GENERIC_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic 15-Pin", 'mapping':IBM_GGP_DEAULT_MAPPING}
+PROTOCOL_15PIN_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic 15-Pin", 'mapping':IBM_GGP_DEAULT_MAPPING}
 PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = {'pid':8, 'display_name':"Gravis Pro"}
 PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = {'pid':9, 'display_name':"MS Sidewinder"}
 PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
@@ -142,10 +142,11 @@ try:
     onlyfiles = [f for f in os.listdir(config_dir_path) if os.path.isfile(os.path.join(config_dir_path, f))]
     json_map_files = [os.path.join(config_dir_path, x) for x in onlyfiles if x.lower().startswith('usb4vc_map') and x.lower().endswith(".json")]
     for item in json_map_files:
+        print('loading json file:', item)
         with open(item) as json_file:
             custom_profile_list.append(json.load(json_file))
 except Exception as e:
-    print('load json maps:', e)
+    print('json load exception:', e)
 
 def get_list_of_usb_drive():
     usb_drive_set = set()
@@ -340,8 +341,8 @@ def oled_print_centered(text, font, y, this_canvas):
 
 ibmpc_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
 ibmpc_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE]
-# ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_GENERIC_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER]
-ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_GENERIC_GAMEPORT_GAMEPAD]
+# ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_15PIN_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER]
+ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_15PIN_GAMEPORT_GAMEPAD]
 
 adb_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_KB]
 adb_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_MOUSE]

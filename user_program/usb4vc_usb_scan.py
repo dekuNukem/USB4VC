@@ -309,7 +309,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             if target_code not in curr_kb_output:
                 curr_kb_output[target_code] = set()
             is_activated = 0
-            deadzone_amount = 19
+            deadzone_amount = 50
             try:
                 deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
             except Exception:
@@ -331,7 +331,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         # usb gamepad analog axes to mouse axes
         if source_type == 'usb_abs_axis' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output:
             movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
-            deadzone_amount = 19
+            deadzone_amount = 20
             try:
                 deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
             except Exception:
