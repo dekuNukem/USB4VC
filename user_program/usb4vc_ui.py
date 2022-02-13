@@ -130,8 +130,8 @@ PROTOCOL_PS2_MOUSE = {'pid':4, 'display_name':"PS/2"}
 PROTOCOL_MICROSOFT_SERIAL_MOUSE = {'pid':5, 'display_name':"Microsft Serial"}
 PROTOCOL_ADB_MOUSE = {'pid':6, 'display_name':"ADB"}
 PROTOCOL_15PIN_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic 15-Pin", 'mapping':IBM_GGP_DEAULT_MAPPING}
-PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = {'pid':8, 'display_name':"Gravis Pro"}
-PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = {'pid':9, 'display_name':"MS Sidewinder"}
+# PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = {'pid':8, 'display_name':"Gravis Pro"}
+# PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = {'pid':9, 'display_name':"MS Sidewinder"}
 PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
@@ -696,8 +696,6 @@ class usb4vc_menu(object):
         self.current_mouse_protocol = self.mouse_protocol_list[self.current_mouse_protocol_index]
         self.current_gamepad_protocol = self.gamepad_protocol_list[self.current_gamepad_protocol_index]
 
-        # print('this', this_msg)
-        # print('last', self.last_spi_message)
         if this_msg == self.last_spi_message:
             print("SPI: no need to send")
             return
@@ -853,8 +851,8 @@ def ui_init():
             this_mapping_bid = usb4vc_shared.board_id_lookup.get(item['protocol_board'], 0)
             if this_mapping_bid == this_pboard_id and item['device_type'] in pboard_database[this_pboard_id]:
                 this_mapping_pid = usb4vc_shared.protocol_id_lookup.get(item['protocol_name'])
-                this_profile = {'pid':this_mapping_pid, 'display_name':item['display_name'], 'mapping':item['mapping']}
-                pboard_database[this_pboard_id][item['device_type']].append(this_profile)
+                item['pid'] = this_mapping_pid
+                pboard_database[this_pboard_id][item['device_type']].append(item)
         pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
         pboard_database[this_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
     if 'rpi_app_ver' not in configuration_dict:

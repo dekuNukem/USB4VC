@@ -1,13 +1,13 @@
 import os
 import sys
 import time
+import math
 import spidev
 import evdev
 import threading
 import RPi.GPIO as GPIO
 import usb4vc_ui
 import usb4vc_shared
-
 
 """
 sudo apt install stm32flash
@@ -175,10 +175,68 @@ MOUSE_SPI_LOOKUP = {
     REL_WHEEL:8,
 }
 
-def find_keycode_in_mapping(source_code, mapping_dict):
+xbox_one_bluetooth_to_linux_ev_code_dict = {
+    "XB1_A":"BTN_SOUTH",
+    "XB1_B":"BTN_EAST",
+    "XB1_X":"BTN_NORTH",
+    "XB1_Y":"BTN_WEST",
+    "XB1_LSB":"BTN_THUMBL",
+    "XB1_RSB":"BTN_THUMBR",
+    "XB1_LB":"BTN_TL",
+    "XB1_RB":"BTN_TR",
+    "XB1_VIEW":"KEY_BACK",
+    "XB1_MENU":"BTN_START",
+    "XB1_LOGO":"KEY_HOMEPAGE",
+    "XB1_LSX":"ABS_X",
+    "XB1_LSY":"ABS_Y",
+    "XB1_RSX":"ABS_Z",
+    "XB1_RSY":"ABS_RZ",
+    "XB1_LT":"ABS_BRAKE",
+    "XB1_RT":"ABS_GAS",
+    "XB1_DPX":"ABS_HAT0X",
+    "XB1_DPY":"ABS_HAT0Y",
+}
+
+xbox_one_wired_to_linux_ev_code_dict = {
+    "XB1_A":"BTN_SOUTH",
+    "XB1_B":"BTN_EAST",
+    "XB1_X":"BTN_NORTH",
+    "XB1_Y":"BTN_WEST",
+    "XB1_LSB":"BTN_THUMBL",
+    "XB1_RSB":"BTN_THUMBR",
+    "XB1_LB":"BTN_TL",
+    "XB1_RB":"BTN_TR",
+    "XB1_VIEW":"BTN_SELECT",
+    "XB1_MENU":"BTN_START",
+    "XB1_LOGO":"BTN_MODE",
+    "XB1_LSX":"ABS_X",
+    "XB1_LSY":"ABS_Y",
+    "XB1_RSX":"ABS_RX",
+    "XB1_RSY":"ABS_RY",
+    "XB1_LT":"ABS_Z",
+    "XB1_RT":"ABS_RZ",
+    "XB1_DPX":"ABS_HAT0X",
+    "XB1_DPY":"ABS_HAT0Y",
+}
+
+def translate_dict(old_mapping_dict, lookup_dict):
+    translated_map_dict = {}
+    for key in old_mapping_dict:
+        lookup_result = lookup_dict.get(key)
+        if lookup_result is not None:
+            translated_map_dict[lookup_result] = old_mapping_dict[key]
+    return translated_map_dict
+
+def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
+    translated_map_dict = {}
+    if usb_gamepad_type == "Xbox One Bluetooth":
+        mapping_dict = translate_dict(mapping_dict, xbox_one_bluetooth_to_linux_ev_code_dict)
+    elif usb_gamepad_type == "Xbox One Wired":
+        mapping_dict = translate_dict(mapping_dict, xbox_one_wired_to_linux_ev_code_dict)
+
     target_info = None
     for item in source_name:
         if item in mapping_dict:
@@ -186,6 +244,8 @@ def find_keycode_in_mapping(source_code, mapping_dict):
     if target_info is None or 'code' not in target_info:
         return None, None
     target_info = dict(target_info) # make a copy so the lookup table itself won't get modified
+    # print(target_info['code'])
+    # print('---///////////////---')
     lookup_result = usb4vc_shared.code_name_to_value_lookup.get(target_info['code'])
     if lookup_result is None:
         return None, None
@@ -211,15 +271,6 @@ def find_furthest_from_midpoint(this_set):
             diff_max = this_diff
             curr_best = item
     return curr_best
-
-import math
-
-def my_fade(value):
-    if 0 < value < 1:
-        return -1 * value + 1
-    if 1 <= value < 2:
-        return value - 1
-    return 1
 
 def apply_curve(x_0_255, y_0_255):
     x_neg127_127 = x_0_255 - 127
@@ -270,7 +321,8 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         REL_WHEEL:0,
     }
     for source_code in this_gp_dict:
-        source_type, target_info = find_keycode_in_mapping(source_code, mapping_info['mapping'])
+        usb_gamepad_type = mapping_info.get('usb_gamepad_type', 'Generic USB')
+        source_type, target_info = find_keycode_in_mapping(source_code, mapping_info['mapping'], usb_gamepad_type)
         if target_info is None:
             continue
         target_code = target_info['code']

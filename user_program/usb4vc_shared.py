@@ -321,6 +321,7 @@ code_value_to_name_lookup = {
 }
 
 board_id_lookup = {
+	'Unknown':0,
 	'IBMPC':1,
 	'ADB':2,
 }
