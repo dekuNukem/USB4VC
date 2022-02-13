@@ -297,7 +297,15 @@ ABS_Z = 0x02
 ABS_RZ = 0x05
 ABS_GAS = 0x09
 ABS_BRAKE = 0x0a
-analog_trigger_codes = {ABS_Z, ABS_RZ, ABS_GAS, ABS_BRAKE}
+xbox_one_wired_analog_trigger_codes = {ABS_Z, ABS_RZ}
+xbox_one_bluetooth_analog_trigger_codes = {ABS_GAS, ABS_BRAKE}
+
+def is_analog_trigger(ev_code, gamepad_type):
+    if gamepad_type == "Xbox One Bluetooth" and ev_code in xbox_one_bluetooth_analog_trigger_codes:
+        return True
+    if gamepad_type == "Xbox One Wired" and ev_code in xbox_one_wired_analog_trigger_codes:
+        return True
+    return False
 
 prev_gp_output = {}
 prev_kb_output = {}
@@ -377,7 +385,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                 deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
             except Exception:
                 pass
-            if source_code in analog_trigger_codes:
+            if is_analog_trigger(source_code, usb_gamepad_type):
                 scaled_value = scale_to_8bit(this_gp_dict[source_code], axes_info, source_code)
                 if scaled_value > deadzone_amount:
                     is_activated = 1
@@ -399,7 +407,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             curr_mouse_output['is_modified'] = True
         # usb gamepad analog axes to mouse axes
         if source_type == 'usb_abs_axis' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output:
-            if source_code in analog_trigger_codes:
+            if is_analog_trigger(source_code, usb_gamepad_type):
                 pass
             else:
                 movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
