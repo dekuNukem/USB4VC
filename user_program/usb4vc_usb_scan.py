@@ -153,6 +153,13 @@ def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
     value -= rmid
     return int((value / rmax) * 255) + 127
 
+def scale_to_8bit(value, axes_dict, axis_key):
+    rmax, rmid = get_range_max_and_midpoint(axes_dict, axis_key)
+    if rmax is None:
+        return value % 256
+    ratio = rmax / 255
+    return int(value/ratio)
+
 IBMPC_GGP_SPI_LOOKUP = {
     'IBM_GGP_BTN_1':4,
     'IBM_GGP_BTN_2':5,
@@ -231,12 +238,10 @@ def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
-    translated_map_dict = {}
     if usb_gamepad_type == "Xbox One Bluetooth":
         mapping_dict = translate_dict(mapping_dict, xbox_one_bluetooth_to_linux_ev_code_dict)
     elif usb_gamepad_type == "Xbox One Wired":
         mapping_dict = translate_dict(mapping_dict, xbox_one_wired_to_linux_ev_code_dict)
-
     target_info = None
     for item in source_name:
         if item in mapping_dict:
@@ -244,8 +249,7 @@ def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     if target_info is None or 'code' not in target_info:
         return None, None
     target_info = dict(target_info) # make a copy so the lookup table itself won't get modified
-    # print(target_info['code'])
-    # print('---///////////////---')
+
     lookup_result = usb4vc_shared.code_name_to_value_lookup.get(target_info['code'])
     if lookup_result is None:
         return None, None
@@ -289,6 +293,12 @@ def apply_curve(x_0_255, y_0_255):
         pass
     return x_0_255, y_0_255
 
+ABS_Z = 0x02
+ABS_RZ = 0x05
+ABS_GAS = 0x09
+ABS_BRAKE = 0x0a
+analog_trigger_codes = {ABS_Z, ABS_RZ, ABS_GAS, ABS_BRAKE}
+
 prev_gp_output = {}
 prev_kb_output = {}
 curr_mouse_output = {}
@@ -327,7 +337,8 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
             continue
         target_code = target_info['code']
         target_type = target_info['type']
-
+        # print(source_code, source_type, target_code, target_type)
+        # print("----------")
         # usb gamepad button to generic gamepad button
         if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_btn' and target_code in curr_gp_output:
             curr_gp_output[target_code].add(this_gp_dict[source_code])
@@ -366,33 +377,42 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
                 deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
             except Exception:
                 pass
-            if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) > 127 + deadzone_amount:
-                is_activated = 1
-            curr_kb_output[target_code].add(is_activated)
+            if source_code in analog_trigger_codes:
+                scaled_value = scale_to_8bit(this_gp_dict[source_code], axes_info, source_code)
+                if scaled_value > deadzone_amount:
+                    is_activated = 1
+                curr_kb_output[target_code].add(is_activated)
+            else:
+                if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) > 127 + deadzone_amount:
+                    is_activated = 1
+                curr_kb_output[target_code].add(is_activated)
+                if target_info['code_neg'] not in curr_kb_output:
+                    curr_kb_output[target_info['code_neg']] = set()
+                is_activated = 0
+                if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) < 127 - deadzone_amount:
+                    is_activated = 1
+                curr_kb_output[target_info['code_neg']].add(is_activated)
 
-            if target_info['code_neg'] not in curr_kb_output:
-                curr_kb_output[target_info['code_neg']] = set()
-            is_activated = 0
-            if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) < 127 - deadzone_amount:
-                is_activated = 1
-            curr_kb_output[target_info['code_neg']].add(is_activated)
         # usb gamepad button to mouse buttons
         if source_type == 'usb_gp_btn' and target_type == 'mouse_btn' and target_code in curr_mouse_output:
             curr_mouse_output[target_code].add(this_gp_dict[source_code])
             curr_mouse_output['is_modified'] = True
         # usb gamepad analog axes to mouse axes
         if source_type == 'usb_abs_axis' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output:
-            movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
-            deadzone_amount = 20
-            try:
-                deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
-            except Exception:
+            if source_code in analog_trigger_codes:
                 pass
-            if abs(movement) <= deadzone_amount:
-                movement = 0
-            joystick_to_mouse_slowdown = 20
-            curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown)
-            curr_mouse_output['is_modified'] = True
+            else:
+                movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
+                deadzone_amount = 20
+                try:
+                    deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
+                except Exception:
+                    pass
+                if abs(movement) <= deadzone_amount:
+                    movement = 0
+                joystick_to_mouse_slowdown = 17
+                curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown)
+                curr_mouse_output['is_modified'] = True
 
     for key in curr_kb_output:
         key_status_set = curr_kb_output[key]

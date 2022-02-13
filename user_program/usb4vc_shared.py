@@ -316,8 +316,8 @@ code_value_to_name_lookup = {
 	0x15:{'ABS_HAT2Y'},
 	0x16:{'ABS_HAT3X'},
 	0x17:{'ABS_HAT3Y'},
-	158:{'KEY_HOMEPAGE'},
-	172:{'KEY_BACK'},
+	158:{'KEY_BACK'},
+	172:{'KEY_HOMEPAGE'},
 }
 
 board_id_lookup = {
