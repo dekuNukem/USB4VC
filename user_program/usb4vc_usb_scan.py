@@ -310,10 +310,19 @@ def is_analog_trigger(ev_code, gamepad_type):
 prev_gp_output = {}
 prev_kb_output = {}
 curr_mouse_output = {}
-def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_info):
+def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, mapping_info):
     global prev_gp_output
     global prev_kb_output
     global curr_mouse_output
+    axes_info = this_device_info['axes_info']
+    this_gamepad_name = this_device_info.get('name', '').lower()
+    usb_gamepad_type = 'Generic USB'
+    if 'xbox' in this_gamepad_name or 'x-box' in this_gamepad_name:
+        if 'wireless' in this_gamepad_name:
+            usb_gamepad_type = 'Xbox One Bluetooth'
+        else:
+            usb_gamepad_type = 'Xbox One Wired'
+
     this_gp_dict = gp_status_dict[gp_id]
     curr_gp_output = {
         'IBM_GGP_BTN_1':set([0]),
@@ -339,7 +348,6 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
         REL_WHEEL:0,
     }
     for source_code in this_gp_dict:
-        usb_gamepad_type = mapping_info.get('usb_gamepad_type', 'Generic USB')
         source_type, target_info = find_keycode_in_mapping(source_code, mapping_info['mapping'], usb_gamepad_type)
         if target_info is None:
             continue
@@ -486,11 +494,11 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, mapping_in
     gp_spi_msg[10], gp_spi_msg[11] = apply_curve(gp_spi_msg[10], gp_spi_msg[11])
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
-def make_gamepad_spi_packet(gp_status_dict, gp_id, axes_info):
+def make_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
     try:
         if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
-            return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, axes_info, current_protocol)
+            return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, current_protocol)
     except Exception as e:
         print("make_generic_gamepad_spi_packet:", e)
     return list(nop_spi_msg_template), None, None
@@ -632,7 +640,7 @@ def raw_input_event_worker():
                         clear_mouse_movement(mouse_status_dict)
                     last_mouse_msg = list(this_mouse_msg)
                 if this_device['is_gp']:
-                    gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device['axes_info'])
+                    gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device)
                     pcard_spi.xfer(gp_to_transfer)
                     if kb_to_transfer is not None:
                         time.sleep(0.001)
