@@ -8,7 +8,7 @@ Congratulations on your new toy! Here is a short guide on how to use your USB4VC
 
 ## Prepare SD card
 
-A Micro SD card at least 4GB in size is needed. A fast card will reduce boot time.
+You need a Micro SD card at least 4GB in size. A fast card will reduce boot time.
 
 [Download the latest boot image here](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
 
@@ -17,7 +17,6 @@ Burn the image to your SD card. I use [Rufus](https://rufus.ie/en/), which is fr
 Select your SD card, then the image file, then press `START` to begin writing.
 
 ![Alt text](photos/rufus.png)
-
 
 ## Test out Raspberry Pi
 
@@ -89,7 +88,7 @@ Also plug in any USB Keyboard, Mouse, and Gamepad into the Raspberry Pi.
 
 If using Bluetooth, we can pair it later.
 
-## USB4VC Power On
+## Powering On
 
 With cables connected, power up USB4VC with a USB-C cable.
 
@@ -97,13 +96,11 @@ You can do it from Baseboard, Protocol Card, or even RPi itself. All will work!
 
 ![Alt text](photos/powerports.jpeg)
 
-After a few seconds, the OLED screen should light up, showing **home screen**:
+After around 15 seconds, the OLED screen should light up, showing **home screen**:
 
 ![Alt text](photos/oledhome.jpeg)
 
 Press `+` or `-` to switch pages, and `enter` button to enter the submenu.
-
-If you have a Bluetooth device, you can pair it in the "Pair Bluetooth" menu.
 
 ## Protocol Setup
 
@@ -114,6 +111,12 @@ Otherwise, press `Enter` button to adjust protocols, mouse sensitivity, and game
 ![Alt text](photos/msserial.jpeg)
 
 It is recommended to leave the mouse and gamepads adjustments at default, and change them inside the OS or game first. Only do it on USB4VC if that's not possible.
+
+## Pair Bluetooth
+
+Select "Pair Bluetooth":
+
+
 
 ## Try it out!
 
