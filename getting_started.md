@@ -20,7 +20,7 @@ Select your SD card, then the image file, then press `START` to begin writing.
 
 ## Power Considerations
 
-A **high-quality power** supply is very important! It should provide **5 Volts** and at least **2 amps** of current.
+A **high-quality power supply** is very important! It should provide **5 Volts** and at least **2 amps** of current.
 
 An inadequate supply can result in failure to boot, unstable operation, glitches, and SD card corruption.
 
@@ -28,7 +28,7 @@ Check the cable too! Cheap ones tends to have unreliable connections and large v
 
 ## Test out Raspberry Pi
 
-This step is optional, but it's good practice to make sure your Raspberry Pi works first. 
+It is a good idea to make sure your Raspberry Pi works. 
 
 USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
 
