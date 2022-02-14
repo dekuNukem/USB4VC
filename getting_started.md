@@ -175,11 +175,11 @@ You can [download this DOS program](https://github.com/dekuNukem/USB4VC/raw/mast
 
 ## Custom Gamepad Mapping
 
-You can also create your own USB-to-Gameport-Gamepad mapping so suit your exact needs.
+You can also create your own USB Gamepad mapping so suit your exact needs.
 
-You can even have it **control mouse and keyboard** instead, so you can play games that did not have native gamepad support!
+You can even have it **control mouse and keyboard**, in order to play games that did not have native gamepad support!
 
-[Download the configuration application](https://github.com/dekuNukem/usb4vc-configurator) and follow the instruction to set it up.
+[Download the configurator](https://github.com/dekuNukem/usb4vc-configurator) and follow the instruction to set it up.
 
 ## Powering Off/On
 
@@ -233,13 +233,11 @@ Here are a couple of bugs and issues that I am aware of, and the corresponding c
 
 * Not a high-priority bug, might work on it when I have time.
 
-## Software Updates
+## Manual Software Updates
 
-Once up and running, you can now update USB4VC via **a USB flash drive** instead of burning SD cards from scratch.
+You should use [the configurator software](https://github.com/dekuNukem/usb4vc-configurator) for updates. But here's how to do it by hand.
 
-This process will be streamlined via a [PC companion app](pc_configurator) that I'm working on, but for now let's do it manually!
-
-[Download the latest USB update file](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
+[Download the latest USB update for flash drives](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
 
 Get a USB flash drive, format it in FAT32, then drag the `usb4vc` folder to the `root level` of the drive:
 
@@ -250,14 +248,6 @@ Insert the drive into Raspberry Pi, and select `Update via USB Flashdrive` in th
 ![Alt text](photos/usboled.jpeg)
 
 It will update the source code, configuration, and Protocol Card firmware to the latest version.
-
-## Mapping Gamepad to Keyboard/Mouse
-
-This feature will become available via the [PC companion app](pc_configurator) that I'm working on.
-
-In the meantime, you can manually edit the JSON file.
-
-Under construction...
 
 ## Questions or Comments?
 
