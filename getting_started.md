@@ -106,7 +106,7 @@ Press `+` or `-` to switch pages, and `enter` button to enter the submenu.
 
 Looking at home screen, if displayed protocol is what you want, you're good to go!
 
-Otherwise, press `Enter` button to adjust protocols, mouse sensitivity, and gamepad linearity.
+Otherwise, press `Enter` button to go to the submenu, and use `Enter` button to adjust protocols, mouse sensitivity, and gamepad linearity.
 
 ![Alt text](photos/msserial.jpeg)
 
@@ -116,15 +116,62 @@ It is recommended to leave the mouse and gamepads adjustments at default, and ch
 
 Select "Pair Bluetooth":
 
+![Alt text](photos/bluetooth.jpeg)
 
+Put your device in Pairing mode, and press enter to start scanning.
+
+After a while, a list of found devices is shown. If your device does not appear, try scanning again.
+
+![Alt text](photos/found.jpeg)
+
+Use left/right to select one, and `enter` button to pair.
+
+Pairing result will be shown. From my experience Bluetooth Mouse/Keyboards are usually fine, but Bluetooth gamepads can be a bit temperamental sometimes. If error occurs, try rebooting the BT device and/or USB4VC.
 
 ## Try it out!
 
-With protocol set up, and cable connected, time to power on the computer!
+With protocol set up, and everything connected, time to power on the computer!
 
 If everything goes well, you should be able to use it as normal, now with USB inputs!
 
 ![Alt text](photos/guide.gif)
+
+## Using Gamepads
+
+For best results, please use a **XBox One controller**. It is the only kind I have, so I used it for development. Other controllers might be buggy in button and axes mapping. I'll try to borrow a few more before the public release. 
+
+* The easiest way is plug it in via a USB cable, and it should just work.
+
+* You can also try to pairing it with Bluetooth. If keeps failing, you might need to [update the controller in Windows 10](photos/xbupdate.png), [source here](https://atar-axis.github.io/xpadneo/).
+
+Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it should behave like a generic gamepad with **4 buttons and 2 analog axes**. Default mapping is:
+
+| XBox Controller | 15-Pin Gamepad          |
+|-----------------|-------------------------|
+| A               | Button 1                |
+| B               | Button 3                |
+| X               | Button 2                |
+| Y               | Button 4                |
+| LB              | Button 1                |
+| RB              | Button 2                |
+| Left Stick      | Joystick 1              |
+| Right Stick     | Joystick 2              |
+| D-pad           | Joystick 1              |
+| Trigger         | Joystick 2 Vertical Axis |
+
+## Joycheck DOS Program
+
+You can [download this DOS program](resources/joytest.zip) to visualize what the gamepad is doing, great for troubleshooting! Found on this [vogons thread](https://www.vogons.org/viewtopic.php?p=187168#p187168).
+
+![Alt text](photos/joycheck.png)
+
+## Custom Gamepad Mapping
+
+You can also create your own USB-to-Gameport-Gamepad mapping so suit your exact needs.
+
+You can even have it **control mouse and keyboard** instead, so you can play games that did not have native gamepad support!
+
+[Download the configuration application](https://github.com/dekuNukem/usb4vc-configurator) and follow the instruction to set it up.
 
 ## Powering Off/On
 
