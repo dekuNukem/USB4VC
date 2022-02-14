@@ -103,23 +103,24 @@ USBGP_ABS_HAT0Y = 0x11 # D-pad Y
 
 IBM_GGP_DEAULT_MAPPING = {
     # buttons to buttons
-   'BTN_X': {'code':'IBM_GGP_BTN_2'},
-   'BTN_B': {'code':'IBM_GGP_BTN_3'},
-   'BTN_Y': {'code':'IBM_GGP_BTN_4'},
-   'BTN_A': {'code':'IBM_GGP_BTN_1'},
-   'BTN_TL': {'code':'IBM_GGP_BTN_1'},
-   'BTN_TR': {'code':'IBM_GGP_BTN_2'},
-    # analog stick to analog stick
-   'ABS_X': {'code':'IBM_GGP_JS1_X'},
-   'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
-   'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
-   'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
-   'ABS_RX': {'code':'IBM_GGP_JS2_X'},
-   'ABS_RY': {'code':'IBM_GGP_JS2_Y'},
-   'ABS_Z': {'code':'IBM_GGP_JS2_X'},
-   'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
-   'ABS_GAS':{'code':'IBM_GGP_JS2_YN'},
-   'ABS_BRAKE':{'code':'IBM_GGP_JS2_YP'},
+    'BTN_X': {'code':'IBM_GGP_BTN_2'},
+    'BTN_B': {'code':'IBM_GGP_BTN_3'},
+    'BTN_Y': {'code':'IBM_GGP_BTN_4'},
+    'BTN_A': {'code':'IBM_GGP_BTN_1'},
+    'BTN_TL': {'code':'IBM_GGP_BTN_1'},
+    'BTN_TR': {'code':'IBM_GGP_BTN_2'},
+    # buttons to keyboard keys
+    'BTN_SELECT': {'code':'KEY_ESC'},
+    'BTN_START': {'code':'KEY_ENTER'},
+    # analog axes to analog axes
+    'ABS_X': {'code':'IBM_GGP_JS1_X'},
+    'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
+    'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
+    'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
+    'ABS_RX': {'code':'IBM_GGP_JS2_X'},
+    'ABS_RY': {'code':'IBM_GGP_JS2_Y'},
+    'ABS_Z':{'code':'IBM_GGP_JS2_YP'},
+    'ABS_RZ':{'code':'IBM_GGP_JS2_YN'},
 }
 
 PROTOCOL_OFF = {'pid':0, 'display_name':"OFF"}

@@ -204,7 +204,7 @@ xbox_one_to_linux_ev_code_dict = {
 }
 
 def translate_dict(old_mapping_dict, lookup_dict):
-    translated_map_dict = {}
+    translated_map_dict = dict(old_mapping_dict)
     for key in old_mapping_dict:
         lookup_result = lookup_dict.get(key)
         if lookup_result is not None:
