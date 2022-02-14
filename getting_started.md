@@ -18,11 +18,13 @@ Select your SD card, then the image file, then press `START` to begin writing.
 
 ![Alt text](photos/rufus.png)
 
-## Power Supply Considerations
+## Power Considerations
 
-A high-quality power supply is very important! It should provide 5 Volts and at least 2 amps of current.
+A **high-quality power** supply is very important! It should provide **5 Volts** and at least **2 amps** of current.
 
 An inadequate supply can result in failure to boot, unstable operation, glitches, and SD card corruption.
+
+Check the cable too! Cheap ones tends to have unreliable connections and large voltage drops.
 
 ## Test out Raspberry Pi
 
