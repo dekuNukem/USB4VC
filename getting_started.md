@@ -165,7 +165,7 @@ Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it 
 
 ## Joycheck DOS Program
 
-You can [download this DOS program](resources/joytest.zip) to visualize what the gamepad is doing, great for troubleshooting! Found on this [vogons thread](https://www.vogons.org/viewtopic.php?p=187168#p187168).
+You can [download this DOS program](https://github.com/dekuNukem/USB4VC/raw/master/resources/joytest.zip) to visualize what the gamepad is doing, great for troubleshooting! Found on this [vogons thread](https://www.vogons.org/viewtopic.php?p=187168#p187168).
 
 * It's OK if the value is slightly off. Games will calibrate before starting anyway.
 
