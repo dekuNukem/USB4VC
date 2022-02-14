@@ -38,7 +38,7 @@ Power on, and it should boot and execute the program, showing a bunch of informa
 
 ![Alt text](photos/rpitest.jpeg)
 
-If so, congrats! Power off and continue.
+If so, congrats! Power off and continue. If not, make sure the power supply is sufficient, and the SD card image is burned properly.
 
 ## Kit Assembly
 
@@ -124,7 +124,7 @@ After a while, a list of found devices is shown. If your device does not appear,
 
 ![Alt text](photos/found.jpeg)
 
-Use left/right to select one, and `enter` button to pair.
+Use `+` / `-` to select one, and `enter` button to pair.
 
 Pairing result will be shown. From my experience Bluetooth Mouse/Keyboards are usually fine, but Bluetooth gamepads can be a bit temperamental sometimes. If error occurs, try rebooting the BT device and/or USB4VC.
 
@@ -134,11 +134,13 @@ With protocol set up, and everything connected, time to power on the computer!
 
 If everything goes well, you should be able to use it as normal, now with USB inputs!
 
+Please do keep reading for more information though 😅!
+
 ![Alt text](photos/guide.gif)
 
 ## Using Gamepads
 
-For best results, please use a **XBox One controller**. It is the only kind I have, so I used it for development. Other controllers might be buggy in button and axes mapping. I'll try to borrow a few more before the public release. 
+For best results, please use a **Xbox One/Xbox 360 controller**. Those are the only kinds I have, so I used them for development. Other controllers might be buggy in button and axes mapping. I'll try to borrow a few more before the public release. 
 
 * The easiest way is plug it in via a USB cable, and it should just work.
 
@@ -158,6 +160,8 @@ Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it 
 | Right Stick     | Joystick 2              |
 | D-pad           | Joystick 1              |
 | Trigger         | Joystick 2 Vertical Axis |
+| Menu Button     | Esc Key                 |
+| View Button     | Enter Key               |
 
 ## Joycheck DOS Program
 
@@ -184,6 +188,50 @@ You can turn off/reboot the Raspberry Pi by pressing the `POWER OFF` button.
 When the RPi is off, you can press `POWER ON` button to turn it back on.
 
 ![Alt text](photos/power_buttons.jpeg)
+
+## Known Issues
+
+Here are a couple of bugs and issues that I am aware of, and the corresponding comments and remedies.
+
+#### Screw head is slightly too tall on the bottom plate, making the anti-slip pad not as effective.
+
+* Will switch to a flatter screw for public release.
+
+* Try double-up the anti-slip pads, or use a thicker one.
+
+#### Boot time can be faster
+
+* Currently it takes about 15 seconds to boot with a decent SD card.
+
+* Might look into disabling some services to speed it up.
+
+* Would be great to get it under 10 seconds with the help of RPi experts.
+
+#### Certain keyboards prevent Raspberry Pi from booting
+
+* My Raspberry Pi 4 doesn't seem to boot with *Apple Wired Keyboard with Numeric Keypad* attached, complaining about USB hub error.
+
+* Not sure if this is just a one-off or they are all like this. Might just be a power issue.
+
+* Will do more testing.
+
+#### 15-Pin Gameport Power Backfeeding
+
+* If USB4VC is unpowered, turning on the PC seems to back-feed power through the 15-pin gameport via the digital potentiometer.
+
+* I haven't noticed any apparent damage, but it's probably not a good idea.
+
+* Make sure to power on USB4VC before the computer. (this is what you should do anyway)
+
+* I might add a diode in the production run.
+
+#### ADB Collision Detection
+
+* ADB collision detection has not been fully implemented.
+
+* Issues might arise **ONLY IF** you daisy-chain additional ADB devices **of the same type** **AND** use them **at the same time**.
+
+* Not a high-priority bug, might work on it when I have time.
 
 ## Software Updates
 
