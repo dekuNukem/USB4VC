@@ -96,8 +96,7 @@ BTN_TASK = 0x117
 
 # some gamepad buttons report as keyboard keys when connected via bluetooth, need to account for those
 gamepad_buttons_as_kb_codes = {
-    158, # KEY_BACK, share button, xbox one controller when connected via bluetooth
-    172, # KEY_HOMEPAGE, xbox logo button, xbox one controller when connected via bluetooth
+    373, # KEY_MODE, Xbox logo button, xbox one controller when connected via bluetooth on xpadneo
     }
 
 nop_spi_msg_template = [SPI_MOSI_MAGIC] + [0]*31
@@ -182,29 +181,7 @@ MOUSE_SPI_LOOKUP = {
     REL_WHEEL:8,
 }
 
-xbox_one_bluetooth_to_linux_ev_code_dict = {
-    "XB1_A":"BTN_SOUTH",
-    "XB1_B":"BTN_EAST",
-    "XB1_X":"BTN_NORTH",
-    "XB1_Y":"BTN_WEST",
-    "XB1_LSB":"BTN_THUMBL",
-    "XB1_RSB":"BTN_THUMBR",
-    "XB1_LB":"BTN_TL",
-    "XB1_RB":"BTN_TR",
-    "XB1_VIEW":"KEY_BACK",
-    "XB1_MENU":"BTN_START",
-    "XB1_LOGO":"KEY_HOMEPAGE",
-    "XB1_LSX":"ABS_X",
-    "XB1_LSY":"ABS_Y",
-    "XB1_RSX":"ABS_Z",
-    "XB1_RSY":"ABS_RZ",
-    "XB1_LT":"ABS_BRAKE",
-    "XB1_RT":"ABS_GAS",
-    "XB1_DPX":"ABS_HAT0X",
-    "XB1_DPY":"ABS_HAT0Y",
-}
-
-xbox_one_wired_to_linux_ev_code_dict = {
+xbox_one_to_linux_ev_code_dict = {
     "XB1_A":"BTN_SOUTH",
     "XB1_B":"BTN_EAST",
     "XB1_X":"BTN_NORTH",
@@ -238,10 +215,8 @@ def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
-    if usb_gamepad_type == "Xbox One Bluetooth":
-        mapping_dict = translate_dict(mapping_dict, xbox_one_bluetooth_to_linux_ev_code_dict)
-    elif usb_gamepad_type == "Xbox One Wired":
-        mapping_dict = translate_dict(mapping_dict, xbox_one_wired_to_linux_ev_code_dict)
+    if usb_gamepad_type == "Xbox One":
+        mapping_dict = translate_dict(mapping_dict, xbox_one_to_linux_ev_code_dict)
     target_info = None
     for item in source_name:
         if item in mapping_dict:
@@ -295,15 +270,10 @@ def apply_curve(x_0_255, y_0_255):
 
 ABS_Z = 0x02
 ABS_RZ = 0x05
-ABS_GAS = 0x09
-ABS_BRAKE = 0x0a
-xbox_one_wired_analog_trigger_codes = {ABS_Z, ABS_RZ}
-xbox_one_bluetooth_analog_trigger_codes = {ABS_GAS, ABS_BRAKE}
+xbox_one_analog_trigger_codes = {ABS_Z, ABS_RZ}
 
 def is_analog_trigger(ev_code, gamepad_type):
-    if gamepad_type == "Xbox One Bluetooth" and ev_code in xbox_one_bluetooth_analog_trigger_codes:
-        return True
-    if gamepad_type == "Xbox One Wired" and ev_code in xbox_one_wired_analog_trigger_codes:
+    if gamepad_type == "Xbox One" and ev_code in xbox_one_analog_trigger_codes:
         return True
     return False
 
@@ -318,10 +288,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
     this_gamepad_name = this_device_info.get('name', '').lower()
     usb_gamepad_type = 'Generic USB'
     if 'xbox' in this_gamepad_name or 'x-box' in this_gamepad_name:
-        if 'wireless' in this_gamepad_name:
-            usb_gamepad_type = 'Xbox One Bluetooth'
-        else:
-            usb_gamepad_type = 'Xbox One Wired'
+        usb_gamepad_type = 'Xbox One'
 
     this_gp_dict = gp_status_dict[gp_id]
     curr_gp_output = {
@@ -680,6 +647,8 @@ def get_input_devices():
             dev_dict['is_mouse'] = True
         if 'KEY_ENTER' in cap_str and "KEY_Y" in cap_str:
             dev_dict['is_kb'] = True
+        if 'KEY_MODE' in cap_str:
+            dev_dict['is_gp'] = True
         if 'EV_ABS' in cap_str and "BTN_SOUTH" in cap_str:
             dev_dict['is_gp'] = True
             try:
