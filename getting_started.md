@@ -110,7 +110,7 @@ Otherwise, press `Enter` button to go to the submenu, and use `Enter` button to 
 
 ![Alt text](photos/msserial.jpeg)
 
-It is recommended to leave the mouse and gamepads adjustments at default, and change them inside the OS or game first. Only do it on USB4VC if that's not possible.
+It is recommended to leave the sensitivity adjustments at default, and change them inside the OS or game first. Only do it on USB4VC if that's not possible.
 
 ## Pair Bluetooth
 
@@ -162,6 +162,10 @@ Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it 
 ## Joycheck DOS Program
 
 You can [download this DOS program](resources/joytest.zip) to visualize what the gamepad is doing, great for troubleshooting! Found on this [vogons thread](https://www.vogons.org/viewtopic.php?p=187168#p187168).
+
+* It's OK if the value is slightly off. Games will calibrate before starting anyway.
+
+* Careful with pressing keyboard keys, it might mess up the display.
 
 ![Alt text](photos/joycheck.png)
 
