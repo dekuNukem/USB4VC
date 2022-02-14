@@ -6,7 +6,7 @@
 
 This document contains technical information for USB4VC, which should be helpful for tinkering, contributing, and making your own Protocol Cards.
 
-Still mostly under construction, aiming to added more details before public release in April. In the meantime, if you have any particular technical questions or comments, l[et me know!](#questions-or-comments)
+Still mostly under construction, aiming to add more details before public release in April. In the meantime, if you have any particular technical questions or comments, [let me know!](#questions-or-comments)
 
 ## Linux Input Event Codes
 

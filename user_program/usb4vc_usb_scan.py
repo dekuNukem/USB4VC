@@ -326,7 +326,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
         if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_btn' and target_code in curr_gp_output:
             curr_gp_output[target_code].add(this_gp_dict[source_code])
         # usb gamepad analog axes to generic gamepad analog axes
-        if source_type == 'usb_abs_axis' and target_type == 'ibm_ggp_axis' and target_code in curr_gp_output:
+        if source_type == 'usb_abs_axis' and target_type == 'ibm_ggp_axis' and target_code in curr_gp_output and is_analog_trigger(source_code, usb_gamepad_type) is False:
             curr_gp_output[target_code].add(convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code))
         # usb gamepad analog axes to generic gamepad analog half axes
         # only use to map USB analog trigger to generic gameport gamepad half axes
@@ -381,21 +381,18 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
             curr_mouse_output[target_code].add(this_gp_dict[source_code])
             curr_mouse_output['is_modified'] = True
         # usb gamepad analog axes to mouse axes
-        if source_type == 'usb_abs_axis' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output:
-            if is_analog_trigger(source_code, usb_gamepad_type):
+        if source_type == 'usb_abs_axis' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output and is_analog_trigger(source_code, usb_gamepad_type) is False:
+            movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
+            deadzone_amount = 20
+            try:
+                deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
+            except Exception:
                 pass
-            else:
-                movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
-                deadzone_amount = 20
-                try:
-                    deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
-                except Exception:
-                    pass
-                if abs(movement) <= deadzone_amount:
-                    movement = 0
-                joystick_to_mouse_slowdown = 17
-                curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown)
-                curr_mouse_output['is_modified'] = True
+            if abs(movement) <= deadzone_amount:
+                movement = 0
+            joystick_to_mouse_slowdown = 17
+            curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown)
+            curr_mouse_output['is_modified'] = True
 
     for key in curr_kb_output:
         key_status_set = curr_kb_output[key]
