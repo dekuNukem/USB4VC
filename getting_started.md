@@ -8,6 +8,8 @@ Congratulations on your new toy! Here is a short guide on how to use your USB4VC
 
 ## Prepare SD card
 
+**!!!! PLEASE DO BURN THE SD CARD WITH LATEST UPDATES BEFORE USING !!!!**
+
 You need a Micro SD card at least 4GB in size. A fast card will reduce boot time.
 
 [Download the latest boot image here](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
@@ -42,13 +44,13 @@ USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
 
 Insert SD card in Raspberry Pi, and hook it up to a monitor. No need for anything else.
 
-Power on, and it should boot and execute the program, showing a bunch of information.
+Power on, and it should boot and execute the program, showing a bunch of text.
 
 If you see `!!!!!!!!!! DO NOT UNPLUG UNTIL I REBOOT !!!!!!!!!!` on screen, **don't touch anything until it reboots**!
 
 ![Alt text](photos/rpitest.jpeg)
 
-If it works, congrats! Wait until nothing is scrolling on screen and unplug.
+If it works, congrats! Wait until screen is idle and unplug.
 
 If not, make sure the power supply is sufficient, and the SD card image is burned properly.
 
@@ -142,7 +144,7 @@ Pairing result will be shown. From my experience Bluetooth Mouse/Keyboards are u
 
 ## Try it out!
 
-With protocol set up, and everything connected, time to power on the computer!
+With protocol selected, and everything connected, time to power on the computer!
 
 If everything goes well, you should be able to use it as normal, now with USB inputs!
 
@@ -191,7 +193,7 @@ You can also create your own USB Gamepad mapping so suit your exact needs.
 
 You can even have it **control mouse and keyboard**, in order to play games that did not have native gamepad support!
 
-[Download the configurator](https://github.com/dekuNukem/usb4vc-configurator) and follow the instruction to set it up.
+[Download the configurator](https://github.com/dekuNukem/usb4vc-configurator/blob/master/README.md) and follow the instruction to set it up.
 
 ## Powering Off/On
 
@@ -247,7 +249,7 @@ Here are a couple of bugs and issues that I am aware of, and the corresponding c
 
 ## Manual Software Updates
 
-You should use [the configurator software](https://github.com/dekuNukem/usb4vc-configurator) for updates. But here's how to do it by hand.
+You should use [the configurator software](https://github.com/dekuNukem/usb4vc-configurator/blob/master/README.md) for updates. But here's how to do it by hand.
 
 [Download the latest USB update for flash drives](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
 
