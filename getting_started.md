@@ -42,11 +42,15 @@ USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
 
 Insert SD card in Raspberry Pi, and hook it up to a monitor. No need for anything else.
 
-Power on, and it should boot and execute the program, showing a bunch of information:
+Power on, and it should boot and execute the program, showing a bunch of information.
+
+If you see `!!!!!!!!!! DO NOT UNPLUG UNTIL I REBOOT !!!!!!!!!!` on screen, **don't touch anything until it reboots**!
 
 ![Alt text](photos/rpitest.jpeg)
 
-If so, congrats! Power off and continue. If not, make sure the power supply is sufficient, and the SD card image is burned properly.
+If it works, congrats! Wait until nothing is scrolling on screen and unplug.
+
+If not, make sure the power supply is sufficient, and the SD card image is burned properly.
 
 ## Kit Assembly
 

@@ -947,4 +947,14 @@ def get_gamepad_protocol():
 def get_joystick_curve():
     return joystick_curve_list[my_menu.current_joystick_curve_index]
 
+def oled_print_model_changed():
+    with canvas(oled_device) as draw:
+        oled_print_centered("RPi Model Changed!", font_regular, 0, draw)
+        oled_print_centered("Recompiling BT Driver", font_regular, 10, draw)
+        oled_print_centered("Might take a while...", font_regular, 20, draw)
+
+def oled_print_oneline(msg):
+    with canvas(oled_device) as draw:
+        oled_print_centered(msg, font_medium, 10, draw)
+
 ui_thread = threading.Thread(target=ui_worker, daemon=True)
