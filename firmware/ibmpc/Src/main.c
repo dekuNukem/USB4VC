@@ -67,7 +67,7 @@ UART_HandleTypeDef huart3;
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 1;
-const uint8_t version_patch = 4;
+const uint8_t version_patch = 5;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
