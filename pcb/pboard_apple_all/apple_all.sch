@@ -5332,6 +5332,41 @@ SparkFun does not currently use this on any active designs, and the connector al
 </deviceset>
 </devicesets>
 </library>
+<library name="supply2" urn="urn:adsk.eagle:library:372">
+<description>&lt;b&gt;Supply Symbols&lt;/b&gt;&lt;p&gt;
+GND, VCC, 0V, +5V, -5V, etc.&lt;p&gt;
+Please keep in mind, that these devices are necessary for the
+automatic wiring of the supply signals.&lt;p&gt;
+The pin name defined in the symbol is identical to the net which is to be wired automatically.&lt;p&gt;
+In this library the device names are the same as the pin names of the symbols, therefore the correct signal names appear next to the supply symbols in the schematic.&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+</packages>
+<symbols>
+<symbol name="+07V" urn="urn:adsk.eagle:symbol:27025/1" library_version="2">
+<wire x1="-0.635" y1="1.27" x2="0.635" y2="1.27" width="0.1524" layer="94"/>
+<wire x1="0" y1="0.635" x2="0" y2="1.905" width="0.1524" layer="94"/>
+<circle x="0" y="1.27" radius="1.27" width="0.254" layer="94"/>
+<text x="-1.905" y="3.175" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="+7V" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="+7V" urn="urn:adsk.eagle:component:27072/1" prefix="SUPPLY" library_version="2">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
+<gates>
+<gate name="G$1" symbol="+07V" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -5349,7 +5384,7 @@ SparkFun does not currently use this on any active designs, and the connector al
 <part name="U$6" library="f1c100s" deviceset="M2.5HOLE" device=""/>
 <part name="U$7" library="f1c100s" deviceset="M2.5HOLE" device=""/>
 <part name="JP1" library="adafruit_changed" deviceset="PINHD-2X20" device="-BIG"/>
-<part name="J2" library="SparkFun-Connectors" deviceset="DB9" device="MALE"/>
+<part name="J2" library="SparkFun-Connectors" deviceset="DB9" device="FEMALE"/>
 <part name="SW1" library="3pos_slide_switch_centered" deviceset="324_SW" device="" value="324_SW"/>
 <part name="+3V1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
@@ -5408,6 +5443,7 @@ SparkFun does not currently use this on any active designs, and the connector al
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
 <part name="U$5" library="adb" deviceset="ADB" device=""/>
 <part name="U$9" library="SparkFun-Retired" deviceset="RJ9" device="PTH"/>
+<part name="SUPPLY1" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="+7V" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -5422,8 +5458,8 @@ SparkFun does not currently use this on any active designs, and the connector al
 <attribute name="NAME" x="85.09" y="46.355" size="1.778" layer="95"/>
 <attribute name="VALUE" x="85.09" y="-10.16" size="1.778" layer="96"/>
 </instance>
-<instance part="J2" gate="G$1" x="256.54" y="157.48" smashed="yes">
-<attribute name="VALUE" x="252.73" y="149.098" size="1.778" layer="96" font="vector" align="top-left"/>
+<instance part="J2" gate="G$1" x="223.52" y="157.48" smashed="yes">
+<attribute name="VALUE" x="219.71" y="149.098" size="1.778" layer="96" font="vector" align="top-left"/>
 </instance>
 <instance part="SW1" gate="G$1" x="-10.16" y="45.72" smashed="yes" rot="MR270"/>
 <instance part="+3V1" gate="G$1" x="76.2" y="45.72" smashed="yes">
@@ -5485,11 +5521,11 @@ SparkFun does not currently use this on any active designs, and the connector al
 <attribute name="NAME" x="95.25" y="-52.2986" size="1.778" layer="95" rot="MR180"/>
 <attribute name="VALUE" x="95.25" y="-47.498" size="1.778" layer="96" rot="MR180"/>
 </instance>
-<instance part="GND15" gate="1" x="246.38" y="147.32" smashed="yes">
-<attribute name="VALUE" x="243.84" y="144.78" size="1.778" layer="96"/>
+<instance part="GND15" gate="1" x="213.36" y="147.32" smashed="yes">
+<attribute name="VALUE" x="210.82" y="144.78" size="1.778" layer="96"/>
 </instance>
-<instance part="GND16" gate="1" x="271.78" y="147.32" smashed="yes">
-<attribute name="VALUE" x="269.24" y="144.78" size="1.778" layer="96"/>
+<instance part="GND16" gate="1" x="238.76" y="147.32" smashed="yes">
+<attribute name="VALUE" x="236.22" y="144.78" size="1.778" layer="96"/>
 </instance>
 <instance part="+3V10" gate="G$1" x="-30.48" y="63.5" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="-27.94" y="58.42" size="1.778" layer="96" rot="MR90"/>
@@ -5643,6 +5679,9 @@ SparkFun does not currently use this on any active designs, and the connector al
 <instance part="U$9" gate="G$1" x="-68.58" y="137.16" smashed="yes">
 <attribute name="VALUE" x="-73.66" y="129.794" size="1.778" layer="96" font="vector"/>
 <attribute name="NAME" x="-73.66" y="145.288" size="1.778" layer="95" font="vector"/>
+</instance>
+<instance part="SUPPLY1" gate="G$1" x="198.12" y="165.1" smashed="yes">
+<attribute name="VALUE" x="196.215" y="168.275" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -5868,6 +5907,19 @@ SparkFun does not currently use this on any active designs, and the connector al
 <pinref part="U$1" gate="1" pin="1"/>
 <wire x1="93.98" y1="127" x2="111.76" y2="127" width="0.1524" layer="91"/>
 <junction x="93.98" y="127"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="1"/>
+<pinref part="GND15" gate="1" pin="GND"/>
+<wire x1="215.9" y1="162.56" x2="213.36" y2="162.56" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="162.56" x2="213.36" y2="157.48" width="0.1524" layer="91"/>
+<pinref part="J2" gate="G$1" pin="3"/>
+<wire x1="213.36" y1="157.48" x2="213.36" y2="149.86" width="0.1524" layer="91"/>
+<wire x1="215.9" y1="157.48" x2="213.36" y2="157.48" width="0.1524" layer="91"/>
+<junction x="213.36" y="157.48"/>
+<pinref part="J2" gate="G$1" pin="SHIELD"/>
+<wire x1="215.9" y1="162.56" x2="238.76" y2="162.56" width="0.1524" layer="91"/>
+<junction x="215.9" y="162.56"/>
 </segment>
 </net>
 <net name="N$29" class="0">
@@ -6200,6 +6252,49 @@ SparkFun does not currently use this on any active designs, and the connector al
 <pinref part="U$1" gate="1" pin="2"/>
 <wire x1="93.98" y1="129.54" x2="111.76" y2="129.54" width="0.1524" layer="91"/>
 <junction x="93.98" y="129.54"/>
+</segment>
+</net>
+<net name="+7V" class="0">
+<segment>
+<pinref part="J2" gate="G$1" pin="2"/>
+<pinref part="SUPPLY1" gate="G$1" pin="+7V"/>
+<wire x1="215.9" y1="160.02" x2="198.12" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="160.02" x2="198.12" y2="162.56" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="X2" class="0">
+<segment>
+<pinref part="J2" gate="G$1" pin="4"/>
+<wire x1="215.9" y1="154.94" x2="187.96" y2="154.94" width="0.1524" layer="91"/>
+<label x="187.96" y="154.94" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="X1" class="0">
+<segment>
+<pinref part="J2" gate="G$1" pin="5"/>
+<wire x1="215.9" y1="152.4" x2="187.96" y2="152.4" width="0.1524" layer="91"/>
+<label x="187.96" y="152.4" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="MOUSE_BUTTON" class="0">
+<segment>
+<pinref part="J2" gate="G$1" pin="7"/>
+<wire x1="231.14" y1="157.48" x2="246.38" y2="157.48" width="0.1524" layer="91"/>
+<label x="241.3" y="157.48" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="Y2" class="0">
+<segment>
+<pinref part="J2" gate="G$1" pin="8"/>
+<wire x1="246.38" y1="154.94" x2="231.14" y2="154.94" width="0.1524" layer="91"/>
+<label x="241.3" y="154.94" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="Y1" class="0">
+<segment>
+<pinref part="J2" gate="G$1" pin="9"/>
+<wire x1="246.38" y1="152.4" x2="231.14" y2="152.4" width="0.1524" layer="91"/>
+<label x="241.3" y="152.4" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>

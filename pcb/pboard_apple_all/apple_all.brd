@@ -491,13 +491,13 @@ We've spent an enormous amount of time creating and checking these footprints an
 &lt;br&gt;
 You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
 <packages>
-<package name="DB9_MALE">
-<description>&lt;h3&gt;9 Pin Serial Connector - Male PCB Mount Right Angle&lt;/h3&gt;
+<package name="DB9">
+<description>&lt;h3&gt;9 Pin Serial Connector - Female PCB Mount Right Angle&lt;/h3&gt;
 0.318" style. 
 &lt;p&gt;Specifications:
 &lt;ul&gt;&lt;li&gt;Pin count:11&lt;/li&gt;
 &lt;/ul&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=”http://www.4uconnector.com/online/object/4udrawing/15944.pdf”&gt;Datasheet referenced for footprint&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=”https://www.sparkfun.com/datasheets/Prototyping/Connectors/DB9-PCB.pdf”&gt;Datasheet referenced for footprint&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Example device(s):
 &lt;ul&gt;&lt;li&gt;DB9&lt;/li&gt;
 &lt;/ul&gt;&lt;/p&gt;</description>
@@ -514,15 +514,15 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="8.128" y1="10.219" x2="8.763" y2="9.584" width="0.2032" layer="51" curve="90"/>
 <wire x1="-7.62" y1="15.807" x2="7.62" y2="15.807" width="0.2032" layer="51"/>
 <wire x1="-15.4" y1="-2.8" x2="15.4" y2="-2.8" width="0.2032" layer="21"/>
-<pad name="5" x="-5.54" y="-1.42" drill="1.016" diameter="1.8796" shape="square"/>
-<pad name="4" x="-2.77" y="-1.42" drill="1.016" diameter="1.8796"/>
+<pad name="1" x="-5.54" y="-1.42" drill="1.016" diameter="1.8796" shape="square"/>
+<pad name="2" x="-2.77" y="-1.42" drill="1.016" diameter="1.8796"/>
 <pad name="3" x="0" y="-1.42" drill="1.016" diameter="1.8796"/>
-<pad name="2" x="2.77" y="-1.42" drill="1.016" diameter="1.8796"/>
-<pad name="1" x="5.54" y="-1.42" drill="1.016" diameter="1.8796"/>
-<pad name="9" x="-4.15" y="1.42" drill="1.016" diameter="1.8796"/>
-<pad name="8" x="-1.38" y="1.42" drill="1.016" diameter="1.8796"/>
-<pad name="7" x="1.38" y="1.42" drill="1.016" diameter="1.8796"/>
-<pad name="6" x="4.15" y="1.42" drill="1.016" diameter="1.8796"/>
+<pad name="4" x="2.77" y="-1.42" drill="1.016" diameter="1.8796"/>
+<pad name="5" x="5.54" y="-1.42" drill="1.016" diameter="1.8796"/>
+<pad name="6" x="-4.15" y="1.42" drill="1.016" diameter="1.8796"/>
+<pad name="7" x="-1.38" y="1.42" drill="1.016" diameter="1.8796"/>
+<pad name="8" x="1.38" y="1.42" drill="1.016" diameter="1.8796"/>
+<pad name="9" x="4.15" y="1.42" drill="1.016" diameter="1.8796"/>
 <pad name="G1" x="-12.5" y="0" drill="3.302" diameter="5.08"/>
 <pad name="G2" x="12.5" y="0" drill="3.302" diameter="5.08"/>
 <text x="-1.905" y="5.588" size="0.6096" layer="25" font="vector" ratio="20">&gt;NAME</text>
@@ -1287,8 +1287,8 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="JP1" library="adafruit_changed" package="2X20-BIG" value="" x="3.5" y="32.5" smashed="yes" rot="MR90">
 <attribute name="VALUE" x="-0.945" y="7.1" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="J2" library="SparkFun-Connectors" package="DB9_MALE" value="" x="46.5" y="29" smashed="yes" rot="R270">
-<attribute name="PROD_ID" value="CONN-09904" x="46.5" y="29" size="1.778" layer="27" rot="R270" display="off"/>
+<element name="J2" library="SparkFun-Connectors" package="DB9" value="" x="46.5" y="29" smashed="yes" rot="R270">
+<attribute name="PROD_ID" value="CONN-08194" x="46.5" y="29" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="51.072" y="30.905" size="0.6096" layer="27" font="vector" ratio="20" rot="R270"/>
 </element>
 <element name="SW1" library="3pos_slide_switch_centered" package="342_SWICH_FOOT" value="324_SW" x="12.192" y="40.386" smashed="yes" rot="R180"/>
@@ -1418,6 +1418,10 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <contactref element="U$5" pad="SHIELD1"/>
 <contactref element="U$8" pad="1"/>
 <contactref element="U$1" pad="1"/>
+<contactref element="J2" pad="1"/>
+<contactref element="J2" pad="3"/>
+<contactref element="J2" pad="G1"/>
+<contactref element="J2" pad="G2"/>
 <wire x1="36.83" y1="42.164" x2="28.829" y2="43.7752" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="+3V3">
@@ -1829,6 +1833,24 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="39.37" y1="50.5748" x2="41.5" y2="57.2" width="0" layer="19" extent="1-1"/>
 <wire x1="21.2" y1="57.2" x2="39.37" y2="50.5748" width="0" layer="19" extent="1-1"/>
 <wire x1="19.07" y1="50.5748" x2="21.2" y2="57.2" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="+7V">
+<contactref element="J2" pad="2"/>
+</signal>
+<signal name="X2">
+<contactref element="J2" pad="4"/>
+</signal>
+<signal name="X1">
+<contactref element="J2" pad="5"/>
+</signal>
+<signal name="MOUSE_BUTTON">
+<contactref element="J2" pad="7"/>
+</signal>
+<signal name="Y2">
+<contactref element="J2" pad="8"/>
+</signal>
+<signal name="Y1">
+<contactref element="J2" pad="9"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
