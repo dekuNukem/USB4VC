@@ -112,7 +112,9 @@ You can do it from Baseboard, Protocol Card, or even RPi itself. All will work!
 
 ![Alt text](photos/powerports.jpeg)
 
-After around 15 seconds, the OLED screen should light up, showing **home screen**:
+Protocol card will power up instantly and start talking with the retro computer, while Raspberry Pi takes a few seconds to boot up.
+
+After a little while, the OLED screen should light up, showing **home screen**:
 
 ![Alt text](photos/oledhome.jpeg)
 
@@ -223,14 +225,6 @@ Here are a couple of bugs and issues that I am aware of, and the corresponding c
 
 * Would be great to get it under 10 seconds with the help of RPi experts.
 
-#### Certain keyboards prevent Raspberry Pi from booting
-
-* My Raspberry Pi 4 doesn't seem to boot with *Apple Wired Keyboard with Numeric Keypad* attached, complaining about USB hub error.
-
-* Not sure if this is just a one-off or they are all like this. Might just be a power issue.
-
-* Will do more testing.
-
 #### 15-Pin Gameport Power Backfeeding
 
 * If USB4VC is unpowered, turning on the PC seems to back-feed power through the 15-pin gameport via the digital potentiometer.
@@ -241,9 +235,9 @@ Here are a couple of bugs and issues that I am aware of, and the corresponding c
 
 * I might add a diode in the production run.
 
-#### ADB Collision Detection
+#### ADB Collision Resolution
 
-* ADB collision detection has not been fully implemented.
+* ADB collision resolution has not been fully implemented yet.
 
 * Issues might arise **ONLY IF** you daisy-chain additional ADB devices **of the same type** **AND** use them **at the same time**.
 
