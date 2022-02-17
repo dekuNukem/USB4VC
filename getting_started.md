@@ -4,11 +4,13 @@
 
 ------
 
-Congratulations on your new toy! Here is a short guide on how to use your USB4VC.
+Thank you very much for beta testing USB4VC! Here is a short guide on getting started.
+
+Please note that the code is most likely NOT 100% bug free at the moment, so if you run into any issues, [do get in touch](#questions-or-comments) so I can try fix it! I have also compiled a list of [known issues](#known-issues), with comments and remedies.
 
 ## Prepare SD card
 
-**!!!! PLEASE DO BURN THE SD CARD WITH LATEST UPDATES BEFORE USING !!!!**
+It's a good idea to **burn an SD card with the latest updates** before using.
 
 You need a Micro SD card at least 4GB in size. A fast card will reduce boot time.
 
@@ -30,11 +32,11 @@ Check the cable too! Cheap ones tends to have unreliable connections and large v
 
 ## Test out Raspberry Pi
 
-It is a good idea to make sure your Raspberry Pi works. 
+It's a good idea to make sure your Raspberry Pi works first. 
 
 USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
 
-* You don't have to get the latest model, even the earliest RPi B+ is plenty fast enough.
+* No need to get the latest model, even the earliest RPi B+ is plenty fast enough.
 
 * Older Pis might not have built-in Bluetooth. So if you want BT, a USB dongle is needed.
 
