@@ -8,29 +8,15 @@ const uint8_t grey_code_lookup[4] = {0, 1, 3, 2};
 
 void quad_write(quad_output *qo)
 {
-  // printf("%d\n", qo->current_index);
   uint8_t current_code = grey_code_lookup[qo->current_index];
-  switch(current_code)
-  {
-      case 0:
-        HAL_GPIO_WritePin(qo->A_port, qo->A_pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(qo->B_port, qo->B_pin, GPIO_PIN_RESET);
-        break;
-      case 1:
-        HAL_GPIO_WritePin(qo->A_port, qo->A_pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(qo->B_port, qo->B_pin, GPIO_PIN_SET);
-        break;
-      case 2:
-        HAL_GPIO_WritePin(qo->A_port, qo->A_pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(qo->B_port, qo->B_pin, GPIO_PIN_RESET);
-        break;
-      case 3:
-        HAL_GPIO_WritePin(qo->A_port, qo->A_pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(qo->B_port, qo->B_pin, GPIO_PIN_SET);
-        break;
-      default:
-        break;
-  }
+  if(current_code & 0x1)
+    HAL_GPIO_WritePin(qo->A_port, qo->A_pin, GPIO_PIN_SET);
+  else
+    HAL_GPIO_WritePin(qo->A_port, qo->A_pin, GPIO_PIN_RESET);
+  if(current_code & 0x2)
+    HAL_GPIO_WritePin(qo->B_port, qo->B_pin, GPIO_PIN_SET);
+  else
+    HAL_GPIO_WritePin(qo->B_port, qo->B_pin, GPIO_PIN_RESET);
 }
 
 void quad_reset(quad_output *qo)

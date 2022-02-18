@@ -3,7 +3,7 @@
 <title>Static Call Graph - [my_adb\my_adb.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image my_adb\my_adb.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Feb 17 21:46:46 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Feb 18 09:29:11 2022
 <BR><P>
 <H3>Maximum Stack Usage =        180 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -763,7 +763,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[78]"></a>quad_decrement</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_decrement))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = quad_decrement &rArr; quad_write
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_decrement &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
@@ -771,7 +771,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[76]"></a>quad_init</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_init &rArr; quad_reset &rArr; quad_write
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = quad_init &rArr; quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
 </UL>
@@ -779,15 +779,15 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[7e]"></a>quad_reset</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_reset))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = quad_reset &rArr; quad_write
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
 </UL>
 
-<P><STRONG><a name="[7d]"></a>quad_write</STRONG> (Thumb, 82 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_write))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = quad_write
+<P><STRONG><a name="[7d]"></a>quad_write</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, quad_encoder.o(i.quad_write))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>

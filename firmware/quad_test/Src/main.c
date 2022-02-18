@@ -297,6 +297,13 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   // GPIOF, GPIO_PIN_0
+
+  /*
+    instead of all at once, we remove data from buffer
+    at a regular interval, say 5ms, if empty, then theres no movement
+    then every 50ms for example the average movement is calculated
+    and that is used to update quad encoder?
+  */
   quad_init(&quad_x, GPIOF, GPIO_PIN_0, GPIOF, GPIO_PIN_1);
   while (1)
   {
