@@ -1,6 +1,6 @@
 # USB4VC: USB Inputs on Retro Computers!
 
-[Get USB4VC](kickstarter_info.md) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
+[Get USB4VC!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
 -----
 
@@ -48,11 +48,9 @@ Click to see USB4VC in action!
   </tr>
 </table>
 
-## Get One / Stay in Touch
+## I Want One!
 
-A [Kickstarter campaign](kickstarter_info.md) is planned for USB4VC around **March 2022**.
-
-Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested! More Protocol Cards are on the way!
+A [Kickstarter campaign is CURRENTLY UNDERWAY!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Thank you very much for the support! Estimated shipping **April 2022**.
 
 **Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
@@ -138,7 +136,7 @@ Let me know via [Discord](https://discord.gg/HAuuh3pAmB), [Twitter DM](https://t
 
 ## Roadmap / Future Plans
 
-Current focus is having a smooth project launch. So for the first few months I will mostly be working on maintaining the [Kickstarter campaign](kickstarter_info.md), shipping orders, and providing updates and bug fixes for existing Protocol Cards.
+Current focus is having a smooth project launch. So for the first few months I will mostly be working on maintaining the [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers), shipping orders, and providing updates and bug fixes for existing Protocol Cards.
 
 Of course, more Protocol Cards are planned. Not making any guarantees at this moment, but a shortlist include:
 
@@ -152,7 +150,7 @@ Want more? Feel free to [get in touch](#get-one--stay-in-touch) and make suggest
 
 ### Where can I get one?
 
-A [Kickstarter campaign](kickstarter_info.md) is planned around **March 2022**. Please [sign up for launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) if you're interested!
+A [Kickstarter campaign is CURRENTLY UNDERWAY!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Estimated shipping **April 2022**.
 
 Public release will commence after all Kickstarter orders have been fulfilled, probably around April or May 2022.
 
