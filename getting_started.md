@@ -66,7 +66,7 @@ Let's take a quick look:
 
 ![Alt text](photos/ibmpcpc.jpeg)
 
-* All cables can be purchased as add-ons during [Kickstarter campaign](kickstarter_info.md) and in Tindie store.
+* All cables can be purchased as add-ons during [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and in Tindie store.
 
 * For PS/2 keyboard and mouse, a **male to male** PS/2 cable is needed.
 

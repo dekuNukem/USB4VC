@@ -4,11 +4,9 @@
 
 ---
 
+## [Kickstarter campaign is currently underway!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Please see this page for most up-to-date information.
+
 Thank you very much for the interest and support of USB4VC!
-
-Please consider [signing up launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for the latest news and updates!
-
-More information will become available as launch plan is finalised. [Click me](README.md) to learn more about USB4VC itself, including the [ongoing beta testing program](README.md#beta-testing)!
 
 ![Alt text](photos/duke3d.jpeg)
 
@@ -38,97 +36,9 @@ More information will become available as launch plan is finalised. [Click me](R
 
 Timing might change depending on circumstances such as component availability and feedback results. This is just an estimate.
 
-## Launch Date, Duration, and Funding Goal
-
-Exact launch date has not been determined yet, but I'm aiming for **early-to-mid March 2022**.
-
-Duration should be around 25 days, with campaign ending in **early-to-mid April**.
-
-Funding goal is planned to be around **4000GBP** for the first production run. Costs include components, manufacturing, accessories, shipping and expenses.
-
-As mentioned before, more details will become available as launch plan is finalised. So please consider [signing up launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for latest developments.
-
-## Rewards
-
-* **`Three reward tiers`** are planned.
-
-* Exact pricing is still under consideration, but is expected to be under 100 USD.
-
-* USB4VC will be shipped in **`kit form`**. You can [put it together](kit_assembly.md) in less than 10 minutes, **`no soldering needed`**.
-
-### Tier 1: Baseboard + Apple Desktop Bus (ADB) Protocol Card
-
-* USB4VC Baseboard
-* USB4VC Apple Desktop Bus (ADB) Protocol Card
-* Acrylic Front & Back Plates
-* Fasteners
-* Silicone anti-flip feet
-* Free stretch goal rewards! (to be determined)
-
-![Alt text](photos/bbadb.jpeg)
-
-### Tier 2: Baseboard + IBM PC Compatible Protocol Card
-
-* USB4VC Baseboard
-* USB4VC IBM PC Compatible Protocol Card
-* Acrylic Front & Back Plates
-* Fasteners
-* Silicone anti-flip feet
-* Free stretch goal rewards! (to be determined)
-
-![Alt text](photos/bbpc.jpeg)
-
-### Tier 3: Baseboard + IBM PC + ADB Protocol Card
-
-* USB4VC Baseboard
-* USB4VC Apple Desktop Bus (ADB) Protocol Card
-* USB4VC IBM PC Compatible Protocol Card
-* Acrylic Front & Back Plates
-* Fasteners
-* Silicone anti-flip feet
-* Free stretch goal rewards! (to be determined)
-
-![Alt text](photos/bbpcadb.jpeg)
-
-### Optional Extras
-
-* You can purchase required cables as add-ons, or get them somewhere else. 
-
-* Extra goodies will be included with every order **`for free`** if **`stretch goals`** are met.
-
-## Shipping
-
-USB4VC will be shipped from **`United Kingdom`**.
-
-If you're already in UK, it will be posted via **[`Royal Mail 1st Class Signed For`](https://www.royalmail.com/sending/uk/signed-for-1st-class)**, which should arrive next-day.
-
-For everywhere else, the default shipping will be **[`Royal Mail International Standard`](https://www.royalmail.com/sending/international/international-standard)**:
-
-* $8
-* Untracked
-* Typically 1 week for Europe
-* Typically 2 weeks for everywhere else
-* Proof of posting available
-
-Optionally, you can upgrade to **[`Royal Mail International Tracked & Signed`](https://www.royalmail.com/sending/international/international-tracked-signed)**:
-
-* $16
-* End-to-end tracking
-* Signature on delivery
-* Typically 1 week for Europe
-* Typically 2 weeks for everywhere else
-* Proof of posting available
-
-Finally, you can also upgrade to **[`DHL Express Worldwide`](https://www.dhl.co.uk/en/express.html)**:
-
-* $49
-* Within 3 working days
-* End-to-end tracking 
-* Signature on delivery
-
 ## Stay Updated / Get in Touch / Questions & Comments
 
-Please consider [signing up launch notification](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for the latest news and updates!
+Feel free to join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for the latest news and updates!
 
 You can also raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`
 
