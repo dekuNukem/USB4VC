@@ -76,15 +76,15 @@ Please [sign up for launch notification](https://www.kickstarter.com/projects/de
 
 ## Why / Project Goals
 
-Before the homogeneity of USB peripherals today, computer input devices were a wild west of proprietary protocols and connectors, as different platforms used their own keyboards, mice, and gamepads.
+Before the homogeneity of USB peripherals today, computer input devices were a wild west of proprietary peripherals, as different platforms used their own connectors and protocols for keyboards, mice, and gamepads.
 
 ![Alt text](photos/keyboards.jpeg)
 
 With the popularity of retro computing today, it poses several issues:
 
-* Many proprietary peripherals are simply **hard to find**, commanding a premium on online marketplaces. They are only getting rarer, and without them, the computer itself is useless.
+* Many of those peripherals are simply **hard to find**, commanding a premium on online marketplaces. They are only getting rarer, and without them, the computer itself is useless.
 
-* After 3 or 4 decades of service, many can be **degraded and unreliable** (e.g. foam & foil keyboards), requiring extensive restoration.
+* After decades of service, many can be **degraded and unreliable** (e.g. foam & foil keyboards), requiring extensive restoration.
 
 * Let's be honest here, most early peripherals simply **does not feel that great**. Mushy membrane keyboards, sticky ball mice, plasticky gamepads, etc. And of course, the good ones gets [*very expensive*](https://www.ebay.com/sch/i.html?_nkw=ibm+model+f&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1).
 
@@ -92,7 +92,7 @@ With the popularity of retro computing today, it poses several issues:
 
 * Thus, this project aims to make retro computers simply **more enjoyable to use**.
 
-* I also hope it can lower the barrier of entry for certain machines, put more computers back in action, help preserving existing rare peripherals, and generally help more people get into this hobby!
+* I also hope it can **lower the barrier of entry** for certain machines, put more computers **back in action**, help **preserving** existing rare peripherals, and generally **help more people** get into this hobby!
 
 But of course, one can argue that using period-correct peripherals is simply part of the hobby, but just like HDMI upscalers or floppy emus, it's nice to have the option to enhance the experience.
 
@@ -104,9 +104,9 @@ USB4VC consists of two halves: **Baseboard** and swappable **Protocol Cards**.
 
 ![Alt text](photos/pcards.jpeg)
 
-Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It handles UI and input events, which are processed and sent to Protocol Card.
+Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It processes USB input events, which are sent to Protocol Card.
 
-Protocol Cards plug into the Baseboard. Each has a dedicated microcontroller and the appropriate connectors for the target computer.
+Each Protocol Card has a dedicated microcontroller and the appropriate circuitry and connectors for a specific platform.
 
 By splitting duties, RPi can focus on input parsing, and Protocol Card handles timing critical signal generation, resulting in a flexible architecture and reliable performance.
 

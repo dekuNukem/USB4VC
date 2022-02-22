@@ -164,7 +164,7 @@ For best results, please use a **Xbox One/Xbox 360 controller**. Those are the o
 
 * You can also try to pairing it with Bluetooth. If keeps failing, you might need to [update the controller in Windows 10](photos/xbupdate.png), [source here](https://atar-axis.github.io/xpadneo/).
 
-Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it should behave like a generic gamepad with **4 buttons and 2 analog axes**. Default mapping is:
+Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it should behave like a generic gamepad with **4 buttons and 4 analog axes**. Default mapping is:
 
 | XBox Controller | 15-Pin Gamepad          |
 |-----------------|-------------------------|
