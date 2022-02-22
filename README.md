@@ -38,6 +38,12 @@ From Apple IIGS in 1986 to PowerMac G3 in 1999, and everything in-between!
 
 Of course, more Protocol Cards are planned after launch!
 
+## I Want One!
+
+A [Kickstarter campaign is CURRENTLY UNDERWAY!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Thank you very much for the support! Estimated shipping **April 2022**.
+
+**Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
+
 ## Promo Video
 
 Click to see USB4VC in action!
@@ -47,12 +53,6 @@ Click to see USB4VC in action!
     <td><a href="https://www.youtube.com/watch?v=54sdPELuu4g" title="YouTube" rel="noopener"><img src="https://i.imgur.com/pFqa7sO.png"></a></td>
   </tr>
 </table>
-
-## I Want One!
-
-A [Kickstarter campaign is CURRENTLY UNDERWAY!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Thank you very much for the support! Estimated shipping **April 2022**.
-
-**Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
 ## Highlights
 
