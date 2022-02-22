@@ -4,6 +4,12 @@
 
 -----
 
+<table>
+  <tr>
+    <td><a href="https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers" title="Kickstarter" rel="noopener"><img src="https://i.imgur.com/qDcbsTv.png"></a></td>
+  </tr>
+</table>
+
 USB4VC is an **active protocol converter** that let you use **USB keyboard, mouse, and gamepads** on a wide range of retro computers.
 
 ![Alt text](photos/header.jpeg)
@@ -38,7 +44,7 @@ From Apple IIGS in 1986 to PowerMac G3 in 1999, and everything in-between!
 
 Of course, more Protocol Cards are planned after launch!
 
-## I Want One!
+## I Want One! / Get in Touch
 
 A [Kickstarter campaign is CURRENTLY UNDERWAY!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Thank you very much for the support! Estimated shipping **April 2022**.
 

@@ -4,9 +4,7 @@
 
 ---
 
-## [Kickstarter campaign is currently underway!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Please see this page for most up-to-date information.
-
-Thank you very much for the interest and support of USB4VC!
+## [Kickstarter campaign is currently underway!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Thank you very much for the interest and support!
 
 ![Alt text](photos/duke3d.jpeg)
 
