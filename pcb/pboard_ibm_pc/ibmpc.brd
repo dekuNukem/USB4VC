@@ -1500,16 +1500,16 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="R11" library="SparkFun-Passives" package="0805" value="5.1K" x="12.192" y="48.006" smashed="yes" rot="R180">
 <attribute name="NAME" x="10.414" y="48.3235" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R5" library="SparkFun-Passives" package="0805" value="390K" x="36.83" y="13.843" smashed="yes">
+<element name="R5" library="SparkFun-Passives" package="0805" value="5.1K" x="36.83" y="13.843" smashed="yes">
 <attribute name="NAME" x="38.735" y="13.3985" size="0.8128" layer="25"/>
 </element>
-<element name="R6" library="SparkFun-Passives" package="0805" value="390K" x="19.304" y="13.843" smashed="yes" rot="R180">
+<element name="R6" library="SparkFun-Passives" package="0805" value="5.1K" x="19.304" y="13.843" smashed="yes" rot="R180">
 <attribute name="NAME" x="17.526" y="14.2875" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R8" library="SparkFun-Passives" package="0805" value="390K" x="33.274" y="13.843" smashed="yes" rot="R180">
+<element name="R8" library="SparkFun-Passives" package="0805" value="5.1K" x="33.274" y="13.843" smashed="yes" rot="R180">
 <attribute name="NAME" x="31.242" y="14.2875" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R10" library="SparkFun-Passives" package="0805" value="390K" x="23.368" y="13.843" smashed="yes">
+<element name="R10" library="SparkFun-Passives" package="0805" value="5.1K" x="23.368" y="13.843" smashed="yes">
 <attribute name="NAME" x="25.146" y="13.3985" size="0.8128" layer="25"/>
 </element>
 <element name="U$5" library="ps2" package="TSSOP20" value="MCP4451" x="18.3642" y="24.9428" smashed="yes" rot="R180">

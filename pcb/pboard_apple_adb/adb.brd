@@ -1240,7 +1240,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="R3" library="SparkFun-Passives" package="0805" value="5.1K" x="50.165" y="28.575" smashed="yes" rot="R180">
 <attribute name="NAME" x="50.673" y="27.6225" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R4" library="SparkFun-Passives" package="0805" value="5.1kK" x="53.594" y="28.575" smashed="yes">
+<element name="R4" library="SparkFun-Passives" package="0805" value="5.1K" x="53.594" y="28.575" smashed="yes">
 <attribute name="NAME" x="54.0258" y="27.5717" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="SW1" library="3pos_slide_switch_centered" package="342_SWICH_FOOT" value="324_SW" x="15.494" y="42.291" smashed="yes" rot="R180"/>
