@@ -209,7 +209,7 @@ Apple Desktop Bus (ADB)</text>
 <text x="48.26" y="48.26" size="1.143" layer="25" rot="R180" align="center">TX</text>
 <text x="11.3284" y="44.4246" size="1.6764" layer="25" rot="R270" align="center">DFU</text>
 <text x="28" y="4" size="1.6764" layer="25" rot="R180" align="center">git.io/usb4vc
-dekuNukem PT2 JAN 2022</text>
+dekuNukem PD1 MAR 2022</text>
 <text x="48.26" y="43.18" size="1.143" layer="25" rot="R180" align="center">GND</text>
 <text x="21.59" y="47.879" size="1.143" layer="25" align="center">G</text>
 <text x="13.97" y="47.879" size="1.143" layer="25" rot="R180" align="center">5V</text>

@@ -215,7 +215,7 @@
 <circle x="19.5" y="3.5" radius="3" width="0" layer="42"/>
 <circle x="19.5" y="61.5" radius="3" width="0" layer="42"/>
 <text x="32.512" y="2.794" size="1.5748" layer="25" rot="R180" align="center">USB4VC BaseBoard
-PT3 JAN 2022</text>
+PD1 MAR 2022</text>
 <text x="86.0552" y="68.3514" size="1.6764" layer="25" rot="R180" align="center">3</text>
 <text x="86.0044" y="65.7098" size="1.6764" layer="25" rot="R180" align="center">G</text>
 <text x="76.6318" y="4.4196" size="1.016" layer="25" rot="R270">5</text>
