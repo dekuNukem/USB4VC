@@ -211,16 +211,66 @@ def translate_dict(old_mapping_dict, lookup_dict):
             translated_map_dict[lookup_result] = old_mapping_dict[key]
     return translated_map_dict
 
+XBOX_DEFAULT_MAPPING = {
+    # buttons to buttons
+    'BTN_A': {'code':'IBM_GGP_BTN_1'},
+    'BTN_X': {'code':'IBM_GGP_BTN_2'},
+    'BTN_B': {'code':'IBM_GGP_BTN_3'},
+    'BTN_Y': {'code':'IBM_GGP_BTN_4'},
+    
+    'BTN_TL': {'code':'IBM_GGP_BTN_1'},
+    'BTN_TR': {'code':'IBM_GGP_BTN_2'},
+    # buttons to keyboard keys
+    'BTN_SELECT': {'code':'KEY_ESC'},
+    'BTN_START': {'code':'KEY_ENTER'},
+    # analog axes to analog axes
+    'ABS_X': {'code':'IBM_GGP_JS1_X'},
+    'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
+    'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
+    'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
+    'ABS_RX': {'code':'IBM_GGP_JS2_X'},
+    'ABS_RY': {'code':'IBM_GGP_JS2_Y'},
+    'ABS_Z':{'code':'IBM_GGP_JS2_YP'},
+    'ABS_RZ':{'code':'IBM_GGP_JS2_YN'},
+}
+
+PLAYSTATION_DEAULT_MAPPING = {
+    # buttons to buttons
+    'BTN_EAST': {'code':'IBM_GGP_BTN_1'},
+    'BTN_SOUTH': {'code':'IBM_GGP_BTN_2'},
+    'BTN_C': {'code':'IBM_GGP_BTN_3'},
+    'BTN_NORTH': {'code':'IBM_GGP_BTN_4'},
+    
+    'BTN_WEST': {'code':'IBM_GGP_BTN_1'},
+    'BTN_Z': {'code':'IBM_GGP_BTN_2'},
+
+    'BTN_TL': {'code':'IBM_GGP_BTN_3'},
+    'BTN_TR': {'code':'IBM_GGP_BTN_4'},
+
+    # analog axes to analog axes
+    'ABS_X': {'code':'IBM_GGP_JS1_X'},
+    'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
+    'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
+    'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
+    'ABS_Z': {'code':'IBM_GGP_JS2_X'},
+    'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
+}
+
 def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
+    map_dict_copy = dict(mapping_dict)
+    if usb_gamepad_type == 'PlayStation' and map_dict_copy.get("IS_DEFAULT", False):
+        map_dict_copy = PLAYSTATION_DEAULT_MAPPING
+    if usb_gamepad_type == 'Xbox' and map_dict_copy.get("IS_DEFAULT", False):
+        map_dict_copy = XBOX_DEFAULT_MAPPING
     source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
-    if usb_gamepad_type == "Xbox One":
-        mapping_dict = translate_dict(mapping_dict, xbox_one_to_linux_ev_code_dict)
+    if usb_gamepad_type == "Xbox":
+        map_dict_copy = translate_dict(map_dict_copy, xbox_one_to_linux_ev_code_dict)
     target_info = None
     for item in source_name:
-        if item in mapping_dict:
-            target_info = mapping_dict[item]
+        if item in map_dict_copy:
+            target_info = map_dict_copy[item]
     if target_info is None or 'code' not in target_info:
         return None, None
     target_info = dict(target_info) # make a copy so the lookup table itself won't get modified
@@ -273,7 +323,7 @@ ABS_RZ = 0x05
 xbox_one_analog_trigger_codes = {ABS_Z, ABS_RZ}
 
 def is_analog_trigger(ev_code, gamepad_type):
-    if gamepad_type == "Xbox One" and ev_code in xbox_one_analog_trigger_codes:
+    if gamepad_type == "Xbox" and ev_code in xbox_one_analog_trigger_codes:
         return True
     return False
 
@@ -288,7 +338,9 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
     this_gamepad_name = this_device_info.get('name', '').lower()
     usb_gamepad_type = 'Generic USB'
     if 'xbox' in this_gamepad_name or 'x-box' in this_gamepad_name:
-        usb_gamepad_type = 'Xbox One'
+        usb_gamepad_type = 'Xbox'
+    elif 'wireless controller' in this_gamepad_name:
+        usb_gamepad_type = 'PlayStation'
 
     this_gp_dict = gp_status_dict[gp_id]
     curr_gp_output = {

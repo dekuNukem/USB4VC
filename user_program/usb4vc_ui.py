@@ -101,17 +101,22 @@ USBGP_ABS_RZ = 0x05 # right analog trigger
 USBGP_ABS_HAT0X = 0x10 # D-pad X
 USBGP_ABS_HAT0Y = 0x11 # D-pad Y
 
-IBM_GGP_DEAULT_MAPPING = {
+IBM_GENERIC_USB_GAMEPAD_TO_15PIN_GAMEPORT_GAMEPAD_DEAULT_MAPPING = {
+    "IS_DEFAULT": True,
     # buttons to buttons
-    'BTN_X': {'code':'IBM_GGP_BTN_2'},
-    'BTN_B': {'code':'IBM_GGP_BTN_3'},
-    'BTN_Y': {'code':'IBM_GGP_BTN_4'},
-    'BTN_A': {'code':'IBM_GGP_BTN_1'},
+    'BTN_SOUTH': {'code':'IBM_GGP_BTN_1'},
+    'BTN_NORTH': {'code':'IBM_GGP_BTN_2'},
+    'BTN_EAST': {'code':'IBM_GGP_BTN_3'},
+    'BTN_WEST': {'code':'IBM_GGP_BTN_4'},
+    
     'BTN_TL': {'code':'IBM_GGP_BTN_1'},
     'BTN_TR': {'code':'IBM_GGP_BTN_2'},
-    # buttons to keyboard keys
-    'BTN_SELECT': {'code':'KEY_ESC'},
-    'BTN_START': {'code':'KEY_ENTER'},
+    'BTN_Z': {'code':'IBM_GGP_BTN_3'},
+    'BTN_C': {'code':'IBM_GGP_BTN_4'},
+    
+    'BTN_TL2': {'code':'IBM_GGP_BTN_1'},
+    'BTN_TR2': {'code':'IBM_GGP_BTN_2'},
+
     # analog axes to analog axes
     'ABS_X': {'code':'IBM_GGP_JS1_X'},
     'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
@@ -119,8 +124,6 @@ IBM_GGP_DEAULT_MAPPING = {
     'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
     'ABS_RX': {'code':'IBM_GGP_JS2_X'},
     'ABS_RY': {'code':'IBM_GGP_JS2_Y'},
-    'ABS_Z':{'code':'IBM_GGP_JS2_YP'},
-    'ABS_RZ':{'code':'IBM_GGP_JS2_YN'},
 }
 
 PROTOCOL_OFF = {'pid':0, 'display_name':"OFF"}
@@ -130,7 +133,7 @@ PROTOCOL_ADB_KB = {'pid':3, 'display_name':"ADB"}
 PROTOCOL_PS2_MOUSE = {'pid':4, 'display_name':"PS/2"}
 PROTOCOL_MICROSOFT_SERIAL_MOUSE = {'pid':5, 'display_name':"Microsft Serial"}
 PROTOCOL_ADB_MOUSE = {'pid':6, 'display_name':"ADB"}
-PROTOCOL_15PIN_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic 15-Pin", 'mapping':IBM_GGP_DEAULT_MAPPING}
+PROTOCOL_15PIN_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic 15-Pin", 'mapping':IBM_GENERIC_USB_GAMEPAD_TO_15PIN_GAMEPORT_GAMEPAD_DEAULT_MAPPING}
 # PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = {'pid':8, 'display_name':"Gravis Pro"}
 # PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = {'pid':9, 'display_name':"MS Sidewinder"}
 PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
