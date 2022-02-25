@@ -1,4 +1,123 @@
-                    
+                if this_device['is_gp']:
+
+                    # check if sticks are in 9% deadzone to avoid sending useless gamepad SPI messages
+                    axes_only = set()
+                    for item in gamepad_status_dict[this_device['id']]:
+                        deadzone_lookup_result = list(usb4vc_shared.code_value_to_name_lookup.get(item))[0]
+                        if deadzone_lookup_result in get_stick_axes(this_device):
+                            axes_only.add(gamepad_status_dict[this_device['id']][item])
+                    in_deadzone_list.append((time.time(), max(axes_only) <= 127 + 10 and min(axes_only) >= 127 - 10))
+                    for item in list(in_deadzone_list):
+                        if time.time() - item[0] > 0.4:
+                            in_deadzone_list.remove(item)
+                    is_in_deadzone = True
+                    for item in in_deadzone_list:
+                        is_in_deadzone = item[1]
+                        if is_in_deadzone is False:
+                            break
+                    if is_in_deadzone:
+                        continue
+                    gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device)
+                    pcard_spi.xfer(gp_to_transfer)
+                    if kb_to_transfer is not None:
+                        time.sleep(0.001)
+                        pcard_spi.xfer(kb_to_transfer)
+                    if mouse_to_transfer is not None:
+                        time.sleep(0.001)
+                        pcard_spi.xfer(mouse_to_transfer)
+                        next_gamepad_hold_check = now + gamepad_hold_check_interval
+
+559!!!!!!
+
+
+def scale_to_8bit(value, axes_dict, axis_key):
+    rmax, rmid = get_range_max_and_midpoint(axes_dict, axis_key)
+    if rmax is None:
+        return value % 256
+    ratio = rmax / 255
+    return int(value/ratio)
+
+
+
+
+
+
+
+
+
+
+
+
+                if this_device['is_gp']:
+                    # gamepad_status_dict[this_device['id']]
+                    axes_only = set()
+                    for item in gamepad_status_dict[this_device['id']]:
+                        if 'ABS' in list(usb4vc_shared.code_value_to_name_lookup.get(item))[0]:
+                            # print(item, list(usb4vc_shared.code_value_to_name_lookup.get(item))[0], gamepad_status_dict[this_device['id']][item])
+                            axes_only.add(gamepad_status_dict[this_device['id']][item])
+                    print(axes_only, max(axes_only), min(axes_only))
+                    if max(axes_only) <= 132 and min(axes_only) >= 122:
+                        # print('ddddd')
+                        continue
+
+
+                # print(abs_value, convert_to_8bit_midpoint127(abs_value, this_device['axes_info'], event_code))
+def gamepad_type_lookup(vendor_id, product_id):
+    # https://the-sz.com/products/usbid/index.php?v=0x54c&p=&n=
+    if vendor_id == 0x054c and product_id == 0x09cc:
+        return "DualShock 4 [CUH-ZCT2x]"
+    if vendor_id == 0x054c and product_id == 0x05c4:
+        return "DualShock 4 [CUH-ZCT1x]"
+    if vendor_id == 0x054c and product_id == 0x0ce6:
+        return "DualSense wireless controller"
+    if vendor_id == 0x57e and product_id == 0x2009:
+        return "Switch Pro Controller"
+    if vendor_id == 0x45e:
+        return "XBox"
+    return "Generic"
+
+
+ps4_to_linux_ev_code_dict = {
+    "PS4_CROSS":"BTN_SOUTH",
+    "PS4_CIRCLE":"BTN_EAST",
+    "PS4_SQUARE":"BTN_WEST",
+    "PS4_TRIANGLE":"BTN_NORTH",
+    "PS4_L1":"BTN_TL",
+    "PS4_R1":"BTN_TR",
+    "PS4_SHARE":"BTN_SELECT",
+    "PS4_OPTION":"BTN_START",
+    "PS4_LOGO":"BTN_MODE",
+    "PS4_L2_BUTTON":"BTN_TL2",
+    "PS4_R2_BUTTON":"BTN_TR2",
+    "PS4_LSB":"BTN_THUMBL",
+    "PS4_RSB":"BTN_THUMBR",
+    "PS4_LSX":"ABS_X",
+    "PS4_LSY":"ABS_Y",
+    "PS4_RSX":"ABS_RX",
+    "PS4_RSY":"ABS_RY",
+    "PS4_L2_ANALOG":"ABS_Z",
+    "PS4_R2_ANALOG":"ABS_RZ",
+    "PS4_DPX":"ABS_HAT0X",
+    "PS4_DPY":"ABS_HAT0Y",
+}
+
+ABS_Z = 0x02
+ABS_RZ = 0x05
+xbox_one_analog_trigger_codes = {ABS_Z, ABS_RZ}
+
+def is_analog_trigger(ev_code, gamepad_type):
+    if gamepad_type == "Xbox" and ev_code in xbox_one_analog_trigger_codes:
+        return True
+    return False
+
+# event is absolute axes AKA joystick
+def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
+    rmax, rmid = get_range_max_and_midpoint(axes_dict, axis_key)
+    if rmax is None:
+        return 127
+    value -= rmid
+    return int((value / rmax) * 255) + 127
+convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code)                    
 
                     # if this_mouse_msg[13:18] == 
 

@@ -152,13 +152,6 @@ def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
     value -= rmid
     return int((value / rmax) * 255) + 127
 
-def scale_to_8bit(value, axes_dict, axis_key):
-    rmax, rmid = get_range_max_and_midpoint(axes_dict, axis_key)
-    if rmax is None:
-        return value % 256
-    ratio = rmax / 255
-    return int(value/ratio)
-
 IBMPC_GGP_SPI_LOOKUP = {
     'IBM_GGP_BTN_1':4,
     'IBM_GGP_BTN_2':5,
@@ -229,6 +222,30 @@ ps5_to_linux_ev_code_dict = {
     "PS5_DPY":"ABS_HAT0Y",
 }
 
+ps4_to_linux_ev_code_dict = {
+    "PS4_CROSS":"BTN_SOUTH",
+    "PS4_CIRCLE":"BTN_EAST",
+    "PS4_SQUARE":"BTN_WEST",
+    "PS4_TRIANGLE":"BTN_NORTH",
+    "PS4_L1":"BTN_TL",
+    "PS4_R1":"BTN_TR",
+    "PS4_SHARE":"BTN_SELECT",
+    "PS4_OPTION":"BTN_START",
+    "PS4_LOGO":"BTN_MODE",
+    "PS4_L2_BUTTON":"BTN_TL2",
+    "PS4_R2_BUTTON":"BTN_TR2",
+    "PS4_LSB":"BTN_THUMBL",
+    "PS4_RSB":"BTN_THUMBR",
+    "PS4_LSX":"ABS_X",
+    "PS4_LSY":"ABS_Y",
+    "PS4_RSX":"ABS_RX",
+    "PS4_RSY":"ABS_RY",
+    "PS4_L2_ANALOG":"ABS_Z",
+    "PS4_R2_ANALOG":"ABS_RZ",
+    "PS4_DPX":"ABS_HAT0X",
+    "PS4_DPY":"ABS_HAT0Y",
+}
+
 def translate_dict(old_mapping_dict, lookup_dict):
     translated_map_dict = dict(old_mapping_dict)
     for key in old_mapping_dict:
@@ -255,7 +272,7 @@ XBOX_DEFAULT_KB_MOUSE_MAPPING = {
     'XB1_VIEW': {'code': 'KEY_ESC'}
 }
 
-PLAYSTATION_DEFAULT_KB_MOUSE_MAPPING = {
+PS5_DEFAULT_KB_MOUSE_MAPPING = {
     'PS5_CROSS': {'code': 'BTN_LEFT'},
     'PS5_SQUARE': {'code': 'BTN_LEFT'},
     'PS5_L1': {'code': 'BTN_LEFT'},
@@ -276,6 +293,29 @@ PLAYSTATION_DEFAULT_KB_MOUSE_MAPPING = {
     
     'PS5_CREATE': {'code': 'KEY_ESC'},
     'PS5_OPTION': {'code': 'KEY_ESC'}
+}
+
+PS4_DEFAULT_KB_MOUSE_MAPPING = {
+    'PS4_CROSS': {'code': 'BTN_LEFT'},
+    'PS4_SQUARE': {'code': 'BTN_LEFT'},
+    'PS4_L1': {'code': 'BTN_LEFT'},
+    'PS4_L2_BUTTON': {'code': 'BTN_LEFT'},
+
+    'PS4_CIRCLE': {'code': 'BTN_RIGHT'},
+    'PS4_TRIANGLE': {'code': 'BTN_RIGHT'},
+    'PS4_R1': {'code': 'BTN_RIGHT'},
+    'PS4_R2_BUTTON': {'code': 'BTN_RIGHT'},
+
+    'PS4_LSX': {'code': 'REL_X'},
+    'PS4_LSY': {'code': 'REL_Y'},
+    
+    'PS4_RSX': {'code': 'KEY_RIGHT', 'code_neg': 'KEY_LEFT'},
+    'PS4_RSY': {'code': 'KEY_DOWN', 'code_neg': 'KEY_UP'},
+    'PS4_DPX': {'code': 'KEY_RIGHT', 'code_neg': 'KEY_LEFT'},
+    'PS4_DPY': {'code': 'KEY_DOWN', 'code_neg': 'KEY_UP'},
+    
+    'PS4_SHARE': {'code': 'KEY_ESC'},
+    'PS4_OPTION': {'code': 'KEY_ESC'}
 }
 
 XBOX_DEFAULT_MAPPING = {
@@ -301,7 +341,7 @@ XBOX_DEFAULT_MAPPING = {
     'ABS_RZ':{'code':'IBM_GGP_JS2_YN'},
 }
 
-PLAYSTATION_DEAULT_MAPPING = {
+PS5_DEAULT_MAPPING = {
     # buttons to buttons
     'BTN_EAST': {'code':'IBM_GGP_BTN_1'},
     'BTN_SOUTH': {'code':'IBM_GGP_BTN_2'},
@@ -311,8 +351,8 @@ PLAYSTATION_DEAULT_MAPPING = {
     'BTN_WEST': {'code':'IBM_GGP_BTN_1'},
     'BTN_Z': {'code':'IBM_GGP_BTN_2'},
 
-    'BTN_TL': {'code':'IBM_GGP_BTN_3'},
-    'BTN_TR': {'code':'IBM_GGP_BTN_4'},
+    # 'BTN_TL': {'code':'IBM_GGP_BTN_3'},
+    # 'BTN_TR': {'code':'IBM_GGP_BTN_4'},
 
     # analog axes to analog axes
     'ABS_X': {'code':'IBM_GGP_JS1_X'},
@@ -321,25 +361,59 @@ PLAYSTATION_DEAULT_MAPPING = {
     'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
     'ABS_Z': {'code':'IBM_GGP_JS2_X'},
     'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
+
+    'ABS_RX':{'code':'IBM_GGP_JS2_YP'},
+    'ABS_RY':{'code':'IBM_GGP_JS2_YN'},
+}
+
+PS4_DEAULT_MAPPING = {
+    # buttons to buttons
+    'PS4_CROSS': {'code':'IBM_GGP_BTN_1'},
+    'PS4_SQUARE': {'code':'IBM_GGP_BTN_2'},
+    'PS4_CIRCLE': {'code':'IBM_GGP_BTN_3'},
+    'PS4_TRIANGLE': {'code':'IBM_GGP_BTN_4'},
+    
+    'PS4_L1': {'code':'IBM_GGP_BTN_1'},
+    'PS4_R1': {'code':'IBM_GGP_BTN_2'},
+
+    # 'PS4_L2_BUTTON': {'code':'IBM_GGP_BTN_3'},
+    # 'PS4_R2_BUTTON': {'code':'IBM_GGP_BTN_4'},
+
+    # analog axes to analog axes
+    'PS4_LSX': {'code':'IBM_GGP_JS1_X'},
+    'PS4_LSY': {'code':'IBM_GGP_JS1_Y'},
+    'PS4_DPX': {'code':'IBM_GGP_JS1_X'},
+    'PS4_DPY': {'code':'IBM_GGP_JS1_Y'},
+    'PS4_RSX': {'code':'IBM_GGP_JS2_X'},
+    'PS4_RSY': {'code':'IBM_GGP_JS2_Y'},
+    'PS4_L2_ANALOG':{'code':'IBM_GGP_JS2_YP'},
+    'PS4_R2_ANALOG':{'code':'IBM_GGP_JS2_YN'},
 }
 
 def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     map_dict_copy = dict(mapping_dict)
-    if usb_gamepad_type == 'PlayStation' and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
-        map_dict_copy = PLAYSTATION_DEAULT_MAPPING
-    elif usb_gamepad_type == 'Xbox' and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
+    if 'DualSense' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
+        map_dict_copy = PS5_DEAULT_MAPPING
+    elif 'DualShock 4' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
+        map_dict_copy = PS4_DEAULT_MAPPING
+    elif 'Xbox' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
         map_dict_copy = XBOX_DEFAULT_MAPPING
-    elif usb_gamepad_type == 'PlayStation' and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_MOUSE_KB":
-        map_dict_copy = PLAYSTATION_DEFAULT_KB_MOUSE_MAPPING
-    elif usb_gamepad_type == 'Xbox' and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_MOUSE_KB":
+    elif 'DualSense' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_MOUSE_KB":
+        map_dict_copy = PS5_DEFAULT_KB_MOUSE_MAPPING
+    elif 'DualShock 4' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_MOUSE_KB":
+        map_dict_copy = PS4_DEFAULT_KB_MOUSE_MAPPING
+    elif 'Xbox' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_MOUSE_KB":
         map_dict_copy = XBOX_DEFAULT_KB_MOUSE_MAPPING
+
     source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
-    if usb_gamepad_type == "Xbox":
+    if 'Xbox' in usb_gamepad_type:
         map_dict_copy = translate_dict(map_dict_copy, xbox_one_to_linux_ev_code_dict)
-    if usb_gamepad_type == "PlayStation":
+    elif 'DualSense' in usb_gamepad_type:
         map_dict_copy = translate_dict(map_dict_copy, ps5_to_linux_ev_code_dict)
+    elif 'DualShock 4' in usb_gamepad_type:
+        map_dict_copy = translate_dict(map_dict_copy, ps4_to_linux_ev_code_dict)
     target_info = None
     for item in source_name:
         if item in map_dict_copy:
@@ -392,13 +466,35 @@ def apply_curve(x_0_255, y_0_255):
     return x_0_255, y_0_255
 
 ABS_Z = 0x02
+ABS_RX = 0x03
+ABS_RY = 0x04
 ABS_RZ = 0x05
 xbox_one_analog_trigger_codes = {ABS_Z, ABS_RZ}
+ps4_analog_trigger_codes = {ABS_Z, ABS_RZ}
+ps5_analog_trigger_codes = {ABS_RX, ABS_RY}
 
 def is_analog_trigger(ev_code, gamepad_type):
-    if gamepad_type == "Xbox" and ev_code in xbox_one_analog_trigger_codes:
+    if "Xbox" in gamepad_type and ev_code in xbox_one_analog_trigger_codes:
+        return True
+    if 'DualSense' in gamepad_type and ev_code in ps5_analog_trigger_codes:
+        return True
+    if 'DualShock' in gamepad_type and ev_code in ps4_analog_trigger_codes:
         return True
     return False
+
+def gamepad_type_lookup(vendor_id, product_id):
+    # https://the-sz.com/products/usbid/index.php?v=0x54c&p=&n=
+    if vendor_id == 0x054c and product_id == 0x09cc:
+        return "DualShock 4 [CUH-ZCT2x]"
+    if vendor_id == 0x054c and product_id == 0x05c4:
+        return "DualShock 4 [CUH-ZCT1x]"
+    if vendor_id == 0x054c and product_id == 0x0ce6:
+        return "DualSense wireless controller"
+    if vendor_id == 0x57e and product_id == 0x2009:
+        return "Switch Pro Controller"
+    if vendor_id == 0x45e:
+        return "Xbox"
+    return "Generic"
 
 prev_gp_output = {}
 prev_kb_output = {}
@@ -407,16 +503,10 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
     global prev_gp_output
     global prev_kb_output
     global curr_mouse_output
+
     axes_info = this_device_info['axes_info']
     this_gamepad_name = this_device_info.get('name', '').lower().strip()
-    usb_gamepad_type = 'Generic USB'
-    if 'xbox' in this_gamepad_name or 'x-box' in this_gamepad_name:
-        usb_gamepad_type = 'Xbox'
-    elif 'sony' in this_gamepad_name and 'wireless controller' in this_gamepad_name:
-        usb_gamepad_type = 'PlayStation'
-    elif this_gamepad_name == 'wireless controller':
-        usb_gamepad_type = 'PlayStation'
-
+    usb_gamepad_type = gamepad_type_lookup(this_device_info['vendor_id'], this_device_info['product_id'])
     this_gp_dict = gp_status_dict[gp_id]
     curr_gp_output = {
         'IBM_GGP_BTN_1':set([0]),
@@ -445,28 +535,28 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
         source_type, target_info = find_keycode_in_mapping(source_code, mapping_info['mapping'], usb_gamepad_type)
         if target_info is None:
             continue
+        source_value = this_gp_dict[source_code]
         target_code = target_info['code']
         target_type = target_info['type']
         # print(source_code, source_type, target_code, target_type)
         # print("----------")
         # usb gamepad button to generic gamepad button
         if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_btn' and target_code in curr_gp_output:
-            curr_gp_output[target_code].add(this_gp_dict[source_code])
+            curr_gp_output[target_code].add(source_value)
         # usb gamepad analog axes to generic gamepad analog axes
         if source_type == 'usb_abs_axis' and target_type == 'ibm_ggp_axis' and target_code in curr_gp_output and is_analog_trigger(source_code, usb_gamepad_type) is False:
-            curr_gp_output[target_code].add(convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code))
+            curr_gp_output[target_code].add(source_value)
         # usb gamepad analog axes to generic gamepad analog half axes
         # only use to map USB analog trigger to generic gameport gamepad half axes
         if source_type == 'usb_abs_axis' and target_type == 'ibm_ggp_half_axis' and target_code[:-1] in curr_gp_output:
-            source_value = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code)//2
             axis_value = 127
             if target_code.endswith('P'):
-                axis_value += abs(source_value)
+                axis_value += abs(source_value)//2
             elif target_code.endswith('N'):
-                axis_value -= abs(source_value)
+                axis_value -= abs(source_value)//2
             curr_gp_output[target_code[:-1]].add(axis_value)
         # usb gamepad button to generic gamepad analog axes
-        if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_half_axis' and target_code[:-1] in curr_gp_output and this_gp_dict[source_code]:
+        if source_type == 'usb_gp_btn' and target_type == 'ibm_ggp_half_axis' and target_code[:-1] in curr_gp_output and source_value:
             if target_code.endswith('P'):
                 axis_value = 255
             elif target_code.endswith('N'):
@@ -476,7 +566,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
         if source_type == 'usb_gp_btn' and target_type == 'kb_key':
             if target_code not in curr_kb_output:
                 curr_kb_output[target_code] = set()
-            curr_kb_output[target_code].add(this_gp_dict[source_code])
+            curr_kb_output[target_code].add(source_value)
         # usb gamepad analog axes to keyboard key
         if source_type == 'usb_abs_axis' and target_type == 'kb_key':
             if target_code not in curr_kb_output:
@@ -488,28 +578,27 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
             except Exception:
                 pass
             if is_analog_trigger(source_code, usb_gamepad_type):
-                scaled_value = scale_to_8bit(this_gp_dict[source_code], axes_info, source_code)
-                if scaled_value > deadzone_amount:
+                if source_value > deadzone_amount:
                     is_activated = 1
                 curr_kb_output[target_code].add(is_activated)
             else:
-                if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) > 127 + deadzone_amount:
+                if source_value > 127 + deadzone_amount:
                     is_activated = 1
                 curr_kb_output[target_code].add(is_activated)
                 if target_info['code_neg'] not in curr_kb_output:
                     curr_kb_output[target_info['code_neg']] = set()
                 is_activated = 0
-                if convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) < 127 - deadzone_amount:
+                if source_value < 127 - deadzone_amount:
                     is_activated = 1
                 curr_kb_output[target_info['code_neg']].add(is_activated)
 
         # usb gamepad button to mouse buttons
         if source_type == 'usb_gp_btn' and target_type == 'mouse_btn' and target_code in curr_mouse_output:
-            curr_mouse_output[target_code].add(this_gp_dict[source_code])
+            curr_mouse_output[target_code].add(source_value)
             curr_mouse_output['is_modified'] = True
         # usb gamepad analog axes to mouse axes
         if source_type == 'usb_abs_axis' and target_type == 'usb_rel_axis' and target_code in curr_mouse_output and is_analog_trigger(source_code, usb_gamepad_type) is False:
-            movement = convert_to_8bit_midpoint127(this_gp_dict[source_code], axes_info, source_code) - 127
+            movement = source_value - 127
             deadzone_amount = 20
             try:
                 deadzone_amount = int(127 * target_info['deadzone_percent'] / 100)
@@ -546,7 +635,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
         if 'IBM_GGP_JS' in key:
             if key in prev_gp_output:
                 new_value_set = curr_gp_output[key] - prev_gp_output[key]
-                if len(new_value_set) > 0:
+                if 0 and len(new_value_set) > 0:
                     gp_spi_msg[IBMPC_GGP_SPI_LOOKUP[key]] = list(new_value_set)[0]
                 else:
                     gp_spi_msg[IBMPC_GGP_SPI_LOOKUP[key]] = find_furthest_from_midpoint(curr_gp_output[key])
@@ -644,6 +733,12 @@ def multiply_round_up_0(number, multi):
         new_number = -1
     return int(new_number)
 
+def get_stick_axes(this_device):
+    usb_gamepad_type = gamepad_type_lookup(this_device['vendor_id'], this_device['product_id'])
+    if 'DualSense' in usb_gamepad_type:
+        return ["ABS_X", "ABS_Y", "ABS_Z", "ABS_RZ"]
+    return ["ABS_X", "ABS_Y", "ABS_RX", "ABS_RY"]
+
 gamepad_hold_check_interval = 0.02
 def raw_input_event_worker():
     last_usb_event = 0
@@ -651,6 +746,8 @@ def raw_input_event_worker():
     gamepad_status_dict = {}
     next_gamepad_hold_check = time.time() + gamepad_hold_check_interval
     last_mouse_msg = []
+    last_gamepad_msg = None
+    in_deadzone_list = []
     print("raw_input_event_worker started")
     while 1:
         now = time.time()
@@ -715,10 +812,12 @@ def raw_input_event_worker():
             elif data[0] == EV_REL and event_code == REL_HWHEEL:
                 mouse_status_dict['hscroll'] = data[4]
 
+
             # event is absolute axes AKA joystick
             elif this_device['is_gp'] and data[0] == EV_ABS:
                 abs_value = int.from_bytes(data[4:8], byteorder='little', signed=True)
-                gamepad_status_dict[this_id][event_code] = abs_value
+                abs_value_midpoint127 = convert_to_8bit_midpoint127(abs_value, this_device['axes_info'], event_code)
+                gamepad_status_dict[this_id][event_code] = abs_value_midpoint127
 
             # SYNC event
             elif data[0] == EV_SYN and event_code == SYN_REPORT:
@@ -731,15 +830,23 @@ def raw_input_event_worker():
                         clear_mouse_movement(mouse_status_dict)
                     last_mouse_msg = list(this_mouse_msg)
                 if this_device['is_gp']:
-                    gp_to_transfer, kb_to_transfer, mouse_to_transfer = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device)
-                    pcard_spi.xfer(gp_to_transfer)
-                    if kb_to_transfer is not None:
-                        time.sleep(0.001)
-                        pcard_spi.xfer(kb_to_transfer)
-                    if mouse_to_transfer is not None:
-                        time.sleep(0.001)
-                        pcard_spi.xfer(mouse_to_transfer)
-                        next_gamepad_hold_check = now + gamepad_hold_check_interval
+                    for stick_axes_name in get_stick_axes(this_device):
+                        axes_code = usb4vc_shared.code_name_to_value_lookup.get(stick_axes_name)[0]
+                        this_gp_dict = gamepad_status_dict[this_device['id']]
+                        if axes_code in this_gp_dict and 127 - 10 <= this_gp_dict[axes_code] <= 127 + 10:
+                            this_gp_dict[axes_code] = 127
+                    gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device)
+                    if gamepad_output != last_gamepad_msg:
+                        gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
+                        pcard_spi.xfer(list(gp_to_transfer))
+                        if kb_to_transfer is not None:
+                            time.sleep(0.001)
+                            pcard_spi.xfer(list(kb_to_transfer))
+                        if mouse_to_transfer is not None:
+                            time.sleep(0.001)
+                            pcard_spi.xfer(list(mouse_to_transfer))
+                            next_gamepad_hold_check = now + gamepad_hold_check_interval
+                        last_gamepad_msg = gamepad_output
             
         # ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):
@@ -758,9 +865,13 @@ def get_input_devices():
     result = []
     available_devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
     for this_device in available_devices:
+        if 'motion' in this_device.name.lower():
+            continue
         dev_dict = {
             'path':this_device.path,
             'name':this_device.name,
+            'vendor_id':this_device.info.vendor,
+            'product_id':this_device.info.product,
             'axes_info':{},
             'is_kb':False,
             'is_mouse':False,
@@ -821,7 +932,7 @@ def usb_device_scan_worker():
                 except:
                     item['id'] = 255
                 opened_device_dict[item['path']] = item
-                print("opened device:", item['name'])
+                print("opened device:", hex(item['vendor_id']), hex(item['product_id']), item['name'])
             except Exception as e:
                 print("Device open exception:", e, item)
 
