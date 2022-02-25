@@ -203,6 +203,32 @@ xbox_one_to_linux_ev_code_dict = {
     "XB1_DPY":"ABS_HAT0Y",
 }
 
+ps5_to_linux_ev_code_dict = {
+    "PS5_CROSS":"BTN_EAST",
+    "PS5_CIRCLE":"BTN_C",
+    "PS5_SQUARE":"BTN_SOUTH",
+    "PS5_TRIANGLE":"BTN_NORTH",
+    "PS5_L1":"BTN_WEST",
+    "PS5_R1":"BTN_Z",
+    "PS5_CREATE":"BTN_TL2",
+    "PS5_OPTION":"BTN_TR2",
+    "PS5_LOGO":"BTN_MODE",
+    "PS5_L2_BUTTON":"BTN_TL",
+    "PS5_R2_BUTTON":"BTN_TR",
+    "PS5_MUTE":"BTN_THUMBR",
+    "PS5_TOUCHPAD_BUTTON":"BTN_THUMBL",
+    "PS5_LSB":"BTN_SELECT",
+    "PS5_RSB":"BTN_START",
+    "PS5_LSX":"ABS_X",
+    "PS5_LSY":"ABS_Y",
+    "PS5_RSX":"ABS_Z",
+    "PS5_RSY":"ABS_RZ",
+    "PS5_L2_ANALOG":"ABS_RX",
+    "PS5_R2_ANALOG":"ABS_RY",
+    "PS5_DPX":"ABS_HAT0X",
+    "PS5_DPY":"ABS_HAT0Y",
+}
+
 def translate_dict(old_mapping_dict, lookup_dict):
     translated_map_dict = dict(old_mapping_dict)
     for key in old_mapping_dict:
@@ -267,6 +293,8 @@ def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
         return None, None
     if usb_gamepad_type == "Xbox":
         map_dict_copy = translate_dict(map_dict_copy, xbox_one_to_linux_ev_code_dict)
+    if usb_gamepad_type == "PlayStation":
+        map_dict_copy = translate_dict(map_dict_copy, ps5_to_linux_ev_code_dict)
     target_info = None
     for item in source_name:
         if item in map_dict_copy:
