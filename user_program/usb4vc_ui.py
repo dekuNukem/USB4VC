@@ -101,8 +101,20 @@ USBGP_ABS_RZ = 0x05 # right analog trigger
 USBGP_ABS_HAT0X = 0x10 # D-pad X
 USBGP_ABS_HAT0Y = 0x11 # D-pad Y
 
+GENERIC_USB_GAMEPAD_TO_MOUSE_KB_DEAULT_MAPPING = {
+    "MAPPING_TYPE": "DEFAULT_MOUSE_KB",
+    'BTN_TL': {'code': 'BTN_LEFT'},
+    'BTN_TR': {'code': 'BTN_RIGHT'},
+    'BTN_TL2': {'code': 'BTN_LEFT'},
+    'BTN_TR2': {'code': 'BTN_RIGHT'},
+    'ABS_X': {'code': 'REL_X'},
+    'ABS_Y': {'code': 'REL_Y'},
+    'ABS_HAT0X': {'code': 'KEY_RIGHT', 'code_neg': 'KEY_LEFT'},
+    'ABS_HAT0Y': {'code': 'KEY_DOWN', 'code_neg': 'KEY_UP'}
+}
+
 IBM_GENERIC_USB_GAMEPAD_TO_15PIN_GAMEPORT_GAMEPAD_DEAULT_MAPPING = {
-    "IS_DEFAULT": True,
+    "MAPPING_TYPE": "DEFAULT_15PIN",
     # buttons to buttons
     'BTN_SOUTH': {'code':'IBM_GGP_BTN_1'},
     'BTN_NORTH': {'code':'IBM_GGP_BTN_2'},
@@ -134,6 +146,7 @@ PROTOCOL_PS2_MOUSE = {'pid':4, 'display_name':"PS/2"}
 PROTOCOL_MICROSOFT_SERIAL_MOUSE = {'pid':5, 'display_name':"Microsft Serial"}
 PROTOCOL_ADB_MOUSE = {'pid':6, 'display_name':"ADB"}
 PROTOCOL_15PIN_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic 15-Pin", 'mapping':IBM_GENERIC_USB_GAMEPAD_TO_15PIN_GAMEPORT_GAMEPAD_DEAULT_MAPPING}
+PROTOCOL_USB_GP_TO_MOUSE_KB = {'pid':0, 'display_name':'Mouse & KB', 'mapping':GENERIC_USB_GAMEPAD_TO_MOUSE_KB_DEAULT_MAPPING}
 # PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD = {'pid':8, 'display_name':"Gravis Pro"}
 # PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER = {'pid':9, 'display_name':"MS Sidewinder"}
 PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
@@ -345,12 +358,11 @@ def oled_print_centered(text, font, y, this_canvas):
 
 ibmpc_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
 ibmpc_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE]
-# ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_15PIN_GAMEPORT_GAMEPAD, PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD, PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER]
-ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_15PIN_GAMEPORT_GAMEPAD]
+ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_15PIN_GAMEPORT_GAMEPAD, PROTOCOL_USB_GP_TO_MOUSE_KB]
 
 adb_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_KB]
 adb_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_MOUSE]
-adb_gamepad_protocols = [PROTOCOL_OFF]
+adb_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_USB_GP_TO_MOUSE_KB]
 
 raw_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_RAW_KEYBOARD]
 raw_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_RAW_MOUSE]

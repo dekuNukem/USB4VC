@@ -235,7 +235,48 @@ def translate_dict(old_mapping_dict, lookup_dict):
         lookup_result = lookup_dict.get(key)
         if lookup_result is not None:
             translated_map_dict[lookup_result] = old_mapping_dict[key]
+            del translated_map_dict[key]
     return translated_map_dict
+
+XBOX_DEFAULT_KB_MOUSE_MAPPING = {
+    'XB1_A': {'code': 'BTN_LEFT'},
+    'XB1_B': {'code': 'BTN_RIGHT'},
+    'XB1_LSX': {'code': 'REL_X'},
+    'XB1_LSY': {'code': 'REL_Y'},
+    'XB1_LB': {'code': 'BTN_LEFT'},
+    'XB1_RB': {'code': 'BTN_RIGHT'},
+    'XB1_RSX': {'code': 'KEY_RIGHT', 'code_neg': 'KEY_LEFT'},
+    'XB1_RSY': {'code': 'KEY_DOWN', 'code_neg': 'KEY_UP'},
+    'XB1_DPX': {'code': 'KEY_RIGHT', 'code_neg': 'KEY_LEFT'},
+    'XB1_DPY': {'code': 'KEY_DOWN', 'code_neg': 'KEY_UP'},
+    'XB1_X': {'code': 'BTN_LEFT'},
+    'XB1_Y': {'code': 'BTN_RIGHT'},
+    'XB1_MENU': {'code': 'KEY_ESC'},
+    'XB1_VIEW': {'code': 'KEY_ESC'}
+}
+
+PLAYSTATION_DEFAULT_KB_MOUSE_MAPPING = {
+    'PS5_CROSS': {'code': 'BTN_LEFT'},
+    'PS5_SQUARE': {'code': 'BTN_LEFT'},
+    'PS5_L1': {'code': 'BTN_LEFT'},
+    'PS5_L2_BUTTON': {'code': 'BTN_LEFT'},
+
+    'PS5_CIRCLE': {'code': 'BTN_RIGHT'},
+    'PS5_TRIANGLE': {'code': 'BTN_RIGHT'},
+    'PS5_R1': {'code': 'BTN_RIGHT'},
+    'PS5_R2_BUTTON': {'code': 'BTN_RIGHT'},
+
+    'PS5_LSX': {'code': 'REL_X'},
+    'PS5_LSY': {'code': 'REL_Y'},
+    
+    'PS5_RSX': {'code': 'KEY_RIGHT', 'code_neg': 'KEY_LEFT'},
+    'PS5_RSY': {'code': 'KEY_DOWN', 'code_neg': 'KEY_UP'},
+    'PS5_DPX': {'code': 'KEY_RIGHT', 'code_neg': 'KEY_LEFT'},
+    'PS5_DPY': {'code': 'KEY_DOWN', 'code_neg': 'KEY_UP'},
+    
+    'PS5_CREATE': {'code': 'KEY_ESC'},
+    'PS5_OPTION': {'code': 'KEY_ESC'}
+}
 
 XBOX_DEFAULT_MAPPING = {
     # buttons to buttons
@@ -284,10 +325,14 @@ PLAYSTATION_DEAULT_MAPPING = {
 
 def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     map_dict_copy = dict(mapping_dict)
-    if usb_gamepad_type == 'PlayStation' and map_dict_copy.get("IS_DEFAULT", False):
+    if usb_gamepad_type == 'PlayStation' and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
         map_dict_copy = PLAYSTATION_DEAULT_MAPPING
-    if usb_gamepad_type == 'Xbox' and map_dict_copy.get("IS_DEFAULT", False):
+    elif usb_gamepad_type == 'Xbox' and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
         map_dict_copy = XBOX_DEFAULT_MAPPING
+    elif usb_gamepad_type == 'PlayStation' and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_MOUSE_KB":
+        map_dict_copy = PLAYSTATION_DEFAULT_KB_MOUSE_MAPPING
+    elif usb_gamepad_type == 'Xbox' and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_MOUSE_KB":
+        map_dict_copy = XBOX_DEFAULT_KB_MOUSE_MAPPING
     source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
@@ -363,11 +408,13 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
     global prev_kb_output
     global curr_mouse_output
     axes_info = this_device_info['axes_info']
-    this_gamepad_name = this_device_info.get('name', '').lower()
+    this_gamepad_name = this_device_info.get('name', '').lower().strip()
     usb_gamepad_type = 'Generic USB'
     if 'xbox' in this_gamepad_name or 'x-box' in this_gamepad_name:
         usb_gamepad_type = 'Xbox'
-    elif 'wireless controller' in this_gamepad_name:
+    elif 'sony' in this_gamepad_name and 'wireless controller' in this_gamepad_name:
+        usb_gamepad_type = 'PlayStation'
+    elif this_gamepad_name == 'wireless controller':
         usb_gamepad_type = 'PlayStation'
 
     this_gp_dict = gp_status_dict[gp_id]
