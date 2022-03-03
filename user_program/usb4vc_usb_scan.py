@@ -833,7 +833,7 @@ def raw_input_event_worker():
                     for stick_axes_name in get_stick_axes(this_device):
                         axes_code = usb4vc_shared.code_name_to_value_lookup.get(stick_axes_name)[0]
                         this_gp_dict = gamepad_status_dict[this_device['id']]
-                        if axes_code in this_gp_dict and 127 - 10 <= this_gp_dict[axes_code] <= 127 + 10:
+                        if axes_code in this_gp_dict and 127 - 12 <= this_gp_dict[axes_code] <= 127 + 12:
                             this_gp_dict[axes_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device)
                     if gamepad_output != last_gamepad_msg:

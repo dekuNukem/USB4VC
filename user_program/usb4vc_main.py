@@ -53,6 +53,7 @@ def check_rpi_model():
         save_rpi_model(current_model)
         time.sleep(2)
         os.system('sudo reboot')
+        time.sleep(10)
 
 check_rpi_model()
 
