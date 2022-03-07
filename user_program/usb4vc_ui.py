@@ -4,12 +4,12 @@ import os
 import sys
 import time
 import threading
-from demo_opts import get_device
+import usb4vc_oled
 from luma.core.render import canvas
-from PIL import ImageFont
 import RPi.GPIO as GPIO
 import usb4vc_usb_scan
 import usb4vc_shared
+import usb4vc_show_ev
 import json
 import subprocess
 from subprocess import Popen, PIPE
@@ -59,12 +59,6 @@ class my_button(object):
         self.prev_state = current_state
         return result
         
-OLED_WIDTH = 128
-OLED_HEIGHT = 32
-
-my_arg = ['--display', 'ssd1306', '--interface', 'spi', '--spi-port', '0', '--spi-device', '1', '--gpio-reset', '6', '--gpio-data-command', '5', '--width', str(OLED_WIDTH), '--height', str(OLED_HEIGHT), '--spi-bus-speed', '2000000']
-oled_device = get_device(my_arg)
-
 PBOARD_ID_UNKNOWN = 0
 PBOARD_ID_IBMPC = 1
 PBOARD_ID_ADB = 2
@@ -269,10 +263,10 @@ def fw_update(fw_path, pbid):
         enter_dfu()
         lsusb_str = subprocess.getoutput("lsusb")
         if 'in DFU'.lower() not in lsusb_str.lower():
-            with canvas(oled_device) as draw:
-                oled_print_centered("Connect a USB cable", font_regular, 0, draw)
-                oled_print_centered("from P-Card to RPi", font_regular, 10, draw)
-                oled_print_centered("and try again", font_regular, 20, draw)
+            with canvas(usb4vc_oled.oled_device) as draw:
+                usb4vc_oled.oled_print_centered("Connect a USB cable", usb4vc_oled.font_regular, 0, draw)
+                usb4vc_oled.oled_print_centered("from P-Card to RPi", usb4vc_oled.font_regular, 10, draw)
+                usb4vc_oled.oled_print_centered("and try again", usb4vc_oled.font_regular, 20, draw)
             time.sleep(4)
         else:
             os.system(f'sudo dfu-util --device ,0483:df11 -a 0 -D {fw_path}')
@@ -293,9 +287,9 @@ def update_pboard_firmware():
         print('update_pboard_firmware:', this_pboard_id, this_pboard_version_tuple, fw_ver_tuple)
         if pbid == this_pboard_id and fw_ver_tuple > this_pboard_version_tuple:
             print("DOING IT NOW")
-            with canvas(oled_device) as draw:
-                oled_print_centered("Loading Firmware:", font_medium, 0, draw)
-                oled_print_centered(item.strip("PBFW_").strip(".dfu").strip(".hex"), font_regular, 16, draw)
+            with canvas(usb4vc_oled.oled_device) as draw:
+                usb4vc_oled.oled_print_centered("Loading Firmware:", usb4vc_oled.font_medium, 0, draw)
+                usb4vc_oled.oled_print_centered(item.strip("PBFW_").strip(".dfu").strip(".hex"), usb4vc_oled.font_regular, 16, draw)
             
             if fw_update(os.path.join(pboard_firmware_path_local, item), this_pboard_id):
                 time.sleep(1)
@@ -317,44 +311,6 @@ def update_from_usb(usb_rpi_src_path, usb_firmware_path, usb_config_path):
         os.system('rm -rfv /home/pi/usb4vc/config/*')
         os.system(f"cp -v {os.path.join(usb_config_path, '*')} /home/pi/usb4vc/config")
         os.system("mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
-
-"""
-OLED for USB4VC
-128*32
-
-3 font sizes available, regular/large: ProggyTiny.ttf, medium: ChiKareGo2.ttf.
-
-regular ProggyTiny:
-16 point, 3 lines, y=0, 10, 20
-
-large type ProggyTiny:
-32 point, 2 lines (1 large + 1 regular), y=0, 20
-
-medium type ChiKareGo2:
-16 point, 2 lines, y=0, 15 
-
-characters per line:
-regular font: 21 
-medium font: 16
-large font: 11
-
-int(sys.argv[1])
-sh sync.sh; ssh -t pi@192.168.1.56 "pkill python3;cd ~/usb4vc;python3 usb4vc_main.py"
-"""
-
-font_regular = ImageFont.truetype("ProggyTiny.ttf", 16)
-font_medium = ImageFont.truetype("ChiKareGo2.ttf", 16)
-font_large = ImageFont.truetype("ProggyTiny.ttf", 32)
-
-max_char_per_line = {font_regular:21, font_medium:17, font_large:11}
-width_per_char = {font_regular:6, font_medium:7, font_large:12}
-
-def oled_print_centered(text, font, y, this_canvas):
-    text = text.strip()[:max_char_per_line[font]]
-    start_x = int((OLED_WIDTH - (len(text) * width_per_char[font]))/2)
-    if start_x < 0:
-        start_x = 0
-    this_canvas.text((start_x, y), text, font=font, fill="white")
 
 ibmpc_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
 ibmpc_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE, PROTOCOL_MICROSOFT_SERIAL_MOUSE]
@@ -428,9 +384,9 @@ def pair_device(mac_addr):
                 p.stdin.write(f'pair {mac_addr}\n')
                 is_sent = True
             if 'PIN code:' in line:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Enter PIN code:", font_medium, 0, draw)
-                    oled_print_centered(line.split('PIN code:')[-1], font_medium, 15, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Enter PIN code:", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered(line.split('PIN code:')[-1], usb4vc_oled.font_medium, 15, draw)
             if '(yes/no)' in line:
                 p.stdin.write('yes\n')
             if 'number in 0-999999' in line:
@@ -505,7 +461,7 @@ class usb4vc_menu(object):
     def __init__(self, pboard, conf_dict):
         super(usb4vc_menu, self).__init__()
         self.current_level = 0
-        self.current_page = 0
+        self.current_page = 3
         self.level_size = 6
         self.page_size = [5, 6, 4, 1, 1, 5]
         self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
@@ -542,9 +498,9 @@ class usb4vc_menu(object):
 
     def draw_joystick_curve(self):
         this_curve = joystick_curve_list[self.current_joystick_curve_index % len(joystick_curve_list)]
-        with canvas(oled_device) as draw:
-            draw.text((0, 0), "Joystick", font=font_medium, fill="white")
-            draw.text((0, 15), "Curve", font=font_medium, fill="white")
+        with canvas(usb4vc_oled.oled_device) as draw:
+            draw.text((0, 0), "Joystick", font=usb4vc_oled.font_medium, fill="white")
+            draw.text((0, 15), "Curve", font=usb4vc_oled.font_medium, fill="white")
             draw.line((curve_vertial_axis_x_pos, 0, curve_vertial_axis_x_pos, curve_vertial_axis_x_pos), fill="white")
             draw.line((curve_vertial_axis_x_pos, 31, curve_vertial_axis_x_pos+curve_horizontal_axis_width, 31), fill="white")
             for xxx in range(curve_horizontal_axis_width):
@@ -556,62 +512,65 @@ class usb4vc_menu(object):
     def display_page(self, level, page):
         if level == 0:
             if page == 0:
-                with canvas(oled_device) as draw:
+                with canvas(usb4vc_oled.oled_device) as draw:
                     mouse_count, kb_count, gp_count = usb4vc_usb_scan.get_device_count()
-                    draw.text((0, 0),  f"KBD {kb_count} {self.current_keyboard_protocol['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 10), f"MOS {mouse_count} {self.current_mouse_protocol['display_name']}", font=font_regular, fill="white")
-                    draw.text((0, 20), f"GPD {gp_count} {self.current_gamepad_protocol['display_name']}", font=font_regular, fill="white")
+                    draw.text((0, 0),  f"KBD {kb_count} {self.current_keyboard_protocol['display_name']}", font=usb4vc_oled.font_regular, fill="white")
+                    draw.text((0, 10), f"MOS {mouse_count} {self.current_mouse_protocol['display_name']}", font=usb4vc_oled.font_regular, fill="white")
+                    draw.text((0, 20), f"GPD {gp_count} {self.current_gamepad_protocol['display_name']}", font=usb4vc_oled.font_regular, fill="white")
             if page == 1:
-                with canvas(oled_device) as draw:
+                with canvas(usb4vc_oled.oled_device) as draw:
                     if 'Unknown' in self.pb_info['full_name']:
-                        draw.text((0, 0), f"{self.pb_info['full_name']} PID {this_pboard_id}", font=font_regular, fill="white")
+                        draw.text((0, 0), f"{self.pb_info['full_name']} PID {this_pboard_id}", font=usb4vc_oled.font_regular, fill="white")
                     else:
-                        draw.text((0, 0), f"{self.pb_info['full_name']}", font=font_regular, fill="white")
-                    draw.text((0, 10), f"PB {self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  RPi {usb4vc_shared.RPI_APP_VERSION_TUPLE[0]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[1]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[2]}", font=font_regular, fill="white")
-                    draw.text((0, 20), f"IP: {get_ip_name()}", font=font_regular, fill="white")
+                        draw.text((0, 0), f"{self.pb_info['full_name']}", font=usb4vc_oled.font_regular, fill="white")
+                    draw.text((0, 10), f"PB {self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  RPi {usb4vc_shared.RPI_APP_VERSION_TUPLE[0]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[1]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[2]}", font=usb4vc_oled.font_regular, fill="white")
+                    draw.text((0, 20), f"IP: {get_ip_name()}", font=usb4vc_oled.font_regular, fill="white")
             if page == 2:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Update via", font_medium, 0, draw)
-                    oled_print_centered("USB Flashdrive", font_medium, 16, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Update via", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered("USB Flashdrive", usb4vc_oled.font_medium, 16, draw)
             if page == 3:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Remove BT Device", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Show Event Codes", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered("Press any key to exit", usb4vc_oled.font_regular, 20, draw)
             if page == 4:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Pair Bluetooth", font_medium, 10, draw)
-
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Remove BT Device", usb4vc_oled.font_medium, 10, draw)
+            if page == 5:
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Pair Bluetooth", usb4vc_oled.font_medium, 10, draw)
         if level == 1:
             if page == 0:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Keyboard Protocol", font_medium, 0, draw)
-                    oled_print_centered(self.kb_protocol_list[self.current_keyboard_protocol_index]['display_name'], font_medium, 15, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Keyboard Protocol", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered(self.kb_protocol_list[self.current_keyboard_protocol_index]['display_name'], usb4vc_oled.font_medium, 15, draw)
             if page == 1:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Mouse Protocol", font_medium, 0, draw)
-                    oled_print_centered(self.mouse_protocol_list[self.current_mouse_protocol_index]['display_name'], font_medium, 15, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Mouse Protocol", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered(self.mouse_protocol_list[self.current_mouse_protocol_index]['display_name'], usb4vc_oled.font_medium, 15, draw)
             if page == 2:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Gamepad Protocol", font_medium, 0, draw)
-                    oled_print_centered(self.gamepad_protocol_list[self.current_gamepad_protocol_index]['display_name'], font_medium, 15, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Gamepad Protocol", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered(self.gamepad_protocol_list[self.current_gamepad_protocol_index]['display_name'], usb4vc_oled.font_medium, 15, draw)
             if page == 3:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Mouse Sensitivity", font_medium, 0, draw)
-                    oled_print_centered(f"{mouse_sensitivity_list[self.current_mouse_sensitivity_offset_index]}", font_medium, 15, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Mouse Sensitivity", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered(f"{mouse_sensitivity_list[self.current_mouse_sensitivity_offset_index]}", usb4vc_oled.font_medium, 15, draw)
             if page == 4:
                 self.draw_joystick_curve()
             if page == 5:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Save & Quit", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Save & Quit", usb4vc_oled.font_medium, 10, draw)
         if level == 2:
             if page == 0:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Put your device in", font_regular, 0, draw)
-                    oled_print_centered("pairing mode now.", font_regular, 10, draw)
-                    oled_print_centered("Press enter to start", font_regular, 20, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Put your device in", usb4vc_oled.font_regular, 0, draw)
+                    usb4vc_oled.oled_print_centered("pairing mode now.", usb4vc_oled.font_regular, 10, draw)
+                    usb4vc_oled.oled_print_centered("Press enter to start", usb4vc_oled.font_regular, 20, draw)
             if page == 1:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Scanning...", font_medium, 0, draw)
-                    oled_print_centered("Please wait", font_medium, 15, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Scanning...", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered("Please wait", usb4vc_oled.font_medium, 15, draw)
                 result, self.error_message = bt_setup()
                 if result != 0:
                     self.goto_page(3)
@@ -631,47 +590,47 @@ class usb4vc_menu(object):
                 self.goto_level(3)
                 self.display_curent_page()
             if page == 2:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Pairing result:", font_medium, 0, draw)
-                    oled_print_centered(self.pairing_result, font_regular, 20, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Pairing result:", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered(self.pairing_result, usb4vc_oled.font_regular, 20, draw)
             if page == 3:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Bluetooth Error!", font_medium, 0, draw)
-                    oled_print_centered(self.error_message, font_regular, 20, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Bluetooth Error!", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered(self.error_message, usb4vc_oled.font_regular, 20, draw)
         if level == 3:
             if page == self.page_size[3] - 1:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Exit", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Exit", usb4vc_oled.font_medium, 10, draw)
             else:
-                with canvas(oled_device) as draw:
-                    oled_print_centered(f"Found {len(self.bluetooth_device_list)}. Pair this?", font_regular, 0, draw)
-                    oled_print_centered(f"{self.bluetooth_device_list[page][1]}", font_regular, 10, draw)
-                    oled_print_centered(f"{self.bluetooth_device_list[page][0]}", font_regular, 20, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered(f"Found {len(self.bluetooth_device_list)}. Pair this?", usb4vc_oled.font_regular, 0, draw)
+                    usb4vc_oled.oled_print_centered(f"{self.bluetooth_device_list[page][1]}", usb4vc_oled.font_regular, 10, draw)
+                    usb4vc_oled.oled_print_centered(f"{self.bluetooth_device_list[page][0]}", usb4vc_oled.font_regular, 20, draw)
         if level == 4:
             if page == self.page_size[4] - 1:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Exit", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Exit", usb4vc_oled.font_medium, 10, draw)
             else:
-                with canvas(oled_device) as draw:
-                    oled_print_centered(f"Remove this?", font_regular, 0, draw)
-                    oled_print_centered(f"{self.paired_devices_list[page][1]}", font_regular, 10, draw)
-                    oled_print_centered(f"{self.paired_devices_list[page][0]}", font_regular, 20, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered(f"Remove this?", usb4vc_oled.font_regular, 0, draw)
+                    usb4vc_oled.oled_print_centered(f"{self.paired_devices_list[page][1]}", usb4vc_oled.font_regular, 10, draw)
+                    usb4vc_oled.oled_print_centered(f"{self.paired_devices_list[page][0]}", usb4vc_oled.font_regular, 20, draw)
         if level == 5:
             if page == 0:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Power Down", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Power Down", usb4vc_oled.font_medium, 10, draw)
             if page == 1:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Relaunch", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Relaunch", usb4vc_oled.font_medium, 10, draw)
             if page == 2:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Reboot", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Reboot", usb4vc_oled.font_medium, 10, draw)
             if page == 3:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Exit to Linux", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Exit to Linux", usb4vc_oled.font_medium, 10, draw)
             if page == 4:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Cancel", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Cancel", usb4vc_oled.font_medium, 10, draw)
 
     def send_protocol_set_spi_msg(self):
         status_dict = {}
@@ -724,33 +683,37 @@ class usb4vc_menu(object):
         if level == 0:
             if page == 2:
                 if copy_debug_log():
-                    with canvas(oled_device) as draw:
-                        oled_print_centered("Copying", font_medium, 0, draw)
-                        oled_print_centered("Debug Log...", font_medium, 16, draw)
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("Copying", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered("Debug Log...", usb4vc_oled.font_medium, 16, draw)
                     time.sleep(2)
                 usb_present, result = check_usb_drive()
                 if usb_present is False:
-                    with canvas(oled_device) as draw:
-                        oled_print_centered("Error:", font_medium, 0, draw)
-                        oled_print_centered(result, font_regular, 16, draw)
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("Error:", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered(result, usb4vc_oled.font_regular, 16, draw)
                     time.sleep(3)
                     self.goto_level(0)
                 else:
-                    with canvas(oled_device) as draw:
-                        oled_print_centered("Updating...", font_medium, 10, draw)
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("Updating...", usb4vc_oled.font_medium, 10, draw)
                     time.sleep(2)
                     update_from_usb(*result)
-                    with canvas(oled_device) as draw:
-                        oled_print_centered("Update complete!", font_medium, 0, draw)
-                        oled_print_centered("Relaunching...", font_medium, 16, draw)
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("Update complete!", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered("Relaunching...", usb4vc_oled.font_medium, 16, draw)
                     time.sleep(3)
                     oled_device.clear()
                     os._exit(0)
             elif page == 3:
+                print("evtest!")
+                usb4vc_show_ev.ev_loop(None)
+
+            elif page == 4:
                 self.paired_devices_list = list(get_paired_devices())
                 self.page_size[4] = len(self.paired_devices_list) + 1
                 self.goto_level(4)
-            elif page == 4:
+            elif page == 5:
                 self.goto_level(2)
             else:
                 self.goto_level(1)
@@ -786,9 +749,9 @@ class usb4vc_menu(object):
             if page == self.page_size[3] - 1:
                 self.goto_level(0)
             else:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Pairing...", font_medium, 0, draw)
-                    oled_print_centered("Please wait", font_medium, 15, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Pairing...", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered("Please wait", usb4vc_oled.font_medium, 15, draw)
                 print("pairing", self.bluetooth_device_list[page])
                 bt_mac_addr = self.bluetooth_device_list[page][0]
                 is_successful, result_message = pair_device(bt_mac_addr)
@@ -807,9 +770,9 @@ class usb4vc_menu(object):
                 self.goto_level(0)
         if level == 5:
             if page == 0:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Wait Until Green", font_medium, 0, draw)
-                    oled_print_centered("LED Stops Blinking", font_medium, 15, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Wait Until Green", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered("LED Stops Blinking", usb4vc_oled.font_medium, 15, draw)
                 time.sleep(2)
                 os.system("sudo halt")
                 while 1:
@@ -818,8 +781,8 @@ class usb4vc_menu(object):
                 oled_device.clear()
                 os._exit(0)
             if page == 2:
-                with canvas(oled_device) as draw:
-                    oled_print_centered("Rebooting...", font_medium, 10, draw)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Rebooting...", usb4vc_oled.font_medium, 10, draw)
                 os.system("sudo reboot")
                 while 1:
                     time.sleep(1)
@@ -857,7 +820,7 @@ def get_mouse_sensitivity():
 def ui_init():
     global pboard_info_spi_msg
     global this_pboard_id
-    load_config()
+    # load_config()
     pboard_info_spi_msg = usb4vc_usb_scan.get_pboard_info()
     print("PB INFO:", pboard_info_spi_msg)
     this_pboard_id = pboard_info_spi_msg[3]
@@ -963,13 +926,13 @@ def get_joystick_curve():
     return joystick_curve_list[my_menu.current_joystick_curve_index]
 
 def oled_print_model_changed():
-    with canvas(oled_device) as draw:
-        oled_print_centered("RPi Model Changed!", font_regular, 0, draw)
-        oled_print_centered("Recompiling BT Driver", font_regular, 10, draw)
-        oled_print_centered("Might take a while...", font_regular, 20, draw)
+    with canvas(usb4vc_oled.oled_device) as draw:
+        usb4vc_oled.oled_print_centered("RPi Model Changed!", usb4vc_oled.font_regular, 0, draw)
+        usb4vc_oled.oled_print_centered("Recompiling BT Driver", usb4vc_oled.font_regular, 10, draw)
+        usb4vc_oled.oled_print_centered("Might take a while...", usb4vc_oled.font_regular, 20, draw)
 
 def oled_print_oneline(msg):
-    with canvas(oled_device) as draw:
-        oled_print_centered(msg, font_medium, 10, draw)
+    with canvas(usb4vc_oled.oled_device) as draw:
+        usb4vc_oled.oled_print_centered(msg, usb4vc_oled.font_medium, 10, draw)
 
 ui_thread = threading.Thread(target=ui_worker, daemon=True)

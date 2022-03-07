@@ -1,3 +1,63 @@
+def ev_loop(button_list):
+    selector = selectors.DefaultSelector()
+    opened_dict = {}
+    while 1:
+        for dev_path in usb4vc_usb_scan.opened_device_dict:
+            if dev_path not in opened_dict:
+                print(dev_path)
+                opened_dict[dev_path] = evdev.InputDevice(dev_path)
+                selector.register(opened_dict[dev_path], selectors.EVENT_READ)
+        for key, mask in selector.select():
+            device = key.fileobj
+            for event in device.read():
+                # print(key, dir(key))
+                # print(device, dir(device))
+                cat = evdev.categorize(event)
+                # print(cat, dir(cat), cat.event)
+
+                middle_line = None
+                ev_str = str(cat)
+                if 'axis event' in ev_str.lower():
+                    name = '???'
+                    try:
+                        name = ev_str.strip().split(' ')[-1]
+                        if len(name) <= 2:
+                            name = cat.event.code
+                    except:
+                        pass
+                    value = '???'
+                    try:
+                        value = cat.event.value
+                    except:
+                        pass
+                    middle_line = f'{name}, {value}'
+                elif 'key event' in ev_str.lower():
+                    keycode = '???'
+                    try:
+                        if isinstance(cat.keycode, str):
+                            keycode = cat.keycode
+                        elif isinstance(cat.keycode, list):
+                            keycode = cat.keycode[0]
+                    except:
+                        pass
+                    middle_line = f'{cat.scancode}, {keycode}, {cat.keystate}'
+                if middle_line is None:
+                    continue
+
+                top_line = str(device.name)
+                print(top_line)
+                print(middle_line)
+                print('--------\n')
+        # with canvas(usb4vc_oled.oled_device) as draw:
+        #     usb4vc_oled.oled_print_centered("hahaha", usb4vc_oled.font_regular, 0, draw)
+        time.sleep(0.05)
+                # print(device.name)
+                # try:
+                #     print(cat)
+                #     print(cat.scancode, cat.keycode[0], cat.keystate)
+                # except:
+                #     pass
+
                 if this_device['is_gp']:
 
                     # check if sticks are in 9% deadzone to avoid sending useless gamepad SPI messages
