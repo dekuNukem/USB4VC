@@ -157,7 +157,7 @@ try:
         with open(item) as json_file:
             custom_profile_list.append(json.load(json_file))
 except Exception as e:
-    print('json load exception:', e)
+    print('exception json load:', e)
 
 def get_list_of_usb_drive():
     usb_drive_set = set()
@@ -166,7 +166,7 @@ def get_list_of_usb_drive():
         for item in [x for x in usb_drive_path if len(x) > 2]:
             usb_drive_set.add(os.path.join(item.split(' ')[-1], 'usb4vc'))
     except Exception as e:
-        print("get_list_of_usb_drive:", e)
+        print("exception get_list_of_usb_drive:", e)
     return usb_drive_set
 
 def copy_debug_log():
@@ -207,13 +207,13 @@ def get_pbid_and_version(dfu_file_name):
     try:
         pbid = int(dfu_file_name.split('PBID')[-1].split('_')[0])
     except Exception as e:
-        print("fw pbid parse:", e)
+        print("exception fw pbid parse:", e)
     fw_ver_tuple = None
     try:
         fw_ver = dfu_file_name.split('_V')[-1].split('.')[0].split('_')
         fw_ver_tuple = (int(fw_ver[0]), int(fw_ver[1]), int(fw_ver[2]))
     except Exception as e:
-        print('fw ver parse:', e)
+        print('exception fw ver parse:', e)
     return pbid, fw_ver_tuple
 
 i2c_bootloader_pbid = [1]
@@ -413,7 +413,7 @@ def get_paired_devices():
                 continue
             dev_set.add((line_split[1], line_split[2]))
     except Exception as e:
-        print('get_paired_devices exception:', e)
+        print('exception get_paired_devices:', e)
     return dev_set
 
 def load_config():
@@ -428,7 +428,7 @@ def load_config():
                 else:
                     configuration_dict[key] = temp_dict[key]
     except Exception as e:
-        print("config load failed!", e)
+        print("exception config load failed!", e)
 
 def get_ip_name():
     ip_str = subprocess.getoutput("timeout 1 hostname -I")
@@ -442,7 +442,7 @@ def save_config():
         with open(config_file_path, 'w', encoding='utf-8') as save_file:
            save_file.write(json.dumps(configuration_dict))
     except Exception as e:
-        print("config save failed!", e)
+        print("exception config save failed!", e)
 
 curve_vertial_axis_x_pos = 80
 curve_horizontal_axis_width = 32
@@ -709,7 +709,7 @@ class usb4vc_menu(object):
                 try:
                     usb4vc_show_ev.ev_loop([plus_button, minus_button, enter_button])
                 except Exception as e:
-                    print('ev_loop exception:', e)
+                    print('exception ev_loop:', e)
                 self.goto_level(0)
             elif page == 4:
                 self.paired_devices_list = list(get_paired_devices())

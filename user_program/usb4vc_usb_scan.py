@@ -142,7 +142,7 @@ def get_range_max_and_midpoint(axes_dict, axis_key):
     try:
         return axes_dict[axis_key]['max'] - axes_dict[axis_key]['min'], int((axes_dict[axis_key]['max'] + axes_dict[axis_key]['min']) / 2)
     except Exception as e:
-        print('get_range_max_and_midpoint:', e)
+        print('exception get_range_max_and_midpoint:', e)
     return None, None
 
 def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
@@ -461,7 +461,7 @@ def apply_curve(x_0_255, y_0_255):
         yyyyy = int(y_neg127_127 / ratio)
         return xxxxx + 127, yyyyy + 127
     except Exception as e:
-        # print('apply_curve:', e)
+        # print('exception apply_curve:', e)
         pass
     return x_0_255, y_0_255
 
@@ -680,7 +680,7 @@ def make_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info):
         if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
             return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, current_protocol)
     except Exception as e:
-        print("make_generic_gamepad_spi_packet:", e)
+        print("exception make_generic_gamepad_spi_packet:", e)
     return list(nop_spi_msg_template), None, None
 
 def change_kb_led(scrolllock, numlock, capslock):
@@ -812,7 +812,6 @@ def raw_input_event_worker():
             elif data[0] == EV_REL and event_code == REL_HWHEEL:
                 mouse_status_dict['hscroll'] = data[4]
 
-
             # event is absolute axes AKA joystick
             elif this_device['is_gp'] and data[0] == EV_ABS:
                 abs_value = int.from_bytes(data[4:8], byteorder='little', signed=True)
@@ -859,7 +858,7 @@ def raw_input_event_worker():
                     change_kb_led(slave_result[3], slave_result[4], slave_result[5])
                     change_kb_led(slave_result[3], slave_result[4], slave_result[5])
                 except Exception as e:
-                    print('change_kb_led exception:', e)
+                    print('exception change_kb_led:', e)
 
 def get_input_devices():
     result = []
@@ -890,7 +889,7 @@ def get_input_devices():
                 for item in this_device.capabilities()[EV_ABS]:
                     dev_dict['axes_info'][item[0]] = item[1]._asdict()
             except Exception as e:
-                print('get_input_devices exception:', e)
+                print('exception get_input_devices:', e)
         result.append(dev_dict)
     return result
 
@@ -914,7 +913,7 @@ def usb_device_scan_worker():
         try:
             device_list = get_input_devices()
         except Exception as e:
-            print('exception at get_input_devices:', e)
+            print('exception get_input_devices:', e)
             continue
         if len(device_list) == 0:
             print('No input devices found')
@@ -934,7 +933,7 @@ def usb_device_scan_worker():
                 opened_device_dict[item['path']] = item
                 print("opened device:", hex(item['vendor_id']), hex(item['product_id']), item['name'])
             except Exception as e:
-                print("Device open exception:", e, item)
+                print("exception Device open:", e, item)
 
 raw_input_event_parser_thread = threading.Thread(target=raw_input_event_worker, daemon=True)
 usb_device_scan_thread = threading.Thread(target=usb_device_scan_worker, daemon=True)
