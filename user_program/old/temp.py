@@ -1,3 +1,13 @@
+                    axis_value_8bit = cat.event.value
+                    try:
+                        gamepad_status = usb4vc_usb_scan.gamepad_status_dict.get(usb4vc_usb_scan.opened_device_dict[device.path]['id'])
+                        axis_value_8bit = gamepad_status.get(cat.event.code)
+                    except:
+                        pass
+                    print(gamepad_status)
+                    # print(usb4vc_usb_scan.opened_device_dict[device.path]['axes_info'][cat.event.code])
+                    # print(cat.event.code)
+
 def ev_loop(button_list):
     selector = selectors.DefaultSelector()
     opened_dict = {}

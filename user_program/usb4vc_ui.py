@@ -706,9 +706,11 @@ class usb4vc_menu(object):
                     oled_device.clear()
                     os._exit(0)
             elif page == 3:
-                print("evtest!")
-                usb4vc_show_ev.ev_loop(None)
-
+                try:
+                    usb4vc_show_ev.ev_loop(None)
+                except Exception as e:
+                    print('ev_loop exception:', e)
+                self.goto_level(0)
             elif page == 4:
                 self.paired_devices_list = list(get_paired_devices())
                 self.page_size[4] = len(self.paired_devices_list) + 1

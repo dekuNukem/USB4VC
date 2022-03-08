@@ -8,6 +8,7 @@ import selectors
 def ev_loop(button_list):
     selector = selectors.DefaultSelector()
     opened_dict = {}
+    last_value = 127
     with canvas(usb4vc_oled.oled_device) as draw:
         usb4vc_oled.oled_print_centered('Listening...', usb4vc_oled.font_medium, 10, draw)
     while 1:
@@ -35,6 +36,16 @@ def ev_loop(button_list):
                         value = cat.event.value
                     except:
                         pass
+                    try:
+                        gamepad_status = usb4vc_usb_scan.gamepad_status_dict.get(usb4vc_usb_scan.opened_device_dict[device.path]['id'])
+                        value = gamepad_status.get(cat.event.code)
+                        if 127 - 20 < value < 127 + 20:
+                            value = 127
+                    except:
+                        pass
+                    if value == last_value:
+                        continue
+                    last_value = value
                     middle_line = f'{name}, {value}'
                 elif 'key event' in ev_str.lower():
                     keycode = '???'
@@ -43,16 +54,18 @@ def ev_loop(button_list):
                             keycode = cat.keycode
                         elif isinstance(cat.keycode, list):
                             keycode = cat.keycode[0]
+                        else:
+                            keycode = cat.scancode
                     except:
                         pass
-                    middle_line = f'{cat.scancode}, {keycode}, {cat.keystate}'
+                    middle_line = f'{keycode} {cat.keystate}'
                 if middle_line is None:
                     continue
 
                 top_line = str(device.name)
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered(top_line, usb4vc_oled.font_regular, 0, draw)
-                    if len(middle_line) <= 17:
+                    if len(middle_line) <= 15:
                         usb4vc_oled.oled_print_centered(middle_line, usb4vc_oled.font_medium, 15, draw)
                     else:
                         usb4vc_oled.oled_print_centered(middle_line, usb4vc_oled.font_regular, 15, draw)

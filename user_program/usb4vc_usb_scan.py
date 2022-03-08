@@ -739,11 +739,11 @@ def get_stick_axes(this_device):
         return ["ABS_X", "ABS_Y", "ABS_Z", "ABS_RZ"]
     return ["ABS_X", "ABS_Y", "ABS_RX", "ABS_RY"]
 
+gamepad_status_dict = {}
 gamepad_hold_check_interval = 0.02
 def raw_input_event_worker():
     last_usb_event = 0
     mouse_status_dict = {'x': [0, 0], 'y': [0, 0], 'scroll': 0, 'hscroll': 0, BTN_LEFT:0, BTN_RIGHT:0, BTN_MIDDLE:0, BTN_SIDE:0, BTN_EXTRA:0, BTN_FORWARD:0, BTN_BACK:0, BTN_TASK:0}
-    gamepad_status_dict = {}
     next_gamepad_hold_check = time.time() + gamepad_hold_check_interval
     last_mouse_msg = []
     last_gamepad_msg = None
