@@ -531,7 +531,8 @@ class usb4vc_menu(object):
                     usb4vc_oled.oled_print_centered("USB Flashdrive", usb4vc_oled.font_medium, 16, draw)
             if page == 3:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Show Event Codes", usb4vc_oled.font_medium, 10, draw)
+                    usb4vc_oled.oled_print_centered("Show Event Codes", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered("(experimental)", usb4vc_oled.font_regular, 20, draw)
             if page == 4:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Remove BT Device", usb4vc_oled.font_medium, 10, draw)

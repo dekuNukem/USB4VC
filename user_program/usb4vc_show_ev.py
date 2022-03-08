@@ -11,8 +11,8 @@ def ev_loop(button_list):
     opened_dict = {}
     last_value = 127
     with canvas(usb4vc_oled.oled_device) as draw:
-        usb4vc_oled.oled_print_centered("HOLD + during", usb4vc_oled.font_medium, 0, draw)
-        usb4vc_oled.oled_print_centered("input to exit", usb4vc_oled.font_medium, 15, draw)
+        usb4vc_oled.oled_print_centered("To exit, HOLD", usb4vc_oled.font_medium, 0, draw)
+        usb4vc_oled.oled_print_centered("+ during input", usb4vc_oled.font_medium, 15, draw)
     time.sleep(0.5)
     while 1:
         for button in button_list:

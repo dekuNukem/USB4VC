@@ -32,7 +32,6 @@ int(sys.argv[1])
 sh sync.sh; ssh -t pi@192.168.1.56 "pkill python3;cd ~/usb4vc;python3 usb4vc_main.py"
 """
 
-
 font_regular = ImageFont.truetype("ProggyTiny.ttf", 16)
 font_medium = ImageFont.truetype("ChiKareGo2.ttf", 16)
 font_large = ImageFont.truetype("ProggyTiny.ttf", 32)
