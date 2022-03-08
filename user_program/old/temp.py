@@ -7,7 +7,14 @@
                     print(gamepad_status)
                     # print(usb4vc_usb_scan.opened_device_dict[device.path]['axes_info'][cat.event.code])
                     # print(cat.event.code)
-
+                    # print(cat.event.code)
+            os.set_blocking(device.fileno(), False)
+usb4vc_oled.oled_print_centered("Press any key to exit", usb4vc_oled.font_regular, 20, draw)
+        for button in button_list:
+            print(button)
+            if button.is_pressed():
+                print("HHHHHHH")
+                return
 def ev_loop(button_list):
     selector = selectors.DefaultSelector()
     opened_dict = {}

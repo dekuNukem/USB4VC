@@ -1,4 +1,5 @@
 import time
+import os
 import usb4vc_oled
 from luma.core.render import canvas
 import usb4vc_usb_scan
@@ -10,11 +11,15 @@ def ev_loop(button_list):
     opened_dict = {}
     last_value = 127
     with canvas(usb4vc_oled.oled_device) as draw:
-        usb4vc_oled.oled_print_centered('Listening...', usb4vc_oled.font_medium, 10, draw)
+        usb4vc_oled.oled_print_centered("HOLD + during", usb4vc_oled.font_medium, 0, draw)
+        usb4vc_oled.oled_print_centered("input to exit", usb4vc_oled.font_medium, 15, draw)
+    time.sleep(0.5)
     while 1:
+        for button in button_list:
+            if button.is_pressed():
+                return
         for dev_path in usb4vc_usb_scan.opened_device_dict:
             if dev_path not in opened_dict:
-                print(dev_path)
                 opened_dict[dev_path] = evdev.InputDevice(dev_path)
                 selector.register(opened_dict[dev_path], selectors.EVENT_READ)
         for key, mask in selector.select():
@@ -69,4 +74,3 @@ def ev_loop(button_list):
                         usb4vc_oled.oled_print_centered(middle_line, usb4vc_oled.font_medium, 15, draw)
                     else:
                         usb4vc_oled.oled_print_centered(middle_line, usb4vc_oled.font_regular, 15, draw)
-        time.sleep(0.05)

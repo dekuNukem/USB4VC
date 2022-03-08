@@ -461,7 +461,7 @@ class usb4vc_menu(object):
     def __init__(self, pboard, conf_dict):
         super(usb4vc_menu, self).__init__()
         self.current_level = 0
-        self.current_page = 3
+        self.current_page = 0
         self.level_size = 6
         self.page_size = [5, 6, 4, 1, 1, 5]
         self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
@@ -531,8 +531,7 @@ class usb4vc_menu(object):
                     usb4vc_oled.oled_print_centered("USB Flashdrive", usb4vc_oled.font_medium, 16, draw)
             if page == 3:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Show Event Codes", usb4vc_oled.font_medium, 0, draw)
-                    usb4vc_oled.oled_print_centered("Press any key to exit", usb4vc_oled.font_regular, 20, draw)
+                    usb4vc_oled.oled_print_centered("Show Event Codes", usb4vc_oled.font_medium, 10, draw)
             if page == 4:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Remove BT Device", usb4vc_oled.font_medium, 10, draw)
@@ -703,11 +702,11 @@ class usb4vc_menu(object):
                         usb4vc_oled.oled_print_centered("Update complete!", usb4vc_oled.font_medium, 0, draw)
                         usb4vc_oled.oled_print_centered("Relaunching...", usb4vc_oled.font_medium, 16, draw)
                     time.sleep(3)
-                    oled_device.clear()
+                    usb4vc_oled.oled_device.clear()
                     os._exit(0)
             elif page == 3:
                 try:
-                    usb4vc_show_ev.ev_loop(None)
+                    usb4vc_show_ev.ev_loop([plus_button, minus_button, enter_button])
                 except Exception as e:
                     print('ev_loop exception:', e)
                 self.goto_level(0)
@@ -780,7 +779,7 @@ class usb4vc_menu(object):
                 while 1:
                     time.sleep(1)
             if page == 1:
-                oled_device.clear()
+                usb4vc_oled.oled_device.clear()
                 os._exit(0)
             if page == 2:
                 with canvas(usb4vc_oled.oled_device) as draw:
@@ -789,7 +788,7 @@ class usb4vc_menu(object):
                 while 1:
                     time.sleep(1)
             if page == 3:
-                oled_device.clear()
+                usb4vc_oled.oled_device.clear()
                 os._exit(169)
             if page == 4:
                 self.goto_level(0)
@@ -822,7 +821,7 @@ def get_mouse_sensitivity():
 def ui_init():
     global pboard_info_spi_msg
     global this_pboard_id
-    # load_config()
+    load_config()
     pboard_info_spi_msg = usb4vc_usb_scan.get_pboard_info()
     print("PB INFO:", pboard_info_spi_msg)
     this_pboard_id = pboard_info_spi_msg[3]
@@ -855,7 +854,7 @@ class oled_sleep_control(object):
     def sleep(self):
         if self.is_sleeping is False:
             print("sleeping!")
-            oled_device.clear()
+            usb4vc_oled.oled_device.clear()
             self.is_sleeping = True
     def wakeup(self):
         if self.is_sleeping:
