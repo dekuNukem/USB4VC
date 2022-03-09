@@ -80,6 +80,8 @@ SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
 
 BTN_SOUTH = 0x130
+BTN_TR = 0x137
+BTN_TL2 = 0x138
 BTN_THUMBR = 0x13e
 
 ABS_X = 0x00
@@ -104,6 +106,7 @@ info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUE
 keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
 mouse_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
 gamepad_event_ibm_ggp_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED, 0, 0, 0, 0, 0, 127, 127, 127, 127] + [0]*20
+raw_usb_gamepad_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW] + [0]*7 + [127]*8 + [0]*14
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_REQ_ACK] + [0]*29
@@ -135,8 +138,9 @@ def make_mouse_spi_packet(mouse_dict, mouse_id):
     to_transfer[17] = mouse_dict[BTN_EXTRA]
     return to_transfer
 
-PID_GENERIC_GAMEPORT_GAMEPAD = 7
 PID_PROTOCOL_OFF = 0
+PID_GENERIC_GAMEPORT_GAMEPAD = 7
+PID_RAW_USB_GAMEPAD = 127
 
 def get_range_max_and_midpoint(axes_dict, axis_key):
     try:
@@ -150,7 +154,10 @@ def convert_to_8bit_midpoint127(value, axes_dict, axis_key):
     if rmax is None:
         return 127
     value -= rmid
-    return int((value / rmax) * 255) + 127
+    result = int((value / rmax) * 255) + 127
+    if result == 254:
+        result = 255
+    return result
 
 IBMPC_GGP_SPI_LOOKUP = {
     'IBM_GGP_BTN_1':4,
@@ -490,16 +497,16 @@ def gamepad_type_lookup(vendor_id, product_id):
         return "DualShock 4 [CUH-ZCT1x]"
     if vendor_id == 0x054c and product_id == 0x0ce6:
         return "DualSense wireless controller"
-    if vendor_id == 0x57e and product_id == 0x2009:
+    if vendor_id == 0x057e and product_id == 0x2009:
         return "Switch Pro Controller"
-    if vendor_id == 0x45e:
+    if vendor_id == 0x045e:
         return "Xbox"
     return "Generic"
 
 prev_gp_output = {}
 prev_kb_output = {}
 curr_mouse_output = {}
-def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, mapping_info):
+def make_generic_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info):
     global prev_gp_output
     global prev_kb_output
     global curr_mouse_output
@@ -507,6 +514,7 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
     axes_info = this_device_info['axes_info']
     this_gamepad_name = this_device_info.get('name', '').lower().strip()
     usb_gamepad_type = gamepad_type_lookup(this_device_info['vendor_id'], this_device_info['product_id'])
+    gp_id = this_device_info['id']
     this_gp_dict = gp_status_dict[gp_id]
     curr_gp_output = {
         'IBM_GGP_BTN_1':set([0]),
@@ -674,11 +682,59 @@ def make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, map
     gp_spi_msg[10], gp_spi_msg[11] = apply_curve(gp_spi_msg[10], gp_spi_msg[11])
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
-def make_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info):
+raw_usb_gamepad_abs_axes_to_spi_msg_index_lookup = {
+    0x00:10, #ABS_X
+    0x01:11, #ABS_Y
+    0x02:12, #ABS_Z
+    0x03:13, #ABS_RX
+    0x04:14, #ABS_RY
+    0x05:15, #ABS_RZ
+    0x06:None, #ABS_THROTTLE
+    0x07:None, #ABS_RUDDER
+    0x08:None, #ABS_WHEEL
+    0x09:None, #ABS_GAS
+    0x0a:None, #ABS_BRAKE
+    0x10:16, #ABS_HAT0X
+    0x11:17, #ABS_HAT0Y
+    0x12:None, #ABS_HAT1X
+    0x13:None, #ABS_HAT1Y
+    0x14:None, #ABS_HAT2X
+    0x15:None, #ABS_HAT2Y
+    0x16:None, #ABS_HAT3X
+    0x17:None, #ABS_HAT3Y
+    0x18:None, #ABS_PRESSURE
+    0x19:None, #ABS_DISTANCE
+    0x1a:None, #ABS_TILT_X
+    0x1b:None, #ABS_TILT_Y
+    0x1c:None, #ABS_TOOL_WIDTH
+}
+
+def make_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
+    gp_id = this_device_info['id']
+    this_msg = list(raw_usb_gamepad_event_spi_msg_template)
+    this_msg[3] = gp_id
+    this_msg[4:6] = this_device_info['vendor_id'].to_bytes(2, byteorder='little')
+    this_msg[6:8] = this_device_info['product_id'].to_bytes(2, byteorder='little')
+
+    for event_code in gp_status_dict[gp_id]:
+        if BTN_SOUTH <= event_code <= BTN_TR:
+            this_msg[8] |= (gp_status_dict[gp_id][event_code] << (event_code - BTN_SOUTH))
+        elif BTN_TL2 <= event_code <= BTN_THUMBR:
+            this_msg[9] |= (gp_status_dict[gp_id][event_code] << (event_code - BTN_TL2))
+        elif ABS_X <= event_code <= ABS_HAT3Y:
+            msg_index = raw_usb_gamepad_abs_axes_to_spi_msg_index_lookup.get(event_code)
+            if msg_index is not None:
+                this_msg[msg_index] = gp_status_dict[gp_id][event_code]
+    # print('{:08b}'.format(this_msg[9]))
+    return this_msg, None, None
+
+def make_gamepad_spi_packet(gp_status_dict, this_device_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
     try:
         if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
-            return make_generic_gamepad_spi_packet(gp_status_dict, gp_id, this_device_info, current_protocol)
+            return make_generic_gamepad_spi_packet(gp_status_dict, this_device_info, current_protocol)
+        elif current_protocol['pid'] == PID_RAW_USB_GAMEPAD:
+            return make_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
     except Exception as e:
         print("exception make_generic_gamepad_spi_packet:", e)
     return list(nop_spi_msg_template), None, None
@@ -834,7 +890,8 @@ def raw_input_event_worker():
                         this_gp_dict = gamepad_status_dict[this_device['id']]
                         if axes_code in this_gp_dict and 127 - 12 <= this_gp_dict[axes_code] <= 127 + 12:
                             this_gp_dict[axes_code] = 127
-                    gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_id, this_device)
+                    gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
+                    # print(gamepad_output[0])
                     if gamepad_output != last_gamepad_msg:
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
                         pcard_spi.xfer(list(gp_to_transfer))

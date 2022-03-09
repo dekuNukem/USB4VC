@@ -1,3 +1,6 @@
+usb4vc_oled.oled_print_centered("HOLD + during", usb4vc_oled.font_medium, 0, draw)
+        usb4vc_oled.oled_print_centered("input to exit", usb4vc_oled.font_medium, 15, draw)
+
                     axis_value_8bit = cat.event.value
                     try:
                         gamepad_status = usb4vc_usb_scan.gamepad_status_dict.get(usb4vc_usb_scan.opened_device_dict[device.path]['id'])
