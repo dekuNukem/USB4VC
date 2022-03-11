@@ -864,7 +864,7 @@ class oled_sleep_control(object):
             self.last_input_event = time.time()
             self.is_sleeping = False
     def check_sleep(self):
-        # time.time() might jump ahead a ton when RPi gets its time from network
+        # time.time() might jump ahead a lot when RPi gets its time from network
         # this ensures OLED won't go to sleep too early
         if self.ui_loop_count <= 1500:
             return
@@ -886,7 +886,7 @@ def ui_worker():
     while 1: 
         time.sleep(0.1)
         my_oled.ui_loop_count += 1
-        if my_oled.is_sleeping is False:
+        if my_oled.is_sleeping is False and my_oled.ui_loop_count % 5 == 0:
             my_menu.update_usb_status();
 
         if plus_button.is_pressed():
