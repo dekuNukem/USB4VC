@@ -804,6 +804,7 @@ def raw_input_event_worker():
     last_mouse_msg = []
     last_gamepad_msg = None
     in_deadzone_list = []
+    last_mouse_button_msg = None
     print("raw_input_event_worker started")
     while 1:
         now = time.time()
@@ -849,7 +850,8 @@ def raw_input_event_worker():
                     next_gamepad_hold_check = now + gamepad_hold_check_interval
                     if data[4] != 2:
                         clear_mouse_movement(mouse_status_dict)
-                        pcard_spi.xfer(make_mouse_spi_packet(mouse_status_dict, this_id))
+                        last_mouse_button_msg = make_mouse_spi_packet(mouse_status_dict, this_id)
+                        pcard_spi.xfer(list(last_mouse_button_msg))
                 # Gamepad buttons
                 elif BTN_SOUTH <= event_code <= BTN_THUMBR or event_code in gamepad_buttons_as_kb_codes:
                     gamepad_status_dict[this_id][event_code] = data[4]
@@ -878,12 +880,14 @@ def raw_input_event_worker():
             elif data[0] == EV_SYN and event_code == SYN_REPORT:
                 if this_device['is_mouse']:
                     this_mouse_msg = make_mouse_spi_packet(mouse_status_dict, this_id)
+                    if this_mouse_msg == last_mouse_button_msg:
+                        pass
                     # send spi mouse message if there is moment, or the button is not typematic
-                    if (max(this_mouse_msg[13:18]) != 2 or sum(this_mouse_msg[4:10]) != 0) and (this_mouse_msg[4:] != last_mouse_msg[4:] or sum(this_mouse_msg[4:]) != 0):
+                    elif (max(this_mouse_msg[13:18]) != 2 or sum(this_mouse_msg[4:10]) != 0) and (this_mouse_msg[4:] != last_mouse_msg[4:] or sum(this_mouse_msg[4:]) != 0):
                         pcard_spi.xfer(list(this_mouse_msg))
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
                         clear_mouse_movement(mouse_status_dict)
-                    last_mouse_msg = list(this_mouse_msg)
+                        last_mouse_msg = list(this_mouse_msg)
                 if this_device['is_gp']:
                     for stick_axes_name in get_stick_axes(this_device):
                         axes_code = usb4vc_shared.code_name_to_value_lookup.get(stick_axes_name)[0]
