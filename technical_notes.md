@@ -156,6 +156,12 @@ You can find the [capture files here](captures/latency), open with [saleae app](
 
 By now you should have a general idea of how USB4VC works on a hardware level. So here are more information on how to get started on making your own Protocol Card!
 
+### Any Restrictions?
+
+Not really! USB4VC is under MIT license, so basically anything goes apart from liability and warranty.
+
+Feel free to develop your own Protocol Cards, write about them, sell them, anything you want really.
+
 ### Recommended Equipment
 
 * A **Logic Analyzer** is strongly recommended. You can use it to capture and decode digital signals, making troubleshooting much easier.
@@ -281,25 +287,30 @@ SPI pins are 23, 21, 19, and 24. Also make sure everything is on the same ground
 
 Use your logic analyzer or oscilloscope to confirm the SPI waveform is correct, and making sure the MCU can reliably receive SPI messages without data corruption and dropouts. See [SPI protocol section](#spi-communication-protocol) for details.
 
-For ARM-based MCUs, you can usually receive messages as SPI slave in interrupt mode. Tell it you need 32 Bytes, and an interrupt callback will fire once the message has been received. [See my tutorial](https://github.com/dekuNukem/STM32_tutorials) for more information, see also the [code for existing P-Cards](https://github.com/dekuNukem/USB4VC/blob/master/firmware/ibmpc/Src/main.c).
-
-For STM32, use `HAL_SPI_TransmitReceive_IT()` to start listening, and `HAL_SPI_TxRxCpltCallback()` will fire when message is received.
 
 This is important as any SPI message corruption might result in missed inputs or wrong inputs being sent to retro computer.
 
 Try start simple and sending single keyboard key strokes. Print the received message out, and compare with [this document](https://docs.google.com/spreadsheets/d/e/2PACX-1vTDylIwis3GZrhakGK0uXJGc_SAZ_QwySmlMfZXpSdFDH6zoIXs1kHX7-4wUTeShZth_n6tJH8l3dJ3/pubhtml#).
 
+----
 
+For ARM-based MCUs, you can usually receive messages as SPI slave in interrupt mode. Tell it you need 32 Bytes, and an interrupt callback will fire once the message has been received. [See my tutorial](https://github.com/dekuNukem/STM32_tutorials) for more information, see also the [code for existing P-Cards](https://github.com/dekuNukem/USB4VC/blob/master/firmware/ibmpc/Src/main.c).
+
+For STM32, set up SPI as follows:
+
+![Alt text](photos/spi_conf.png)
+
+Then use `HAL_SPI_TransmitReceive_IT()` to start listening, and `HAL_SPI_TxRxCpltCallback()` will fire when message is received.
 
 #### Work on protocols
 
-Once SPI is working, you can move on to implementing the protocol itself. A few tips:
+Once SPI is working, you can move on to implementing the protocol itself. A few general tips:
 
 * Popular protocols tends to have Arduino libraries already written, and you can modify/convert them to suit your needs. Double check the license though!
 
 * Use the logic analyzer or oscilloscope to compare your output with the reference and make sure the timing is spot-on.
 
-* Once working, try rapid inputs and see if it can handle that. And use it for a few hours to verify the stability.
+* Once working, try rapid inputs (mashing keyboard, moving mouse fast), simultaneous inputs (mashing keyboard/mouse/gamepad at same time) and see if any issue arises. And use it for a few hours to verify stability.
 
 #### Tips and tricks
 
@@ -307,13 +318,15 @@ Once SPI is working, you can move on to implementing the protocol itself. A few 
 
 * For example just copy everything into a buffer in ISR, and process it in the main loop.
 
+* If designing your own PCB, you can refer to a lot of open-source vendors such as Sparkfun and Adafruit.
 
+* Just find a relevant product and download the schematics and PCB files, they are often production tested, so a great starting point to make your own!
 
---------
+### Unique Protocol Card ID
 
-Each Protocol Card can have a unique ID, so RPi can display the appropriate protocol in the menus. Although at the beginning we don't have to worry about that. RPi will still send out Keyboard/Mouse/Gamepad updates regardless.
+Once your own P-Card has been tried and tested, it can be given a unique ID so the Baseboard can properly recognise it and display its protocol in the menus.
 
-
+I'm still fleshing out how this will work, expect an update soon!
 
 ## Questions or Comments?
 
