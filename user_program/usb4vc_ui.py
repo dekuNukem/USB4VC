@@ -463,7 +463,7 @@ class usb4vc_menu(object):
         self.current_level = 0
         self.current_page = 0
         self.level_size = 6
-        self.page_size = [5, 6, 4, 1, 1, 5]
+        self.page_size = [6, 6, 4, 1, 1, 5]
         self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
         self.mouse_protocol_list = list(pboard['protocol_list_mouse'])
         self.gamepad_protocol_list = list(pboard['protocol_list_gamepad'])
