@@ -52,8 +52,6 @@ Most pins are already in use:
 
 ![Alt text](photos/bb_pinout.png)
 
-A few comments:
-
 * Protocol Card and OLED screen shares the same SPI bus, with different CS of course.
 
 * Pin 22 is used to reset the P-Card, pin 32 for putting the microcontroller in bootloader mode for firmware updates.
@@ -72,7 +70,9 @@ A few comments:
 
 Raspberri Pi communicates with Protocol Card through SPI. [Here's a quick introduction](https://www.circuitbasics.com/basics-of-the-spi-communication-protocol/) if you're unfamiliar.
 
-RPi is master, P-card is slave. **Mode 0** is used (CPOL and CPHA both 0), **SCLK is 2MHz**.
+RPi is master, P-card is slave. **SCLK is 2MHz**.
+
+**Mode 0** is used. CPOL=0 (CLK idle low), CPHA=0 (data valid on CLK rising edge).
 
 RPi and P-Card communicates via **fixed-length 32-byte packets**.
 
@@ -93,6 +93,20 @@ Here is a close-up of the first few bytes:
 Compare to the [keyboard tab in the document](https://docs.google.com/spreadsheets/d/e/2PACX-1vTDylIwis3GZrhakGK0uXJGc_SAZ_QwySmlMfZXpSdFDH6zoIXs1kHX7-4wUTeShZth_n6tJH8l3dJ3/pubhtml#):
 
 ![Alt text](photos/spi_kb.png)
+
+## P-Card Interrupt Handling
+
+When Protocol Card has data for RPi, it should prepare the SPI buffer, and switch its interrupt pin to HIGH ([Pin 36](#hardware-pinout)).
+
+Upon detecting this change, RPi will send out an ACK message. Upon receiving, the P-Card switches the interrupt pin to LOW.
+
+RPi will then send out another ACK (or NOP) message to shift the data from P-Card to itself.
+
+Here is a sample capture:
+
+![Alt text](photos/interrupt.png)
+
+Currently this feature is only used for changing keyboard LEDs.
 
 ## Sample SPI Message Captures
 

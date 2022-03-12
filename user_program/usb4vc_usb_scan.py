@@ -910,9 +910,11 @@ def raw_input_event_worker():
             
         # ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):
-            slave_result = None
-            for x in range(2):
-                slave_result = pcard_spi.xfer(make_spi_msg_ack())
+            # send out ACK to turn off P-Card interrupt
+            slave_result = pcard_spi.xfer(make_spi_msg_ack())
+            time.sleep(0.001)
+            # send another to shift response into RPi
+            slave_result = pcard_spi.xfer(make_spi_msg_ack())
             print(int(time.time()), slave_result)
             if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_TYPE_KB_LED_REQUEST:
                 try:
