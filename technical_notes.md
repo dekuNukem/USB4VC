@@ -60,7 +60,7 @@ Most pins are already in use:
 
 * A CH340 TTL-Serial-to-USB chip converts RPi serial (Pin 8 and 10) to USB-C on the Baseboard, currently unused.
 
-* Pin 36 is P-Card-to-Baseboard interrupt pin, details in next section.
+* Pin 36 is PCard-to-Baseboard interrupt pin, details in next section.
 
 * 5V current should not exceed 2A.
 
@@ -209,7 +209,7 @@ Here is a quick run-down of a few popular microcontrollers:
 
 #### PROs
 
-* Those chips can be very fast (hundreds of MHz), and you can probably just brute force through any timing issues.
+* Can be very fast (hundreds of MHz), and you can probably just brute force through any timing issues.
 
 * Very popular too, so many resources are available.
 
@@ -245,23 +245,23 @@ In conclusion, my suggestion would be:
 
 * For **one-off designs**: A well-supported **high-powered ARM dev board** such as [Teensy](https://www.pjrc.com/store/) to brute force way through any timing issues.
 
-* For **volume production**: Bare **ARM MCUs** such as STM32, and design your own circuit board.
+* For **volume production**: Bare **ARM MCUs** such as STM32. Prototype with a cheap board such as [blue/black pill](https://hackaday.com/2021/01/20/blue-pill-vs-black-pill-transitioning-from-stm32f103-to-stm32f411/), and design your own circuit board.
 
 * I have written a [tutorial on STM32 development](https://github.com/dekuNukem/STM32_tutorials), which should get you started.
 
 ### Typical Development Steps
 
-With your microcontroller chosen, here is how I would approach starting a new Protocol Card:
+With your microcontroller chosen, here is how I would approach making a new Protocol Card:
 
 #### Research the protocol!
 
 First of all, look up the protocol and get as much details as you can!
 
-* Can your MCU handle the **voltage level**? (5V/12V)
+* Can your MCU handle the **voltage level**? (5V/12V?)
 
 * Does it involve a particular MCU peripheral? (UART, timers, external interrupts, etc)
 
-* Does it need a **special driver**? (RS485)
+* Does it need a **special driver**? (RS232, RS485?)
 
 * How tight is the **timing**?
 
@@ -294,7 +294,7 @@ Try start simple and sending single keyboard key strokes. Print the received mes
 
 ----
 
-For ARM-based MCUs, you can usually receive messages as SPI slave in interrupt mode. Tell it you need 32 Bytes, and an interrupt callback will fire once the message has been received. [See my tutorial](https://github.com/dekuNukem/STM32_tutorials) for more information, see also the [code for existing P-Cards](https://github.com/dekuNukem/USB4VC/blob/master/firmware/ibmpc/Src/main.c).
+For ARM-based MCUs, you can usually receive messages as SPI slave in interrupt mode. Tell it you want 32 Bytes, and an interrupt callback will fire once the message has been received. [See my tutorial](https://github.com/dekuNukem/STM32_tutorials) for more information, see also the [code for existing P-Cards](https://github.com/dekuNukem/USB4VC/blob/master/firmware/ibmpc/Src/main.c).
 
 For STM32, set up SPI as follows:
 
