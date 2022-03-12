@@ -152,15 +152,168 @@ I tested out different generations of Raspberry Pis, and here is the result:
 
 You can find the [capture files here](captures/latency), open with [saleae app](https://www.saleae.com/downloads/), search `PID ACK` for USB input events, more info [in this video](https://www.youtube.com/watch?v=wdgULBpRoXk)
 
-## Developing your own Protocol Card
+## Making your own Protocol Card
 
-USB4VC will send out keyboard and mouse event on SPI regardless of whether a protocol card is inserted or not. Although it will display appropriate options for switching protocols if the protocol card ID is recognized.
+By now you should have a general idea of how USB4VC works on a hardware level. So here are more information on how to get started on making your own Protocol Card!
 
-SPI Format, AVR based arduino probably wont work, suggested to use STM32, include link.
+### Recommended Equipment
 
-RPi Header pinout, explain what each pin does.
+* A **Logic Analyzer** is strongly recommended. You can use it to capture and decode digital signals, making troubleshooting much easier.
 
-Current limits etc.
+* I use a [Saleae Logic Pro 16](https://www.saleae.com/), it's a bit pricey but works very well. There are also cheaper ones available at the usual online marketplaces.
+
+* An oscilloscope would work too, but the user interface might be more convoluted.
+
+### Microcontroller Selection
+
+The heart of a Protocol Card is the microcontroller. Picking one requires some considerations:
+
+* It has to be **fast enough** to reliably read the 32-byte message at 2MHz SCLK **as SPI slave**, **AND** generate timing-critical signal to the retro computer.
+
+* Able to tolerate 5V inputs, as is common for many retro computers.
+
+* Economical and available for the quantity you're planning to make.
+
+Here is a quick run-down of a few popular microcontrollers:
+
+### Arduino, 8-bit ATmega-based. (UNO, Nano, Micro, Leonardo, etc)
+
+#### PROs
+
+* The obvious choice
+
+* Lots of tutorials
+
+* Cheap & available
+
+* 5V tolerant
+
+#### CONs
+
+* Most runs at 16MHz, not sure if fast enough for 2MHz SPI signals.
+
+* Not many resources on how to use them as SPI slaves. You might need to get cozy with configuration registers.
+
+* Limited peripherals (timers, external interrupts, etc) and RAM and Flash memory.
+
+* Overall just a bit underpowered, but I'm sure Atmel wizards can squeeze every bit of juice out of it :)
+
+
+### ARM-Based Development Boards (Teensy, ESP32, RP2040, etc)
+
+#### PROs
+
+* Those chips can be very fast (hundreds of MHz), and you can probably just brute force through any timing issues.
+
+* Very popular too, so many resources are available.
+
+#### CONs
+
+* Can be expensive, especially for volume production.
+
+* Might not be 5V tolerant
+
+* Availability concerns
+
+### Bare ARM Chip (STM32, NXP LPC, etc)
+
+Finally, you can just program a bare 32-bit ARM microcontroller yourself.
+
+#### PROs
+
+* Complete control and flexibility in programming.
+
+* Able to integrate into your own Protocol Card on a single PCB.
+
+* Lowest cost, many parts to choose from at different price points and performance levels.
+
+#### CONs
+
+* Learning curve
+
+* Not as many resources online
+
+---
+
+In conclusion, my suggestion would be:
+
+* For **one-off designs**: A well-supported **high-powered ARM dev board** such as [Teensy](https://www.pjrc.com/store/) to brute force way through any timing issues.
+
+* For **volume production**: Bare **ARM MCUs** such as STM32, and design your own circuit board.
+
+* I have written a [tutorial on STM32 development](https://github.com/dekuNukem/STM32_tutorials), which should get you started.
+
+### Typical Development Steps
+
+With your microcontroller chosen, here is how I would approach starting a new Protocol Card:
+
+#### Research the protocol!
+
+First of all, look up the protocol and get as much details as you can!
+
+* Can your MCU handle the **voltage level**? (5V/12V)
+
+* Does it involve a particular MCU peripheral? (UART, timers, external interrupts, etc)
+
+* Does it need a **special driver**? (RS485)
+
+* How tight is the **timing**?
+
+* Does the host poll at regular interval (ADB) or can you send an event at any time (PS/2)?
+
+#### Reference waveform
+
+If possible, use a logic analyzer or oscilloscope to **capture a sample waveform** with a **real retro peripheral**.
+
+You might need to make a pass-through cable that exposes the signal lines.
+
+No matter how good the documentation, nothing beats a reference capture from the real deal. This way you can verify the documentation is correct, and have something to compare to down the line.
+
+#### SPI wire-up
+
+Baseboard will send Keyboard/Mouse/Gamepad events over SPI even if nothing is connected, so no need to worry about that.
+
+Take a look at the [pinout section](#hardware-pinout), connect your dev board to appropriate power, ground, and SPI pins.
+
+SPI pins are 23, 21, 19, and 24. Also make sure everything is on the same ground.
+
+#### Get SPI working
+
+Use your logic analyzer or oscilloscope to confirm the SPI waveform is correct, and making sure the MCU can reliably receive SPI messages without data corruption and dropouts. See [SPI protocol section](#spi-communication-protocol) for details.
+
+For ARM-based MCUs, you can usually receive messages as SPI slave in interrupt mode. Tell it you need 32 Bytes, and an interrupt callback will fire once the message has been received. [See my tutorial](https://github.com/dekuNukem/STM32_tutorials) for more information, see also the [code for existing P-Cards](https://github.com/dekuNukem/USB4VC/blob/master/firmware/ibmpc/Src/main.c).
+
+For STM32, use `HAL_SPI_TransmitReceive_IT()` to start listening, and `HAL_SPI_TxRxCpltCallback()` will fire when message is received.
+
+This is important as any SPI message corruption might result in missed inputs or wrong inputs being sent to retro computer.
+
+Try start simple and sending single keyboard key strokes. Print the received message out, and compare with [this document](https://docs.google.com/spreadsheets/d/e/2PACX-1vTDylIwis3GZrhakGK0uXJGc_SAZ_QwySmlMfZXpSdFDH6zoIXs1kHX7-4wUTeShZth_n6tJH8l3dJ3/pubhtml#).
+
+
+
+#### Work on protocols
+
+Once SPI is working, you can move on to implementing the protocol itself. A few tips:
+
+* Popular protocols tends to have Arduino libraries already written, and you can modify/convert them to suit your needs. Double check the license though!
+
+* Use the logic analyzer or oscilloscope to compare your output with the reference and make sure the timing is spot-on.
+
+* Once working, try rapid inputs and see if it can handle that. And use it for a few hours to verify the stability.
+
+#### Tips and tricks
+
+* If using interrupts to read SPI messages, keep the ISR short! 
+
+* For example just copy everything into a buffer in ISR, and process it in the main loop.
+
+
+
+--------
+
+Each Protocol Card can have a unique ID, so RPi can display the appropriate protocol in the menus. Although at the beginning we don't have to worry about that. RPi will still send out Keyboard/Mouse/Gamepad updates regardless.
+
+
 
 ## Questions or Comments?
 
