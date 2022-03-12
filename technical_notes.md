@@ -1,16 +1,16 @@
-# USB4VC Technical Notes
+# USB4VC Technical Notes / Make Your Own Protocol Card
 
 [Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
 -----
 
-This document contains technical information for USB4VC, which should be helpful for tinkering, contributing, and making your own Protocol Cards.
-
-Still mostly under construction, aiming to add more details before public release in April. In the meantime, if you have any particular technical questions or comments, [let me know!](#questions-or-comments)
+This document contains technical information about how USB4VC works. Please **read the whole article** if you're planning to make your own Protocol Cards.
 
 ## Linux Input Event Codes
 
-Raspberry Pi runs Linux, which uses **Input Event Codes**. Here's a very simplified description:
+First of all, how does USB4VC read from KB/Mouse/Gamepads in the first place?
+
+The answer is Linux **Input Event Codes**. Here's a very simplified description:
 
 * Connected input devices show up in `/dev/input` as files:
 
@@ -21,7 +21,6 @@ event0  event1  event2  mice  mouse0  mouse1
 
 * Reading from one of those files returns input events. Try `cat /dev/input/mice`!
 
-
 * On RPi, **16 Bytes** are returned each time there is an event. They are arranged as follows:
 
 | Byte  | Name        |
@@ -31,9 +30,9 @@ event0  event1  event2  mice  mouse0  mouse1
 | 10-11 | Event Code  |
 | 12-15 | Event Value |
 
-* A list of all Event Type, Code and Values [can be found here](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h)
+* A list of all Event Type, Code and Values [can be found here](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h), set a bookmark if you're making your own P-Card!
 
-* Keyboard keys and mouse/gamepad buttons are EV_KEY type, mouse moments are EV_REL (relative) type, and joystick moments are EV_ABS (absolute) type.
+* Keyboard keys and mouse/gamepad buttons are **EV_KEY** type, mouse moments are **EV_REL** (relative) type, and joystick movements are **EV_ABS** (absolute) type.
 
 * Once you know the Event Type, you can look up Event Code to see which key/button/axes is being updated.
 
@@ -47,32 +46,71 @@ event0  event1  event2  mice  mouse0  mouse1
 
 ## Hardware Pinout
 
-The Protocol Card connector is the same as the Raspberry Pi Header, although the pins are flipped around.
+The Protocol Card connector directly maps to the Raspberry Pi Header, although the pins are flipped around.
 
-Most of the pins are already in use:
+Most pins are already in use:
 
-![Alt text](photos/rpi_pinout.png)
+![Alt text](photos/bb_pinout.png)
+
+A few comments:
+
+* Protocol Card and OLED screen shares the same SPI bus, with different CS of course.
+
+* Pin 22 is used to reset the P-Card, pin 32 for putting the microcontroller in bootloader mode for firmware updates.
+
+* Pin 3 and 5 are connected to microcontroller I2C lines for firmware updates.
+
+* A CH340 TTL-Serial-to-USB chip converts RPi serial (Pin 8 and 10) to USB-C on the Baseboard, currently unused.
+
+* Pin 36 is P-Card-to-Baseboard interrupt pin, details in next section.
+
+* 5V current should not exceed 2A.
+
+* 3.3V current should not exceed 600mA.
 
 ## SPI Communication Protocol
 
 Raspberri Pi communicates with Protocol Card through SPI. [Here's a quick introduction](https://www.circuitbasics.com/basics-of-the-spi-communication-protocol/) if you're unfamiliar.
 
-RPi is master, P-card is slave. Mode 0 is used (CPOL and CPHA both 0), SCLK is 2MHz.
+RPi is master, P-card is slave. **Mode 0** is used (CPOL and CPHA both 0), **SCLK is 2MHz**.
 
-[include a sample capture.]
+RPi and P-Card communicates via **fixed-length 32-byte packets**.
 
-RPi and P-Card communicates via fixed-length 32-byte packets. Detailed description of messaging protocol [can be found here](https://docs.google.com/spreadsheets/d/e/2PACX-1vTDylIwis3GZrhakGK0uXJGc_SAZ_QwySmlMfZXpSdFDH6zoIXs1kHX7-4wUTeShZth_n6tJH8l3dJ3/pubhtml#
-).
+Detailed description of messaging protocol [can be found in this document](https://docs.google.com/spreadsheets/d/e/2PACX-1vTDylIwis3GZrhakGK0uXJGc_SAZ_QwySmlMfZXpSdFDH6zoIXs1kHX7-4wUTeShZth_n6tJH8l3dJ3/pubhtml#), note that there are **multiple pages**.
+
+Here is a sample capture of pressing `U` on the keyboard:
+
+![Alt text](photos/spi_wide.png)
+
+* 32 Bytes are sent in a single CS activation.
+
+* SCLK is 2MHz, the entire transmission take around 290uS.
+
+Here is a close-up of the first few bytes:
+
+![Alt text](photos/spi_close.png)
+
+Compare to the [keyboard tab in the document](https://docs.google.com/spreadsheets/d/e/2PACX-1vTDylIwis3GZrhakGK0uXJGc_SAZ_QwySmlMfZXpSdFDH6zoIXs1kHX7-4wUTeShZth_n6tJH8l3dJ3/pubhtml#):
+
+![Alt text](photos/spi_kb.png)
+
+## Sample SPI Message Captures
+
+More **sample captures** [can be found here](https://github.com/dekuNukem/USB4VC/tree/master/captures/diy_samples).
+
+Click one and press `Download`.
+
+Open with [Saleae Logic app](https://www.saleae.com/downloads/).
 
 ## Latency Information
 
-Input latency can be introduced during all stages of input chain. Using keyboards as example, we have:
+Input latency can be introduced during all stages of input chain. Using keyboard as example, we have:
 
 * Step 1: Switch physically depressed
 
 * Step 2: Keyboard sends out event on USB/Bluetooth
 
-* Step 3: Raspberry Pi processes the event and informs the Protocol Card
+* Step 3: Raspberry Pi processes the event and informs Protocol Card
 
 * Step 4: Protocol Card sends out the keystroke to retro computer
 

@@ -206,7 +206,7 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Kit Assembly Guide](kit_assembly.md)
 
-[Technical Notes](technical_notes.md)
+[Technical Notes / Make Your Own Protocol Card](technical_notes.md)
 
 [Launch Plan / Kickstarter Info](kickstarter_info.md)
 
