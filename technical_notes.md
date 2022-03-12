@@ -50,7 +50,7 @@ The Protocol Card connector directly maps to the Raspberry Pi Header, although t
 
 Most pins are already in use:
 
-![Alt text](photos/bb_pinout.png)
+![Alt text](photos/bb_pinout.PNG)
 
 * Protocol Card and OLED screen shares the same SPI bus, with different CS of course.
 
@@ -161,6 +161,8 @@ By now you should have a general idea of how USB4VC works on a hardware level. S
 Not really! USB4VC is under MIT license, so basically anything goes apart from liability and warranty.
 
 Feel free to develop your own Protocol Cards, write about them, sell them, anything you want really.
+
+[Do let me know](https://github.com/dekuNukem/USB4VC/blob/master/technical_notes.md#questions-or-comments) if you make one though! I'd be interested in checking it out!
 
 ### Recommended Equipment
 
