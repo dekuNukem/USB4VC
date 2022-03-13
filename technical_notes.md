@@ -48,8 +48,6 @@ event0  event1  event2  mice  mouse0  mouse1
 
 The Protocol Card connector directly maps to the Raspberry Pi Header, although the pins are flipped around.
 
-Most pins are already in use:
-
 ![Alt text](photos/bb_pinout.PNG)
 
 * Protocol Card and OLED screen shares the same SPI bus, with different CS of course.

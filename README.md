@@ -42,7 +42,7 @@ From Apple IIGS in 1986 to PowerMac G3 in 1999, and everything in-between!
 
 #### More to Come!
 
-Of course, more Protocol Cards are planned after launch!
+Of course, more Protocol Cards are planned, and you can try [make your own](technical_notes.md) too!
 
 ## I Want One! / Get in Touch
 
@@ -76,7 +76,7 @@ Click to see USB4VC in action!
 
 * Fully Open-source
 
-* Make-your-own Protocol Card [instruction provided](technical_notes.md)
+* Make-your-own Protocol Card [Instruction Provided](technical_notes.md)
 
 ## Why / Project Goals
 
