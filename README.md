@@ -76,7 +76,7 @@ Click to see USB4VC in action!
 
 * Fully Open-source
 
-* Powered by Raspberry Pi
+* Make-your-own Protocol Card [instruction provided](technical_notes.md)
 
 ## Why / Project Goals
 
@@ -136,7 +136,7 @@ Let me know via [Discord](https://discord.gg/HAuuh3pAmB), [Twitter DM](https://t
 
 [Click me](getting_started.md)
 
-## Technical Details
+## Technical Details / Make Your Own Protocol Cards
 
 [Click me](technical_notes.md)
 
@@ -162,11 +162,13 @@ Public release will commence after all Kickstarter orders have been fulfilled, p
 
 ### Which Raspberry Pi can I use?
 
-USB4VC is tested on **Raspberry Pi 1/2/3/4 Model B**.
+Any RPi with a **40-pin header** *should* work, although **Model B/B+** is preferred. See [this table](https://en.wikipedia.org/wiki/Raspberry_Pi#Model_comparison) for details, sort by **GPIO** column.
+
+USB4VC has been officially tested on **Raspberry Pi 2/3/4 Model B**.
 
 Raspberry Pi Zeros should work too, but would need a USB hub.
 
-No need to get the latest and greatest. An older RPi is plenty fast enough for this!
+No need to get the latest and greatest. An older RPi is plenty fast enough!
 
 ### What about latency?
 
@@ -178,15 +180,13 @@ No need to get the latest and greatest. An older RPi is plenty fast enough for t
 
 I'd love to! But I would need a working machine with working peripherals.
 
-So if you're in UK and is happy to lend me one for a while, [let me know!](#get-one--stay-in-touch)
+So if you're in UK and is happy to lend me one for a while, [let me know!](#i-want-one--get-in-touch)
 
-Also, as I can only work on so many at once, I'll probably focus on the more popular machines at first, but still, do let me know! 
+Also, as I can only work on so many at once, I'll probably focus on the more popular machines at first, but still, do let me know!
 
 ### Can I make my own Protocol Cards?
 
-Of course! Detailed instructions will be provided shortly before public availability.
-
-Feel free take a look at [technical notes](technical_notes.md) in the meantime.
+Of course! See [this document](technical_notes.md).
 
 ### What does USB4VC stand for?
 

@@ -245,11 +245,11 @@ Finally, you can just program a bare 32-bit ARM microcontroller yourself.
 
 In conclusion, my suggestion would be:
 
-* For **one-off designs**: A well-supported **high-powered ARM dev board** such as [Teensy](https://www.pjrc.com/store/) to brute force way through any timing issues.
+* For **one-off designs**: A well-supported **high-powered ARM dev board** such as [Teensy](https://www.pjrc.com/store/). Lots of resources online to get you started, and the fast speed gives you more wiggle room for timing sensitive situations. 
 
 * For **volume production**: Bare **ARM MCUs** such as STM32. Prototype with a cheap board such as [blue/black pill](https://hackaday.com/2021/01/20/blue-pill-vs-black-pill-transitioning-from-stm32f103-to-stm32f411/), and design your own circuit board.
 
-* I have written a [tutorial on STM32 development](https://github.com/dekuNukem/STM32_tutorials), which should get you started.
+* I have written a [tutorial on STM32 development](https://github.com/dekuNukem/STM32_tutorials), which should be helpful.
 
 ### Typical Development Steps
 
