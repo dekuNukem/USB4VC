@@ -4,12 +4,6 @@
 
 -----
 
-<table>
-  <tr>
-    <td><a href="https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers" title="Kickstarter" rel="noopener"><img src="https://i.imgur.com/qDcbsTv.png"></a></td>
-  </tr>
-</table>
-
 USB4VC is an **active protocol converter** that let you use **USB keyboard, mouse, and gamepads** on a wide range of retro computers.
 
 ![Alt text](photos/header.jpeg)
@@ -46,7 +40,7 @@ Of course, more Protocol Cards are planned, and you can try [make your own](tech
 
 ## I Want One! / Get in Touch
 
-This project have been successly funded [via Kickstarter!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers), now it is available [on my Tindie store!](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/)
+This project have been successly funded [via Kickstarter!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers), it is now available [on my Tindie store!](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/)
 
 Thank you very much for the support! Estimated shipping **April 2022**.
 
