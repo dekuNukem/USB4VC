@@ -1,6 +1,6 @@
 # USB4VC: USB Inputs on Retro Computers!
 
-[Get USB4VC!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
+[Get USB4VC!](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
 -----
 
@@ -46,7 +46,9 @@ Of course, more Protocol Cards are planned, and you can try [make your own](tech
 
 ## I Want One! / Get in Touch
 
-A [Kickstarter campaign is CURRENTLY UNDERWAY!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Thank you very much for the support! Estimated shipping **April 2022**.
+This project have been successly funded [via Kickstarter!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers), now it is available [on my Tindie store!](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/)
+
+Thank you very much for the support! Estimated shipping **April 2022**.
 
 **Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
@@ -116,22 +118,6 @@ By splitting duties, RPi can focus on input parsing, and Protocol Card handles t
 
 USB peripherals can be connected via cables, wireless dongles, or Bluetooth.
 
-## Beta Testing
-
-I would love to have USB4VC tested on more machines before public release, to gather feedback and fix bugs.
-
-If you have a decent working PC/Mac collection, let me know and I maybe can send you one!
-
-Especially looking for:
-
-* Testing on IBM PC XT/AT original and clones.
-
-* PS4/PS5/Xbox Series X/S controllers for compatibility testing.
-
-Everyone welcome, but **UK** users preferred due to shipping time and cost. 
-
-Let me know via [Discord](https://discord.gg/HAuuh3pAmB), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
-
 ## Getting Started
 
 [Click me](getting_started.md)
@@ -156,9 +142,7 @@ Want more? Feel free to [get in touch](#get-one--stay-in-touch) and make suggest
 
 ### Where can I get one?
 
-A [Kickstarter campaign is CURRENTLY UNDERWAY!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Estimated shipping **April 2022**.
-
-Public release will commence after all Kickstarter orders have been fulfilled, probably around April or May 2022.
+This project have been successly funded [via Kickstarter!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers), now it is available [on my Tindie store!](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/)
 
 ### Which Raspberry Pi can I use?
 
@@ -208,5 +192,5 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Technical Notes / Make Your Own Protocol Card](technical_notes.md)
 
-[Launch Plan / Kickstarter Info](kickstarter_info.md)
+[Kickstarter Acknowledgements](kickstarter_info.md)
 

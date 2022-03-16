@@ -1,6 +1,6 @@
 # Getting Started with USB4VC
 
-[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Table of Contents](#table-of-contents)
+[Get USB4VC](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Table of Contents](#table-of-contents)
 
 ------
 
@@ -66,7 +66,7 @@ Let's take a quick look:
 
 ![Alt text](photos/ibmpcpc.jpeg)
 
-* All cables can be purchased as add-ons during [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) and in Tindie store.
+* All cables can be purchased in [my Tindie store](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/).
 
 * For PS/2 keyboard and mouse, a **male to male** PS/2 cable is needed.
 
@@ -273,8 +273,8 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Kit Assembly Guide](kit_assembly.md)
 
-[Technical Notes](technical_notes.md)
+[Technical Notes / Make Your Own Protocol Card](technical_notes.md)
 
-[Launch Plan / Kickstarter Info](kickstarter_info.md)
+[Kickstarter Acknowledgements](kickstarter_info.md)
 
 

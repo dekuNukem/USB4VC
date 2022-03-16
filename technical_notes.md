@@ -1,6 +1,6 @@
 # USB4VC Technical Notes / Make Your Own Protocol Card
 
-[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
+[Get USB4VC](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
 -----
 
@@ -342,7 +342,7 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Kit Assembly Guide](kit_assembly.md)
 
-[Technical Notes](technical_notes.md)
+[Technical Notes / Make Your Own Protocol Card](technical_notes.md)
 
-[Launch Plan / Kickstarter Info](kickstarter_info.md)
+[Kickstarter Acknowledgements](kickstarter_info.md)
 

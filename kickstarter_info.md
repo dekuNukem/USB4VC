@@ -1,40 +1,16 @@
-# USB4VC Launch Plan
+# USB4VC Kickstarter Acknowledgements
 
-[Get USB4VC](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
+[Get USB4VC](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
 ---
 
-## [Kickstarter campaign is currently underway!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers) Thank you very much for the interest and support!
+This project have been successly funded [via Kickstarter!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers), and now it is available [on my Tindie store!](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/)
 
-![Alt text](photos/duke3d.jpeg)
+## Backer Acknowledgements 
 
-## Launch Timeline
+To be added after backer survey...
 
-#### February - March 2022
-
-* Public Beta Testing
-
-* Gather Feedback, Fix Bugs, Finishing Touches.
-
-* Write Documentations
-
-#### March - April 2022
-
-* Kickstarter Campaign
-
-* Arrange Production Run
-
-#### April 2022 Onwards
-
-* Fulfilling Kickstarter Order
-
-* Public Release
-
-* Work on Improvements, More Protocols and Protocol Cards
-
-Timing might change depending on circumstances such as component availability and feedback results. This is just an estimate.
-
-## Stay Updated / Get in Touch / Questions & Comments
+## Get in Touch / Questions & Comments
 
 Feel free to join our [Discord Chatroom](https://discord.gg/HAuuh3pAmB) for the latest news and updates!
 
@@ -50,7 +26,7 @@ You can also raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues),
 
 [Kit Assembly Guide](kit_assembly.md)
 
-[Technical Notes](technical_notes.md)
+[Technical Notes / Make Your Own Protocol Card](technical_notes.md)
 
-[Launch Plan / Kickstarter Info](kickstarter_info.md)
+[Kickstarter Acknowledgements](kickstarter_info.md)
 
