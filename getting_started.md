@@ -8,6 +8,16 @@ Thank you very much for beta testing USB4VC! Here is a short guide on getting st
 
 Please note that the code is most likely NOT 100% bug free at the moment, so if you run into any issues, [do get in touch](#questions-or-comments) so I can try fix it! I have also compiled a list of [known issues](#known-issues), with comments and remedies.
 
+## Pick a Raspberry Pi
+
+* USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
+
+* Any RPi with a **40-pin header** *should* work, although **Model B/B+** is preferred.
+
+* No need to get the latest model, even the earliest RPi B+ is plenty fast enough.
+
+![Alt text](photos/rpis.jpeg)
+
 ## Prepare SD card
 
 It's a good idea to **burn an SD card with the latest updates** before using.
@@ -33,16 +43,6 @@ Check the cable too! Cheap ones tends to have unreliable connections and large v
 ## Test out Raspberry Pi
 
 It's a good idea to make sure your Raspberry Pi works first. 
-
-USB4VC is designed for **Raspberry Pi 1/2/3/4 Model B**.
-
-* No need to get the latest model, even the earliest RPi B+ is plenty fast enough.
-
-* Older Pis might not have built-in Bluetooth. So if you want BT, a USB dongle is needed.
-
-* Pi Zeros *might* work, but you need to solder a male header, and use a USB hub.
-
-![Alt text](photos/rpis.jpeg)
 
 Insert SD card in Raspberry Pi, and hook it up to a monitor. No need for anything else.
 
@@ -152,34 +152,43 @@ With protocol selected, and everything connected, time to power on the computer!
 
 If everything goes well, you should be able to use it as normal, now with USB inputs!
 
-Please do keep reading for more information though 😅!
+Please **do keep reading** for more information though 😅!
 
 ![Alt text](photos/guide.gif)
 
 ## Using Gamepads
 
-For best results, please use a **Xbox One/Xbox 360 controller**. Those are the only kinds I have, so I used them for development. Other controllers might be buggy in button and axes mapping. I'll try to borrow a few more before the public release. 
+Currently, USB4VC officially supports the following controllers:
 
-* The easiest way is plug it in via a USB cable, and it should just work.
+* Xbox 360 / Xbox One / Xbox Series X
 
-* You can also try to pairing it with Bluetooth. If keeps failing, you might need to [update the controller in Windows 10](photos/xbupdate.png), [source here](https://atar-axis.github.io/xpadneo/).
+* PlayStation 4 / PlayStation 5
 
-Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it should behave like a generic gamepad with **4 buttons and 4 analog axes**. Default mapping is:
+In my testing, gamepad compatibility seems to depends on the RPi models:
 
-| XBox Controller | 15-Pin Gamepad          |
-|-----------------|-------------------------|
-| A               | Button 1                |
-| B               | Button 3                |
-| X               | Button 2                |
-| Y               | Button 4                |
-| LB              | Button 1                |
-| RB              | Button 2                |
-| Left Stick      | Joystick 1              |
-| Right Stick     | Joystick 2              |
-| D-pad           | Joystick 1              |
-| Trigger         | Joystick 2 Vertical Axis |
-| Menu Button     | Esc Key                 |
-| View Button     | Enter Key               |
+![Alt text](photos/matrix.png)
+
+* Raspberry Pi 3 Model B seems to be the most compatible.
+
+* The easiest way is using a USB cable, and it should just work.
+
+* If pairing fails, remove the BT device in the menu, reboot USB4VC, and try again.
+
+Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it should behave like a generic gamepad with **4 buttons and 4 analog axes**.
+
+With **officially supported controllers**, the mapping is:
+
+* 4 Face buttons to 4 Gameport Gamepad buttons
+
+* Left and right trigger to Gameport Gamepad button 1 & 2.
+
+* Left Stick to Gameport Gamepad Joystick 1.
+
+* Right Stick to Gameport Gamepad Joystick 2.
+
+* Left & Right Analog Triggers to Joystick 2 Y Axis.
+
+Unsupported USB controllers might still work, but the mapping might be a bit wonky.
 
 ## Joycheck DOS Program
 
@@ -211,19 +220,13 @@ When the RPi is off, you can press `POWER ON` button to turn it back on.
 
 Here are a couple of bugs and issues that I am aware of, and the corresponding comments and remedies.
 
-#### Screw head is slightly too tall on the bottom plate, making the anti-slip pad not as effective.
-
-* Will switch to a flatter screw for public release.
-
-* Try double-up the anti-slip pads, or use a thicker one.
-
 #### Boot time can be faster
 
 * Currently it takes about 15 seconds to boot with a decent SD card.
 
 * Might look into disabling some services to speed it up.
 
-* Would be great to get it under 10 seconds with the help of RPi experts.
+* [Let me know](#questions-or-comments) if you'd like to help!
 
 #### 15-Pin Gameport Power Backfeeding
 
@@ -232,8 +235,6 @@ Here are a couple of bugs and issues that I am aware of, and the corresponding c
 * I haven't noticed any apparent damage, but it's probably not a good idea.
 
 * Make sure to power on USB4VC before the computer. (this is what you should do anyway)
-
-* I might add a diode in the production run.
 
 #### ADB Collision Resolution
 

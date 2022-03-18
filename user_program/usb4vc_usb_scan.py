@@ -590,7 +590,10 @@ def raw_input_event_worker():
                         pcard_spi.xfer(list(last_mouse_button_msg))
                 # Gamepad buttons
                 elif BTN_SOUTH <= event_code <= BTN_THUMBR or event_code in gamepad_buttons_as_kb_codes:
-                    gamepad_status_dict[this_id][event_code] = data[4]
+                    this_btn_status = data[4]
+                    if this_btn_status != 0:
+                        this_btn_status = 1
+                    gamepad_status_dict[this_id][event_code] = this_btn_status
 
             # event is relative axes AKA mouse
             elif data[0] == EV_REL and event_code == REL_X:
