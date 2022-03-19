@@ -168,27 +168,27 @@ In my testing, gamepad compatibility seems to depends on the RPi models:
 
 ![Alt text](photos/matrix.png)
 
-* Raspberry Pi 3 Model B seems to be the most compatible.
-
-* The easiest way is using a USB cable, and it should just work.
+* **Raspberry Pi 3 Model B** seems to be the most compatible.
 
 * If pairing fails, remove the BT device in the menu, reboot USB4VC, and try again.
+
+-----
 
 Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it should behave like a generic gamepad with **4 buttons and 4 analog axes**.
 
 With **officially supported controllers**, the mapping is:
 
-* 4 Face buttons to 4 Gameport Gamepad buttons
+* 4 face buttons to 4 gameport buttons
 
-* Left and right trigger to Gameport Gamepad button 1 & 2.
+* Left and right shoulder button to gameport button 1 & 2.
 
-* Left Stick to Gameport Gamepad Joystick 1.
+* Left Stick to gameport Joystick 1.
 
-* Right Stick to Gameport Gamepad Joystick 2.
+* Right Stick to gameport Joystick 2.
 
-* Left & Right Analog Triggers to Joystick 2 Y Axis.
+* Left & Right Analog Triggers to Joystick 2 Y-Axis.
 
-Unsupported USB controllers might still work, but the mapping might be a bit wonky.
+Unsupported USB controllers might still work, but the default mapping might be a bit wonky.
 
 ## Joycheck DOS Program
 
