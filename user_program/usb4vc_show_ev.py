@@ -26,7 +26,7 @@ def ev_loop(button_list):
             device = key.fileobj
             for event in device.read():
                 cat = evdev.categorize(event)
-                middle_line = None
+                bottom_line = None
                 ev_str = str(cat)
                 if 'axis event' in ev_str.lower():
                     name = '???'
@@ -51,7 +51,7 @@ def ev_loop(button_list):
                     if value == last_value:
                         continue
                     last_value = value
-                    middle_line = f'{name}, {value}'
+                    bottom_line = f'{name}, {value}'
                 elif 'key event' in ev_str.lower():
                     keycode = '???'
                     try:
@@ -63,14 +63,18 @@ def ev_loop(button_list):
                             keycode = cat.scancode
                     except:
                         pass
-                    middle_line = f'{keycode} {cat.keystate}'
-                if middle_line is None:
+                    bottom_line = f'{keycode} {cat.keystate}'
+                if bottom_line is None:
                     continue
 
                 top_line = str(device.name)
+                middle_line = 'Unknown PID and VID'
+                try:
+                    dev_dict = usb4vc_usb_scan.opened_device_dict.get(device.path)
+                    middle_line = f"VID:{hex(dev_dict['vendor_id'])} PID:{hex(dev_dict['product_id'])}"
+                except Exception:
+                    pass
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered(top_line, usb4vc_oled.font_regular, 0, draw)
-                    if len(middle_line) <= 15:
-                        usb4vc_oled.oled_print_centered(middle_line, usb4vc_oled.font_medium, 15, draw)
-                    else:
-                        usb4vc_oled.oled_print_centered(middle_line, usb4vc_oled.font_regular, 15, draw)
+                    usb4vc_oled.oled_print_centered(middle_line, usb4vc_oled.font_regular, 10, draw)
+                    usb4vc_oled.oled_print_centered(bottom_line, usb4vc_oled.font_regular, 20, draw)
