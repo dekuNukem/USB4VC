@@ -4,9 +4,9 @@
 
 ------
 
-Thank you very much for beta testing USB4VC! Here is a short guide on getting started.
+Thank you very much for getting USB4VC! Here is a short guide on getting started.
 
-Please note that the code is most likely NOT 100% bug free at the moment, so if you run into any issues, [do get in touch](#questions-or-comments) so I can try fix it! I have also compiled a list of [known issues](#known-issues), with comments and remedies.
+Please note that at the code is most likely NOT 100% bug free at the moment, so if you run into any issues, [do get in touch](#questions-or-comments) so I can try fixing it!
 
 ## Pick a Raspberry Pi
 
