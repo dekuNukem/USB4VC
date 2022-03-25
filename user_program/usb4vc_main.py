@@ -91,10 +91,11 @@ network={{
 }}
 """
     to_write = config_str
-    if len(wifi_dict['wifi_password']) > 0:
+    if len(wifi_dict['wifi_password']) == 0:
         to_write = config_str_unsecured
     with open(config_file_path, 'w') as wifi_config_file:
         wifi_config_file.write(to_write)
+    os.system("wpa_cli -i wlan0 reconfigure")
 
 check_rpi_model()
 
