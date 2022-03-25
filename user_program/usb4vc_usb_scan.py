@@ -192,7 +192,7 @@ def translate_dict(old_mapping_dict, lookup_dict):
     return translated_map_dict
 
 def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
-    print(source_code, mapping_dict, usb_gamepad_type)
+    # print(source_code, mapping_dict, usb_gamepad_type)
     map_dict_copy = dict(mapping_dict)
     if 'DualSense' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
         map_dict_copy = usb4vc_gamepads.PS5_DEFAULT_MAPPING
