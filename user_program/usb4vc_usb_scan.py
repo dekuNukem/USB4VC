@@ -192,6 +192,7 @@ def translate_dict(old_mapping_dict, lookup_dict):
     return translated_map_dict
 
 def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
+    print(source_code, mapping_dict, usb_gamepad_type)
     map_dict_copy = dict(mapping_dict)
     if 'DualSense' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
         map_dict_copy = usb4vc_gamepads.PS5_DEFAULT_MAPPING
@@ -269,7 +270,7 @@ def apply_curve(x_0_255, y_0_255):
 prev_gp_output = {}
 prev_kb_output = {}
 curr_mouse_output = {}
-def make_generic_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info):
+def make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info):
     global prev_gp_output
     global prev_kb_output
     global curr_mouse_output
@@ -469,11 +470,11 @@ def make_gamepad_spi_packet(gp_status_dict, this_device_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
     try:
         if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
-            return make_generic_gamepad_spi_packet(gp_status_dict, this_device_info, current_protocol)
+            return make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, current_protocol)
         elif current_protocol['pid'] == PID_RAW_USB_GAMEPAD:
             return make_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
     except Exception as e:
-        print("exception make_generic_gamepad_spi_packet:", e)
+        print("exception make_15pin_gamepad_spi_packet:", e)
     return list(nop_spi_msg_template), None, None
 
 def change_kb_led(scrolllock, numlock, capslock):

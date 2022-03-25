@@ -506,7 +506,7 @@ class usb4vc_menu(object):
             for xxx in range(curve_horizontal_axis_width):
                 dict_key = xxx*4
                 this_point_x = xxx + curve_vertial_axis_x_pos
-                this_point_y = OLED_HEIGHT - this_curve[dict_key]//4 - 1
+                this_point_y = usb4vc_oled.OLED_HEIGHT - this_curve[dict_key]//4 - 1
                 draw.line((this_point_x,this_point_y,this_point_x,this_point_y), fill="white")
 
     def display_page(self, level, page):
