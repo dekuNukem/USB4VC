@@ -274,18 +274,34 @@ int16_t get_buf_avg(void)
   return (int16_t)(sum/AVG_BUF_SIZE);
 }
 
+/*
+each speed has a corresponding duration before the next increment or decrement
+
+for example speed 1 has a duration of 10ms?
+*/
+
+uint32_t quad_interrupt_counter;
 quad_output quad_x;
 // calculate average speed here, 64 = 1ms, 0 = no movement, set next increment in microsecond interrupt handler
+// prescaler 47, period 100 = 0.1ms
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
-  if(this_mouse_event == NULL)
+  quad_interrupt_counter++;
+  if(quad_interrupt_counter % 100 == 0)
   {
-    avg_buf_add(0);
-    return;
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
+    mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
+    if(this_mouse_event == NULL)
+    {
+      avg_buf_add(0);
+      return;
+    }
+    avg_buf_add(this_mouse_event->movement_x);
+    mouse_buf_pop(&my_mouse_buf);
   }
-  avg_buf_add(this_mouse_event->movement_x);
-  mouse_buf_pop(&my_mouse_buf);
+  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
+  int16_t avg_speed = get_buf_avg();
+  // htim17.Instance->ARR;
 }
 
 /* USER CODE END 0 */
@@ -349,7 +365,7 @@ int main(void)
     if(spi_error_occured)
       spi_error_dump_reboot();
 
-    printf("%d\n", get_buf_avg());
+    // printf("%d\n", get_buf_avg());
     // quad_decrement(&quad_x);
     HAL_Delay(50);
     
@@ -472,7 +488,7 @@ static void MX_TIM17_Init(void)
   htim17.Instance = TIM17;
   htim17.Init.Prescaler = 47;
   htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim17.Init.Period = 10000;
+  htim17.Init.Period = 100;
   htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim17.Init.RepetitionCounter = 0;
   htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -528,7 +544,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOF, GPIO_PIN_0|GPIO_PIN_1, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, SLAVE_REQ_Pin|GPIO_PIN_9|GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : USER_LED_Pin */
   GPIO_InitStruct.Pin = USER_LED_Pin;
@@ -544,12 +560,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SLAVE_REQ_Pin */
-  GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
+  /*Configure GPIO pins : SLAVE_REQ_Pin PA9 PA10 */
+  GPIO_InitStruct.Pin = SLAVE_REQ_Pin|GPIO_PIN_9|GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 }
 
