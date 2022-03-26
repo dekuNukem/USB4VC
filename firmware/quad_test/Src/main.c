@@ -267,6 +267,10 @@ int16_t get_buf_avg(void)
   int32_t sum = 0;
   for (int i = 0; i < AVG_BUF_SIZE; ++i)
     sum += avg_buf[i];
+  if (sum > 0 && sum < AVG_BUF_SIZE)
+    sum = AVG_BUF_SIZE;
+  else if (sum < 0 && abs(sum) < AVG_BUF_SIZE)
+    sum = AVG_BUF_SIZE * -1;
   return (int16_t)(sum/AVG_BUF_SIZE);
 }
 
