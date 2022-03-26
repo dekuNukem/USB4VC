@@ -1,5 +1,10 @@
   // printf("%d %d\n", avg_buf_index, value);
+y=−306.4516129032258x+20306.451612903224
 
+    if(avg_speed > 64)
+      avg_speed = 64
+    elif(avg_speed < -64)
+      avg_speed = -64
   for (int i = 0; i < AVG_BUF_SIZE; ++i)
     printf("%d ", avg_buf[i]);
   printf("\n");

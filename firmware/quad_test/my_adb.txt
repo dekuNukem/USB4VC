@@ -1,0 +1,63 @@
+Configuration	my_adb
+STM32CubeMX 	4.27.0
+Date	03/26/2022
+MCU	STM32F042F6Px
+
+
+
+PERIPHERALS	MODES	FUNCTIONS	PINS
+SPI1	Full-Duplex Slave	SPI1_MISO	PA6
+SPI1	Full-Duplex Slave	SPI1_MOSI	PA7
+SPI1	Full-Duplex Slave	SPI1_SCK	PA5
+SPI1	Hardware NSS Input Signal	SPI1_NSS	PA4
+SYS	Serial_Wire	SYS_SWCLK	PA14
+SYS	Serial_Wire	SYS_SWDIO	PA13
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+TIM2	Internal Clock	TIM2_VS_ClockSourceINT	VP_TIM2_VS_ClockSourceINT
+TIM16	Enable_Timer	TIM16_VS_ClockSourceINT	VP_TIM16_VS_ClockSourceINT
+TIM17	Enable_Timer	TIM17_VS_ClockSourceINT	VP_TIM17_VS_ClockSourceINT
+USART2	Single Wire (Half-Duplex)	USART2_TX	PA2
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+1	PB8	GPIO_Output	USER_LED
+2	PF0-OSC_IN	GPIO_Output	
+3	PF1-OSC_OUT	GPIO_Output	
+7	PA1	GPIO_Output	SLAVE_REQ
+8	PA2	USART2_TX	
+10	PA4	SPI1_NSS	
+11	PA5	SPI1_SCK	
+12	PA6	SPI1_MISO	
+13	PA7	SPI1_MOSI	
+17	PA9	GPIO_Output	
+18	PA10	GPIO_Output	
+19	PA13	SYS_SWDIO	
+20	PA14	SYS_SWCLK	
+
+
+
+SOFTWARE PROJECT
+
+Project Settings : 
+Project Name : my_adb
+Project Folder : C:\Users\allen\Desktop\repos\usb2ps2\firmware\quad_test
+Toolchain / IDE : MDK-ARM V5
+Firmware Package Name and Version : STM32Cube FW_F0 V1.9.0
+
+
+Code Generation Settings : 
+STM32Cube Firmware Library Package : Copy only the necessary library files
+Generate peripheral initialization as a pair of '.c/.h' files per peripheral : No
+Backup previously generated files when re-generating : No
+Delete previously generated files when not re-generated : Yes
+Set all free pins as analog (to optimize the power consumption) : No
+
+
+Toolchains Settings : 
+Compiler Optimizations : 
+
+
+
+
+

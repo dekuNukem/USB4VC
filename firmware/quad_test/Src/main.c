@@ -61,6 +61,7 @@
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim16;
 TIM_HandleTypeDef htim17;
 
 UART_HandleTypeDef huart2;
@@ -90,6 +91,7 @@ static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM17_Init(void);
+static void MX_TIM16_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -262,7 +264,7 @@ void avg_buf_add(int16_t value)
     avg_buf_index = 0;
 }
 
-int16_t get_buf_avg(void)
+int32_t get_buf_avg(void)
 {
   int32_t sum = 0;
   for (int i = 0; i < AVG_BUF_SIZE; ++i)
@@ -271,37 +273,53 @@ int16_t get_buf_avg(void)
     sum = AVG_BUF_SIZE;
   else if (sum < 0 && abs(sum) < AVG_BUF_SIZE)
     sum = AVG_BUF_SIZE * -1;
-  return (int16_t)(sum/AVG_BUF_SIZE);
+  return (int32_t)(sum/AVG_BUF_SIZE);
 }
 
 /*
 each speed has a corresponding duration before the next increment or decrement
 
-for example speed 1 has a duration of 10ms?
+make sure to enable autoreload preload to prevent glitches
 */
 
-uint32_t quad_interrupt_counter;
+uint16_t calc_arr(int32_t speed_val)
+{
+  speed_val = abs(speed_val);
+  if(speed_val <= 0)
+    return 65535;
+  if(speed_val >= 64)
+    return 1000;
+  return (uint16_t)(-460*speed_val + 30460);
+}
+
 quad_output quad_x;
-// calculate average speed here, 64 = 1ms, 0 = no movement, set next increment in microsecond interrupt handler
-// prescaler 47, period 100 = 0.1ms
+int32_t avg_speed;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  quad_interrupt_counter++;
-  if(quad_interrupt_counter % 100 == 0)
+  if(htim == &htim17)
   {
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
     mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
     if(this_mouse_event == NULL)
     {
       avg_buf_add(0);
-      return;
     }
-    avg_buf_add(this_mouse_event->movement_x);
-    mouse_buf_pop(&my_mouse_buf);
+    else
+    {
+      avg_buf_add(this_mouse_event->movement_x);
+      mouse_buf_pop(&my_mouse_buf);
+    }
+    avg_speed = get_buf_avg();
+    htim16.Instance->ARR = calc_arr(avg_speed);
   }
-  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
-  int16_t avg_speed = get_buf_avg();
-  // htim17.Instance->ARR;
+  if(htim == &htim16 && avg_speed != 0)
+  {
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_10);
+    if(avg_speed > 0)
+      quad_increment(&quad_x);
+    else
+      quad_decrement(&quad_x);
+  }
 }
 
 /* USER CODE END 0 */
@@ -339,6 +357,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM2_Init();
   MX_TIM17_Init();
+  MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
@@ -355,11 +374,15 @@ int main(void)
   */
   quad_init(&quad_x, GPIOF, GPIO_PIN_0, GPIOF, GPIO_PIN_1);
   HAL_TIM_Base_Start_IT(&htim17);
+  HAL_TIM_Base_Start_IT(&htim16);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
+  for (int i = -64; i < 64; ++i)
+  {
+    printf("%d %d\n", i, calc_arr(i));
+  }
   while (1)
   {
     if(spi_error_occured)
@@ -481,6 +504,24 @@ static void MX_TIM2_Init(void)
 
 }
 
+/* TIM16 init function */
+static void MX_TIM16_Init(void)
+{
+
+  htim16.Instance = TIM16;
+  htim16.Init.Prescaler = 47;
+  htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim16.Init.Period = 65535;
+  htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim16.Init.RepetitionCounter = 0;
+  htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim16) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
 /* TIM17 init function */
 static void MX_TIM17_Init(void)
 {
@@ -488,7 +529,7 @@ static void MX_TIM17_Init(void)
   htim17.Instance = TIM17;
   htim17.Init.Prescaler = 47;
   htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim17.Init.Period = 100;
+  htim17.Init.Period = 10000;
   htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim17.Init.RepetitionCounter = 0;
   htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
