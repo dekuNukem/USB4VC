@@ -1,3 +1,8 @@
+  // printf("%d %d\n", avg_buf_index, value);
+
+  for (int i = 0; i < AVG_BUF_SIZE; ++i)
+    printf("%d ", avg_buf[i]);
+  printf("\n");
   printf("%d %d %d\n", (uint8_t)qo->current_index, (uint8_t)(qo->current_index - 1), (uint8_t)(qo->current_index - 1)%4);
 void quad_write(quad_output *qo)
 {

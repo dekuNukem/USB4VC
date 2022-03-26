@@ -61,6 +61,7 @@
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim17;
 
 UART_HandleTypeDef huart2;
 
@@ -88,6 +89,7 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_TIM17_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -248,7 +250,39 @@ uint8_t int16_to_uint6(int16_t value)
   return (uint8_t)value;
 }
 
+#define AVG_BUF_SIZE 8
+int16_t avg_buf[AVG_BUF_SIZE];
+uint8_t avg_buf_index;
+
+void avg_buf_add(int16_t value)
+{
+  avg_buf[avg_buf_index] = value;
+  avg_buf_index++;
+  if (avg_buf_index >= AVG_BUF_SIZE)
+    avg_buf_index = 0;
+}
+
+int16_t get_buf_avg(void)
+{
+  int32_t sum = 0;
+  for (int i = 0; i < AVG_BUF_SIZE; ++i)
+    sum += avg_buf[i];
+  return (int16_t)(sum/AVG_BUF_SIZE);
+}
+
 quad_output quad_x;
+// calculate average speed here, 64 = 1ms, 0 = no movement, set next increment in microsecond interrupt handler
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
+  if(this_mouse_event == NULL)
+  {
+    avg_buf_add(0);
+    return;
+  }
+  avg_buf_add(this_mouse_event->movement_x);
+  mouse_buf_pop(&my_mouse_buf);
+}
 
 /* USER CODE END 0 */
 
@@ -284,6 +318,7 @@ int main(void)
   MX_SPI1_Init();
   MX_USART2_UART_Init();
   MX_TIM2_Init();
+  MX_TIM17_Init();
   /* USER CODE BEGIN 2 */
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
@@ -292,12 +327,6 @@ int main(void)
   mouse_buf_init(&my_mouse_buf, 16);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  // GPIOF, GPIO_PIN_0
-
   /*
     instead of all at once, we remove data from buffer
     at a regular interval, say 5ms, if empty, then theres no movement
@@ -305,13 +334,20 @@ int main(void)
     and that is used to update quad encoder?
   */
   quad_init(&quad_x, GPIOF, GPIO_PIN_0, GPIOF, GPIO_PIN_1);
+  HAL_TIM_Base_Start_IT(&htim17);
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     if(spi_error_occured)
       spi_error_dump_reboot();
 
-    quad_decrement(&quad_x);
-    HAL_Delay(1);
+    printf("%d\n", get_buf_avg());
+    // quad_decrement(&quad_x);
+    HAL_Delay(50);
     
   /* USER CODE END WHILE */
 
@@ -419,6 +455,24 @@ static void MX_TIM2_Init(void)
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
+/* TIM17 init function */
+static void MX_TIM17_Init(void)
+{
+
+  htim17.Instance = TIM17;
+  htim17.Init.Prescaler = 47;
+  htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim17.Init.Period = 10000;
+  htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim17.Init.RepetitionCounter = 0;
+  htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim17) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
