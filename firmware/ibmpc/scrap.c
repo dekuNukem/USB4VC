@@ -1,3 +1,28 @@
+  uint16_t idcode = (*(uint16_t*)(DBGMCU_IDCODE)) & 0x1fff;
+  uint16_t flash_size = *(uint16_t*)(FLASH_SIZE_REG_ADDRESS);
+  uint16_t* usb_reg = (uint16_t*)USB_CNTR;
+  usb_reg = (uint16_t*)USB_CNTR;
+  printf("idcode: 0x%x\n", idcode);
+  printf("flash_size: %d\n", flash_size);
+  printf("usb_before: 0x%x\n", *usb_reg);
+  // *usb_reg = 0x2;
+  // printf("usb_after: 0x%x\n", *usb_reg);
+
+  //115200 195134
+
+  1200 2032
+
+  huart3.Init.BaudRate = 1200;
+if(flash_size != 64)
+  huart3.Init.BaudRate = 2032;
+
+huart1.Init.BaudRate = 115200;
+if(flash_size != 64)
+  huart1.Init.BaudRate = 195134;
+
+huart3.Init.WordLength = UART_WORDLENGTH_7B;
+
+
   for (int i = 0; i < 3; ++i)
     printf("0x%x ", serial_mouse_output_buf[i]);
   printf("\n");
