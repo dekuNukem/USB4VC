@@ -1,6 +1,6 @@
   // printf("%d %d\n", avg_buf_index, value);
 y=−306.4516129032258x+20306.451612903224
-
+https://planetcalc.com/8110/
     if(avg_speed > 64)
       avg_speed = 64
     elif(avg_speed < -64)

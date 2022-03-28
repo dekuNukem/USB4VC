@@ -288,12 +288,17 @@ uint16_t calc_arr(int32_t speed_val)
   if(speed_val <= 0)
     return 65535;
   if(speed_val >= 64)
-    return 1000;
-  return (uint16_t)(-460*speed_val + 30460);
+    return 500;
+  return (uint16_t)(-190*speed_val + 12690); // 1, 12500 | 64, 500
 }
 
 quad_output quad_x;
 int32_t avg_speed;
+
+/*
+  this gets called every 10ms, fetches mouse event and put them into a running buffer
+  a window average is calculated, used to adjust the timer autoreload register
+*/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if(htim == &htim17)
