@@ -1,0 +1,3 @@
+"use strict";(()=>{var O=Object.defineProperty;var l=(t,e)=>O(t,"name",{value:e,configurable:!0});(globalThis.webpackChunk=globalThis.webpackChunk||[]).push([[7139],{24605:(t,e,_)=>{var E=_(92925),n=_(88310),a=_(46393),M=_(66917),D=_(93113),P=_(55876),m=_(61075),h=_(19635),g=_(48219),s=_(34060),u=_(47001),o=_(45623),d=_(57125)},57125:(t,e,_)=>{var E=_(61075);window.IncludeFragmentElement.prototype.fetch=n=>(n.headers.append("X-Requested-With","XMLHttpRequest"),window.fetch(n))}},t=>{var e=l(E=>t(t.s=E),"__webpack_exec__");t.O(0,[9048,9758,6038],()=>e(24605));var _=t.O()}]);})();
+
+//# sourceMappingURL=github-elements-175a0b856430.js.map
