@@ -24,6 +24,7 @@ ibmpc\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_flash.h
 ibmpc\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_flash_ex.h
 ibmpc\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c.h
 ibmpc\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c_ex.h
+ibmpc\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_iwdg.h
 ibmpc\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h
 ibmpc\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h
 ibmpc\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi.h

@@ -10,7 +10,7 @@
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2021 STMicroelectronics
+  * COPYRIGHT(c) 2022 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -55,6 +55,8 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c2;
 
+IWDG_HandleTypeDef hiwdg;
+
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
@@ -67,7 +69,7 @@ UART_HandleTypeDef huart3;
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 1;
-const uint8_t version_patch = 5;
+const uint8_t version_patch = 6;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -76,6 +78,7 @@ uint8_t spi_recv_buf[SPI_BUF_SIZE];
 kb_buf my_kb_buf;
 mouse_buf my_mouse_buf;
 gamepad_buf my_gamepad_buf;
+uint16_t flash_size;
 
 uint8_t ps2kb_host_cmd, ps2mouse_host_cmd, buffered_code, buffered_value, ps2mouse_bus_status, ps2kb_bus_status;
 mouse_event latest_mouse_event;
@@ -107,6 +110,7 @@ static void MX_SPI1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART3_UART_Init(void);
+static void MX_IWDG_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -486,6 +490,23 @@ void xtkb_update(void)
   }
 }
 
+/*
+!!!!!!!!!!!!!!!!!!!!!! AFTER CODE RE-GENERATION
+!!!!!!!!!!!!!!!!!!!!!! CHANGE THE FOLLOWING
+
+huart3.Init.BaudRate = 1200;
+if(flash_size != 64)
+  huart3.Init.BaudRate = 2032;
+
+huart1.Init.BaudRate = 115200;
+if(flash_size != 64)
+  huart1.Init.BaudRate = 195134;
+
+huart3.Init.WordLength = UART_WORDLENGTH_7B;
+
+!!!!!!!!!!!!!!!!!!!!!!
+*/
+
 /* USER CODE END 0 */
 
 /**
@@ -496,7 +517,7 @@ void xtkb_update(void)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  flash_size = *(uint16_t*)0x1FFFF7CC;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -522,6 +543,7 @@ int main(void)
   MX_TIM2_Init();
   MX_USART1_UART_Init();
   MX_USART3_UART_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
@@ -540,8 +562,6 @@ int main(void)
 
   mcp4451_reset();
   HAL_Delay(1);
-  if(mcp4451_is_available() == 0)
-    hw_revision = 1;
 
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -550,12 +570,11 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  // DONT FORGET
-  // huart3.Init.WordLength = UART_WORDLENGTH_7B;
+  printf("flash_size: %d\n", flash_size);
 
   while (1)
   {
-
+    HAL_IWDG_Refresh(&hiwdg);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -576,7 +595,6 @@ int main(void)
 
     if(spi_error_occured)
       spi_error_dump_reboot();
-
   }
   /* USER CODE END 3 */
 
@@ -595,8 +613,9 @@ void SystemClock_Config(void)
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -669,6 +688,21 @@ static void MX_I2C2_Init(void)
 
 }
 
+/* IWDG init function */
+static void MX_IWDG_Init(void)
+{
+
+  hiwdg.Instance = IWDG;
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_32;
+  hiwdg.Init.Window = 4095;
+  hiwdg.Init.Reload = 4095;
+  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
 /* SPI1 init function */
 static void MX_SPI1_Init(void)
 {
@@ -733,6 +767,8 @@ static void MX_USART1_UART_Init(void)
 
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 115200;
+  if(flash_size != 64)
+    huart1.Init.BaudRate = 195134;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -754,8 +790,10 @@ static void MX_USART3_UART_Init(void)
 
   huart3.Instance = USART3;
   huart3.Init.BaudRate = 1200;
-  huart3.Init.WordLength = UART_WORDLENGTH_7B;
+  if(flash_size != 64)
+    huart3.Init.BaudRate = 2032;
   huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.WordLength = UART_WORDLENGTH_7B;
   huart3.Init.Parity = UART_PARITY_NONE;
   huart3.Init.Mode = UART_MODE_TX_RX;
   huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
