@@ -35,10 +35,13 @@ SHUTDOWN_BUTTON_PIN = 21
 
 PBOARD_RESET_PIN = 25
 PBOARD_BOOT0_PIN = 12
+SLEEP_LED_PIN = 26
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
 GPIO.setup(PBOARD_BOOT0_PIN, GPIO.IN)
+GPIO.setup(SLEEP_LED_PIN, GPIO.OUT)
+GPIO.output(SLEEP_LED_PIN, GPIO.LOW)
 
 SPI_MOSI_MAGIC = 0xde
 SPI_MOSI_MSG_TYPE_SET_PROTOCOL = 2
@@ -857,12 +860,14 @@ class oled_sleep_control(object):
             print("sleeping!")
             usb4vc_oled.oled_device.clear()
             self.is_sleeping = True
+            # GPIO.output(SLEEP_LED_PIN, GPIO.HIGH)
     def wakeup(self):
         if self.is_sleeping:
             print("waking up!")
             my_menu.display_curent_page()
             self.last_input_event = time.time()
             self.is_sleeping = False
+            # GPIO.output(SLEEP_LED_PIN, GPIO.LOW)
     def check_sleep(self):
         # time.time() might jump ahead a lot when RPi gets its time from network
         # this ensures OLED won't go to sleep too early
