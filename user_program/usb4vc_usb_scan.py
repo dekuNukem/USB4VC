@@ -447,7 +447,7 @@ def make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
 
-def make_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
+def make_unsupported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
     gp_id = this_device_info['id']
     this_msg = list(raw_usb_gamepad_event_spi_msg_template)
     this_msg[3] = gp_id
@@ -466,13 +466,66 @@ def make_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
     # print('{:08b}'.format(this_msg[9]))
     return this_msg, None, None
 
+def xbname_to_ev_codename(xb_btn):
+    ev_name = usb4vc_gamepads.xbox_one_to_linux_ev_code_dict.get(xb_btn)
+    if ev_name is None:
+        return None
+    return usb4vc_shared.code_name_to_value_lookup[ev_name][0]
+
+xbox_to_generic_dict = {
+    xbname_to_ev_codename('XB_A'):'FACE_BUTTON_SOUTH',
+    xbname_to_ev_codename('XB_B'):'FACE_BUTTON_EAST',
+    xbname_to_ev_codename('XB_X'):'FACE_BUTTON_WEST',
+    xbname_to_ev_codename('XB_Y'):'FACE_BUTTON_NORTH',
+    xbname_to_ev_codename('XB_LB'):'SHOULDER_BUTTON_LEFT',
+    xbname_to_ev_codename('XB_RB'):'SHOULDER_BUTTON_RIGHT',
+    xbname_to_ev_codename('XB_LSB'):'STICK_BUTTON_LEFT',
+    xbname_to_ev_codename('XB_RSB'):'STICK_BUTTON_RIGHT',
+    xbname_to_ev_codename('XB_VIEW'):'MISC_BUTTON_1',
+    xbname_to_ev_codename('XB_MENU'):'MISC_BUTTON_2',
+    xbname_to_ev_codename('XB_LOGO'):'LOGO_BUTTON',
+}
+
+def make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
+    gp_id = this_device_info['id']
+    this_gp_status = gp_status_dict[gp_id]
+    print(this_gp_status)
+    generic_button_dict = {
+        'FACE_BUTTON_SOUTH':0,
+        'FACE_BUTTON_EAST':0,
+        'FACE_BUTTON_WEST':0,
+        'FACE_BUTTON_NORTH':0,
+        'SHOULDER_BUTTON_LEFT':0,
+        'SHOULDER_BUTTON_RIGHT':0,
+        'BUMPER_BUTTON_LEFT':0,
+        'BUMPER_BUTTON_RIGHT':0,
+        'STICK_BUTTON_LEFT':0,
+        'STICK_BUTTON_RIGHT':0,
+        'LOGO_BUTTON':0,
+        'MISC_BUTTON_1':0,
+        'MISC_BUTTON_2':0,
+        'MISC_BUTTON_3':0,
+        'MISC_BUTTON_4':0,
+        'MISC_BUTTON_5':0,
+    }
+    if this_device_info['gamepad_type'] == 'Xbox':
+        for item in this_gp_status:
+            generic_name = xbox_to_generic_dict.get(item)
+            if generic_name is not None:
+                generic_button_dict[generic_name] = this_gp_status[item]
+        print(generic_button_dict)
+    return list(nop_spi_msg_template), None, None
+
 def make_gamepad_spi_packet(gp_status_dict, this_device_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
     try:
         if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
             return make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, current_protocol)
         elif current_protocol['pid'] == PID_RAW_USB_GAMEPAD:
-            return make_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
+            if this_device_info['gamepad_type'] == 'Generic': 
+                return make_unsupported_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
+            else:
+                return make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
     except Exception as e:
         print("exception make_15pin_gamepad_spi_packet:", e)
     return list(nop_spi_msg_template), None, None
@@ -675,7 +728,7 @@ def get_input_devices():
             'vendor_id':this_device.info.vendor,
             'product_id':this_device.info.product,
             'axes_info':{},
-            'gamepad_type':None,
+            'gamepad_type':'Generic',
             'is_kb':False,
             'is_mouse':False,
             'is_gp':False,
