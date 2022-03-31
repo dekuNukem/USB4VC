@@ -1,16 +1,23 @@
+GAMEPAD_TYPE_XBOX = 'Xbox'
+GAMEPAD_TYPE_PS4_GEN1 = "DualShock 4 [CUH-ZCT1x]"
+GAMEPAD_TYPE_PS4_GEN2 = "DualShock 4 [CUH-ZCT2x]"
+GAMEPAD_TYPE_PS5_GEN1 = "DualSense wireless controller"
+GAMEPAD_TYPE_SWITCH_PRO = "Switch Pro Controller"
+GAMEPAD_TYPE_UNKNOWN = "Generic"
+
 def gamepad_type_lookup(vendor_id, product_id):
     # https://the-sz.com/products/usbid/index.php?v=0x54c&p=&n=
     if vendor_id == 0x054c and product_id == 0x09cc:
-        return "DualShock 4 [CUH-ZCT2x]"
+        return GAMEPAD_TYPE_PS4_GEN2
     if vendor_id == 0x054c and product_id == 0x05c4:
-        return "DualShock 4 [CUH-ZCT1x]"
+        return GAMEPAD_TYPE_PS4_GEN1
     if vendor_id == 0x054c and product_id == 0x0ce6:
-        return "DualSense wireless controller"
+        return GAMEPAD_TYPE_PS5_GEN1
     if vendor_id == 0x057e and product_id == 0x2009:
-        return "Switch Pro Controller"
+        return GAMEPAD_TYPE_SWITCH_PRO
     if vendor_id == 0x045e:
-        return "Xbox"
-    return "Generic"
+        return GAMEPAD_TYPE_XBOX
+    return GAMEPAD_TYPE_UNKNOWN
 
 ABS_Z = 0x02
 ABS_RX = 0x03

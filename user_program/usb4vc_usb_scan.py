@@ -472,6 +472,12 @@ def xbname_to_ev_codename(xb_btn):
         return None
     return usb4vc_shared.code_name_to_value_lookup[ev_name][0]
 
+def ps5name_to_ev_codename(ps5_btn):
+    ev_name = usb4vc_gamepads.ps5_to_linux_ev_code_dict.get(ps5_btn)
+    if ev_name is None:
+        return None
+    return usb4vc_shared.code_name_to_value_lookup[ev_name][0] 
+
 xbox_to_generic_dict = {
     xbname_to_ev_codename('XB_A'):'FACE_BUTTON_SOUTH',
     xbname_to_ev_codename('XB_B'):'FACE_BUTTON_EAST',
@@ -486,11 +492,29 @@ xbox_to_generic_dict = {
     xbname_to_ev_codename('XB_LOGO'):'LOGO_BUTTON',
 }
 
+ps5_to_generic_dict = {
+    ps5name_to_ev_codename('PS_CROSS'):'FACE_BUTTON_SOUTH',
+    ps5name_to_ev_codename('PS_CIRCLE'):'FACE_BUTTON_EAST',
+    ps5name_to_ev_codename('PS_SQUARE'):'FACE_BUTTON_WEST',
+    ps5name_to_ev_codename('PS_TRIANGLE'):'FACE_BUTTON_NORTH',
+    ps5name_to_ev_codename('PS_L1'):'SHOULDER_BUTTON_LEFT',
+    ps5name_to_ev_codename('PS_R1'):'SHOULDER_BUTTON_RIGHT',
+    ps5name_to_ev_codename('PS_L2_BUTTON'):'BUMPER_BUTTON_LEFT',
+    ps5name_to_ev_codename('PS_R2_BUTTON'):'BUMPER_BUTTON_RIGHT',
+    ps5name_to_ev_codename('PS_LSB'):'STICK_BUTTON_LEFT',
+    ps5name_to_ev_codename('PS_RSB'):'STICK_BUTTON_RIGHT',
+    ps5name_to_ev_codename('PS_CREATE'):'MISC_BUTTON_1',
+    ps5name_to_ev_codename('PS_OPTION'):'MISC_BUTTON_2',
+    ps5name_to_ev_codename('PS_MUTE'):'MISC_BUTTON_3',
+    ps5name_to_ev_codename('PS_TOUCHPAD_BUTTON'):'MISC_BUTTON_4',
+    ps5name_to_ev_codename('PS_LOGO'):'LOGO_BUTTON',
+}
+
 def make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
     gp_id = this_device_info['id']
     this_gp_status = gp_status_dict[gp_id]
     print(this_gp_status)
-    generic_button_dict = {
+    supported_gamepad_status_dict = {
         'FACE_BUTTON_SOUTH':0,
         'FACE_BUTTON_EAST':0,
         'FACE_BUTTON_WEST':0,
@@ -507,13 +531,45 @@ def make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
         'MISC_BUTTON_3':0,
         'MISC_BUTTON_4':0,
         'MISC_BUTTON_5':0,
+        "LEFT_STICK_X":127,
+        "LEFT_STICK_Y":127,
+        "RIGHT_STICK_X":127,
+        "RIGHT_STICK_Y":127,
+        "ANALOG_TRIGGER_LEFT":0,
+        "ANALOG_TRIGGER_RIGHT":0,
+        "DPAD_X":127,
+        "DPAD_Y":127,
     }
     if this_device_info['gamepad_type'] == 'Xbox':
         for item in this_gp_status:
             generic_name = xbox_to_generic_dict.get(item)
             if generic_name is not None:
-                generic_button_dict[generic_name] = this_gp_status[item]
-        print(generic_button_dict)
+                supported_gamepad_status_dict[generic_name] = this_gp_status[item]
+        supported_gamepad_status_dict["LEFT_STICK_X"] = this_gp_status.get(xbname_to_ev_codename('XB_LSX'), 127)
+        supported_gamepad_status_dict["LEFT_STICK_Y"] = this_gp_status.get(xbname_to_ev_codename('XB_LSY'), 127)
+        supported_gamepad_status_dict["RIGHT_STICK_X"] = this_gp_status.get(xbname_to_ev_codename('XB_RSX'), 127)
+        supported_gamepad_status_dict["RIGHT_STICK_Y"] = this_gp_status.get(xbname_to_ev_codename('XB_RSY'), 127)
+        supported_gamepad_status_dict["ANALOG_TRIGGER_LEFT"] = this_gp_status.get(xbname_to_ev_codename('XB_LT'), 0)
+        supported_gamepad_status_dict["ANALOG_TRIGGER_RIGHT"] = this_gp_status.get(xbname_to_ev_codename('XB_RT'), 0)
+        supported_gamepad_status_dict["DPAD_X"] = this_gp_status.get(xbname_to_ev_codename('XB_DPX'), 127)
+        supported_gamepad_status_dict["DPAD_Y"] = this_gp_status.get(xbname_to_ev_codename('XB_DPY'), 127)
+        # print(supported_gamepad_status_dict)
+
+    elif this_device_info['gamepad_type'] == usb4vc_gamepads.GAMEPAD_TYPE_PS5_GEN1:
+        for item in this_gp_status:
+            generic_name = ps5_to_generic_dict.get(item)
+            if generic_name is not None:
+                supported_gamepad_status_dict[generic_name] = this_gp_status[item]
+        supported_gamepad_status_dict["LEFT_STICK_X"] = this_gp_status.get(ps5name_to_ev_codename('PS_LSX'), 127)
+        supported_gamepad_status_dict["LEFT_STICK_Y"] = this_gp_status.get(ps5name_to_ev_codename('PS_LSY'), 127)
+        supported_gamepad_status_dict["RIGHT_STICK_X"] = this_gp_status.get(ps5name_to_ev_codename('PS_RSX'), 127)
+        supported_gamepad_status_dict["RIGHT_STICK_Y"] = this_gp_status.get(ps5name_to_ev_codename('PS_RSY'), 127)
+        supported_gamepad_status_dict["ANALOG_TRIGGER_LEFT"] = this_gp_status.get(ps5name_to_ev_codename('PS_L2_ANALOG'), 0)
+        supported_gamepad_status_dict["ANALOG_TRIGGER_RIGHT"] = this_gp_status.get(ps5name_to_ev_codename('PS_R2_ANALOG'), 0)
+        supported_gamepad_status_dict["DPAD_X"] = this_gp_status.get(ps5name_to_ev_codename('PS_DPX'), 127)
+        supported_gamepad_status_dict["DPAD_Y"] = this_gp_status.get(ps5name_to_ev_codename('PS_DPY'), 127)
+        print(supported_gamepad_status_dict)
+        
     return list(nop_spi_msg_template), None, None
 
 def make_gamepad_spi_packet(gp_status_dict, this_device_info):
