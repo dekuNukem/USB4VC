@@ -70,8 +70,9 @@ SPI_MOSI_MSG_TYPE_REQ_ACK = 3
 
 SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT = 8
 SPI_MOSI_MSG_TYPE_MOUSE_EVENT = 9
-SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW = 10
+SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW_UNKNOWN = 10
 SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED = 11
+SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW_SUPPORTED = 12
 
 SPI_MISO_MSG_TYPE_NOP = 0
 SPI_MISO_MSG_TYPE_INFO_REQUEST = 128
@@ -107,7 +108,8 @@ info_request_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_INFO_REQUE
 keyboard_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT] + [0]*29
 mouse_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_MOUSE_EVENT] + [0]*29
 gamepad_event_ibm_ggp_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED, 0, 0, 0, 0, 0, 127, 127, 127, 127] + [0]*20
-raw_usb_gamepad_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW] + [0]*7 + [127]*8 + [0]*14
+raw_usb_unknown_gamepad_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW_UNKNOWN] + [0]*7 + [127]*8 + [0]*14
+raw_usb_supported_gamepad_event_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW_SUPPORTED] + [0]*7 + [127]*4 + [0, 0, 127, 127] + [0]*14
 
 def make_spi_msg_ack():
     return [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_REQ_ACK] + [0]*29
@@ -447,9 +449,9 @@ def make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
 
 
-def make_unsupported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
+def make_unknown_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
     gp_id = this_device_info['id']
-    this_msg = list(raw_usb_gamepad_event_spi_msg_template)
+    this_msg = list(raw_usb_unknown_gamepad_event_spi_msg_template)
     this_msg[3] = gp_id
     this_msg[4:6] = this_device_info['vendor_id'].to_bytes(2, byteorder='little')
     this_msg[6:8] = this_device_info['product_id'].to_bytes(2, byteorder='little')
@@ -536,7 +538,6 @@ ps4_to_generic_dict = {
 def make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
     gp_id = this_device_info['id']
     this_gp_status = gp_status_dict[gp_id]
-    print(this_gp_status)
     supported_gamepad_status_dict = {
         'FACE_BUTTON_SOUTH':0,
         'FACE_BUTTON_EAST':0,
@@ -576,7 +577,6 @@ def make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
         supported_gamepad_status_dict["ANALOG_TRIGGER_RIGHT"] = this_gp_status.get(xbname_to_ev_codename('XB_RT'), 0)
         supported_gamepad_status_dict["DPAD_X"] = this_gp_status.get(xbname_to_ev_codename('XB_DPX'), 127)
         supported_gamepad_status_dict["DPAD_Y"] = this_gp_status.get(xbname_to_ev_codename('XB_DPY'), 127)
-        # print(supported_gamepad_status_dict)
 
     elif this_device_info['gamepad_type'] == usb4vc_gamepads.GAMEPAD_TYPE_PS5_GEN1:
         for item in this_gp_status:
@@ -591,7 +591,6 @@ def make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
         supported_gamepad_status_dict["ANALOG_TRIGGER_RIGHT"] = this_gp_status.get(ps5name_to_ev_codename('PS_R2_ANALOG'), 0)
         supported_gamepad_status_dict["DPAD_X"] = this_gp_status.get(ps5name_to_ev_codename('PS_DPX'), 127)
         supported_gamepad_status_dict["DPAD_Y"] = this_gp_status.get(ps5name_to_ev_codename('PS_DPY'), 127)
-        # print(supported_gamepad_status_dict)
 
     elif 'DualShock 4' in this_device_info['gamepad_type']:
         for item in this_gp_status:
@@ -606,9 +605,29 @@ def make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
         supported_gamepad_status_dict["ANALOG_TRIGGER_RIGHT"] = this_gp_status.get(ps4name_to_ev_codename('PS_R2_ANALOG'), 0)
         supported_gamepad_status_dict["DPAD_X"] = this_gp_status.get(ps4name_to_ev_codename('PS_DPX'), 127)
         supported_gamepad_status_dict["DPAD_Y"] = this_gp_status.get(ps4name_to_ev_codename('PS_DPY'), 127)
-        print(supported_gamepad_status_dict)
 
-    return list(nop_spi_msg_template), None, None
+    this_msg = list(raw_usb_supported_gamepad_event_spi_msg_template)
+    this_msg[3] = gp_id
+    this_msg[4:6] = this_device_info['vendor_id'].to_bytes(2, byteorder='little')
+    this_msg[6:8] = this_device_info['product_id'].to_bytes(2, byteorder='little')
+    
+    for index, item in enumerate(list(supported_gamepad_status_dict.items())):
+        # print(index, item)
+        if 0 <= index <= 7:
+            this_msg[8] |= item[1] << (index % 8)
+        if 8 <= index <= 15:
+            this_msg[9] |= item[1] << (index % 8)
+
+    this_msg[10] = supported_gamepad_status_dict["LEFT_STICK_X"]
+    this_msg[11] = supported_gamepad_status_dict["LEFT_STICK_Y"]
+    this_msg[12] = supported_gamepad_status_dict["RIGHT_STICK_X"]
+    this_msg[13] = supported_gamepad_status_dict["RIGHT_STICK_Y"]
+    this_msg[14] = supported_gamepad_status_dict["ANALOG_TRIGGER_LEFT"]
+    this_msg[15] = supported_gamepad_status_dict["ANALOG_TRIGGER_RIGHT"]
+    this_msg[16] = supported_gamepad_status_dict["DPAD_X"]
+    this_msg[17] = supported_gamepad_status_dict["DPAD_Y"]
+
+    return this_msg, None, None
 
 def make_gamepad_spi_packet(gp_status_dict, this_device_info):
     current_protocol = usb4vc_ui.get_gamepad_protocol()
@@ -616,8 +635,8 @@ def make_gamepad_spi_packet(gp_status_dict, this_device_info):
         if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
             return make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, current_protocol)
         elif current_protocol['pid'] == PID_RAW_USB_GAMEPAD:
-            if this_device_info['gamepad_type'] == 'Generic': 
-                return make_unsupported_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
+            if this_device_info['gamepad_type'] == usb4vc_gamepads.GAMEPAD_TYPE_UNKNOWN: 
+                return make_unknown_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
             else:
                 return make_supported_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
     except Exception as e:
@@ -782,7 +801,7 @@ def raw_input_event_worker():
                         if axes_code in this_gp_dict and 127 - 12 <= this_gp_dict[axes_code] <= 127 + 12:
                             this_gp_dict[axes_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
-                    # print(gamepad_output[0])
+                    print(gamepad_output[0])
                     if gamepad_output != last_gamepad_msg:
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
                         pcard_spi.xfer(list(gp_to_transfer))
