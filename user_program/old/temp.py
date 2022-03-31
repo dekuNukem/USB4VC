@@ -1,3 +1,12 @@
+custom_name_to_ev_codename(usb4vc_gamepads.xbox_one_to_linux_ev_code_dict, )
+
+def custom_name_to_ev_codename(lookup_dict, button_name):
+    ev_name = lookup_dict.get(button_name)
+    if ev_name is None:
+        return None
+    return usb4vc_shared.code_name_to_value_lookup[ev_name][0] 
+
+
 usb4vc_oled.oled_print_centered("HOLD + during", usb4vc_oled.font_medium, 0, draw)
         usb4vc_oled.oled_print_centered("input to exit", usb4vc_oled.font_medium, 15, draw)
 
