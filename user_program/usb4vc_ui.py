@@ -888,6 +888,11 @@ def ui_worker():
     print("ui_worker started")
     my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id), configuration_dict[this_pboard_id])
     my_menu.display_page(0, 0)
+    for x in range(2):
+        GPIO.output(SLEEP_LED_PIN, GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(SLEEP_LED_PIN, GPIO.LOW)
+        time.sleep(0.2)
     while 1: 
         time.sleep(0.1)
         my_oled.ui_loop_count += 1
