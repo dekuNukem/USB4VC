@@ -32,7 +32,7 @@ event0  event1  event2  mice  mouse0  mouse1
 
 * A list of all Event Type, Code and Values [can be found here](https://github.com/torvalds/linux/blob/master/include/uapi/linux/input-event-codes.h), set a bookmark if you're making your own P-Card!
 
-* Keyboard keys and mouse/gamepad buttons are **EV_KEY** type, mouse moments are **EV_REL** (relative) type, and joystick movements are **EV_ABS** (absolute) type.
+* Keyboard keys and mouse/gamepad buttons are **EV_KEY** type, mouse movements are **EV_REL** (relative) type, and joystick movements are **EV_ABS** (absolute) type.
 
 * Once you know the Event Type, you can look up Event Code to see which key/button/axes is being updated.
 
