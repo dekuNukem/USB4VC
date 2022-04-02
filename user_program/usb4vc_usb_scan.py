@@ -801,7 +801,6 @@ def raw_input_event_worker():
                         if axes_code in this_gp_dict and 127 - 12 <= this_gp_dict[axes_code] <= 127 + 12:
                             this_gp_dict[axes_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
-                    print(gamepad_output[0])
                     if gamepad_output != last_gamepad_msg:
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
                         pcard_spi.xfer(list(gp_to_transfer))
@@ -917,10 +916,10 @@ def get_pboard_info():
     this_msg[5] = usb4vc_shared.RPI_APP_VERSION_TUPLE[2]
     pcard_spi.xfer(this_msg)
 
-    time.sleep(0.1)
+    time.sleep(0.05)
     # send an empty message to allow response to be shifted into RPi
     response = pcard_spi.xfer(list(nop_spi_msg_template))
-    time.sleep(0.01)
+    time.sleep(0.05)
     response = pcard_spi.xfer(list(nop_spi_msg_template))
     return response
 

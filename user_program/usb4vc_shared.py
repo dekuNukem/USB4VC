@@ -1,4 +1,4 @@
-RPI_APP_VERSION_TUPLE = (0, 0, 7)
+RPI_APP_VERSION_TUPLE = (0, 0, 8)
 
 code_name_to_value_lookup = {
 	'KEY_RESERVED':(0, 'kb_key'),

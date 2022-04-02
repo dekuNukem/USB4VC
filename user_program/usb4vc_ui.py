@@ -466,7 +466,7 @@ class usb4vc_menu(object):
         self.current_level = 0
         self.current_page = 0
         self.level_size = 6
-        self.page_size = [6, 6, 4, 1, 1, 5]
+        self.page_size = [7, 6, 4, 1, 1, 5]
         self.kb_protocol_list = list(pboard['protocol_list_keyboard'])
         self.mouse_protocol_list = list(pboard['protocol_list_mouse'])
         self.gamepad_protocol_list = list(pboard['protocol_list_gamepad'])
@@ -530,16 +530,19 @@ class usb4vc_menu(object):
                     draw.text((0, 20), f"IP: {get_ip_name()}", font=usb4vc_oled.font_regular, fill="white")
             if page == 2:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Update via", usb4vc_oled.font_medium, 0, draw)
-                    usb4vc_oled.oled_print_centered("USB Flashdrive", usb4vc_oled.font_medium, 16, draw)
+                    usb4vc_oled.oled_print_centered("Load Custom", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered("Mapping from USB", usb4vc_oled.font_medium, 16, draw)
             if page == 3:
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Internet Update", usb4vc_oled.font_medium, 10, draw)
+            if page == 4:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Show Event Codes", usb4vc_oled.font_medium, 0, draw)
                     usb4vc_oled.oled_print_centered("(experimental)", usb4vc_oled.font_regular, 20, draw)
-            if page == 4:
+            if page == 5:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Remove BT Device", usb4vc_oled.font_medium, 10, draw)
-            if page == 5:
+            if page == 6:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Pair Bluetooth", usb4vc_oled.font_medium, 10, draw)
         if level == 1:
@@ -709,16 +712,19 @@ class usb4vc_menu(object):
                     usb4vc_oled.oled_device.clear()
                     os._exit(0)
             elif page == 3:
+                print("INTERNET UPDATE")
+                self.goto_level(0)
+            elif page == 4:
                 try:
                     usb4vc_show_ev.ev_loop([plus_button, minus_button, enter_button])
                 except Exception as e:
                     print('exception ev_loop:', e)
                 self.goto_level(0)
-            elif page == 4:
+            elif page == 5:
                 self.paired_devices_list = list(get_paired_devices())
                 self.page_size[4] = len(self.paired_devices_list) + 1
                 self.goto_level(4)
-            elif page == 5:
+            elif page == 6:
                 self.goto_level(2)
             else:
                 self.goto_level(1)
