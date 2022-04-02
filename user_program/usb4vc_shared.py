@@ -1,3 +1,15 @@
+import os
+
+this_app_dir_path = "/home/pi/usb4vc/rpi_app"
+config_dir_path = "/home/pi/usb4vc/config"
+firmware_dir_path = "/home/pi/usb4vc/firmware"
+temp_dir_path = "/home/pi/usb4vc/temp"
+
+def ensure_dir(dir_path):
+    print('ensure_dir', dir_path)
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
 RPI_APP_VERSION_TUPLE = (0, 0, 8)
 
 code_name_to_value_lookup = {

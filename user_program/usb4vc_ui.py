@@ -10,23 +10,23 @@ import RPi.GPIO as GPIO
 import usb4vc_usb_scan
 import usb4vc_shared
 import usb4vc_show_ev
+import usb4vc_check_update
 import json
 import subprocess
 from subprocess import Popen, PIPE
 
-this_app_dir_path = "/home/pi/usb4vc/rpi_app"
-config_dir_path = "/home/pi/usb4vc/config"
-firmware_dir_path = "/home/pi/usb4vc/firmware"
-config_file_path = os.path.join(config_dir_path, 'config.json')
+from usb4vc_shared import this_app_dir_path
+from usb4vc_shared import config_dir_path
+from usb4vc_shared import firmware_dir_path
+from usb4vc_shared import temp_dir_path
+from usb4vc_shared import ensure_dir
 
-def ensure_dir(dir_path):
-    print('ensure_dir', dir_path)
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
+config_file_path = os.path.join(config_dir_path, 'config.json')
 
 ensure_dir(this_app_dir_path)
 ensure_dir(config_dir_path)
 ensure_dir(firmware_dir_path)
+ensure_dir(temp_dir_path)
 
 PLUS_BUTTON_PIN = 27
 MINUS_BUTTON_PIN = 19
