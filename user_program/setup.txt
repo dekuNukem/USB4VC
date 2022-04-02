@@ -4,11 +4,13 @@ Fresh install setup
 raspbi-config
 enable SPI, I2C, Serial (NO LOGIN SHELL)
 
+sudo apt install git
+
 set up ssh:
 ssh-keygen
 copy PC pub key to rpi ~/.ssh/authorized_keys
 
----
+-------------
 # use sudo -E to preserve environmental variables for python3
 
 sudo apt-get install i2c-tools
@@ -22,17 +24,6 @@ sudo dfu-util --device ,0483:df11 -a 0 -D ~/usb4vc/firmware/PBFW_ADB_PBID2_V0_1_
 
 --------------
 
-Serial setup:
-
-serial clock is tied to GPU clock, need to fix it for it to be stable
-
-sudo nano /boot/config.txt, add:
-gpu_freq=250
-gpu_freq_min=250
-
-also, use /dev/serial0 to maintain compatibility for all models of pi
-
---------------
 Luma OLED driver
 
 https://luma-oled.readthedocs.io/en/latest/software.html
@@ -40,33 +31,12 @@ sudo apt-get update
 sudo apt-get install python3 python3-pip python3-pil libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5 -y
 sudo -H pip3 install luma.oled
 
---------------
-Nintendo Pro controller
-https://retropie.org.uk/docs/Nintendo-Switch-Controllers/
-
-sudo apt install git
-sudo apt install dkms
-sudo apt-get install libudev-dev
-sudo apt-get install libevdev-dev
-
-git clone https://github.com/nicman23/dkms-hid-nintendo
-cd dkms-hid-nintendo
-sudo dkms add .
-sudo dkms build nintendo -v 3.2
-sudo dkms install nintendo -v 3.2
-
-git clone https://github.com/DanielOgorchock/joycond.git
-cd joycond
-cmake .
-sudo make install
-sudo systemctl enable --now joycond
 -------------------
 remove CTRL+ALT+DELETE reboot
 
 sudo rm /lib/systemd/system/ctrl-alt-del.target
 sudo ln -s /dev/null /lib/systemd/system/ctrl-alt-del.target
 sudo systemctl daemon-reload
-
 -------------------
 
 run script on launch:
@@ -83,6 +53,7 @@ sudo nano /etc/rc.local
 
 echo 1 > /sys/module/bluetooth/parameters/disable_ertm
 cd /home/pi/usb4vc/rpi_app; python3 keep_alive.py 2>&1 | tee -a /home/pi/usb4vc/usb4vc_debug_log.txt &
+
 kill -SIGINT pid
 
 -----------
@@ -91,30 +62,6 @@ xbox one bluetooth driver
 https://github.com/atar-axis/xpadneo
 
 echo 'options bluetooth disable_ertm=Y' | sudo tee -a /etc/modprobe.d/bluetooth.conf
-
----------------
-
-relaunch if exits:
-
-while true; do echo think; sleep 1; done
-
----------
-
-serial format:
-
-U4 CMD_TYPE PAYLOAD
-
-U4 header, any command not beginning with U4 is ignored
-
-CMD TYPE:
-SC: Shell Command, execute whatever follows in shell
-RF: Read File
-WF: Write File
-GG: get gamepad file
-QUIT: quit program
-
-U4 RF /home/pi/usb4vc_data/config.json
-U4 WF /home/pi/usb4vc_data/test.txt c3NoIHBpQDE5Mi4xNjguMS41Ng==
 
 ------------
 boot speedup:
@@ -165,4 +112,64 @@ usb4vc_data
 		naming format: PBFW_IBMPC_PBID1_V0_1_0.dfu
 	config
 		config and mapping files
-		
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx NO LONGER NEEDED xxxxxxxxxxxxxxxxxxxxxxxx
+
+--------------
+Nintendo Pro controller
+https://retropie.org.uk/docs/Nintendo-Switch-Controllers/
+
+sudo apt install git
+sudo apt install dkms
+sudo apt-get install libudev-dev
+sudo apt-get install libevdev-dev
+
+git clone https://github.com/nicman23/dkms-hid-nintendo
+cd dkms-hid-nintendo
+sudo dkms add .
+sudo dkms build nintendo -v 3.2
+sudo dkms install nintendo -v 3.2
+
+git clone https://github.com/DanielOgorchock/joycond.git
+cd joycond
+cmake .
+sudo make install
+sudo systemctl enable --now joycond
+
+----------------------
+
+Serial setup:
+
+serial clock is tied to GPU clock, need to fix it for it to be stable
+
+sudo nano /boot/config.txt, add:
+gpu_freq=250
+gpu_freq_min=250
+
+also, use /dev/serial0 to maintain compatibility for all models of pi
+
+--------------
+
+relaunch if exits:
+
+while true; do echo think; sleep 1; done
+
+
+---------
+
+serial format:
+
+U4 CMD_TYPE PAYLOAD
+
+U4 header, any command not beginning with U4 is ignored
+
+CMD TYPE:
+SC: Shell Command, execute whatever follows in shell
+RF: Read File
+WF: Write File
+GG: get gamepad file
+QUIT: quit program
+
+U4 RF /home/pi/usb4vc_data/config.json
+U4 WF /home/pi/usb4vc_data/test.txt c3NoIHBpQDE5Mi4xNjguMS41Ng==
