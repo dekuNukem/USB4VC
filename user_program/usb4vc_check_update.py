@@ -95,6 +95,23 @@ def update(temp_path):
     os.system(f'cp -fv {os.path.join(src_code_path, "*")} {this_app_dir_path}')
     return 0, 'Success'
 
+firmware_url = 'https://api.github.com/repos/dekuNukem/USB4VC/contents/firmware/releases?ref=master'
+
+# version number most recent to least recent
+# dont for get to check extension
+def get_firmware_list(pcard_id):
+    try:
+        file_list = json.loads(urllib.request.urlopen(firmware_url).read())
+        fw_list = [x['name'] for x in file_list if 'name' in x and 'type' in x and x['type'] == 'file']
+        fw_list = [d for d in fw_list if d.startswith('PBFW') and d.lower() and f"PBID{pcard_id}" in d]
+        fw_list.sort(key=lambda s: list(map(int, s.lower().split('_v')[1].split('.')[0].replace('_', '.').split('.'))), reverse=True)
+    except Exception as e:
+        print('get_firmware_list:', e)
+        return []
+    return fw_list
+
+print(get_firmware_list(1))
+
 # print(update(temp_dir_path))
 # print(get_usb4vc_update(temp_dir_path))
 # print(get_remote_tag_version() >= RPI_APP_VERSION_TUPLE)

@@ -1,3 +1,9 @@
+        print(fw_list[0].split('_V')[1].split('.')[0].replace('_', '.'))
+        fw_list.append('PBFW_IBMPC_PBID1_V0_1_6.hex')
+        fw_list.append('PBFW_IBMPC_PBID1_V0_1_1.hex')
+        fw_list.append('PBFW_IBMPC_PBID1_V0_0_3.hex')
+        fw_list.append('PBFW_IBMPC_PBID1_V1_0_3.hex')
+
 -----------
 
 
