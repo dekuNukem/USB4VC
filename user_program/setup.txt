@@ -74,20 +74,6 @@ sudo nano /boot/cmdline.txt
 
 Add quiet after rootwait
 
-raspberry pi 3
-before speedup:
-
-19.16
-18.07
-19.11
-18.37
-
-
-after speedup:
-
-16.95
-16.45
-
 -------------
 
 usb auto mount:
@@ -97,6 +83,15 @@ sudo apt install usbmount
 sudo nano /lib/systemd/system/systemd-udevd.service
 
 change to PrivateMounts=no
+
+-----------
+
+zero out free space to compress better:
+
+cat /dev/zero > ./zero.file
+wait until it exits
+sync
+rm zero.file
 
 -----------
 
@@ -116,6 +111,19 @@ usb4vc_data
 
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx NO LONGER NEEDED xxxxxxxxxxxxxxxxxxxxxxxx
 
+raspberry pi 3
+before speedup:
+
+19.16
+18.07
+19.11
+18.37
+
+
+after speedup:
+
+16.95
+16.45
 --------------
 Nintendo Pro controller
 https://retropie.org.uk/docs/Nintendo-Switch-Controllers/
