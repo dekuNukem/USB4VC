@@ -136,8 +136,9 @@ def download_latest_firmware(pcard_id):
         return 2
     return 0
 
+# print(get_remote_tag_version()[1], RPI_APP_VERSION_TUPLE)
+# print(get_remote_tag_version()[1] > RPI_APP_VERSION_TUPLE)
 # print(download_latest_firmware(1))
-
 # print(update(temp_dir_path))
 # print(get_usb4vc_update(temp_dir_path))
 # print(get_remote_tag_version() >= RPI_APP_VERSION_TUPLE)

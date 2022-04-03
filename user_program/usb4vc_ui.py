@@ -694,6 +694,8 @@ class usb4vc_menu(object):
                     os._exit(0)
                 self.goto_level(0)
             elif page == 3:
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Updating...", usb4vc_oled.font_medium, 10, draw)
                 fffff = usb4vc_check_update.download_latest_firmware(this_pboard_id)
                 if fffff != 0:
                     with canvas(usb4vc_oled.oled_device) as draw:
@@ -716,9 +718,9 @@ class usb4vc_menu(object):
                         usb4vc_oled.oled_print_centered("Relaunching...", usb4vc_oled.font_medium, 16, draw)
                 else:
                     with canvas(usb4vc_oled.oled_device) as draw:
-                        usb4vc_oled.oled_print_centered("Update failed!", usb4vc_oled.font_medium, 0, draw)
-                        usb4vc_oled.oled_print_centered(f"Err: {update_result[-1]}", usb4vc_oled.font_regular, 16, draw)
-                time.sleep(3.5)
+                        usb4vc_oled.oled_print_centered("Update failed:", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered(f"{update_result[-1]}", usb4vc_oled.font_regular, 16, draw)
+                time.sleep(4)
                 usb4vc_oled.oled_device.clear()
                 os._exit(0)
             elif page == 4:
