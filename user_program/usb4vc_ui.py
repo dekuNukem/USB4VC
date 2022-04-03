@@ -413,7 +413,7 @@ def load_config():
     except Exception as e:
         print("exception config load failed!", e)
 
-def get_ip_name():
+def get_ip_address():
     ip_str = subprocess.getoutput("timeout 1 hostname -I")
     ip_list = [x for x in ip_str.split(' ') if '.' in x]
     if len(ip_list) == 0:
@@ -507,7 +507,7 @@ class usb4vc_menu(object):
                     else:
                         draw.text((0, 0), f"{self.pb_info['full_name']}", font=usb4vc_oled.font_regular, fill="white")
                     draw.text((0, 10), f"PB {self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  RPi {usb4vc_shared.RPI_APP_VERSION_TUPLE[0]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[1]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[2]}", font=usb4vc_oled.font_regular, fill="white")
-                    draw.text((0, 20), f"IP: {get_ip_name()}", font=usb4vc_oled.font_regular, fill="white")
+                    draw.text((0, 20), f"IP: {get_ip_address()}", font=usb4vc_oled.font_regular, fill="white")
             if page == 2:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Load Custom", usb4vc_oled.font_medium, 0, draw)
@@ -802,7 +802,8 @@ class usb4vc_menu(object):
                 os._exit(0)
             if page == 2:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Rebooting...", usb4vc_oled.font_medium, 10, draw)
+                    usb4vc_oled.oled_print_centered("Rebooting...", usb4vc_oled.font_medium, 0, draw)
+                    usb4vc_oled.oled_print_centered("Unplug if stuck >10s", usb4vc_oled.font_regular, 16, draw)
                 os.system("sudo reboot")
                 while 1:
                     time.sleep(1)
@@ -814,7 +815,7 @@ class usb4vc_menu(object):
         self.display_curent_page()
 
     def action_current_page(self):
-        self.action(self.current_level, self.current_page);
+        self.action(self.current_level, self.current_page)
 
     def display_curent_page(self):
         self.display_page(self.current_level, self.current_page)
@@ -822,6 +823,10 @@ class usb4vc_menu(object):
     def update_usb_status(self):
         if self.current_level == 0 and self.current_page == 0:
             self.display_page(0, 0)
+
+    def update_board_status(self):
+        if self.current_level == 0 and self.current_page == 1:
+            self.display_page(0, 1)
 
 pboard_database = {
     PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown', 'hw_rev':0, 'protocol_list_keyboard':raw_keyboard_protocols, 'protocol_list_mouse':raw_mouse_protocols, 'protocol_list_gamepad':raw_gamepad_protocols},
@@ -912,7 +917,8 @@ def ui_worker():
         time.sleep(0.1)
         my_oled.ui_loop_count += 1
         if my_oled.is_sleeping is False and my_oled.ui_loop_count % 5 == 0:
-            my_menu.update_usb_status();
+            my_menu.update_usb_status()
+            my_menu.update_board_status()
 
         if plus_button.is_pressed():
             my_oled.kick()
@@ -961,5 +967,10 @@ def oled_print_model_changed():
 def oled_print_oneline(msg):
     with canvas(usb4vc_oled.oled_device) as draw:
         usb4vc_oled.oled_print_centered(msg, usb4vc_oled.font_medium, 10, draw)
+
+def oled_print_reboot():
+    with canvas(usb4vc_oled.oled_device) as draw:
+        usb4vc_oled.oled_print_centered("Done! Rebooting..", usb4vc_oled.font_medium, 0, draw)
+        usb4vc_oled.oled_print_centered("Unplug if stuck >10s", usb4vc_oled.font_regular, 16, draw)
 
 ui_thread = threading.Thread(target=ui_worker, daemon=True)

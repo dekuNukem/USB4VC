@@ -50,7 +50,7 @@ def check_rpi_model():
         os.system("cd /home/pi/xpadneo/; sudo ./uninstall.sh")
         usb4vc_ui.oled_print_oneline("Recompiling...")
         os.system("cd /home/pi/xpadneo/; sudo ./install.sh")
-        usb4vc_ui.oled_print_oneline("Done! Rebooting..")
+        usb4vc_ui.oled_print_reboot()
         save_rpi_model(current_model)
         time.sleep(2)
         os.system('sudo reboot')
