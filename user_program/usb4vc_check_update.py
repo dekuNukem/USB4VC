@@ -98,7 +98,7 @@ def update(temp_path):
 firmware_url = 'https://api.github.com/repos/dekuNukem/USB4VC/contents/firmware/releases?ref=master'
 
 # version number most recent to least recent
-# dont for get to check extension
+# dont forget to check extension
 def get_firmware_list(pcard_id):
     try:
         file_list = json.loads(urllib.request.urlopen(firmware_url).read())
@@ -110,7 +110,29 @@ def get_firmware_list(pcard_id):
         return []
     return fw_list
 
-print(get_firmware_list(1))
+def download_latest_firmware(pcard_id):
+    fw_list = get_firmware_list(pcard_id)
+    if pcard_id == 2:
+        fw_list = [x for x in fw_list if x.lower().endswith('.dfu')]
+    else:
+        fw_list = [x for x in fw_list if x.lower().endswith('.hex')]
+    if len(fw_list) == 0:
+        return 1
+    fw_filename = fw_list[0]
+    fw_download_url = f"https://github.com/dekuNukem/USB4VC/raw/master/firmware/releases/{fw_filename}"
+    ensure_dir(firmware_dir_path)
+    os.system(f'rm -rfv {os.path.join(firmware_dir_path, "*")}')
+    print("downloading", fw_download_url)
+    fw_download_path = os.path.join(firmware_dir_path, fw_filename)
+    try:
+        with open(fw_download_path, 'wb') as out_file:
+            content = requests.get(fw_download_url, timeout=5).content
+            out_file.write(content)
+    except Exception as e:
+        return 2
+    return 0
+
+print(download_latest_firmware(1))
 
 # print(update(temp_dir_path))
 # print(get_usb4vc_update(temp_dir_path))
