@@ -5,12 +5,15 @@ config_dir_path = "/home/pi/usb4vc/config"
 firmware_dir_path = "/home/pi/usb4vc/firmware"
 temp_dir_path = "/home/pi/usb4vc/temp"
 
+i2c_bootloader_pbid = [1]
+usb_bootloader_pbid = [2]
+
 def ensure_dir(dir_path):
     print('ensure_dir', dir_path)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
-RPI_APP_VERSION_TUPLE = (0, 0, 8)
+RPI_APP_VERSION_TUPLE = (0, 1, 0)
 
 code_name_to_value_lookup = {
 	'KEY_RESERVED':(0, 'kb_key'),

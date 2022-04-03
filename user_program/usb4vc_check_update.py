@@ -13,6 +13,8 @@ from usb4vc_shared import config_dir_path
 from usb4vc_shared import firmware_dir_path
 from usb4vc_shared import temp_dir_path
 from usb4vc_shared import ensure_dir
+from usb4vc_shared import i2c_bootloader_pbid
+from usb4vc_shared import usb_bootloader_pbid
 
 usb4vc_release_url = "https://api.github.com/repos/dekuNukem/usb4vc/releases/latest"
 
@@ -93,6 +95,7 @@ def update(temp_path):
         return 5, f'Unknown error: {e}'
     os.system(f'rm -rfv {os.path.join(this_app_dir_path, "*")}')
     os.system(f'cp -fv {os.path.join(src_code_path, "*")} {this_app_dir_path}')
+    os.system(f'chown pi {os.path.join(this_app_dir_path, "*")}') # change owner from root back to pi for easy editing
     return 0, 'Success'
 
 firmware_url = 'https://api.github.com/repos/dekuNukem/USB4VC/contents/firmware/releases?ref=master'
@@ -112,7 +115,7 @@ def get_firmware_list(pcard_id):
 
 def download_latest_firmware(pcard_id):
     fw_list = get_firmware_list(pcard_id)
-    if pcard_id == 2:
+    if pcard_id in usb_bootloader_pbid:
         fw_list = [x for x in fw_list if x.lower().endswith('.dfu')]
     else:
         fw_list = [x for x in fw_list if x.lower().endswith('.hex')]
@@ -129,10 +132,11 @@ def download_latest_firmware(pcard_id):
             content = requests.get(fw_download_url, timeout=5).content
             out_file.write(content)
     except Exception as e:
+        print('exception download_latest_firmware:', e)
         return 2
     return 0
 
-print(download_latest_firmware(1))
+# print(download_latest_firmware(1))
 
 # print(update(temp_dir_path))
 # print(get_usb4vc_update(temp_dir_path))

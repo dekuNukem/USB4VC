@@ -20,6 +20,8 @@ from usb4vc_shared import config_dir_path
 from usb4vc_shared import firmware_dir_path
 from usb4vc_shared import temp_dir_path
 from usb4vc_shared import ensure_dir
+from usb4vc_shared import i2c_bootloader_pbid
+from usb4vc_shared import usb_bootloader_pbid
 
 config_file_path = os.path.join(config_dir_path, 'config.json')
 
@@ -189,19 +191,12 @@ def check_usb_drive():
         return False, 'USB Drive Not Found'
 
     for this_path in usb_drive_set:
-        usb_rpi_src_path = os.path.join(this_path, 'rpi_app')
-        usb_firmware_path = os.path.join(this_path, 'firmware')
         usb_config_path = os.path.join(this_path, 'config')
-
-        if not os.path.isdir(usb_rpi_src_path):
-            usb_rpi_src_path = None
-        if not os.path.isdir(usb_firmware_path):
-            usb_firmware_path = None
         if not os.path.isdir(usb_config_path):
             usb_config_path = None
 
-        if usb_rpi_src_path or usb_firmware_path or usb_config_path:
-            return True, (usb_rpi_src_path, usb_firmware_path, usb_config_path)
+        if usb_config_path is not None:
+            return True, usb_config_path
 
     return False, 'No Update Data Found'
 
@@ -213,14 +208,11 @@ def get_pbid_and_version(dfu_file_name):
         print("exception fw pbid parse:", e)
     fw_ver_tuple = None
     try:
-        fw_ver = dfu_file_name.split('_V')[-1].split('.')[0].split('_')
+        fw_ver = dfu_file_name.lower().split('_v')[-1].split('.')[0].split('_')
         fw_ver_tuple = (int(fw_ver[0]), int(fw_ver[1]), int(fw_ver[2]))
     except Exception as e:
         print('exception fw ver parse:', e)
     return pbid, fw_ver_tuple
-
-i2c_bootloader_pbid = [1]
-usb_bootloader_pbid = [2]
 
 def reset_pboard():
     print("resetting protocol board...")
@@ -277,36 +269,25 @@ def fw_update(fw_path, pbid):
     exit_dfu()
     return is_updated
     
-def update_pboard_firmware():
+def update_pboard_firmware(this_pid):
     onlyfiles = [f for f in os.listdir(firmware_dir_path) if os.path.isfile(os.path.join(firmware_dir_path, f))]
     firmware_files = [x for x in onlyfiles if x.startswith("PBFW_") and (x.lower().endswith(".dfu") or x.lower().endswith(".hex")) and "PBID" in x]
-    this_pboard_id = pboard_info_spi_msg[3]
     this_pboard_version_tuple = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
     for item in firmware_files:
         pbid, fw_ver_tuple = get_pbid_and_version(item)
         if pbid is None or fw_ver_tuple is None:
             continue
-        print('update_pboard_firmware:', this_pboard_id, this_pboard_version_tuple, fw_ver_tuple)
-        if pbid == this_pboard_id and fw_ver_tuple > this_pboard_version_tuple:
+        print('update_pboard_firmware:', this_pid, this_pboard_version_tuple, fw_ver_tuple)
+        if pbid == this_pid and fw_ver_tuple > this_pboard_version_tuple:
             print("DOING IT NOW")
             with canvas(usb4vc_oled.oled_device) as draw:
                 usb4vc_oled.oled_print_centered("Loading Firmware:", usb4vc_oled.font_medium, 0, draw)
                 usb4vc_oled.oled_print_centered(item.strip("PBFW_").strip(".dfu").strip(".hex"), usb4vc_oled.font_regular, 16, draw)
-            
-            if fw_update(os.path.join(firmware_dir_path, item), this_pboard_id):
-                time.sleep(1)
-                return
+            if fw_update(os.path.join(firmware_dir_path, item), this_pid):
+                return True
+    return False
 
-def update_from_usb(usb_rpi_src_path, usb_firmware_path, usb_config_path):
-    if usb_firmware_path is not None:
-        os.system('rm -rfv /home/pi/usb4vc/firmware/*')
-        os.system(f"cp -v {os.path.join(usb_firmware_path, '*')} /home/pi/usb4vc/firmware")
-        update_pboard_firmware()
-
-    if usb_rpi_src_path is not None:
-        os.system('rm -rfv /home/pi/usb4vc/rpi_app/*')
-        os.system(f"cp -v {os.path.join(usb_rpi_src_path, '*')} /home/pi/usb4vc/rpi_app")
-
+def update_from_usb(usb_config_path):
     if usb_config_path is not None:
         os.system(f'cp -v /home/pi/usb4vc/config/config.json {usb_config_path}')
         os.system('mv -v /home/pi/usb4vc/config/config.json /home/pi/usb4vc/config.json')
@@ -530,7 +511,7 @@ class usb4vc_menu(object):
             if page == 2:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Load Custom", usb4vc_oled.font_medium, 0, draw)
-                    usb4vc_oled.oled_print_centered("Mapping from USB", usb4vc_oled.font_medium, 16, draw)
+                    usb4vc_oled.oled_print_centered("Config from USB", usb4vc_oled.font_medium, 16, draw)
             if page == 3:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Internet Update", usb4vc_oled.font_medium, 10, draw)
@@ -687,34 +668,59 @@ class usb4vc_menu(object):
     def action(self, level, page):
         if level == 0:
             if page == 2:
-                if copy_debug_log():
-                    with canvas(usb4vc_oled.oled_device) as draw:
-                        usb4vc_oled.oled_print_centered("Copying", usb4vc_oled.font_medium, 0, draw)
-                        usb4vc_oled.oled_print_centered("Debug Log...", usb4vc_oled.font_medium, 16, draw)
-                    time.sleep(2)
-                usb_present, result = check_usb_drive()
+                usb_present, config_path = check_usb_drive()
                 if usb_present is False:
                     with canvas(usb4vc_oled.oled_device) as draw:
                         usb4vc_oled.oled_print_centered("Error:", usb4vc_oled.font_medium, 0, draw)
-                        usb4vc_oled.oled_print_centered(result, usb4vc_oled.font_regular, 16, draw)
+                        usb4vc_oled.oled_print_centered(str(config_path), usb4vc_oled.font_regular, 16, draw)
                     time.sleep(3)
                     self.goto_level(0)
                 else:
                     with canvas(usb4vc_oled.oled_device) as draw:
-                        usb4vc_oled.oled_print_centered("Updating...", usb4vc_oled.font_medium, 10, draw)
+                        usb4vc_oled.oled_print_centered("Copying", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered("Debug Log...", usb4vc_oled.font_medium, 16, draw)
+                    copy_debug_log()
                     time.sleep(2)
-                    update_from_usb(*result)
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("Copying custom", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered("mapping...", usb4vc_oled.font_medium, 16, draw)
+                    time.sleep(2)
+                    update_from_usb(config_path)
                     with canvas(usb4vc_oled.oled_device) as draw:
                         usb4vc_oled.oled_print_centered("Update complete!", usb4vc_oled.font_medium, 0, draw)
                         usb4vc_oled.oled_print_centered("Relaunching...", usb4vc_oled.font_medium, 16, draw)
                     time.sleep(3)
                     usb4vc_oled.oled_device.clear()
                     os._exit(0)
-            elif page == 3:
-                print("INTERNET UPDATE")
-                usb4vc_check_update.download_latest_firmware(pboard_info_spi_msg[3])
-                update_pboard_firmware()
                 self.goto_level(0)
+            elif page == 3:
+                fffff = usb4vc_check_update.download_latest_firmware(this_pboard_id)
+                if fffff != 0:
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("Unable to download", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered(f"firmware: {fffff}", usb4vc_oled.font_medium, 16, draw)
+                elif update_pboard_firmware(this_pboard_id):
+                        with canvas(usb4vc_oled.oled_device) as draw:
+                            usb4vc_oled.oled_print_centered("Firmware updated!", usb4vc_oled.font_medium, 10, draw)
+                else:
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("FW update failed!", usb4vc_oled.font_medium, 10, draw)
+                time.sleep(3)
+                with canvas(usb4vc_oled.oled_device) as draw:
+                    usb4vc_oled.oled_print_centered("Updating code...", usb4vc_oled.font_medium, 10, draw)
+                time.sleep(1)
+                update_result = usb4vc_check_update.update(temp_dir_path)
+                if update_result[0] == 0:
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("Update complete!", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered("Relaunching...", usb4vc_oled.font_medium, 16, draw)
+                else:
+                    with canvas(usb4vc_oled.oled_device) as draw:
+                        usb4vc_oled.oled_print_centered("Update failed!", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered(f"Err: {update_result[-1]}", usb4vc_oled.font_regular, 16, draw)
+                time.sleep(3.5)
+                usb4vc_oled.oled_device.clear()
+                os._exit(0)
             elif page == 4:
                 try:
                     usb4vc_show_ev.ev_loop([plus_button, minus_button, enter_button])
