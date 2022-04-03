@@ -278,8 +278,7 @@ def fw_update(fw_path, pbid):
     return is_updated
     
 def update_pboard_firmware():
-    pboard_firmware_path_local = '/home/pi/usb4vc/firmware'
-    onlyfiles = [f for f in os.listdir(pboard_firmware_path_local) if os.path.isfile(os.path.join(pboard_firmware_path_local, f))]
+    onlyfiles = [f for f in os.listdir(firmware_dir_path) if os.path.isfile(os.path.join(firmware_dir_path, f))]
     firmware_files = [x for x in onlyfiles if x.startswith("PBFW_") and (x.lower().endswith(".dfu") or x.lower().endswith(".hex")) and "PBID" in x]
     this_pboard_id = pboard_info_spi_msg[3]
     this_pboard_version_tuple = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
@@ -294,7 +293,7 @@ def update_pboard_firmware():
                 usb4vc_oled.oled_print_centered("Loading Firmware:", usb4vc_oled.font_medium, 0, draw)
                 usb4vc_oled.oled_print_centered(item.strip("PBFW_").strip(".dfu").strip(".hex"), usb4vc_oled.font_regular, 16, draw)
             
-            if fw_update(os.path.join(pboard_firmware_path_local, item), this_pboard_id):
+            if fw_update(os.path.join(firmware_dir_path, item), this_pboard_id):
                 time.sleep(1)
                 return
 
@@ -713,6 +712,8 @@ class usb4vc_menu(object):
                     os._exit(0)
             elif page == 3:
                 print("INTERNET UPDATE")
+                usb4vc_check_update.download_latest_firmware(pboard_info_spi_msg[3])
+                update_pboard_firmware()
                 self.goto_level(0)
             elif page == 4:
                 try:
