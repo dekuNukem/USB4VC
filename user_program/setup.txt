@@ -1,4 +1,11 @@
 -----------
+Preparing SD card image for public release:
+
+double check wpa_supplicant in /etc DOES NOT contain my own WiFi password
+Put BLANK wpa_supplicant.conf in /boot
+use the same base image for the same minor version, manually copy over the files, dont just dump the developement SD card.
+
+-----------
 Fresh install setup
 
 raspbi-config
