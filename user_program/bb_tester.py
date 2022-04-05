@@ -11,6 +11,8 @@ OLED_HEIGHT = 32
 
 my_arg = ['--display', 'ssd1306', '--interface', 'spi', '--spi-port', '0', '--spi-device', '1', '--gpio-reset', '6', '--gpio-data-command', '5', '--width', str(OLED_WIDTH), '--height', str(OLED_HEIGHT), '--spi-bus-speed', '2000000']
 oled_device = get_device(my_arg)
+time.sleep(0.5)
+oled_device = get_device(my_arg)
 
 font_regular = ImageFont.truetype("ProggyTiny.ttf", 16)
 font_medium = ImageFont.truetype("ChiKareGo2.ttf", 16)
@@ -45,6 +47,12 @@ PLUS_BUTTON_PIN = 27
 MINUS_BUTTON_PIN = 19
 ENTER_BUTTON_PIN = 22
 SHUTDOWN_BUTTON_PIN = 21
+PCARD_CS_PIN = 8
+SLEEP_LED_PIN = 26
+
+GPIO.setup(SLEEP_LED_PIN, GPIO.OUT)
+GPIO.output(SLEEP_LED_PIN, GPIO.LOW)
+GPIO.setup(PCARD_CS_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 plus_button = my_button(PLUS_BUTTON_PIN)
 minus_button = my_button(MINUS_BUTTON_PIN)
@@ -55,11 +63,14 @@ loop_count = 0
 def print_pattern():
     global loop_count
     loop_count = (loop_count + 1) % 2
+    oled_device = get_device(my_arg)
     if loop_count:
+        GPIO.output(SLEEP_LED_PIN, GPIO.HIGH)
         with canvas(oled_device) as draw:
             draw.text((0, 0), "ABCDEFGHIJKLMNO", font=font_medium, fill="white")
             draw.text((0, 15), "PQRSTUVWXYZ0123", font=font_medium, fill="white")
     else:
+        GPIO.output(SLEEP_LED_PIN, GPIO.LOW)
         with canvas(oled_device) as draw:
             draw.text((0, 0), "===================", font=font_medium, fill="white")
             draw.text((0, 15), "===================", font=font_medium, fill="white")
@@ -67,12 +78,12 @@ def print_pattern():
 print_pattern()
 
 while 1:
-    time.sleep(0.1)
-    if plus_button.is_pressed():
-        print_pattern()
-    if minus_button.is_pressed():
-        print_pattern()
-    if enter_button.is_pressed():
-        print_pattern()
-    if shutdown_button.is_pressed():
+    time.sleep(0.05)
+    if GPIO.input(PCARD_CS_PIN) == 0:
+        GPIO.output(SLEEP_LED_PIN, GPIO.LOW)
+        exit()
+    if plus_button.is_pressed() or \
+        minus_button.is_pressed() or \
+        enter_button.is_pressed() or \
+        shutdown_button.is_pressed():
         print_pattern()
