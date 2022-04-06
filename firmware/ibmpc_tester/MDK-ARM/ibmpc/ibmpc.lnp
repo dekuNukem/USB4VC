@@ -1,0 +1,27 @@
+--cpu Cortex-M0
+"ibmpc\startup_stm32f072xb.o"
+"ibmpc\mcp4451.o"
+"ibmpc\main.o"
+"ibmpc\stm32f0xx_it.o"
+"ibmpc\stm32f0xx_hal_msp.o"
+"ibmpc\stm32f0xx_hal_i2c.o"
+"ibmpc\stm32f0xx_hal_i2c_ex.o"
+"ibmpc\stm32f0xx_hal_tim.o"
+"ibmpc\stm32f0xx_hal_tim_ex.o"
+"ibmpc\stm32f0xx_hal_uart.o"
+"ibmpc\stm32f0xx_hal_uart_ex.o"
+"ibmpc\stm32f0xx_hal_rcc.o"
+"ibmpc\stm32f0xx_hal_rcc_ex.o"
+"ibmpc\stm32f0xx_hal.o"
+"ibmpc\stm32f0xx_hal_gpio.o"
+"ibmpc\stm32f0xx_hal_dma.o"
+"ibmpc\stm32f0xx_hal_cortex.o"
+"ibmpc\stm32f0xx_hal_pwr.o"
+"ibmpc\stm32f0xx_hal_pwr_ex.o"
+"ibmpc\stm32f0xx_hal_flash.o"
+"ibmpc\stm32f0xx_hal_flash_ex.o"
+"ibmpc\system_stm32f0xx.o"
+--library_type=microlib --strict --scatter "ibmpc\ibmpc.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "ibmpc.map" -o ibmpc\ibmpc.axf
