@@ -1,0 +1,1056 @@
+/* MadCap Table Style: */
+
+/*<meta Version="7" />*/
+
+@media DellPrint
+{
+	mcTableStyle
+	{
+		margin-left: 0in;
+		margin-right: 0in;
+		margin-top: 12pt;
+		margin-bottom: 12pt;
+		border-spacing-x: 0;
+		border-spacing-y: 0;
+		border-collapse: collapse;
+		border-left-color: #000000;
+		border-right-color: #000000;
+		border-top-color: #000000;
+		border-bottom-color: #000000;
+		border-top-style: solid;
+		border-top-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-width: 1px;
+		border-right-style: solid;
+		border-right-width: 1px;
+		border-left-style: solid;
+		border-left-width: 1px;
+		cell-padding-top: 4pt;
+		cell-padding-left: 7pt;
+		cell-padding-right: 4pt;
+		cell-padding-bottom: 7pt;
+		max-id: 5;
+	}
+
+	mcTableColumnStyle
+	{
+		separator-style: solid;
+		separator-width: 1px;
+		separator-color: #000000;
+	}
+
+	mcTableHeadStyle
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	mcTableBodyStyle
+	{
+		separator-style: solid;
+		separator-width: 1px;
+		separator-color: #000000;
+	}
+
+	mcTableFootStyle
+	{
+		
+	}
+}
+
+@media Dellnon-print
+{
+	mcTableStyle
+	{
+		margin-left: 0in;
+		margin-right: 0in;
+		margin-top: 12pt;
+		margin-bottom: 12pt;
+		border-spacing-x: 0;
+		border-spacing-y: 0;
+		border-collapse: collapse;
+		border-left-color: #000000;
+		border-right-color: #000000;
+		border-top-color: #000000;
+		border-bottom-color: #000000;
+		border-top-style: solid;
+		border-top-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-width: 1px;
+		border-right-style: solid;
+		border-right-width: 1px;
+		border-left-style: solid;
+		border-left-width: 1px;
+		cell-padding-top: 4pt;
+		cell-padding-left: 7pt;
+		cell-padding-right: 4pt;
+		cell-padding-bottom: 7pt;
+		max-id: 5;
+	}
+
+	mcTableColumnStyle
+	{
+		separator-style: solid;
+		separator-width: 1px;
+		separator-color: #000000;
+	}
+
+	mcTableHeadStyle
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	mcTableBodyStyle
+	{
+		separator-style: solid;
+		separator-width: 1px;
+		separator-color: #000000;
+	}
+
+	mcTableFootStyle
+	{
+		
+	}
+}
+
+mcTableStyle
+{
+	name: Aruba_Standard;
+	margin-left: 0in;
+	margin-right: 0in;
+	margin-top: 12pt;
+	margin-bottom: 12pt;
+	border-spacing-x: 0;
+	border-spacing-y: 0;
+	border-collapse: collapse;
+	border-left-color: #5289ae;
+	border-right-color: #5289ae;
+	border-top-color: #5289ae;
+	border-bottom-color: #5289ae;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-left-style: solid;
+	border-left-width: 1px;
+	cell-padding-top: 4pt;
+	cell-padding-left: 7pt;
+	cell-padding-right: 4pt;
+	cell-padding-bottom: 7pt;
+	max-id: 4;
+}
+
+mcTableColumnStyle
+{
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #5289ae;
+	ruler-style: solid;
+	ruler-width: 1px;
+	ruler-color: #5289ae;
+	name: Column1;
+	id: 0;
+}
+
+mcTableHeadStyle
+{
+	span: 1;
+	background-color: #5289ae;
+	separator-style: none;
+	separator-width: 1px;
+	separator-color: #5289ae;
+	name: Header1;
+	id: 3;
+	color: #ffffff;
+}
+
+mcTableBodyStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #5289ae;
+	ruler-style: solid;
+	ruler-width: 1px;
+	ruler-color: #5289ae;
+	name: Body1;
+	id: 1;
+}
+
+mcTableFootStyle
+{
+	name: Footer1;
+	id: 4;
+}
+
+
+/* Cell Styles: */
+ 
+@media DellPrint
+{
+	.TableStyle-Aruba_Standard
+	{
+		border-left-style: solid;
+		border-left-color: #000000;
+		border-left-width: 1px;
+		border-right-style: solid;
+		border-right-color: #000000;
+		border-right-width: 1px;
+		border-top-style: solid;
+		border-top-color: #000000;
+		border-top-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-color: #000000;
+		border-bottom-width: 1px;
+		border-spacing: 0px 0px;
+	}
+
+	.TableStyle-Aruba_Standard .HeadI-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadI-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadE-Column1-Header1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadE-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadF-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadF-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadH-Column1-Header1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadH-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadD-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadD-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadC-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadC-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadB-Column1-Header1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadB-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadA-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadA-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadG-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadG-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .FootE-Column1-Footer1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .FootH-Column1-Footer1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .FootB-Column1-Footer1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyE-Column1-Body1
+	{
+		border-bottom-width: 1px;
+		border-bottom-color: #000000;
+		border-bottom-style: solid;
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyF-Column1-Body1
+	{
+		border-bottom-width: 1px;
+		border-bottom-color: #000000;
+		border-bottom-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyH-Column1-Body1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyD-Column1-Body1
+	{
+		border-bottom-width: 1px;
+		border-bottom-color: #000000;
+		border-bottom-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyB-Column1-Body1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+}
+
+@media Dellnon-print
+{
+	.TableStyle-Aruba_Standard
+	{
+		border-left-style: solid;
+		border-left-color: #000000;
+		border-left-width: 1px;
+		border-right-style: solid;
+		border-right-color: #000000;
+		border-right-width: 1px;
+		border-top-style: solid;
+		border-top-color: #000000;
+		border-top-width: 1px;
+		border-bottom-style: solid;
+		border-bottom-color: #000000;
+		border-bottom-width: 1px;
+		border-spacing: 0px 0px;
+	}
+
+	.TableStyle-Aruba_Standard .HeadI-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadI-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadE-Column1-Header1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadE-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadF-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadF-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadH-Column1-Header1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadH-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadD-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadD-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadC-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadC-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadB-Column1-Header1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadB-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadA-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadA-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .HeadG-Column1-Header1
+	{
+		color: #ffffff;
+		background-color: #000000;
+	}
+
+	.TableStyle-Aruba_Standard .HeadG-Column1-Header1 p
+	{
+		color: #ffffff;
+	}
+
+	.TableStyle-Aruba_Standard .FootE-Column1-Footer1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .FootH-Column1-Footer1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .FootB-Column1-Footer1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyE-Column1-Body1
+	{
+		border-bottom-width: 1px;
+		border-bottom-color: #000000;
+		border-bottom-style: solid;
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyF-Column1-Body1
+	{
+		border-bottom-width: 1px;
+		border-bottom-color: #000000;
+		border-bottom-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyH-Column1-Body1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyD-Column1-Body1
+	{
+		border-bottom-width: 1px;
+		border-bottom-color: #000000;
+		border-bottom-style: solid;
+	}
+
+	.TableStyle-Aruba_Standard .BodyB-Column1-Body1
+	{
+		border-right-width: 1px;
+		border-right-color: #000000;
+		border-right-style: solid;
+	}
+}
+
+.TableStyle-Aruba_Standard
+{
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-color: #5289ae;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-right-color: #5289ae;
+	border-right-width: 1px;
+	border-top-style: solid;
+	border-top-color: #5289ae;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #5289ae;
+	border-bottom-width: 1px;
+	margin-left: 0in;
+	margin-right: 0in;
+	margin-top: 12pt;
+	margin-bottom: 12pt;
+	border-spacing: 0px 0px;
+}
+
+.TableStyle-Aruba_Standard .Column-Column1
+{
+	
+}
+
+.TableStyle-Aruba_Standard .Head-Header1
+{
+	
+}
+
+.TableStyle-Aruba_Standard .HeadI-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+	color: #ffffff;
+	background-color: #5289ae;
+}
+
+.TableStyle-Aruba_Standard .HeadI-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .HeadE-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+	color: #ffffff;
+	background-color: #5289ae;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: none;
+}
+
+.TableStyle-Aruba_Standard .HeadE-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .HeadF-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+	color: #ffffff;
+	background-color: #5289ae;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: none;
+}
+
+.TableStyle-Aruba_Standard .HeadF-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .HeadH-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+	color: #ffffff;
+	background-color: #5289ae;
+}
+
+.TableStyle-Aruba_Standard .HeadH-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .HeadD-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	color: #ffffff;
+	background-color: #5289ae;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: none;
+}
+
+.TableStyle-Aruba_Standard .HeadD-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .HeadC-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+	color: #ffffff;
+	background-color: #5289ae;
+}
+
+.TableStyle-Aruba_Standard .HeadC-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .HeadB-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+	color: #ffffff;
+	background-color: #5289ae;
+}
+
+.TableStyle-Aruba_Standard .HeadB-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .HeadA-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	color: #ffffff;
+	background-color: #5289ae;
+}
+
+.TableStyle-Aruba_Standard .HeadA-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .HeadG-Column1-Header1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	color: #ffffff;
+	background-color: #5289ae;
+}
+
+.TableStyle-Aruba_Standard .HeadG-Column1-Header1 p
+{
+	color: #ffffff;
+}
+
+.TableStyle-Aruba_Standard .Foot-Footer1
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootI-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .FootI-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootE-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .FootE-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootF-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .FootF-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootH-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .FootH-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootD-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+}
+
+.TableStyle-Aruba_Standard .FootD-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootC-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .FootC-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootB-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .FootB-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootA-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+}
+
+.TableStyle-Aruba_Standard .FootA-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .FootG-Column1-Footer1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+}
+
+.TableStyle-Aruba_Standard .FootG-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .Body-Body1
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyI-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: solid;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .BodyI-Column1-Body1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyE-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: solid;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .BodyE-Column1-Body1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyF-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: solid;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .BodyF-Column1-Body1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyH-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: solid;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .BodyH-Column1-Body1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyD-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Aruba_Standard .BodyD-Column1-Body1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyC-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .BodyC-Column1-Body1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyB-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-right-width: 1px;
+	border-right-color: #5289ae;
+	border-right-style: solid;
+}
+
+.TableStyle-Aruba_Standard .BodyB-Column1-Body1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyA-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+}
+
+.TableStyle-Aruba_Standard .BodyA-Column1-Body1 p
+{
+	
+}
+
+.TableStyle-Aruba_Standard .BodyG-Column1-Body1
+{
+	padding-left: 7pt;
+	padding-right: 4pt;
+	padding-top: 4pt;
+	padding-bottom: 7pt;
+	border-bottom-width: 1px;
+	border-bottom-color: #5289ae;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Aruba_Standard .BodyG-Column1-Body1 p
+{
+	
+}

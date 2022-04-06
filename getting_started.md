@@ -22,7 +22,7 @@ Please note that at the code is most likely NOT 100% bug free at the moment, so 
 
 It's a good idea to **burn an SD card with the latest updates** before using.
 
-You need a Micro SD card at least 4GB in size. A fast card will reduce boot time.
+You need a Micro SD card **at least 4GB** in size. A fast card will reduce boot time.
 
 [Download the latest boot image here](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
 
@@ -32,6 +32,22 @@ Select your SD card, then the image file, then press `START` to begin writing.
 
 ![Alt text](photos/rufus.png)
 
+## (Optional) Set up WiFi
+
+After writing the SD card, go to the drive named `boot`, and open up `wpa_supplicant.conf` with a proper text editor:
+
+![Alt text](photos/wpa.png)
+
+Edit the file with your WiFi information. You can find your [WiFi country code here](https://www.arubanetworks.com/techdocs/InstantWenger_Mobile/Advanced/Content/Instant%20User%20Guide%20-%20volumes/Country_Codes_List.htm)
+
+![Alt text](photos/wifi.png)
+
+This file will disappear once Raspberry Pi boots up. To connect to a different WiFi, **create a new file** with the same name under `boot` with updated information. [Here is a template](resources/wpa_supplicant.conf) you can use.
+
+## Kit Assembly
+
+Insert the SD card in your Raspberry Pi. Then [See this guide](/kit_assembly.md) to put everything together.
+
 ## Power Considerations
 
 A **high-quality power supply** is very important! It should provide **5 Volts** and at least **2 amps** of current.
@@ -40,37 +56,17 @@ An inadequate supply can result in failure to boot, unstable operation, glitches
 
 Check the cable too! Cheap ones tends to have unreliable connections and large voltage drops.
 
-## Test out Raspberry Pi
-
-It's a good idea to make sure your Raspberry Pi works first. 
-
-Insert SD card in Raspberry Pi, and hook it up to a monitor. No need for anything else.
-
-Power on, and it should boot and execute the program, showing a bunch of text.
-
-If you see `!!!!!!!!!! DO NOT UNPLUG UNTIL I REBOOT !!!!!!!!!!` on screen, **don't touch anything until it reboots**!
-
-![Alt text](photos/rpitest.jpeg)
-
-If it works, congrats! Wait until screen is idle and unplug.
-
-If not, make sure the power supply is sufficient, and the SD card image is burned properly.
-
-## Kit Assembly
-
-If your USB4VC hasn't been assembled yet, [see this guide](/kit_assembly.md) to put it together.
-
 ## Protocol Card Overview: IBM PC
 
 Let's take a quick look:
 
 ![Alt text](photos/ibmpcpc.jpeg)
 
-* All cables can be purchased in [my Tindie store](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/).
+* Cables can be purchased in [my Tindie store](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/).
 
-* For PS/2 keyboard and mouse, a **male to male** PS/2 cable is needed.
+* PS/2 keyboard and mouse need a **male to male** PS/2 cable.
 
-* For XT and AT keyboards, a **PS/2 female to AT male** adapter is needed.
+* XT and AT keyboards need a **PS/2 female to AT male** adapter.
 
 * The 9-Pin serial mouse requires a **female-to-female straight-through** cable.
 

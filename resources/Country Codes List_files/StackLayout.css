@@ -1,0 +1,319 @@
+/*<meta />*/
+
+#stackLayout ul
+{
+	list-style-image: none;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#stackLayout li.listRow
+{
+	padding-left: 10px;
+}
+
+/* Used to override "listRowHeading" properties */
+
+#stackLayout li.listRowHeading
+{
+	background-image: url("../Images/IndexHeadingBG.png");
+	color: White;
+}
+
+#stackLayout li.listRowHeading_Index
+{
+	background-image: url('../Images/IndexHeadingBG.png');
+}
+
+/**/
+
+#stackLayout li.listRowHeading_Glossary
+{
+	background-image: url('../Images/IndexHeadingBG.png');
+}
+
+/* IE 6 only */
+
+#stackLayout li.listRowItem
+{
+	border-bottom: solid 1px #E0E0E0;
+	padding-top: 11px;
+	padding-right: 29px;
+	padding-bottom: 11px;
+	position: relative;
+}
+
+/* Used to override "listRowItem" properties */
+
+* html #stackLayout li.listRowItem
+{
+	background-color: #ffffff;
+}
+
+#stackLayout li.listRowItem_Home-TOC
+{
+	
+}
+
+#stackLayout li.listRowItem_Home-Index
+{
+	
+}
+
+#stackLayout li.listRowItem_Home-Glossary
+{
+	
+}
+
+#stackLayout li.listRowItem_Home-BrowseSequences
+{
+	
+}
+
+#stackLayout li.listRowItem_Home-About
+{
+	
+}
+
+#stackLayout li.listRowItem_TOC
+{
+	
+}
+
+#stackLayout li.listRowItem_Index
+{
+	
+}
+
+#stackLayout li.listRowItem_Glossary
+{
+	
+}
+
+#stackLayout li.listRowItem_BrowseSequences
+{
+	
+}
+
+/**/
+
+#stackLayout li.listRowItem_Search
+{
+	
+}
+
+#stackLayout li h2
+{
+	margin: 0;
+	font-size: .9em;
+}
+
+/* Used to override "#stackLayout li a.rowLink" properties */
+
+#stackLayout li a.rowLink
+{
+	text-decoration: none;
+	color: #000000;
+}
+
+#stackLayout li a.rowLink_Home-TOC
+{
+	
+}
+
+#stackLayout li a.rowLink_Home-Index
+{
+	
+}
+
+#stackLayout li a.rowLink_Home-Glossary
+{
+	
+}
+
+#stackLayout li a.rowLink_Home-BrowseSequences
+{
+	
+}
+
+#stackLayout li a.rowLink_Home-About
+{
+	
+}
+
+#stackLayout li a.rowLink_TOC
+{
+	
+}
+
+#stackLayout li a.rowLink_Index
+{
+	
+}
+
+#stackLayout li a.rowLink_Glossary
+{
+	
+}
+
+#stackLayout li a.rowLink_BrowseSequences
+{
+	
+}
+
+/**/
+
+#stackLayout li a.rowLink_Search
+{
+	
+}
+
+.rowContent
+{
+	
+}
+
+/* Used to override ".rowTitle" properties */
+
+.rowTitle
+{
+	font-size: 20px;
+	font-weight: bold;
+	display: block;
+}
+
+.rowTitle_Home-TOC
+{
+	
+}
+
+.rowTitle_Home-Index
+{
+	
+}
+
+.rowTitle_Home-Glossary
+{
+	
+}
+
+.rowTitle_Home-BrowseSequences
+{
+	
+}
+
+.rowTitle_Home-About
+{
+	
+}
+
+.rowTitle_TOC
+{
+	
+}
+
+.rowTitle_Index
+{
+	
+}
+
+.rowTitle_Glossary
+{
+	
+}
+
+.rowTitle_BrowseSequences
+{
+	
+}
+
+/**/
+
+.rowTitle_Search
+{
+	
+}
+
+/* Used to override ".heading_rowTitle" properties */
+
+.heading_rowTitle
+{
+	line-height: 23px;
+}
+
+.heading_rowTitle_Index
+{
+	height: 23px;
+	line-height: 23px;
+}
+
+/**/
+
+.heading_rowTitle_Glossary
+{
+	height: 23px;
+	line-height: 23px;
+}
+
+/* IE 6 only */
+
+.rowArrow
+{
+	background-image: url("../Images/chevron.png");
+	width: 8px;
+	height: 13px;
+	position: absolute;
+	top: 50%;
+	right: 11px;
+	margin-top: -6.5px;
+}
+
+* html .rowArrow
+{
+	display: none;
+}
+
+/* Used to override ".childCount" properties */
+
+.childCount
+{
+	color: Gray;
+	margin-left: .5em;
+}
+
+.childCount_TOC
+{
+	
+}
+
+.childCount_Index
+{
+	
+}
+
+/**/
+
+.childCount_BrowseSequences
+{
+	
+}
+
+.rowDescription
+{
+	color: Gray;
+	font-size: 12px;
+}
+
+/* Search styles */
+
+.listLevel
+{
+	
+}
+
+.searchMessage
+{
+	padding-top: 1em;
+}
+

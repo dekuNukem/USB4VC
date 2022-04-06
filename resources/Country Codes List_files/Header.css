@@ -1,0 +1,145 @@
+/*<meta />*/
+
+body
+{
+	font-family: Arial;
+	margin: 0;
+	padding: 0;
+}
+
+#header
+{
+	text-align: center;
+}
+
+#header .headerTitle
+{
+	white-space: nowrap;
+	visibility: hidden;
+}
+
+#navigationContainer
+{
+	color: #FFFFFF;
+	font-size: 21px;
+	font-weight: bold;
+	height: 42px;
+	line-height: 42px;
+	position: relative;
+	overflow: hidden;
+	border-top: solid 1px #D8DFE7;
+	border-bottom: solid 1px #323C47;
+	background-image: url('../Images/header.png');
+}
+
+#searchContainer
+{
+	display: none;
+	background-color: #DFDFDF;
+	border-bottom: solid 1px #BBBBBB;
+	padding: 2px;
+	background-image: url('../Images/SearchBG.png');
+}
+
+#SearchPageBody #searchContainer
+{
+	display: block;
+}
+
+#searchForm
+{
+	margin: 0;
+}
+
+#searchField
+{
+	width: 125px;
+}
+
+#searchSubmit
+{
+	margin: 0px 0px 0px 4px;
+}
+
+.button
+{
+	text-decoration: none;
+	color: White;
+	font-size: 12px;
+	height: 30px;
+	line-height: 30px;
+	position: absolute;
+	top: 50%;
+	left: 5px;
+	margin-top: -15px;
+	margin-left: 5px;
+}
+
+/* Only necessary for IE */
+
+.buttonLeft
+{
+	font-size: 0px;
+	background-image: url("../Images/button_background_left.png");
+	width: 7px;
+	height: 30px;
+	float: left;
+	position: relative;
+	top: 0;
+}
+
+/* Only necessary for IE */
+
+.buttonLeft_Back
+{
+	font-size: 0px;
+	background-image: url("../Images/button_background_left_back.png");
+	width: 13px;
+	height: 30px;
+	float: left;
+	position: relative;
+	top: 0;
+}
+
+.buttonCenter
+{
+	background-image: url("../Images/button_background_center.png");
+	float: left;
+	height: 30px;
+	position: relative;
+	top: 0;
+}
+
+/* Only necessary for IE */
+
+.buttonRight
+{
+	font-size: 0px;
+	background-image: url("../Images/button_background_right.png");
+	width: 7px;
+	height: 30px;
+	float: left;
+	position: relative;
+	top: 0;
+}
+
+#content
+{
+	
+}
+
+#AboutBoxContainer
+{
+	position: relative;
+	height: 248px;
+}
+
+#AboutBox
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -124px;
+	margin-left: -125px;
+}
+

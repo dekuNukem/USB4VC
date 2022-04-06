@@ -1,3 +1,20 @@
+## Test out Raspberry Pi
+
+It's a good idea to make sure your Raspberry Pi works first. 
+
+Insert SD card in Raspberry Pi, and hook it up to a monitor. No need for anything else.
+
+Power on, and it should boot and execute the program, showing a bunch of text.
+
+If you see `!!!!!!!!!! DO NOT UNPLUG UNTIL I REBOOT !!!!!!!!!!` on screen, **don't touch anything until it reboots**!
+
+![Alt text](photos/rpitest.jpeg)
+
+If it works, congrats! Wait until screen is idle and unplug.
+
+If not, make sure the power supply is sufficient, and the SD card image is burned properly.
+
+
         print(fw_list[0].split('_V')[1].split('.')[0].replace('_', '.'))
         fw_list.append('PBFW_IBMPC_PBID1_V0_1_6.hex')
         fw_list.append('PBFW_IBMPC_PBID1_V0_1_1.hex')
