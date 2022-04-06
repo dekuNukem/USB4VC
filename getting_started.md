@@ -206,11 +206,13 @@ You can even have it **control mouse and keyboard**, in order to play games that
 
 Under construction ...
 
+Basically make sure RPi is connected to internet, and select `Internet Update` in main menu.
+
 ## Tinkering Guide / Making Your Own Protocol Card / Techincal Details
 
-Tinkering Guide is under construction ...
+[Click me to for techincal details and make-your-own protocol card instructions!](technical_notes.md)
 
-[Click me to for techincal details and guide on making your own protocol card!](technical_notes.md)
+Tinkering Guide is under construction ...
 
 ## Powering Off/On
 
