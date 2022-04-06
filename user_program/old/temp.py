@@ -1,3 +1,20 @@
+## Manual Software Updates
+
+You should use [the configurator software](https://github.com/dekuNukem/usb4vc-configurator/blob/master/README.md) for updates. But here's how to do it by hand.
+
+[Download the latest USB update for flash drives](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
+
+Get a USB flash drive, format it in FAT32, then drag the `usb4vc` folder to the `root level` of the drive:
+
+![Alt text](photos/usbdisk.png)
+
+Insert the drive into Raspberry Pi, and select `Update via USB Flashdrive` in the main menu.
+
+![Alt text](photos/usboled.jpeg)
+
+It will update the source code, configuration, and Protocol Card firmware to the latest version.
+
+
 ## Test out Raspberry Pi
 
 It's a good idea to make sure your Raspberry Pi works first. 

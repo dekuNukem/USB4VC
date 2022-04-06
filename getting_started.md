@@ -20,8 +20,6 @@ Please note that at the code is most likely NOT 100% bug free at the moment, so 
 
 ## Prepare SD card
 
-It's a good idea to **burn an SD card with the latest updates** before using.
-
 You need a Micro SD card **at least 4GB** in size. A fast card will reduce boot time.
 
 [Download the latest boot image here](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
@@ -38,7 +36,7 @@ After writing the SD card, go to the drive named `boot`, and open up `wpa_suppli
 
 ![Alt text](photos/wpa.png)
 
-Edit the file with your WiFi information. You can find your [WiFi country code here](https://www.arubanetworks.com/techdocs/InstantWenger_Mobile/Advanced/Content/Instant%20User%20Guide%20-%20volumes/Country_Codes_List.htm)
+Edit the file with your WiFi information. You can find your [WiFi country code here.](https://www.arubanetworks.com/techdocs/InstantWenger_Mobile/Advanced/Content/Instant%20User%20Guide%20-%20volumes/Country_Codes_List.htm)
 
 ![Alt text](photos/wifi.png)
 
@@ -136,9 +134,9 @@ Put your device in Pairing mode, and press enter to start scanning.
 
 After a while, a list of found devices is shown. If your device does not appear, try scanning again.
 
-![Alt text](photos/found.jpeg)
-
 Use `+` / `-` to select one, and `enter` button to pair.
+
+![Alt text](photos/found.jpeg)
 
 Pairing result will be shown. From my experience Bluetooth Mouse/Keyboards are usually fine, but Bluetooth gamepads can be a bit temperamental sometimes. If error occurs, try rebooting the BT device and/or USB4VC.
 
@@ -176,7 +174,7 @@ With **officially supported controllers**, the mapping is:
 
 * 4 face buttons to 4 gameport buttons
 
-* Left and right shoulder button to gameport button 1 & 2.
+* Left and right shoulder button to gameport button 3 & 4.
 
 * Left Stick to gameport Joystick 1.
 
@@ -204,6 +202,16 @@ You can even have it **control mouse and keyboard**, in order to play games that
 
 [Download the configurator](https://github.com/dekuNukem/usb4vc-configurator/blob/master/README.md) and follow the instruction to set it up.
 
+## Software Updates
+
+Under construction ...
+
+## Tinkering Guide / Making Your Own Protocol Card / Techincal Details
+
+Tinkering Guide is under construction ...
+
+[Click me to for techincal details and guide on making your own protocol card!](technical_notes.md)
+
 ## Powering Off/On
 
 You can turn off/reboot the Raspberry Pi by pressing the `POWER OFF` button.
@@ -218,7 +226,7 @@ Here are a couple of bugs and issues that I am aware of, and the corresponding c
 
 #### Boot time can be faster
 
-* Currently it takes about 15 seconds to boot with a decent SD card.
+* Currently it takes about 17 seconds to boot with a decent SD card.
 
 * Might look into disabling some services to speed it up.
 
@@ -230,7 +238,7 @@ Here are a couple of bugs and issues that I am aware of, and the corresponding c
 
 * I haven't noticed any apparent damage, but it's probably not a good idea.
 
-* Make sure to power on USB4VC before the computer. (this is what you should do anyway)
+* Make sure to power on USB4VC **BEFORE** the computer. (this is what you should do anyway)
 
 #### ADB Collision Resolution
 
@@ -239,22 +247,6 @@ Here are a couple of bugs and issues that I am aware of, and the corresponding c
 * Issues might arise **ONLY IF** you daisy-chain additional ADB devices **of the same type** **AND** use them **at the same time**.
 
 * Not a high-priority bug, might work on it when I have time.
-
-## Manual Software Updates
-
-You should use [the configurator software](https://github.com/dekuNukem/usb4vc-configurator/blob/master/README.md) for updates. But here's how to do it by hand.
-
-[Download the latest USB update for flash drives](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
-
-Get a USB flash drive, format it in FAT32, then drag the `usb4vc` folder to the `root level` of the drive:
-
-![Alt text](photos/usbdisk.png)
-
-Insert the drive into Raspberry Pi, and select `Update via USB Flashdrive` in the main menu.
-
-![Alt text](photos/usboled.jpeg)
-
-It will update the source code, configuration, and Protocol Card firmware to the latest version.
 
 ## Questions or Comments?
 
