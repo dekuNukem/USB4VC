@@ -45,7 +45,6 @@
 #include <string.h>
 #include "mcp4451.h"
 
-
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -76,31 +75,6 @@ int fputc(int ch, FILE *f)
   HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
   return ch;
 }
-
-// void gamepad_update(void)
-// {
-//   gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
-//   if(this_gamepad_event != NULL)
-//   {
-//     // printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
-//     /*
-//     X1 = Wiper 3
-//     Y1 = Wiper 0
-//     X2 = Wiper 2
-//     Y2 = Wiper 1
-//     */
-//     HAL_GPIO_WritePin(GAMEPAD_B1_GPIO_Port, GAMEPAD_B1_Pin, !(this_gamepad_event->button_1));
-//     HAL_GPIO_WritePin(GAMEPAD_B2_GPIO_Port, GAMEPAD_B2_Pin, !(this_gamepad_event->button_2));
-//     HAL_GPIO_WritePin(GAMEPAD_B3_GPIO_Port, GAMEPAD_B3_Pin, !(this_gamepad_event->button_3));
-//     HAL_GPIO_WritePin(GAMEPAD_B4_GPIO_Port, GAMEPAD_B4_Pin, !(this_gamepad_event->button_4));
-//     mcp4451_write_wiper(3, 255-this_gamepad_event->axis_x);
-//     mcp4451_write_wiper(0, 255-this_gamepad_event->axis_y);
-//     mcp4451_write_wiper(2, 255-this_gamepad_event->axis_rx);
-//     mcp4451_write_wiper(1, 255-this_gamepad_event->axis_ry);
-//     gamepad_buf_pop(&my_gamepad_buf);
-//   }
-// }
-
 
 /*
 !!!!!!!!!!!!!!!!!!!!!! AFTER CODE RE-GENERATION
@@ -208,7 +182,7 @@ int main(void)
     check_i2c_error(mcp4451_write_wiper(2, pot_value));
     check_i2c_error(mcp4451_write_wiper(1, pot_value));
     
-    HAL_Delay(500);
+    HAL_Delay(250);
   }
   /* USER CODE END 3 */
 

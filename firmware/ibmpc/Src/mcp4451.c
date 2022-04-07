@@ -16,7 +16,9 @@ uint8_t mcp4451_is_available(void)
 void mcp4451_reset(void)
 {
   HAL_GPIO_WritePin(POT_RESET_GPIO_Port, POT_RESET_Pin, GPIO_PIN_RESET);
+  HAL_Delay(1);
   HAL_GPIO_WritePin(POT_RESET_GPIO_Port, POT_RESET_Pin, GPIO_PIN_SET);
+  HAL_Delay(1);
 }
 
 uint8_t mcp4451_write_wiper(uint8_t wiper_id, uint8_t value)

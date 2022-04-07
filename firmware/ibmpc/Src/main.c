@@ -68,8 +68,8 @@ UART_HandleTypeDef huart3;
 /* Private variables ---------------------------------------------------------*/
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
-const uint8_t version_minor = 1;
-const uint8_t version_patch = 6;
+const uint8_t version_minor = 2;
+const uint8_t version_patch = 0;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -545,6 +545,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
+  HAL_IWDG_Refresh(&hiwdg);
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
   protocol_status_lookup_init();
@@ -561,7 +562,6 @@ int main(void)
   gamepad_buf_init(&my_gamepad_buf, 16);
 
   mcp4451_reset();
-  HAL_Delay(1);
 
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -569,8 +569,18 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
   printf("flash_size: %d\n", flash_size);
+
+  if(!mcp4451_is_available())
+  {
+    printf("Digital pot not responding!\n");
+    for (int i = 0; i < 10; ++i)
+    {
+      HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
+      HAL_Delay(50);
+    }
+    HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+  }
 
   while (1)
   {
