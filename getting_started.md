@@ -40,7 +40,7 @@ Edit the file with your WiFi information. You can find your [WiFi country code h
 
 ![Alt text](photos/wifi.png)
 
-This file will disappear once Raspberry Pi boots up. To connect to a different WiFi, [download a new file](https://github.com/dekuNukem/USB4VC/raw/master/resources/wpa_supplicant.zip), unzip it, and put it under `boot` with updated information.
+If the file doesn't exist, [download a new one](https://github.com/dekuNukem/USB4VC/raw/master/resources/wpa_supplicant.zip), unzip, put it under `boot`, and update the information as above.
 
 ## Kit Assembly
 
@@ -268,7 +268,7 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Kit Assembly Guide](kit_assembly.md)
 
-[Technical Notes / Make Your Own Protocol Card](technical_notes.md)
+[Tinkering Guide / Make Your Own Protocol Card / Technical Notes](technical_notes.md)
 
 [Kickstarter Acknowledgements](kickstarter_info.md)
 

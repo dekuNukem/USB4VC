@@ -184,7 +184,7 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Kit Assembly Guide](kit_assembly.md)
 
-[Technical Notes / Make Your Own Protocol Card](technical_notes.md)
+[Tinkering Guide / Make Your Own Protocol Card / Technical Notes](technical_notes.md)
 
 [Kickstarter Acknowledgements](kickstarter_info.md)
 

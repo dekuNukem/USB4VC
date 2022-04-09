@@ -10,9 +10,11 @@ This document contains technical information about how USB4VC works. Please **re
 
 Working on USB4VC is very straightforward. It's just some python scripts running on official RaspberryPi OS Lite.
 
-To SSH into it, [set up WiFi](getting_started.md#optional-set-up-wifi) or plug in an Ethernet cable. The IP address will show up on the second page of main menu:
+To SSH into it, [set up WiFi](getting_started.md#optional-set-up-wifi) or plug in an Ethernet cable. The IP address should show up on the second page of main menu:
 
 ![Alt text](photos/ip.jpeg)
+
+Simply do (change the IP to your own) `ssh pi@192.168.1.65`.
 
 Username and password is `pi` and `usb4vc`, all lower case. 
 
@@ -299,7 +301,6 @@ SPI pins are 23, 21, 19, and 24. Also make sure everything is on the same ground
 
 Use your logic analyzer or oscilloscope to confirm the SPI waveform is correct, and making sure the MCU can reliably receive SPI messages without data corruption and dropouts. See [SPI protocol section](#spi-communication-protocol) for details.
 
-
 This is important as any SPI message corruption might result in missed inputs or wrong inputs being sent to retro computer.
 
 Try start simple and sending single keyboard key strokes. Print the received message out, and compare with [this document](https://docs.google.com/spreadsheets/d/e/2PACX-1vTDylIwis3GZrhakGK0uXJGc_SAZ_QwySmlMfZXpSdFDH6zoIXs1kHX7-4wUTeShZth_n6tJH8l3dJ3/pubhtml#).
@@ -370,7 +371,7 @@ Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), 
 
 [Kit Assembly Guide](kit_assembly.md)
 
-[Technical Notes / Make Your Own Protocol Card](technical_notes.md)
+[Tinkering Guide / Make Your Own Protocol Card / Technical Notes](technical_notes.md)
 
 [Kickstarter Acknowledgements](kickstarter_info.md)
 
