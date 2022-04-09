@@ -1,4 +1,4 @@
-# USB4VC Technical Notes / Make Your Own Protocol Card
+# USB4VC Technical Notes / Make Your Own Protocol Card / Tinkering Guide
 
 [Get USB4VC](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/) | [Official Discord](https://discord.gg/HAuuh3pAmB) | [Getting Started](getting_started.md) | [Table of Contents](#table-of-contents)
 
@@ -6,13 +6,25 @@
 
 This document contains technical information about how USB4VC works. Please **read the whole article** if you're planning to make your own Protocol Cards.
 
+## Tinkering Guide
+
+Working on USB4VC is very straightforward. It's just some python scripts running on official RaspberryPi OS Lite.
+
+To SSH into it, [set up WiFi](getting_started.md#optional-set-up-wifi) or plug in an Ethernet cable. The IP address will show up on the second page of main menu:
+
+![Alt text](photos/ip.jpeg)
+
+Username and password is `pi` and `usb4vc`, all lower case. 
+
+All files are inside `~/usb4vc`.
+
 ## Linux Input Event Codes
 
-First of all, how does USB4VC read from KB/Mouse/Gamepads in the first place?
+Now, how does USB4VC read from USB inputs in the first place?
 
 The answer is Linux **Input Event Codes**. Here's a very simplified description:
 
-* Connected input devices show up in `/dev/input` as files:
+* Input devices show up in `/dev/input` as files:
 
 ```
 $ ls /dev/input/
@@ -40,7 +52,7 @@ event0  event1  event2  mice  mouse0  mouse1
 
 * [Here's a good article](https://thehackerdiary.wordpress.com/2017/04/21/exploring-devinput-1/) that goes into a bit more details.
 
-* You can install `evtest` and see what your device is returning in real time.
+* You can use `evtest` to see input events in real time.
 
 * USB4VC reads those events from all input devices, processes them, and send them out to the Protocol Card.
 
@@ -321,6 +333,22 @@ Once SPI is working, you can move on to implementing the protocol itself. A few 
 * If designing your own PCB, you can refer to a lot of open-source vendors such as Sparkfun and Adafruit.
 
 * Just find a relevant product and download the schematics and PCB files, they are often production tested, so a great starting point to make your own!
+
+### Protocol Card PCB Design Notes
+
+If you want to design a Protocol Card for volume production, here are some helpful information.
+
+* Protocol Cards has the same dimension as a Raspberry Pi Model A:
+
+![Alt text](photos/stdpcard.png)
+
+* Protocol Card pins are mapped to Raspberry Pi headers. See the red number for RPi pin number, and [click me for pinout details](#hardware-pinout).
+
+* Connectors can come out from all 3 sides.
+
+* Make sure to have a way for user to **update the firmware!** You can put a USB connector for manual updates, or hook up reset and DFU lines to do it from Raspberry Pi.
+
+* No need to have a 5V to 3.3V regulator on the P-Card, it is provided by the Baseboard.
 
 ### Unique Protocol Card ID
 

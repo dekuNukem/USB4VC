@@ -40,7 +40,7 @@ Edit the file with your WiFi information. You can find your [WiFi country code h
 
 ![Alt text](photos/wifi.png)
 
-This file will disappear once Raspberry Pi boots up. To connect to a different WiFi, **create a new file** with the same name under `boot` with updated information. [Here is a template](resources/wpa_supplicant.conf) you can use.
+This file will disappear once Raspberry Pi boots up. To connect to a different WiFi, [download a new file](https://github.com/dekuNukem/USB4VC/raw/master/resources/wpa_supplicant.zip), unzip it, and put it under `boot` with updated information.
 
 ## Kit Assembly
 
@@ -60,7 +60,7 @@ Let's take a quick look:
 
 ![Alt text](photos/ibmpcpc.jpeg)
 
-* Cables can be purchased in [my Tindie store](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/).
+* Cables can be purchased in [my Tindie store](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/) (and of course other places).
 
 * PS/2 keyboard and mouse need a **male to male** PS/2 cable.
 
@@ -103,6 +103,8 @@ If using Bluetooth, we can pair it later.
 With cables connected, power up USB4VC with a USB-C cable.
 
 You can do it from Baseboard, Protocol Card, or even RPi itself. All will work!
+
+**Always turn on USB4VC BEFORE the computer!**
 
 ![Alt text](photos/powerports.jpeg)
 
@@ -166,6 +168,8 @@ In my testing, gamepad compatibility seems to depends on the RPi models:
 
 * If pairing fails, remove the BT device in the menu, reboot USB4VC, and try again.
 
+* Multiple controllers will work at the same time, although sometime their outputs might compete with each other.
+
 -----
 
 Once connected, you can enable `15-Pin Gamepad` Protocol on IBM PC Card, and it should behave like a generic gamepad with **4 buttons and 4 analog axes**.
@@ -182,7 +186,7 @@ With **officially supported controllers**, the mapping is:
 
 * Left & Right Analog Triggers to Joystick 2 Y-Axis.
 
-Unsupported USB controllers might still work, but the default mapping might be a bit wonky.
+Unsupported USB controllers might still work, but the default mapping might be wonky.
 
 ## Joycheck DOS Program
 
@@ -204,15 +208,13 @@ You can even have it **control mouse and keyboard**, in order to play games that
 
 ## Software Updates
 
-Under construction ...
+Connect RPi to internet. You can [set up WiFi](#optional-set-up-wifi), or plug in an Ethernet cable.
 
-Basically make sure RPi is connected to internet, and select `Internet Update` in main menu.
+Then simply select `Internet Update` in main menu. It will update source code and P-Card firmware to latest version.
 
-## Tinkering Guide / Making Your Own Protocol Card / Techincal Details
+## Tinkering Guide / Making Your Own Protocol Card / Technical Details
 
-[Click me to for techincal details and make-your-own protocol card instructions!](technical_notes.md)
-
-Tinkering Guide is under construction ...
+[Click me!](technical_notes.md)
 
 ## Powering Off/On
 
@@ -226,9 +228,11 @@ When the RPi is off, you can press `POWER ON` button to turn it back on.
 
 Here are a couple of bugs and issues that I am aware of, and the corresponding comments and remedies.
 
-#### Boot time can be faster
+#### Boot Time
 
 * Currently it takes about 17 seconds to boot with a decent SD card.
+
+* Would be great if it's faster.
 
 * Might look into disabling some services to speed it up.
 
