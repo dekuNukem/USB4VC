@@ -32,7 +32,7 @@ Select your SD card, then the image file, then press `START` to begin writing.
 
 ## (Optional) Set up WiFi
 
-After writing the SD card, go to the drive named `boot`, and open up `wpa_supplicant.conf` with a proper text editor:
+After writing the SD card, go to the drive named `boot`, and open up `wpa_supplicant.conf` with a **proper text editor**:
 
 ![Alt text](photos/wpa.png)
 
