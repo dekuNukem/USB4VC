@@ -92,6 +92,10 @@ Flip it over, clean the area if dirty, and stick on the anti-slip feet on the co
 
 ![Alt text](photos/feet.jpeg)
 
+If your package came with labels, attach them like so:
+
+![Alt text](photos/label.png)
+
 And you're done! Congratulations!
 
 Head back to the [Getting Started Guide](getting_started.md#kit-assembly) to see how to use it.
