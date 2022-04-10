@@ -188,6 +188,14 @@ With **officially supported controllers**, the mapping is:
 
 Unsupported USB controllers might still work, but the default mapping might be wonky.
 
+## Custom Gamepad Mapping
+
+You can also create your own USB Gamepad mapping so suit your exact needs.
+
+You can even have it **control mouse and keyboard**, in order to play games that did not have native gamepad support!
+
+[Download the configurator](https://github.com/dekuNukem/usb4vc-configurator/blob/master/README.md) and follow the instruction to set it up.
+
 ## Joycheck DOS Program
 
 You can [download this DOS program](https://github.com/dekuNukem/USB4VC/raw/master/resources/joytest.zip) to visualize what the gamepad is doing, great for troubleshooting! Found on this [vogons thread](https://www.vogons.org/viewtopic.php?p=187168#p187168).
@@ -197,14 +205,6 @@ You can [download this DOS program](https://github.com/dekuNukem/USB4VC/raw/mast
 * Careful with pressing keyboard keys, it might mess up the display.
 
 ![Alt text](photos/joycheck.png)
-
-## Custom Gamepad Mapping
-
-You can also create your own USB Gamepad mapping so suit your exact needs.
-
-You can even have it **control mouse and keyboard**, in order to play games that did not have native gamepad support!
-
-[Download the configurator](https://github.com/dekuNukem/usb4vc-configurator/blob/master/README.md) and follow the instruction to set it up.
 
 ## Software Updates
 

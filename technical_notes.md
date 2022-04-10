@@ -54,9 +54,19 @@ event0  event1  event2  mice  mouse0  mouse1
 
 * [Here's a good article](https://thehackerdiary.wordpress.com/2017/04/21/exploring-devinput-1/) that goes into a bit more details.
 
-* You can use `evtest` to see input events in real time.
-
 * USB4VC reads those events from all input devices, processes them, and send them out to the Protocol Card.
+
+* To see it in action, you can select `Show Event Codes` from the main menu:
+
+![Alt text](photos/showev.jpeg)
+
+* It will show a summary of latest input events, including device name, USB vendor and product ID, and event code name and value.
+
+![Alt text](photos/evexample.jpeg)
+
+* To exit, **HOLD DOWN** `+` button during an input event.
+
+* You can also `ssh` into it and use `evtest` to see more detailed reports.
 
 ## Hardware Pinout
 
