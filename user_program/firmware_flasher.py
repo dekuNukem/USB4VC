@@ -13,6 +13,8 @@ GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
 GPIO.setup(PBOARD_BOOT0_PIN, GPIO.IN)
 GPIO.setup(SLAVE_REQ_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
+is_dfu = False
+
 def enter_dfu():
     # RESET LOW: Enter reset
     GPIO.setup(PBOARD_RESET_PIN, GPIO.OUT)
@@ -24,7 +26,7 @@ def enter_dfu():
     time.sleep(0.05)
     # Release RESET, BOOT0 still HIGH, STM32 now in DFU mode
     GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
-    time.sleep(0.5)
+    time.sleep(1)
 
 def exit_dfu():
     # Release BOOT0
@@ -35,13 +37,16 @@ def exit_dfu():
     time.sleep(0.05)
     # Release RESET, BOOT0 is LOW, STM32 boots in normal mode
     GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
-    time.sleep(0.5)
+    time.sleep(0.2)
 
 def flash_firmware(fw_path):
     for x in range(5):
         print(f"----------------- {fw_path.split('/')[-1]} -----------------")
     enter_dfu()
-    exit_code = os.system(f'sudo stm32flash -w {fw_path} -a 0x3b /dev/i2c-1') >> 8
+    if is_dfu:
+        exit_code = os.system(f'sudo dfu-util --device ,0483:df11 -a 0 -D {fw_path}') >> 8
+    else:
+        exit_code = os.system(f'sudo stm32flash -w {fw_path} -a 0x3b /dev/i2c-1') >> 8
     exit_dfu()
     if exit_code != 0:
         for x in range(5):
@@ -59,6 +64,9 @@ pcard_spi.max_speed_hz = 2000000
 
 payload_fw_path = sys.argv[1]
 test_fw_path = sys.argv[2]
+
+if '.dfu' in payload_fw_path.lower() or '.dfu' in test_fw_path.lower():
+    is_dfu = True
 
 flash_firmware(test_fw_path)
 req_result = []
