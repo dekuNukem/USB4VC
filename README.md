@@ -12,7 +12,7 @@ With a **modular design**, different platforms are supported by swapping out **P
 
 ![Alt text](photos/header.gif)
 
-Two Protocol Cards are available at launch (March 2022):
+USB4VC is [now available on Tindie](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/), and two Protocol Cards are available at launch:
 
 #### IBM PC Compatible
 
@@ -40,9 +40,7 @@ Of course, more Protocol Cards are planned, and you can try [make your own](tech
 
 ## I Want One! / Get in Touch
 
-This project have been successly funded [via Kickstarter!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers), it is now available [on my Tindie store!](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/)
-
-Thank you very much for the support! Estimated shipping **April 2022**.
+USB4VC is now available [on my Tindie store](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/) after being successfully funded [on Kickstarter!](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers)!
 
 **Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
