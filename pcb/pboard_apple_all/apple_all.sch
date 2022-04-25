@@ -6140,6 +6140,8 @@ In this library the device names are the same as the pin names of the symbols, t
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
 <part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="TP1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="TP12R" package3d_urn="urn:adsk.eagle:package:27963/1"/>
+<part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="TP12R" package3d_urn="urn:adsk.eagle:package:27963/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -6328,9 +6330,8 @@ In this library the device names are the same as the pin names of the symbols, t
 <attribute name="NAME" x="7.62" y="33.02" size="1.27" layer="95" font="vector" rot="MR180"/>
 <attribute name="VALUE" x="12.7" y="15.24" size="1.27" layer="96" font="vector" rot="MR0"/>
 </instance>
-<instance part="TP3" gate="G$1" x="25.4" y="60.96" smashed="yes">
-<attribute name="NAME" x="24.13" y="62.23" size="1.778" layer="95"/>
-<attribute name="TP_SIGNAL_NAME" x="26.67" y="59.69" size="1.778" layer="97"/>
+<instance part="TP3" gate="G$1" x="17.78" y="50.8" smashed="yes">
+<attribute name="TP_SIGNAL_NAME" x="19.05" y="49.53" size="1.778" layer="97"/>
 </instance>
 <instance part="P+2" gate="1" x="20.32" y="-38.1" smashed="yes" rot="MR0">
 <attribute name="VALUE" x="22.86" y="-43.18" size="1.778" layer="96" rot="MR90"/>
@@ -6459,6 +6460,12 @@ In this library the device names are the same as the pin names of the symbols, t
 </instance>
 <instance part="GND15" gate="1" x="132.08" y="71.12" smashed="yes">
 <attribute name="VALUE" x="129.54" y="68.58" size="1.778" layer="96"/>
+</instance>
+<instance part="TP1" gate="G$1" x="60.96" y="180.34" smashed="yes">
+<attribute name="TP_SIGNAL_NAME" x="62.23" y="179.07" size="1.778" layer="97"/>
+</instance>
+<instance part="TP2" gate="G$1" x="55.88" y="177.8" smashed="yes">
+<attribute name="TP_SIGNAL_NAME" x="57.15" y="176.53" size="1.778" layer="97"/>
 </instance>
 </instances>
 <busses>
@@ -7361,6 +7368,27 @@ In this library the device names are the same as the pin names of the symbols, t
 <pinref part="U$11" gate="G$1" pin="4"/>
 <pinref part="R8" gate="G$1" pin="2"/>
 <wire x1="241.3" y1="48.26" x2="233.68" y2="48.26" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$11" class="0">
+<segment>
+<pinref part="IC1" gate="PORTB_L" pin="PB4"/>
+<pinref part="TP3" gate="G$1" pin="TP"/>
+<wire x1="43.18" y1="48.26" x2="17.78" y2="48.26" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$17" class="0">
+<segment>
+<pinref part="IC1" gate="PORTB_H" pin="PB10"/>
+<pinref part="TP1" gate="G$1" pin="TP"/>
+<wire x1="86.36" y1="177.8" x2="60.96" y2="177.8" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$19" class="0">
+<segment>
+<pinref part="IC1" gate="PORTB_H" pin="PB11"/>
+<pinref part="TP2" gate="G$1" pin="TP"/>
+<wire x1="86.36" y1="175.26" x2="55.88" y2="175.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
