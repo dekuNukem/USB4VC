@@ -224,6 +224,10 @@ When the RPi is off, you can press `POWER ON` button to turn it back on.
 
 ![Alt text](photos/power_buttons.jpeg)
 
+## Plate Dimensions
+
+Want to design a custom case? [Click me](pcb/plates) for dimension drawings.
+
 ## Known Issues
 
 Here are a couple of bugs and issues that I am aware of, and the corresponding comments and remedies.
