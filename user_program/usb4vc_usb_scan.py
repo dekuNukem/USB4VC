@@ -828,6 +828,21 @@ def raw_input_event_worker():
                 except Exception as e:
                     print('exception change_kb_led:', e)
 
+def check_is_gamepad(capability_dict):
+    keys_and_buttons = capability_dict.get(('EV_KEY', 1))
+    if keys_and_buttons is None:
+        return False
+    key_name_set = set()
+    for item in [x[0] for x in keys_and_buttons]:
+        if isinstance(item, str):
+            key_name_set.add(item)
+        if isinstance(item, list):
+            key_name_set.update(item)
+    for item in usb4vc_shared.gamepad_event_code_name_list:
+        if item in key_name_set:
+            return True
+    return False
+
 def get_input_devices():
     result = []
     available_devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
@@ -845,14 +860,13 @@ def get_input_devices():
             'is_mouse':False,
             'is_gp':False,
         }
-        cap_str = str(this_device.capabilities(verbose=True))
+        this_cap = this_device.capabilities(verbose=True)
+        cap_str = str(this_cap)
         if 'BTN_LEFT' in cap_str and "EV_REL" in cap_str:
             dev_dict['is_mouse'] = True
         if 'KEY_ENTER' in cap_str and "KEY_Y" in cap_str:
             dev_dict['is_kb'] = True
-        if 'KEY_MODE' in cap_str:
-            dev_dict['is_gp'] = True
-        if 'EV_ABS' in cap_str and "BTN_SOUTH" in cap_str:
+        if check_is_gamepad(this_cap):
             dev_dict['is_gp'] = True
             try:
                 for item in this_device.capabilities()[EV_ABS]:
@@ -882,6 +896,7 @@ def usb_device_scan_worker():
         time.sleep(0.75)
         try:
             device_list = get_input_devices()
+            print(device_list)
         except Exception as e:
             print('exception get_input_devices:', e)
             continue
