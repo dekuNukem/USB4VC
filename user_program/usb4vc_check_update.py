@@ -81,12 +81,12 @@ def get_usb4vc_update(temp_path):
 def update(temp_path):
     rcode, item = get_remote_tag_version()
     if rcode != 0:
-        return 1, "Unknown error"
+        return 10 + rcode, "Remote ver unknown"
     if item < RPI_APP_VERSION_TUPLE:
         return 2, 'Local code is newer'
     rcode, item = get_usb4vc_update(temp_path)
     if rcode != 0:
-        return 3, 'Download failed'
+        return 10 + rcode, 'Download failed'
     try:
         src_code_path = os.path.join(temp_path, 'rpi_app')
         if len(os.listdir(src_code_path)) <= 5:

@@ -706,7 +706,8 @@ class usb4vc_menu(object):
                             usb4vc_oled.oled_print_centered("Firmware updated!", usb4vc_oled.font_medium, 10, draw)
                 else:
                     with canvas(usb4vc_oled.oled_device) as draw:
-                        usb4vc_oled.oled_print_centered("FW update failed!", usb4vc_oled.font_medium, 10, draw)
+                        usb4vc_oled.oled_print_centered("FW update ERR or", usb4vc_oled.font_medium, 0, draw)
+                        usb4vc_oled.oled_print_centered("already newest", usb4vc_oled.font_medium, 15, draw)
                 time.sleep(3)
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Updating code...", usb4vc_oled.font_medium, 10, draw)
@@ -719,7 +720,7 @@ class usb4vc_menu(object):
                 else:
                     with canvas(usb4vc_oled.oled_device) as draw:
                         usb4vc_oled.oled_print_centered("Update failed:", usb4vc_oled.font_medium, 0, draw)
-                        usb4vc_oled.oled_print_centered(f"{update_result[-1]}", usb4vc_oled.font_regular, 16, draw)
+                        usb4vc_oled.oled_print_centered(f"{update_result[-1]} {update_result[0]}", usb4vc_oled.font_regular, 16, draw)
                 time.sleep(4)
                 usb4vc_oled.oled_device.clear()
                 os._exit(0)
