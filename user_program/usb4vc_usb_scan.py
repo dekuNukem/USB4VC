@@ -98,6 +98,15 @@ BTN_FORWARD = 0x115
 BTN_BACK = 0x116
 BTN_TASK = 0x117
 
+def is_gamepad_button(event_code):
+    name_result = usb4vc_shared.code_value_to_name_lookup.get(event_code)
+    if name_result is None:
+        return False
+    for item in name_result:
+        if item in usb4vc_shared.gamepad_event_code_name_list:
+            return True
+    return False
+
 # some gamepad buttons report as keyboard keys when connected via bluetooth, need to account for those
 gamepad_buttons_as_kb_codes = {
     373, # KEY_MODE, Xbox logo button, xbox one controller when connected via bluetooth on xpadneo
@@ -232,7 +241,7 @@ def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     source_type = None
     if ABS_X <= source_code <= ABS_HAT3Y:
         source_type = 'usb_abs_axis'
-    elif BTN_SOUTH <= source_code <= BTN_THUMBR or source_code in gamepad_buttons_as_kb_codes:
+    elif is_gamepad_button(source_code) or source_code in gamepad_buttons_as_kb_codes:
         source_type = 'usb_gp_btn'
     if source_type is None:
         return None, None
@@ -277,11 +286,14 @@ def make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info
     global prev_kb_output
     global curr_mouse_output
 
+    # print(gp_status_dict)
+
     axes_info = this_device_info['axes_info']
     this_gamepad_name = this_device_info.get('name', '').lower().strip()
     usb_gamepad_type = this_device_info['gamepad_type']
     gp_id = this_device_info['id']
     this_gp_dict = gp_status_dict[gp_id]
+    print(this_gp_dict)
     curr_gp_output = {
         'IBM_GGP_BTN_1':set([0]),
         'IBM_GGP_BTN_2':set([0]),
@@ -756,7 +768,7 @@ def raw_input_event_worker():
                         last_mouse_button_msg = make_mouse_spi_packet(mouse_status_dict, this_id)
                         pcard_spi.xfer(list(last_mouse_button_msg))
                 # Gamepad buttons
-                elif BTN_SOUTH <= event_code <= BTN_THUMBR or event_code in gamepad_buttons_as_kb_codes:
+                elif is_gamepad_button(event_code) or event_code in gamepad_buttons_as_kb_codes:
                     this_btn_status = data[4]
                     if this_btn_status != 0:
                         this_btn_status = 1
@@ -802,6 +814,7 @@ def raw_input_event_worker():
                             this_gp_dict[axes_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
                     if gamepad_output != last_gamepad_msg:
+                        print(gamepad_output)
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
                         pcard_spi.xfer(list(gp_to_transfer))
                         if kb_to_transfer is not None:
@@ -866,6 +879,10 @@ def get_input_devices():
             dev_dict['is_mouse'] = True
         if 'KEY_ENTER' in cap_str and "KEY_Y" in cap_str:
             dev_dict['is_kb'] = True
+        # print(this_device.name)
+        # print(this_cap)
+        # print(check_is_gamepad(this_cap))
+        # print("!!!!!!!!!!!!!!!!!!!!!!")
         if check_is_gamepad(this_cap):
             dev_dict['is_gp'] = True
             try:
@@ -896,7 +913,6 @@ def usb_device_scan_worker():
         time.sleep(0.75)
         try:
             device_list = get_input_devices()
-            print(device_list)
         except Exception as e:
             print('exception get_input_devices:', e)
             continue
