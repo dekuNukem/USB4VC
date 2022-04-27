@@ -293,7 +293,7 @@ def make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info
     usb_gamepad_type = this_device_info['gamepad_type']
     gp_id = this_device_info['id']
     this_gp_dict = gp_status_dict[gp_id]
-    print(this_gp_dict)
+    # print(this_gp_dict)
     curr_gp_output = {
         'IBM_GGP_BTN_1':set([0]),
         'IBM_GGP_BTN_2':set([0]),
@@ -459,7 +459,6 @@ def make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info
     gp_spi_msg[8], gp_spi_msg[9] = apply_curve(gp_spi_msg[8], gp_spi_msg[9])
     gp_spi_msg[10], gp_spi_msg[11] = apply_curve(gp_spi_msg[10], gp_spi_msg[11])
     return gp_spi_msg, kb_spi_msg, mouse_spi_msg
-
 
 def make_unknown_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
     gp_id = this_device_info['id']
