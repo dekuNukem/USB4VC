@@ -1,0 +1,28 @@
+--cpu Cortex-M0
+"apple_all\startup_stm32f072xb.o"
+"apple_all\main.o"
+"apple_all\stm32f0xx_it.o"
+"apple_all\stm32f0xx_hal_msp.o"
+"apple_all\stm32f0xx_hal_spi.o"
+"apple_all\stm32f0xx_hal_spi_ex.o"
+"apple_all\stm32f0xx_hal_tim.o"
+"apple_all\stm32f0xx_hal_tim_ex.o"
+"apple_all\stm32f0xx_hal_uart.o"
+"apple_all\stm32f0xx_hal_uart_ex.o"
+"apple_all\stm32f0xx_hal_rcc.o"
+"apple_all\stm32f0xx_hal_rcc_ex.o"
+"apple_all\stm32f0xx_hal.o"
+"apple_all\stm32f0xx_hal_i2c.o"
+"apple_all\stm32f0xx_hal_i2c_ex.o"
+"apple_all\stm32f0xx_hal_gpio.o"
+"apple_all\stm32f0xx_hal_dma.o"
+"apple_all\stm32f0xx_hal_cortex.o"
+"apple_all\stm32f0xx_hal_pwr.o"
+"apple_all\stm32f0xx_hal_pwr_ex.o"
+"apple_all\stm32f0xx_hal_flash.o"
+"apple_all\stm32f0xx_hal_flash_ex.o"
+"apple_all\system_stm32f0xx.o"
+--library_type=microlib --strict --scatter "apple_all\apple_all.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "apple_all.map" -o apple_all\apple_all.axf
