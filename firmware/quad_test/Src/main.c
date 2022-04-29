@@ -385,9 +385,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   for (int i = -64; i < 64; ++i)
-  {
     printf("%d %d\n", i, calc_arr(i));
-  }
   while (1)
   {
     if(spi_error_occured)

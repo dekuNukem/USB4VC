@@ -57,6 +57,16 @@
 #define MAC_KB_DATA_GPIO_Port GPIOB
 #define MAC_KB_DET_Pin GPIO_PIN_2
 #define MAC_KB_DET_GPIO_Port GPIOB
+#define MOUSE_BUTTON_Pin GPIO_PIN_12
+#define MOUSE_BUTTON_GPIO_Port GPIOB
+#define MY2_Pin GPIO_PIN_13
+#define MY2_GPIO_Port GPIOB
+#define MY1_Pin GPIO_PIN_14
+#define MY1_GPIO_Port GPIOB
+#define MX2_Pin GPIO_PIN_15
+#define MX2_GPIO_Port GPIOB
+#define MX1_Pin GPIO_PIN_8
+#define MX1_GPIO_Port GPIOA
 #define ACT_LED_Pin GPIO_PIN_15
 #define ACT_LED_GPIO_Port GPIOA
 #define ERR_LED_Pin GPIO_PIN_3

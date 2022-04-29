@@ -28,5 +28,13 @@ apple_all\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h
 apple_all\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h
 apple_all\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi.h
 apple_all\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi_ex.h
+apple_all\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim.h
+apple_all\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h
 apple_all\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h
 apple_all\main.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
+apple_all\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+apple_all\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+apple_all\main.o: ../Inc/delay_us.h
+apple_all\main.o: ../Inc/shared.h
+apple_all\main.o: ../Inc/helpers.h
+apple_all\main.o: ../Inc/quad_encoder.h

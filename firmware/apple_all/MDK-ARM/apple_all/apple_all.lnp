@@ -1,5 +1,8 @@
 --cpu Cortex-M0
 "apple_all\startup_stm32f072xb.o"
+"apple_all\delay_us.o"
+"apple_all\quad_encoder.o"
+"apple_all\helpers.o"
 "apple_all\main.o"
 "apple_all\stm32f0xx_it.o"
 "apple_all\stm32f0xx_hal_msp.o"
