@@ -1,0 +1,7 @@
+    // int32_t ddd = calc_arr(avg_speed);
+    // if(ddd != 65535)
+    //   printf("%d\n", calc_arr(avg_speed));
+
+
+  // return (uint16_t)(-190*speed_val + 12690); // 1, 12500 | 64, 500
+int32_t result = -307*speed_val + 12807; // 1, 12500, 40, 500

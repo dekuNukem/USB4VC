@@ -182,10 +182,10 @@ void spi_error_dump_reboot(void)
 const char boot_message[] = "USB4VC Protocol Board\nEarly Macintosh & Apple Desktop Bus\ndekuNukem 2022";
 
 #define AVG_BUF_SIZE 8
-int16_t avg_buf[AVG_BUF_SIZE];
+int32_t avg_buf[AVG_BUF_SIZE];
 uint8_t avg_buf_index;
 
-void avg_buf_add(int16_t value)
+void avg_buf_add(int32_t value)
 {
   avg_buf[avg_buf_index] = value;
   avg_buf_index++;
@@ -216,15 +216,16 @@ value = us
 
 uint16_t calc_arr(int32_t speed_val)
 {
-  return 10000;
   speed_val = abs(speed_val);
-  if(speed_val <= 0)
-    return 65535;
-  if(speed_val >= 64)
+  if(speed_val <= 0 || speed_val >= 64)
     return 500;
-  return (uint16_t)(-307*speed_val + 12807); // 1, 12500 | 64, 500
-  // return (uint16_t)(-190*speed_val + 12690); // 1, 12500 | 64, 500
-
+  // int32_t result = -190*speed_val + 12690; // 1, 12500 | 64, 500
+  int32_t result = -307*speed_val + 12807; // 1, 12500, 40, 500
+  if (result < 500)
+    result = 500;
+  if(result > 12500)
+    result = 12500;
+  return (uint16_t)result;
 }
 
 quad_output quad_x;
@@ -240,7 +241,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   // every 10ms
   if(htim == &htim17)
   {
-    // HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+    HAL_GPIO_TogglePin(MX1_GPIO_Port, MX1_Pin);
     mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
     if(this_mouse_event == NULL)
     {
@@ -253,14 +254,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     }
     avg_speed = get_buf_avg();
     htim16.Instance->ARR = calc_arr(avg_speed);
-    // int32_t ddd = calc_arr(avg_speed);
-    // if(ddd != 65535)
-    //   printf("%d\n", calc_arr(avg_speed));
   }
   // every ARR overflow
   if(htim == &htim16 && avg_speed != 0)
   {
-    // HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_3);
+    HAL_GPIO_TogglePin(MX2_GPIO_Port, MX2_Pin);
     if(avg_speed > 0)
       quad_increment(&quad_x);
     else
@@ -461,7 +459,7 @@ static void MX_TIM16_Init(void)
   htim16.Init.Period = 65535;
   htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim16.Init.RepetitionCounter = 0;
-  htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim16) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
