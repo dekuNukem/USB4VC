@@ -181,80 +181,21 @@ void spi_error_dump_reboot(void)
 
 const char boot_message[] = "USB4VC Protocol Board\nEarly Macintosh & Apple Desktop Bus\ndekuNukem 2022";
 
-#define AVG_BUF_SIZE 8
-int32_t avg_buf[AVG_BUF_SIZE];
-uint8_t avg_buf_index;
-
-void avg_buf_add(int32_t value)
-{
-  avg_buf[avg_buf_index] = value;
-  avg_buf_index++;
-  if (avg_buf_index >= AVG_BUF_SIZE)
-    avg_buf_index = 0;
-}
-
-int32_t get_buf_avg(void)
-{
-  int32_t sum = 0;
-  for (int i = 0; i < AVG_BUF_SIZE; ++i)
-    sum += avg_buf[i];
-  if (sum > 0 && sum < AVG_BUF_SIZE)
-    sum = AVG_BUF_SIZE;
-  else if (sum < 0 && abs(sum) < AVG_BUF_SIZE)
-    sum = AVG_BUF_SIZE * -1;
-  return (int32_t)(sum/AVG_BUF_SIZE);
-}
-
 /*
-each speed has a corresponding duration before the next increment or decrement
 
-make sure to enable autoreload preload to prevent glitches
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-ARR = Auto Reload Register
-value = us
+REMEMBER TO ENABLE ARR PRELOAD ON TIMER 16
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 */
-
-uint16_t calc_arr(int32_t speed_val)
-{
-  speed_val = abs(speed_val);
-  if(speed_val <= 0 || speed_val >= ARR_LOOKUP_SIZE)
-    return 500;
-  return arr_lookup[speed_val];
-}
-
-/*
-  this gets called every 10ms, fetches mouse event and put them into a running buffer
-  a window average is calculated, used to adjust the timer autoreload register
-*/
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-  // every 10ms
-  if(htim == &htim17)
-  {
-    HAL_GPIO_TogglePin(MX1_GPIO_Port, MX1_Pin);
-    mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
-    if(this_mouse_event == NULL)
-    {
-      avg_buf_add(0);
-    }
-    else
-    {
-      avg_buf_add(this_mouse_event->movement_x);
-      mouse_buf_pop(&my_mouse_buf);
-    }
-    avg_speed = get_buf_avg();
-    htim16.Instance->ARR = calc_arr(avg_speed);
-  }
-  // every ARR overflow
-  if(htim == &htim16 && avg_speed != 0)
-  {
-    HAL_GPIO_TogglePin(MX2_GPIO_Port, MX2_Pin);
-    // if(avg_speed > 0)
-    //   quad_increment(&quad_x);
-    // else
-    //   quad_decrement(&quad_x);
-  }
-}
 
 /* USER CODE END 0 */
 
@@ -299,13 +240,8 @@ int main(void)
   mouse_buf_init(&my_mouse_buf, 16);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  /*
-    instead of all at once, we remove data from buffer
-    at a regular interval, say 5ms, if empty, then theres no movement
-    then every 50ms for example the average movement is calculated
-    and that is used to update quad encoder?
-  */
-  quad_init(&htim17, &htim16, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12);
+
+  quad_init(&my_mouse_buf, &htim17, &htim16, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -514,11 +450,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, MAC_KB_CLK_Pin|MAC_KB_DATA_Pin|MOUSE_BUTTON_Pin|MY2_Pin 
-                          |MY1_Pin|MX2_Pin|ADB_PWR_Pin|ADB_DATA_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, MAC_KB_CLK_Pin|MAC_KB_DATA_Pin|GPIO_PIN_12|GPIO_PIN_13 
+                          |GPIO_PIN_14|GPIO_PIN_15|ADB_PWR_Pin|ADB_DATA_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(MX1_GPIO_Port, MX1_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
@@ -533,10 +469,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MAC_KB_CLK_Pin MAC_KB_DATA_Pin MOUSE_BUTTON_Pin MY2_Pin 
-                           MY1_Pin MX2_Pin ADB_PWR_Pin ADB_DATA_Pin */
-  GPIO_InitStruct.Pin = MAC_KB_CLK_Pin|MAC_KB_DATA_Pin|MOUSE_BUTTON_Pin|MY2_Pin 
-                          |MY1_Pin|MX2_Pin|ADB_PWR_Pin|ADB_DATA_Pin;
+  /*Configure GPIO pins : MAC_KB_CLK_Pin MAC_KB_DATA_Pin PB12 PB13 
+                           PB14 PB15 ADB_PWR_Pin ADB_DATA_Pin */
+  GPIO_InitStruct.Pin = MAC_KB_CLK_Pin|MAC_KB_DATA_Pin|GPIO_PIN_12|GPIO_PIN_13 
+                          |GPIO_PIN_14|GPIO_PIN_15|ADB_PWR_Pin|ADB_DATA_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -548,12 +484,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : MX1_Pin */
-  GPIO_InitStruct.Pin = MX1_Pin;
+  /*Configure GPIO pin : PA8 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(MX1_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ACT_LED_Pin */
   GPIO_InitStruct.Pin = ACT_LED_Pin;

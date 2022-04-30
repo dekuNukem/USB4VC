@@ -35,4 +35,5 @@ apple_all\quad_encoder.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim.
 apple_all\quad_encoder.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h
 apple_all\quad_encoder.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h
 apple_all\quad_encoder.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
+apple_all\quad_encoder.o: ../Inc/helpers.h
 apple_all\quad_encoder.o: ../Inc/shared.h

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [apple_all\apple_all.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image apple_all\apple_all.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Apr 30 16:23:32 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Apr 30 17:08:29 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -193,19 +193,19 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = __aeabi_uidivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
-<LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
-<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_is_full
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_add
+<LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_InitTick
 <LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetSysClockFreq
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_SetConfig
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
-<P><STRONG><a name="[8e]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
+<P><STRONG><a name="[8d]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
 </UL>
 
 <P><STRONG><a name="[9a]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
@@ -224,7 +224,7 @@ Global Symbols
 <P><STRONG><a name="[31]"></a>__aeabi_memclr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, memseta.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
+<BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_reset
 </UL>
 
@@ -258,7 +258,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 </UL>
 
 <P><STRONG><a name="[48]"></a>HAL_GPIO_Init</STRONG> (Thumb, 314 bytes, Stack size 24 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_Init))
@@ -270,14 +270,14 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[60]"></a>HAL_GPIO_TogglePin</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_TogglePin))
-<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<BR><BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
 <P><STRONG><a name="[4b]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
 
 <P><STRONG><a name="[36]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetTick))
@@ -503,8 +503,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us_init
 </UL>
 
-<P><STRONG><a name="[8a]"></a>HAL_TIM_Base_Start_IT</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_Base_Start_IT))
-<BR><BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<P><STRONG><a name="[92]"></a>HAL_TIM_Base_Start_IT</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_Base_Start_IT))
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
 </UL>
 
 <P><STRONG><a name="[53]"></a>HAL_TIM_ConfigClockSource</STRONG> (Thumb, 238 bytes, Stack size 24 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_ConfigClockSource))
@@ -545,17 +545,17 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
 
-<P><STRONG><a name="[5c]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 120 bytes, Stack size 16 bytes, main.o(i.HAL_TIM_PeriodElapsedCallback))
+<P><STRONG><a name="[5c]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, quad_encoder.o(i.HAL_TIM_PeriodElapsedCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = HAL_TIM_PeriodElapsedCallback &rArr; quad_increment &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
+<BR>[Calls]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
+<LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
+<LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
+<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_increment
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_decrement
 <LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_buf_avg
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;calc_arr
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;avg_buf_add
-<LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
-<LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
-<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_increment
-<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_decrement
 </UL>
 <BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
@@ -710,7 +710,7 @@ Global Symbols
 <P><STRONG><a name="[86]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -720,17 +720,17 @@ Global Symbols
 
 <P><STRONG><a name="[a3]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[62]"></a>avg_buf_add</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, main.o(i.avg_buf_add))
+<P><STRONG><a name="[62]"></a>avg_buf_add</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, quad_encoder.o(i.avg_buf_add))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = avg_buf_add
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
-<P><STRONG><a name="[90]"></a>byte_to_int16_t</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, main.o(i.byte_to_int16_t))
+<P><STRONG><a name="[8f]"></a>byte_to_int16_t</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, main.o(i.byte_to_int16_t))
 <BR><BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_spi_buf
 </UL>
 
-<P><STRONG><a name="[65]"></a>calc_arr</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, main.o(i.calc_arr))
+<P><STRONG><a name="[65]"></a>calc_arr</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, quad_encoder.o(i.calc_arr))
 <BR><BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
@@ -749,7 +749,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> printf3.o(i.__0printf$3)
 </UL>
-<P><STRONG><a name="[64]"></a>get_buf_avg</STRONG> (Thumb, 52 bytes, Stack size 0 bytes, main.o(i.get_buf_avg))
+<P><STRONG><a name="[64]"></a>get_buf_avg</STRONG> (Thumb, 52 bytes, Stack size 0 bytes, quad_encoder.o(i.get_buf_avg))
 <BR><BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
@@ -787,14 +787,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 </UL>
 
-<P><STRONG><a name="[26]"></a>main</STRONG> (Thumb, 210 bytes, Stack size 16 bytes, main.o(i.main))
+<P><STRONG><a name="[26]"></a>main</STRONG> (Thumb, 200 bytes, Stack size 16 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 212<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
-<LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
+<BR>[Calls]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 <LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM2_Init
@@ -816,11 +815,11 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 </UL>
 
-<P><STRONG><a name="[8c]"></a>mouse_buf_add</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, helpers.o(i.mouse_buf_add))
+<P><STRONG><a name="[8b]"></a>mouse_buf_add</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, helpers.o(i.mouse_buf_add))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = mouse_buf_add &rArr; mouse_buf_is_full &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 <LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_spi_buf
@@ -829,18 +828,18 @@ Global Symbols
 <P><STRONG><a name="[87]"></a>mouse_buf_init</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = mouse_buf_init &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
+<BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8d]"></a>mouse_buf_is_full</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_is_full))
+<P><STRONG><a name="[8c]"></a>mouse_buf_is_full</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_is_full))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = mouse_buf_is_full &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
 </UL>
 
 <P><STRONG><a name="[61]"></a>mouse_buf_peek</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, helpers.o(i.mouse_buf_peek))
@@ -855,7 +854,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
-<P><STRONG><a name="[8f]"></a>mouse_buf_reset</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_reset))
+<P><STRONG><a name="[8e]"></a>mouse_buf_reset</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = mouse_buf_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
@@ -866,8 +865,8 @@ Global Symbols
 <P><STRONG><a name="[4c]"></a>parse_spi_buf</STRONG> (Thumb, 184 bytes, Stack size 16 bytes, main.o(i.parse_spi_buf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = parse_spi_buf &rArr; mouse_buf_add &rArr; mouse_buf_is_full &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;byte_to_int16_t
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
+<BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;byte_to_int16_t
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_add
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
@@ -877,7 +876,7 @@ Global Symbols
 <P><STRONG><a name="[67]"></a>quad_decrement</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_decrement))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_decrement &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
@@ -885,42 +884,43 @@ Global Symbols
 <P><STRONG><a name="[66]"></a>quad_increment</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_increment))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_increment &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
-<P><STRONG><a name="[89]"></a>quad_init</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = quad_init &rArr; quad_reset &rArr; quad_write
+<P><STRONG><a name="[89]"></a>quad_init</STRONG> (Thumb, 44 bytes, Stack size 24 bytes, quad_encoder.o(i.quad_init))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = quad_init &rArr; quad_reset &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
+<BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[92]"></a>quad_reset</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_reset))
+<P><STRONG><a name="[91]"></a>quad_reset</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_reset &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
 </UL>
 
-<P><STRONG><a name="[91]"></a>quad_write</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, quad_encoder.o(i.quad_write))
+<P><STRONG><a name="[90]"></a>quad_write</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, quad_encoder.o(i.quad_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
+<BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_increment
 <LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_decrement
 </UL>
 
-<P><STRONG><a name="[8b]"></a>spi_error_dump_reboot</STRONG> (Thumb, 72 bytes, Stack size 0 bytes, main.o(i.spi_error_dump_reboot))
+<P><STRONG><a name="[8a]"></a>spi_error_dump_reboot</STRONG> (Thumb, 72 bytes, Stack size 0 bytes, main.o(i.spi_error_dump_reboot))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = spi_error_dump_reboot &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
-<LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<BR>[Calls]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
