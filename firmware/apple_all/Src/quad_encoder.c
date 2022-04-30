@@ -9,7 +9,8 @@ quad_output quad_x;
 quad_output quad_y;
 
 TIM_HandleTypeDef* avg_timer;
-TIM_HandleTypeDef* arr_timer;
+TIM_HandleTypeDef* arr_timer_x;
+TIM_HandleTypeDef* arr_timer_y;
 
 mouse_buf* mouse_buffer;
 
@@ -36,10 +37,10 @@ int32_t get_buf_avg(quad_output* qo)
   int32_t sum = 0;
   for (int i = 0; i < AVG_BUF_SIZE; ++i)
     sum += qo->avg_buf[i];
-  if (sum > 0 && sum < AVG_BUF_SIZE)
-    sum = AVG_BUF_SIZE;
-  else if (sum < 0 && abs(sum) < AVG_BUF_SIZE)
-    sum = AVG_BUF_SIZE * -1;
+  // if (sum > 0 && sum < AVG_BUF_SIZE)
+  //   sum = AVG_BUF_SIZE;
+  // else if (sum < 0 && abs(sum) < AVG_BUF_SIZE)
+  //   sum = AVG_BUF_SIZE * -1;
   return (int32_t)(sum/AVG_BUF_SIZE);
 }
 
@@ -82,18 +83,26 @@ void quad_reset(quad_output *qo)
   quad_write(qo);
 }
 
-void quad_init(mouse_buf* mbuf, TIM_HandleTypeDef* avg_tim, TIM_HandleTypeDef* arr_tim, GPIO_TypeDef* x1_port, uint16_t x1_pin, GPIO_TypeDef* x2_port, uint16_t x2_pin)//, GPIO_TypeDef* y1_port, uint16_t y1_pin, GPIO_TypeDef* y2_port, uint16_t y2_pin)
+void quad_init(mouse_buf* mbuf, TIM_HandleTypeDef* avg_tim, TIM_HandleTypeDef* arr_tim_x, TIM_HandleTypeDef* arr_tim_y, GPIO_TypeDef* x1_port, uint16_t x1_pin, GPIO_TypeDef* x2_port, uint16_t x2_pin, GPIO_TypeDef* y1_port, uint16_t y1_pin, GPIO_TypeDef* y2_port, uint16_t y2_pin)
 {
   quad_x.A_port = x1_port;
   quad_x.A_pin = x1_pin;
   quad_x.B_port = x2_port;
   quad_x.B_pin = x2_pin;
+
+  quad_y.A_port = y1_port;
+  quad_y.A_pin = y1_pin;
+  quad_y.B_port = y2_port;
+  quad_y.B_pin = y2_pin;
+
   avg_timer = avg_tim;
-  arr_timer = arr_tim;
+  arr_timer_x = arr_tim_x;
+  arr_timer_y = arr_tim_y;
   mouse_buffer = mbuf;
   quad_reset(&quad_x);
   HAL_TIM_Base_Start_IT(avg_timer);
-  HAL_TIM_Base_Start_IT(arr_timer);
+  HAL_TIM_Base_Start_IT(arr_timer_x);
+  HAL_TIM_Base_Start_IT(arr_timer_y);
 }
 
 void quad_increment(quad_output *qo)
@@ -119,28 +128,45 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   // every 10ms
   if(htim == avg_timer)
   {
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
     mouse_event* this_mouse_event = mouse_buf_peek(mouse_buffer);
     if(this_mouse_event == NULL)
     {
       avg_buf_add(&quad_x, 0);
+      avg_buf_add(&quad_y, 0);
     }
     else
     {
       avg_buf_add(&quad_x, this_mouse_event->movement_x);
+      avg_buf_add(&quad_y, this_mouse_event->movement_y);
       mouse_buf_pop(mouse_buffer);
     }
     quad_x.avg_speed = get_buf_avg(&quad_x);
-    arr_timer->Instance->ARR = calc_arr(quad_x.avg_speed);
+    quad_y.avg_speed = get_buf_avg(&quad_y);
+    arr_timer_x->Instance->ARR = calc_arr(quad_x.avg_speed);
+    arr_timer_y->Instance->ARR = calc_arr(quad_y.avg_speed);
+    if(this_mouse_event != NULL)
+    {
+      if(this_mouse_event->button_left || this_mouse_event->button_right)
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+      else
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+    }
   }
   // every ARR overflow
-  if(htim == arr_timer && quad_x.avg_speed != 0)
+  if(htim == arr_timer_x && quad_x.avg_speed != 0)
   {
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
     if(quad_x.avg_speed > 0)
       quad_increment(&quad_x);
     else
       quad_decrement(&quad_x);
   }
+  if(htim == arr_timer_y && quad_y.avg_speed != 0)
+  {
+    if(quad_y.avg_speed > 0)
+      quad_increment(&quad_y);
+    else
+      quad_decrement(&quad_y);
+  }
 }
 
+// HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);

@@ -8,7 +8,7 @@
 #include "stm32f0xx_hal.h"
 #include "helpers.h"
 
-#define AVG_BUF_SIZE 8
+#define AVG_BUF_SIZE 2
 typedef struct
 {
   GPIO_TypeDef* A_port;
@@ -21,7 +21,7 @@ typedef struct
   int32_t avg_speed;
 } quad_output;
 
-void quad_init(mouse_buf* mbuf, TIM_HandleTypeDef* avg_tim, TIM_HandleTypeDef* arr_tim, GPIO_TypeDef* x1_port, uint16_t x1_pin, GPIO_TypeDef* x2_port, uint16_t x2_pin);
+void quad_init(mouse_buf* mbuf, TIM_HandleTypeDef* avg_tim, TIM_HandleTypeDef* arr_tim_x, TIM_HandleTypeDef* arr_tim_y, GPIO_TypeDef* x1_port, uint16_t x1_pin, GPIO_TypeDef* x2_port, uint16_t x2_pin, GPIO_TypeDef* y1_port, uint16_t y1_pin, GPIO_TypeDef* y2_port, uint16_t y2_pin);
 void quad_increment(quad_output *qo);
 void quad_decrement(quad_output *qo);
 #ifdef __cplusplus

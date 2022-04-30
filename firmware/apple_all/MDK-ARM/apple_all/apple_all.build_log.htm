@@ -28,10 +28,14 @@ Project File Date:  04/30/2022
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'apple_all'
 compiling quad_encoder.c...
+..\Src\quad_encoder.c(172): warning:  #1-D: last line of file ends without a newline
+  // HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
+..\Src\quad_encoder.c: 1 warning, 0 errors
+compiling main.c...
 linking...
-Program Size: Code=9328 RO-data=408 RW-data=48 ZI-data=2088  
+Program Size: Code=9516 RO-data=408 RW-data=52 ZI-data=2164  
 FromELF: creating hex file...
-"apple_all\apple_all.axf" - 0 Error(s), 0 Warning(s).
+"apple_all\apple_all.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -54,7 +58,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>
