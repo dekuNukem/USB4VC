@@ -213,8 +213,6 @@ make sure to enable autoreload preload to prevent glitches
 ARR = Auto Reload Register
 value = us
 */
-#define ARR_LOOKUP_SIZE 40
-const uint16_t arr_lookup[ARR_LOOKUP_SIZE] = {500, 12500, 10245, 8926, 7990, 7264, 6671, 6170, 5735, 5352, 5010, 4699, 4416, 4156, 3915, 3691, 3481, 3283, 3098, 2922, 2755, 2596, 2445, 2300, 2162, 2029, 1901, 1779, 1660, 1546, 1436, 1329, 1226, 1126, 1029, 934, 843, 754, 667, 582};
 
 uint16_t calc_arr(int32_t speed_val)
 {
@@ -223,10 +221,6 @@ uint16_t calc_arr(int32_t speed_val)
     return 500;
   return arr_lookup[speed_val];
 }
-
-quad_output quad_x;
-quad_output quad_y;
-int32_t avg_speed;
 
 /*
   this gets called every 10ms, fetches mouse event and put them into a running buffer
@@ -255,10 +249,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if(htim == &htim16 && avg_speed != 0)
   {
     HAL_GPIO_TogglePin(MX2_GPIO_Port, MX2_Pin);
-    if(avg_speed > 0)
-      quad_increment(&quad_x);
-    else
-      quad_decrement(&quad_x);
+    // if(avg_speed > 0)
+    //   quad_increment(&quad_x);
+    // else
+    //   quad_decrement(&quad_x);
   }
 }
 
@@ -311,10 +305,7 @@ int main(void)
     then every 50ms for example the average movement is calculated
     and that is used to update quad encoder?
   */
-  quad_init(&quad_x, MY2_GPIO_Port, MY2_Pin, MOUSE_BUTTON_GPIO_Port, MOUSE_BUTTON_Pin);
-  // quad_init(&quad_y, MY1_GPIO_Port, MY1_Pin, MY2_GPIO_Port, MY2_Pin);
-  HAL_TIM_Base_Start_IT(&htim17);
-  HAL_TIM_Base_Start_IT(&htim16);
+  quad_init(&htim17, &htim16, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12);
   /* USER CODE END 2 */
 
   /* Infinite loop */
