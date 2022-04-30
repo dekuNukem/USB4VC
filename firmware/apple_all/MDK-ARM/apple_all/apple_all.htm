@@ -3,7 +3,7 @@
 <title>Static Call Graph - [apple_all\apple_all.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image apple_all\apple_all.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Apr 30 17:08:29 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Apr 30 18:17:45 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -545,7 +545,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
 
-<P><STRONG><a name="[5c]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, quad_encoder.o(i.HAL_TIM_PeriodElapsedCallback))
+<P><STRONG><a name="[5c]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 122 bytes, Stack size 16 bytes, quad_encoder.o(i.HAL_TIM_PeriodElapsedCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = HAL_TIM_PeriodElapsedCallback &rArr; quad_increment &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
@@ -720,10 +720,8 @@ Global Symbols
 
 <P><STRONG><a name="[a3]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[62]"></a>avg_buf_add</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, quad_encoder.o(i.avg_buf_add))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = avg_buf_add
-</UL>
-<BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
+<P><STRONG><a name="[62]"></a>avg_buf_add</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, quad_encoder.o(i.avg_buf_add))
+<BR><BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
 <P><STRONG><a name="[8f]"></a>byte_to_int16_t</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, main.o(i.byte_to_int16_t))
@@ -749,8 +747,10 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> printf3.o(i.__0printf$3)
 </UL>
-<P><STRONG><a name="[64]"></a>get_buf_avg</STRONG> (Thumb, 52 bytes, Stack size 0 bytes, quad_encoder.o(i.get_buf_avg))
-<BR><BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
+<P><STRONG><a name="[64]"></a>get_buf_avg</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, quad_encoder.o(i.get_buf_avg))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = get_buf_avg
+</UL>
+<BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
 <P><STRONG><a name="[81]"></a>kb_buf_add</STRONG> (Thumb, 48 bytes, Stack size 16 bytes, helpers.o(i.kb_buf_add))
@@ -898,7 +898,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[91]"></a>quad_reset</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_reset))
+<P><STRONG><a name="[91]"></a>quad_reset</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write

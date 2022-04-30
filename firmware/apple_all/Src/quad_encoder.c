@@ -13,14 +13,9 @@ TIM_HandleTypeDef* arr_timer;
 
 mouse_buf* mouse_buffer;
 
-int32_t avg_speed;
 #define ARR_LOOKUP_SIZE 40
 const uint16_t arr_lookup[ARR_LOOKUP_SIZE] = {500, 12500, 10245, 8926, 7990, 7264, 6671, 6170, 5735, 5352, 5010, 4699, 4416, 4156, 3915, 3691, 3481, 3283, 3098, 2922, 2755, 2596, 2445, 2300, 2162, 2029, 1901, 1779, 1660, 1546, 1436, 1329, 1226, 1126, 1029, 934, 843, 754, 667, 582};
 const uint8_t grey_code_lookup[4] = {0, 1, 3, 2};
-
-#define AVG_BUF_SIZE 8
-int32_t avg_buf[AVG_BUF_SIZE];
-uint8_t avg_buf_index;
 
 /*
   instead of all at once, we remove data from buffer
@@ -28,19 +23,19 @@ uint8_t avg_buf_index;
   then every 50ms for example the average movement is calculated
   and that is used to update quad encoder?
 */
-void avg_buf_add(int32_t value)
+void avg_buf_add(quad_output* qo, int16_t value)
 {
-  avg_buf[avg_buf_index] = value;
-  avg_buf_index++;
-  if (avg_buf_index >= AVG_BUF_SIZE)
-    avg_buf_index = 0;
+  qo->avg_buf[qo->avg_buf_index] = value;
+  qo->avg_buf_index++;
+  if(qo->avg_buf_index >= AVG_BUF_SIZE)
+    qo->avg_buf_index = 0;
 }
 
-int32_t get_buf_avg(void)
+int32_t get_buf_avg(quad_output* qo)
 {
   int32_t sum = 0;
   for (int i = 0; i < AVG_BUF_SIZE; ++i)
-    sum += avg_buf[i];
+    sum += qo->avg_buf[i];
   if (sum > 0 && sum < AVG_BUF_SIZE)
     sum = AVG_BUF_SIZE;
   else if (sum < 0 && abs(sum) < AVG_BUF_SIZE)
@@ -67,7 +62,7 @@ uint16_t calc_arr(int32_t speed_val)
 
 void quad_write(quad_output *qo)
 {
-  uint8_t current_code = grey_code_lookup[qo->current_index];
+  uint8_t current_code = grey_code_lookup[qo->gray_code_index];
   if(current_code & 0x1)
     HAL_GPIO_WritePin(qo->A_port, qo->A_pin, GPIO_PIN_SET);
   else
@@ -80,7 +75,10 @@ void quad_write(quad_output *qo)
 
 void quad_reset(quad_output *qo)
 {
-  qo->current_index = 0;
+  qo->gray_code_index = 0;
+  qo->avg_buf_index = 0;
+  qo->avg_speed = 0;
+  memset(qo->avg_buf, 0, AVG_BUF_SIZE);
   quad_write(qo);
 }
 
@@ -100,13 +98,13 @@ void quad_init(mouse_buf* mbuf, TIM_HandleTypeDef* avg_tim, TIM_HandleTypeDef* a
 
 void quad_increment(quad_output *qo)
 {
-  qo->current_index = (uint8_t)(qo->current_index + 1) % 4;
+  qo->gray_code_index = (uint8_t)(qo->gray_code_index + 1) % 4;
   quad_write(qo);
 }
 
 void quad_decrement(quad_output *qo)
 {
-  qo->current_index = (uint8_t)(qo->current_index - 1) % 4;
+  qo->gray_code_index = (uint8_t)(qo->gray_code_index - 1) % 4;
   quad_write(qo);
 }
 
@@ -125,21 +123,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     mouse_event* this_mouse_event = mouse_buf_peek(mouse_buffer);
     if(this_mouse_event == NULL)
     {
-      avg_buf_add(0);
+      avg_buf_add(&quad_x, 0);
     }
     else
     {
-      avg_buf_add(this_mouse_event->movement_x);
+      avg_buf_add(&quad_x, this_mouse_event->movement_x);
       mouse_buf_pop(mouse_buffer);
     }
-    avg_speed = get_buf_avg();
-    arr_timer->Instance->ARR = calc_arr(avg_speed);
+    quad_x.avg_speed = get_buf_avg(&quad_x);
+    arr_timer->Instance->ARR = calc_arr(quad_x.avg_speed);
   }
   // every ARR overflow
-  if(htim == arr_timer && avg_speed != 0)
+  if(htim == arr_timer && quad_x.avg_speed != 0)
   {
     HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
-    if(avg_speed > 0)
+    if(quad_x.avg_speed > 0)
       quad_increment(&quad_x);
     else
       quad_decrement(&quad_x);
