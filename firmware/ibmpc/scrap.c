@@ -1,3 +1,10 @@
+uint8_t ps2_write_result = ps2kb_press_key(buffered_code, buffered_value);
+    if(ps2_write_result)
+      HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+    else
+      kb_buf_pop(&my_kb_buf);
+  printf("!%d", cmd);
+
   uint16_t idcode = (*(uint16_t*)(DBGMCU_IDCODE)) & 0x1fff;
   uint16_t flash_size = *(uint16_t*)(FLASH_SIZE_REG_ADDRESS);
   uint16_t* usb_reg = (uint16_t*)USB_CNTR;

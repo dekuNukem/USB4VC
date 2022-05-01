@@ -27,6 +27,14 @@ void ps2kb_reset(void);
 #define LINUX_KEYCODE_SYSRQ 99
 #define LINUX_KEYCODE_PAUSE 119
 
+#define PS2_OK 0
+#define PS2_ERROR_SCAN_DISABLED 1
+#define PS2_ERROR_UNKNOWN_CODE_SET 9
+#define PS2_ERROR_HOST_INHIBIT 69
+#define PS2_ERROR_UNUSED_CODE 2
+#define PS2_ERROR_UNKNOWN 3
+#define PS2_ERROR_TIMEOUT 4
+
 extern const uint8_t linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2[LINUX_KEYCODE_TO_PS2_SCANCODE_SINGLE_SIZE];
 
 

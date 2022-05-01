@@ -357,11 +357,12 @@ void ps2kb_update(void)
       HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_SET);
     }
   }
-
-  if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+  else if(ps2kb_bus_status == PS2_BUS_IDLE && (kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0))
   {
-    ps2kb_press_key(buffered_code, buffered_value);
-    kb_buf_pop(&my_kb_buf);
+    if(ps2kb_press_key(buffered_code, buffered_value) == PS2_ERROR_HOST_INHIBIT) // host inhibited line during transmission
+      HAL_Delay(1);
+    else
+      kb_buf_pop(&my_kb_buf);
   }
 }
 
