@@ -354,6 +354,7 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
         PS2KB_SENDACK();
       else
         ps2kb_write(0xFE, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      break;
 	  case 0xF6: //set defaults
 	    PS2KB_SENDACK();
 	    break;
@@ -512,8 +513,6 @@ uint8_t ps2kb_press_key_scancode_2(uint8_t linux_keycode, uint8_t linux_keyvalue
   }
   return PS2_ERROR_UNKNOWN;
 }
-
-
 
 uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
 {
