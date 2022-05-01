@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ibmpc\ibmpc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ibmpc\ibmpc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun May 01 17:15:29 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun May 01 22:54:56 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -280,6 +280,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_check_for_softreset
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mcp4451_reset
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_update
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_update
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -1230,7 +1231,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_update
 </UL>
 
-<P><STRONG><a name="[c5]"></a>ps2kb_press_key_scancode_1</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key_scancode_1))
+<P><STRONG><a name="[c5]"></a>ps2kb_press_key_scancode_1</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key_scancode_1))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = ps2kb_press_key_scancode_1 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
@@ -1490,7 +1491,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d5]"></a>xtkb_check_for_softreset</STRONG> (Thumb, 60 bytes, Stack size 8 bytes, xt_kb.o(i.xtkb_check_for_softreset))
-<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = xtkb_check_for_softreset &rArr; xtkb_write &rArr; delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = xtkb_check_for_softreset &rArr; xtkb_write &rArr; xtkb_reset_bus
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_write
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_clk_high
@@ -1518,7 +1519,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d8]"></a>xtkb_press_key</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, xt_kb.o(i.xtkb_press_key))
-<BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = xtkb_press_key &rArr; xtkb_write &rArr; delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = xtkb_press_key &rArr; xtkb_write &rArr; xtkb_reset_bus
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_write
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -1540,16 +1541,16 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_enable
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_update
+<BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_write
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_enable
 </UL>
 
-<P><STRONG><a name="[bc]"></a>xtkb_update</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, main.o(i.xtkb_update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = xtkb_update &rArr; xtkb_press_key &rArr; xtkb_write &rArr; delay_us
+<P><STRONG><a name="[bc]"></a>xtkb_update</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, main.o(i.xtkb_update))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = xtkb_update &rArr; xtkb_press_key &rArr; xtkb_write &rArr; xtkb_reset_bus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_reset_bus
-<LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_press_key
+<BR>[Calls]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_press_key
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_check_for_softreset
+<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
 </UL>
@@ -1557,9 +1558,10 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d6]"></a>xtkb_write</STRONG> (Thumb, 186 bytes, Stack size 16 bytes, xt_kb.o(i.xtkb_write))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = xtkb_write &rArr; delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = xtkb_write &rArr; xtkb_reset_bus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<BR>[Calls]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_reset_bus
+<LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>

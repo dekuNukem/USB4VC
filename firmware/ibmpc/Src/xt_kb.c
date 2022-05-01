@@ -58,15 +58,20 @@ uint8_t xtkb_write(uint8_t data)
 {
   // if clk is low, then host is holding it, inhibiting transmission
   if(XTKB_READ_CLK_PIN() == GPIO_PIN_RESET)
-    return 1;
-
+  {
+    xtkb_reset_bus();
+    return XTKB_ERROR_HOST_INHIBIT;
+  }
   XTKB_CLK_LOW();
   delay_us(5);
   XTKB_DATA_HI();
   delay_us(CLK_RTS_DURATION_US);
   // if data pin is still low, host is inhibiting transmission
   if(XTKB_READ_DATA_PIN() == GPIO_PIN_RESET)
-    return 2;
+  {
+    xtkb_reset_bus();
+    return XTKB_ERROR_HOST_INHIBIT;
+  }
   XTKB_CLK_HI();
   delay_us(CLK_HI_DURATION_US);
   XTKB_CLK_LOW();
@@ -89,7 +94,7 @@ uint8_t xtkb_write(uint8_t data)
   XTKB_CLK_HI();
   XTKB_DATA_LOW();
 
-  return 0;
+  return XTKB_OK;
 }
 
 uint8_t wait_for_clk_high(uint32_t timeout_ms)
@@ -98,9 +103,9 @@ uint8_t wait_for_clk_high(uint32_t timeout_ms)
   while(XTKB_READ_CLK_PIN() == GPIO_PIN_RESET)
   {
     if(HAL_GetTick() - start_time > timeout_ms)
-      return 1;
+      return XTKB_ERROR_TIMEOUT;
   }
-  return 0;
+  return XTKB_OK;
 }
 
 void xtkb_check_for_softreset(void)
@@ -167,11 +172,11 @@ uint8_t xtkb_press_key(uint8_t code, uint8_t status)
   }
 
   if(code > 83) // not on XT keyboard
-    return 0;
+    return XTKB_OK;
   if(status == 2) // typematic, XT can't handle fast repeats, so slow it down a bit
   {
     if(HAL_GetTick() - last_typematic <= 80)
-      return 0;
+      return XTKB_OK;
     last_typematic = HAL_GetTick();
   }
   if(!status)

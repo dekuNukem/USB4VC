@@ -479,15 +479,12 @@ void gamepad_update(void)
 void xtkb_update(void)
 {
   xtkb_check_for_softreset();
-
   if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
   {
-    if(xtkb_press_key(buffered_code, buffered_value) != 0)
-    {
-      xtkb_reset_bus();
-      return;
-    }
-    kb_buf_pop(&my_kb_buf);
+    if(xtkb_press_key(buffered_code, buffered_value) == XTKB_ERROR_HOST_INHIBIT)
+      HAL_Delay(1);
+    else
+      kb_buf_pop(&my_kb_buf);
   }
 }
 

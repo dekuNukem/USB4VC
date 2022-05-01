@@ -14,6 +14,14 @@ void xtkb_reset_bus(void);
 void xtkb_release_lines(void);
 void xtkb_enable(void);
 
+#define XTKB_OK 0
+#define XTKB_ERROR_SCAN_DISABLED 1
+#define XTKB_ERROR_UNKNOWN_CODE_SET 9
+#define XTKB_ERROR_HOST_INHIBIT 69
+#define XTKB_ERROR_UNUSED_CODE 2
+#define XTKB_ERROR_UNKNOWN 3
+#define XTKB_ERROR_TIMEOUT 4
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,3 +1,19 @@
+void xtkb_update(void)
+{
+  xtkb_check_for_softreset();
+
+  if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+  {
+    if(xtkb_press_key(buffered_code, buffered_value) != 0)
+    {
+      xtkb_reset_bus();
+      return;
+    }
+    kb_buf_pop(&my_kb_buf);
+  }
+}
+
+
 uint8_t ps2_write_result = ps2kb_press_key(buffered_code, buffered_value);
     if(ps2_write_result)
       HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);

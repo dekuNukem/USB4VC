@@ -406,9 +406,15 @@ uint8_t ps2kb_press_key_scancode_1(uint8_t linux_keycode, uint8_t linux_keyvalue
   if(linux_keycode <= 83 || linux_keycode == LINUX_KEYCODE_F11 || linux_keycode == LINUX_KEYCODE_F12)
   {
     if(linux_keyvalue)
-      ps2kb_write(linux_keycode, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    {
+      if(ps2kb_write(linux_keycode, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS))
+        return PS2_ERROR_HOST_INHIBIT;
+    }
     else
-      ps2kb_write(linux_keycode | 0x80, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+    {
+      if(ps2kb_write(linux_keycode | 0x80, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS))
+        return PS2_ERROR_HOST_INHIBIT;
+    }
     return PS2_OK;
   }
   return PS2_ERROR_UNKNOWN;
