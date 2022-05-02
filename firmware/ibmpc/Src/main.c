@@ -330,10 +330,8 @@ void ps2mouse_update(void)
     while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
       ;
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
-    while(1)
-      ;
   }
-  mouse_buf_pop(&my_mouse_buf);
+  mouse_buf_reset(&my_mouse_buf);
 }
 
 void ps2kb_update(void)
