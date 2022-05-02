@@ -23,6 +23,8 @@ uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf, uint8_t inhibit_timeout_ms)
 uint8_t ps2mouse_write_nowait(uint8_t data);
 void ps2mouse_reset(void);
 void ps2mouse_restore_defaults(void);
+void ps2mouse_send_bat(uint8_t timeout_ms);
+uint8_t ps2mouse_wait_for_idle(uint8_t timeout_ms);
 
 #define PS2_OK 0
 #define PS2_ERROR_REPORTING_DISABLED 1

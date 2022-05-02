@@ -73,6 +73,14 @@ void ps2mouse_reset(void)
   mouse_device_id = 0;
 }
 
+void ps2mouse_send_bat(uint8_t timeout_ms)
+{
+  if(ps2mouse_wait_for_idle(timeout_ms))
+    return;
+  ps2mouse_write(0xaa, 100);
+  ps2mouse_write(0, 100);
+}
+
 void ps2mouse_init(GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* data_port, uint16_t data_pin)
 {
   ps2mouse_clk_port = clk_port;

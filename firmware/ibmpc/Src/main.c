@@ -199,6 +199,7 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_PS2_MOUSE:
+      case PROTOCOL_PS2_MOUSE_KVM:
         ps2mouse_reset();
         ps2mouse_release_lines();
         break;
@@ -327,7 +328,7 @@ void ps2mouse_update(void)
 
   uint8_t inhibit_timeout_ms = 200;
   if(is_protocol_enabled(PROTOCOL_PS2_MOUSE_KVM))
-    inhibit_timeout_ms = 3;
+    inhibit_timeout_ms = 2;
   if(ps2mouse_send_update(&my_ps2_outbuf, inhibit_timeout_ms) != PS2_OK)
   {
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
@@ -555,9 +556,9 @@ int main(void)
   MX_TIM2_Init();
   MX_USART1_UART_Init();
   MX_USART3_UART_Init();
-  // MX_IWDG_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-  // HAL_IWDG_Refresh(&hiwdg);
+  HAL_IWDG_Refresh(&hiwdg);
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
   protocol_status_lookup_init();
@@ -593,11 +594,11 @@ int main(void)
     }
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
   }
-  ps2mouse_write(0xaa, 100);
-  ps2mouse_write(0, 100);
+
+  ps2mouse_send_bat(25);
   while (1)
   {
-    // HAL_IWDG_Refresh(&hiwdg);
+    HAL_IWDG_Refresh(&hiwdg);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
