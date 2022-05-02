@@ -341,11 +341,15 @@ void ps2mouse_update(void)
     return;
   }
 
-  if(ps2mouse_send_update(&my_ps2_outbuf) == PS2_ERROR_HOST_INHIBIT)
+  if(ps2mouse_send_update(&my_ps2_outbuf) != PS2_OK)
   {
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+    uint32_t enter_time = HAL_GetTick();
     while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
-      ;
+    {
+      if(HAL_GetTick() - enter_time > 25)
+        break;
+    }
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
   }
   mouse_buf_reset(&my_mouse_buf); // don't change this!

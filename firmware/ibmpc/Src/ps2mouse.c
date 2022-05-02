@@ -69,7 +69,7 @@ void ps2mouse_restore_defaults(void)
   ps2mouse_sampling_rate = 100;
   ps2mouse_resolution = 2;
   ps2mouse_scale = 1;
-  ps2mouse_data_reporting_enabled = 0;
+  ps2mouse_data_reporting_enabled = 1;
   ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
   ps2mouse_prev_mode = PS2MOUSE_MODE_STREAM;
   reset_accumulators();
@@ -402,11 +402,11 @@ uint8_t ps2mouse_write_nowait(uint8_t data)
   delay_us(CLKFULL);
   PS2MOUSE_CLK_HI();
   delay_us(CLKHALF);
-  if(PS2MOUSE_READ_CLK_PIN() == GPIO_PIN_RESET)
-  {
-    ps2mouse_release_lines();
-    return PS2_ERROR_HOST_INHIBIT;
-  }
+  // if(PS2MOUSE_READ_CLK_PIN() == GPIO_PIN_RESET)
+  // {
+  //   ps2mouse_release_lines();
+  //   return PS2_ERROR_HOST_INHIBIT;
+  // }
   delay_us(BYTEWAIT_END);
   return PS2_OK;
 }
@@ -417,7 +417,8 @@ uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf)
   for (int i = 0; i < pbuf->size; ++i)
   {
     // return error if inhibited or interrupted while transmitting
-    write_result = ps2mouse_write(pbuf->data[i], 255);
+    // kvm mode = 3, direct mode = 200
+    write_result = ps2mouse_write(pbuf->data[i], 3);
     if(write_result)
       return write_result;
   }
