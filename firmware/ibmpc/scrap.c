@@ -1,3 +1,49 @@
+uint8_t is_ps2_mouse_connected_prev;
+
+void ps2mouse_update(void)
+{
+  uint8_t is_ps2_mouse_connected = IS_PS2MOUSE_PRESENT();
+  uint8_t send_bat = 0;
+  if(is_ps2_mouse_connected == 1 && is_ps2_mouse_connected_prev == 0)
+  {
+    send_bat = 1;
+    HAL_Delay(50);
+    ps2mouse_restore_defaults();
+  }
+  is_ps2_mouse_connected_prev = is_ps2_mouse_connected;
+
+  ps2mouse_bus_status = ps2mouse_get_bus_status();
+  if(ps2mouse_bus_status == PS2_BUS_INHIBIT)
+  {
+    ps2mouse_release_lines();
+    return;
+  }
+  else if(ps2mouse_bus_status == PS2_BUS_REQ_TO_SEND)
+  {
+    ps2mouse_read(&ps2mouse_host_cmd, 10);
+    ps2mouse_host_req_reply(ps2mouse_host_cmd, &latest_mouse_event);
+    return;
+  }
+  else if(send_bat)
+  {
+    ps2mouse_write(0xaa, 100);
+    ps2mouse_write(0, 100);
+  }
+
+
+
+uint8_t is_ps2_mouse_connected_prev;
+ uint8_t is_ps2_mouse_connected = IS_PS2MOUSE_PRESENT();
+  uint8_t send_bat = 0;
+  if(is_ps2_mouse_connected == 1 && is_ps2_mouse_connected_prev == 0)
+  {
+    send_bat = 1;
+    HAL_Delay(50);
+    ps2mouse_restore_defaults();
+  }
+  is_ps2_mouse_connected_prev = is_ps2_mouse_connected;
+
+
 if(ps2mouse_send_update(&my_ps2_outbuf) == PS2_ERROR_HOST_INHIBIT)
   {
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);

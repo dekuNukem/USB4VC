@@ -19,11 +19,10 @@ uint8_t ps2mouse_write(uint8_t data, uint8_t timeout_ms);
 void ps2mouse_host_req_reply(uint8_t cmd, mouse_event* mevent);
 void ps2mouse_release_lines(void);
 uint8_t ps2mouse_get_outgoing_data(mouse_event* this_event, ps2_outgoing_buf* pbuf);
-uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf);
+uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf, uint8_t inhibit_timeout_ms);
 uint8_t ps2mouse_write_nowait(uint8_t data);
 void ps2mouse_reset(void);
 void ps2mouse_restore_defaults(void);
-
 
 #define PS2_OK 0
 #define PS2_ERROR_REPORTING_DISABLED 1

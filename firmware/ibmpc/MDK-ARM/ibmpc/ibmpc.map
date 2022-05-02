@@ -268,17 +268,14 @@ Section Cross References
     main.o(i.ps2kb_update) refers to stm32f0xx_hal.o(i.HAL_Delay) for HAL_Delay
     main.o(i.ps2kb_update) refers to main.o(.data) for .data
     main.o(i.ps2kb_update) refers to main.o(.bss) for .bss
-    main.o(i.ps2mouse_update) refers to stm32f0xx_hal_gpio.o(i.HAL_GPIO_ReadPin) for HAL_GPIO_ReadPin
-    main.o(i.ps2mouse_update) refers to stm32f0xx_hal.o(i.HAL_Delay) for HAL_Delay
-    main.o(i.ps2mouse_update) refers to ps2mouse.o(i.ps2mouse_restore_defaults) for ps2mouse_restore_defaults
     main.o(i.ps2mouse_update) refers to ps2mouse.o(i.ps2mouse_get_bus_status) for ps2mouse_get_bus_status
-    main.o(i.ps2mouse_update) refers to ps2mouse.o(i.ps2mouse_write) for ps2mouse_write
     main.o(i.ps2mouse_update) refers to helpers.o(i.mouse_buf_peek) for mouse_buf_peek
     main.o(i.ps2mouse_update) refers to ps2mouse.o(i.ps2mouse_get_outgoing_data) for ps2mouse_get_outgoing_data
     main.o(i.ps2mouse_update) refers to helpers.o(i.mouse_buf_pop) for mouse_buf_pop
     main.o(i.ps2mouse_update) refers to ps2mouse.o(i.ps2mouse_release_lines) for ps2mouse_release_lines
     main.o(i.ps2mouse_update) refers to ps2mouse.o(i.ps2mouse_read) for ps2mouse_read
     main.o(i.ps2mouse_update) refers to ps2mouse.o(i.ps2mouse_host_req_reply) for ps2mouse_host_req_reply
+    main.o(i.ps2mouse_update) refers to main.o(i.is_protocol_enabled) for is_protocol_enabled
     main.o(i.ps2mouse_update) refers to ps2mouse.o(i.ps2mouse_send_update) for ps2mouse_send_update
     main.o(i.ps2mouse_update) refers to stm32f0xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
     main.o(i.ps2mouse_update) refers to stm32f0xx_hal.o(i.HAL_GetTick) for HAL_GetTick
@@ -2008,68 +2005,68 @@ Image Symbol Table
     i.gamepad_update                         0x08002a58   Section        0  main.o(i.gamepad_update)
     i.gameport_init                          0x08002afc   Section        0  main.o(i.gameport_init)
     i.handle_protocol_switch                 0x08002b38   Section        0  main.o(i.handle_protocol_switch)
-    i.is_protocol_enabled                    0x08002bd4   Section        0  main.o(i.is_protocol_enabled)
-    i.kb_buf_add                             0x08002be8   Section        0  helpers.o(i.kb_buf_add)
-    i.kb_buf_init                            0x08002c18   Section        0  helpers.o(i.kb_buf_init)
-    i.kb_buf_is_full                         0x08002c38   Section        0  helpers.o(i.kb_buf_is_full)
-    i.kb_buf_peek                            0x08002c54   Section        0  helpers.o(i.kb_buf_peek)
-    i.kb_buf_pop                             0x08002c74   Section        0  helpers.o(i.kb_buf_pop)
-    i.kb_buf_reset                           0x08002c8c   Section        0  helpers.o(i.kb_buf_reset)
-    i.keyboard_reply                         0x08002ca8   Section        0  ps2kb.o(i.keyboard_reply)
-    i.main                                   0x08002da8   Section        0  main.o(i.main)
-    i.malloc                                 0x08002f88   Section        0  malloc.o(i.malloc)
-    i.mcp4451_is_available                   0x08002ff4   Section        0  mcp4451.o(i.mcp4451_is_available)
-    i.mcp4451_reset                          0x08003014   Section        0  mcp4451.o(i.mcp4451_reset)
-    i.mcp4451_write_wiper                    0x08003040   Section        0  mcp4451.o(i.mcp4451_write_wiper)
-    i.micros                                 0x08003078   Section        0  delay_us.o(i.micros)
-    i.microsoft_serial_mouse_update          0x08003088   Section        0  main.o(i.microsoft_serial_mouse_update)
-    i.mouse_buf_add                          0x0800314c   Section        0  helpers.o(i.mouse_buf_add)
-    i.mouse_buf_init                         0x0800317e   Section        0  helpers.o(i.mouse_buf_init)
-    i.mouse_buf_is_full                      0x08003196   Section        0  helpers.o(i.mouse_buf_is_full)
-    i.mouse_buf_peek                         0x080031b2   Section        0  helpers.o(i.mouse_buf_peek)
-    i.mouse_buf_pop                          0x080031c8   Section        0  helpers.o(i.mouse_buf_pop)
-    i.mouse_buf_reset                        0x080031e0   Section        0  helpers.o(i.mouse_buf_reset)
-    i.protocol_status_lookup_init            0x080031f8   Section        0  main.o(i.protocol_status_lookup_init)
-    i.ps2kb_get_bus_status                   0x08003218   Section        0  ps2kb.o(i.ps2kb_get_bus_status)
-    i.ps2kb_init                             0x0800325c   Section        0  ps2kb.o(i.ps2kb_init)
-    i.ps2kb_press_key                        0x08003278   Section        0  ps2kb.o(i.ps2kb_press_key)
-    i.ps2kb_press_key_scancode_1             0x080032a4   Section        0  ps2kb.o(i.ps2kb_press_key_scancode_1)
-    i.ps2kb_press_key_scancode_2             0x080032d0   Section        0  ps2kb.o(i.ps2kb_press_key_scancode_2)
-    i.ps2kb_read                             0x08003460   Section        0  ps2kb.o(i.ps2kb_read)
-    i.ps2kb_release_lines                    0x0800355c   Section        0  ps2kb.o(i.ps2kb_release_lines)
-    i.ps2kb_reset                            0x0800357c   Section        0  ps2kb.o(i.ps2kb_reset)
-    i.ps2kb_update                           0x0800358c   Section        0  main.o(i.ps2kb_update)
-    i.ps2kb_write                            0x08003640   Section        0  ps2kb.o(i.ps2kb_write)
-    i.ps2kb_write_nowait                     0x08003684   Section        0  ps2kb.o(i.ps2kb_write_nowait)
-    i.ps2mouse_get_bus_status                0x080037a8   Section        0  ps2mouse.o(i.ps2mouse_get_bus_status)
-    i.ps2mouse_get_outgoing_data             0x08003808   Section        0  ps2mouse.o(i.ps2mouse_get_outgoing_data)
-    i.ps2mouse_host_req_reply                0x080038ec   Section        0  ps2mouse.o(i.ps2mouse_host_req_reply)
-    i.ps2mouse_init                          0x08003a64   Section        0  ps2mouse.o(i.ps2mouse_init)
-    i.ps2mouse_read                          0x08003a80   Section        0  ps2mouse.o(i.ps2mouse_read)
-    i.ps2mouse_release_lines                 0x08003b78   Section        0  ps2mouse.o(i.ps2mouse_release_lines)
-    i.ps2mouse_reset                         0x08003b98   Section        0  ps2mouse.o(i.ps2mouse_reset)
-    i.ps2mouse_restore_defaults              0x08003bb0   Section        0  ps2mouse.o(i.ps2mouse_restore_defaults)
-    i.ps2mouse_send_update                   0x08003bcc   Section        0  ps2mouse.o(i.ps2mouse_send_update)
-    i.ps2mouse_update                        0x08003bf0   Section        0  main.o(i.ps2mouse_update)
-    i.ps2mouse_wait_for_idle                 0x08003cc8   Section        0  ps2mouse.o(i.ps2mouse_wait_for_idle)
-    i.ps2mouse_write                         0x08003cee   Section        0  ps2mouse.o(i.ps2mouse_write)
-    i.ps2mouse_write_delay_start             0x08003d08   Section        0  ps2mouse.o(i.ps2mouse_write_delay_start)
-    i.ps2mouse_write_nowait                  0x08003d2c   Section        0  ps2mouse.o(i.ps2mouse_write_nowait)
-    i.spi_error_dump_reboot                  0x08003e50   Section        0  main.o(i.spi_error_dump_reboot)
-    i.wait_for_clk_high                      0x08003ec8   Section        0  xt_kb.o(i.wait_for_clk_high)
-    i.xtkb_check_for_softreset               0x08003ef8   Section        0  xt_kb.o(i.xtkb_check_for_softreset)
-    i.xtkb_enable                            0x08003f38   Section        0  xt_kb.o(i.xtkb_enable)
-    i.xtkb_init                              0x08003f4c   Section        0  xt_kb.o(i.xtkb_init)
-    i.xtkb_press_key                         0x08003f60   Section        0  xt_kb.o(i.xtkb_press_key)
-    i.xtkb_release_lines                     0x08003fd8   Section        0  xt_kb.o(i.xtkb_release_lines)
-    i.xtkb_reset_bus                         0x08003ff8   Section        0  xt_kb.o(i.xtkb_reset_bus)
-    i.xtkb_update                            0x08004018   Section        0  main.o(i.xtkb_update)
-    i.xtkb_write                             0x08004054   Section        0  xt_kb.o(i.xtkb_write)
-    .constdata                               0x08004114   Section      121  ps2kb.o(.constdata)
-    .constdata                               0x0800418d   Section        4  mcp4451.o(.constdata)
-    .constdata                               0x08004191   Section       55  main.o(.constdata)
-    .constdata                               0x080041c8   Section       16  system_stm32f0xx.o(.constdata)
-    .constdata                               0x080041d8   Section        8  system_stm32f0xx.o(.constdata)
+    i.is_protocol_enabled                    0x08002bd8   Section        0  main.o(i.is_protocol_enabled)
+    i.kb_buf_add                             0x08002bec   Section        0  helpers.o(i.kb_buf_add)
+    i.kb_buf_init                            0x08002c1c   Section        0  helpers.o(i.kb_buf_init)
+    i.kb_buf_is_full                         0x08002c3c   Section        0  helpers.o(i.kb_buf_is_full)
+    i.kb_buf_peek                            0x08002c58   Section        0  helpers.o(i.kb_buf_peek)
+    i.kb_buf_pop                             0x08002c78   Section        0  helpers.o(i.kb_buf_pop)
+    i.kb_buf_reset                           0x08002c90   Section        0  helpers.o(i.kb_buf_reset)
+    i.keyboard_reply                         0x08002cac   Section        0  ps2kb.o(i.keyboard_reply)
+    i.main                                   0x08002dac   Section        0  main.o(i.main)
+    i.malloc                                 0x08002f94   Section        0  malloc.o(i.malloc)
+    i.mcp4451_is_available                   0x08003000   Section        0  mcp4451.o(i.mcp4451_is_available)
+    i.mcp4451_reset                          0x08003020   Section        0  mcp4451.o(i.mcp4451_reset)
+    i.mcp4451_write_wiper                    0x0800304c   Section        0  mcp4451.o(i.mcp4451_write_wiper)
+    i.micros                                 0x08003084   Section        0  delay_us.o(i.micros)
+    i.microsoft_serial_mouse_update          0x08003094   Section        0  main.o(i.microsoft_serial_mouse_update)
+    i.mouse_buf_add                          0x08003158   Section        0  helpers.o(i.mouse_buf_add)
+    i.mouse_buf_init                         0x0800318a   Section        0  helpers.o(i.mouse_buf_init)
+    i.mouse_buf_is_full                      0x080031a2   Section        0  helpers.o(i.mouse_buf_is_full)
+    i.mouse_buf_peek                         0x080031be   Section        0  helpers.o(i.mouse_buf_peek)
+    i.mouse_buf_pop                          0x080031d4   Section        0  helpers.o(i.mouse_buf_pop)
+    i.mouse_buf_reset                        0x080031ec   Section        0  helpers.o(i.mouse_buf_reset)
+    i.protocol_status_lookup_init            0x08003204   Section        0  main.o(i.protocol_status_lookup_init)
+    i.ps2kb_get_bus_status                   0x08003228   Section        0  ps2kb.o(i.ps2kb_get_bus_status)
+    i.ps2kb_init                             0x0800326c   Section        0  ps2kb.o(i.ps2kb_init)
+    i.ps2kb_press_key                        0x08003288   Section        0  ps2kb.o(i.ps2kb_press_key)
+    i.ps2kb_press_key_scancode_1             0x080032b4   Section        0  ps2kb.o(i.ps2kb_press_key_scancode_1)
+    i.ps2kb_press_key_scancode_2             0x080032e0   Section        0  ps2kb.o(i.ps2kb_press_key_scancode_2)
+    i.ps2kb_read                             0x08003470   Section        0  ps2kb.o(i.ps2kb_read)
+    i.ps2kb_release_lines                    0x0800356c   Section        0  ps2kb.o(i.ps2kb_release_lines)
+    i.ps2kb_reset                            0x0800358c   Section        0  ps2kb.o(i.ps2kb_reset)
+    i.ps2kb_update                           0x0800359c   Section        0  main.o(i.ps2kb_update)
+    i.ps2kb_write                            0x08003650   Section        0  ps2kb.o(i.ps2kb_write)
+    i.ps2kb_write_nowait                     0x08003694   Section        0  ps2kb.o(i.ps2kb_write_nowait)
+    i.ps2mouse_get_bus_status                0x080037b8   Section        0  ps2mouse.o(i.ps2mouse_get_bus_status)
+    i.ps2mouse_get_outgoing_data             0x08003818   Section        0  ps2mouse.o(i.ps2mouse_get_outgoing_data)
+    i.ps2mouse_host_req_reply                0x080038fc   Section        0  ps2mouse.o(i.ps2mouse_host_req_reply)
+    i.ps2mouse_init                          0x08003a74   Section        0  ps2mouse.o(i.ps2mouse_init)
+    i.ps2mouse_read                          0x08003a90   Section        0  ps2mouse.o(i.ps2mouse_read)
+    i.ps2mouse_release_lines                 0x08003b88   Section        0  ps2mouse.o(i.ps2mouse_release_lines)
+    i.ps2mouse_reset                         0x08003ba8   Section        0  ps2mouse.o(i.ps2mouse_reset)
+    i.ps2mouse_restore_defaults              0x08003bc0   Section        0  ps2mouse.o(i.ps2mouse_restore_defaults)
+    i.ps2mouse_send_update                   0x08003bdc   Section        0  ps2mouse.o(i.ps2mouse_send_update)
+    i.ps2mouse_update                        0x08003c00   Section        0  main.o(i.ps2mouse_update)
+    i.ps2mouse_wait_for_idle                 0x08003cb0   Section        0  ps2mouse.o(i.ps2mouse_wait_for_idle)
+    i.ps2mouse_write                         0x08003cd6   Section        0  ps2mouse.o(i.ps2mouse_write)
+    i.ps2mouse_write_delay_start             0x08003cf0   Section        0  ps2mouse.o(i.ps2mouse_write_delay_start)
+    i.ps2mouse_write_nowait                  0x08003d14   Section        0  ps2mouse.o(i.ps2mouse_write_nowait)
+    i.spi_error_dump_reboot                  0x08003e38   Section        0  main.o(i.spi_error_dump_reboot)
+    i.wait_for_clk_high                      0x08003eb0   Section        0  xt_kb.o(i.wait_for_clk_high)
+    i.xtkb_check_for_softreset               0x08003ee0   Section        0  xt_kb.o(i.xtkb_check_for_softreset)
+    i.xtkb_enable                            0x08003f20   Section        0  xt_kb.o(i.xtkb_enable)
+    i.xtkb_init                              0x08003f34   Section        0  xt_kb.o(i.xtkb_init)
+    i.xtkb_press_key                         0x08003f48   Section        0  xt_kb.o(i.xtkb_press_key)
+    i.xtkb_release_lines                     0x08003fc0   Section        0  xt_kb.o(i.xtkb_release_lines)
+    i.xtkb_reset_bus                         0x08003fe0   Section        0  xt_kb.o(i.xtkb_reset_bus)
+    i.xtkb_update                            0x08004000   Section        0  main.o(i.xtkb_update)
+    i.xtkb_write                             0x0800403c   Section        0  xt_kb.o(i.xtkb_write)
+    .constdata                               0x080040fc   Section      121  ps2kb.o(.constdata)
+    .constdata                               0x08004175   Section        4  mcp4451.o(.constdata)
+    .constdata                               0x08004179   Section       55  main.o(.constdata)
+    .constdata                               0x080041b0   Section       16  system_stm32f0xx.o(.constdata)
+    .constdata                               0x080041c0   Section        8  system_stm32f0xx.o(.constdata)
     .data                                    0x20000000   Section        4  delay_us.o(.data)
     .data                                    0x20000004   Section       20  ps2kb.o(.data)
     .data                                    0x20000018   Section       28  ps2mouse.o(.data)
@@ -2282,72 +2279,72 @@ Image Symbol Table
     gamepad_buf_reset                        0x08002a41   Thumb Code    22  helpers.o(i.gamepad_buf_reset)
     gamepad_update                           0x08002a59   Thumb Code   150  main.o(i.gamepad_update)
     gameport_init                            0x08002afd   Thumb Code    52  main.o(i.gameport_init)
-    handle_protocol_switch                   0x08002b39   Thumb Code   148  main.o(i.handle_protocol_switch)
-    is_protocol_enabled                      0x08002bd5   Thumb Code    16  main.o(i.is_protocol_enabled)
-    kb_buf_add                               0x08002be9   Thumb Code    48  helpers.o(i.kb_buf_add)
-    kb_buf_init                              0x08002c19   Thumb Code    32  helpers.o(i.kb_buf_init)
-    kb_buf_is_full                           0x08002c39   Thumb Code    28  helpers.o(i.kb_buf_is_full)
-    kb_buf_peek                              0x08002c55   Thumb Code    32  helpers.o(i.kb_buf_peek)
-    kb_buf_pop                               0x08002c75   Thumb Code    24  helpers.o(i.kb_buf_pop)
-    kb_buf_reset                             0x08002c8d   Thumb Code    28  helpers.o(i.kb_buf_reset)
-    keyboard_reply                           0x08002ca9   Thumb Code   250  ps2kb.o(i.keyboard_reply)
-    main                                     0x08002da9   Thumb Code   386  main.o(i.main)
-    malloc                                   0x08002f89   Thumb Code    92  malloc.o(i.malloc)
-    mcp4451_is_available                     0x08002ff5   Thumb Code    26  mcp4451.o(i.mcp4451_is_available)
-    mcp4451_reset                            0x08003015   Thumb Code    38  mcp4451.o(i.mcp4451_reset)
-    mcp4451_write_wiper                      0x08003041   Thumb Code    46  mcp4451.o(i.mcp4451_write_wiper)
-    micros                                   0x08003079   Thumb Code    10  delay_us.o(i.micros)
-    microsoft_serial_mouse_update            0x08003089   Thumb Code   188  main.o(i.microsoft_serial_mouse_update)
-    mouse_buf_add                            0x0800314d   Thumb Code    50  helpers.o(i.mouse_buf_add)
-    mouse_buf_init                           0x0800317f   Thumb Code    24  helpers.o(i.mouse_buf_init)
-    mouse_buf_is_full                        0x08003197   Thumb Code    28  helpers.o(i.mouse_buf_is_full)
-    mouse_buf_peek                           0x080031b3   Thumb Code    22  helpers.o(i.mouse_buf_peek)
-    mouse_buf_pop                            0x080031c9   Thumb Code    24  helpers.o(i.mouse_buf_pop)
-    mouse_buf_reset                          0x080031e1   Thumb Code    22  helpers.o(i.mouse_buf_reset)
-    protocol_status_lookup_init              0x080031f9   Thumb Code    28  main.o(i.protocol_status_lookup_init)
-    ps2kb_get_bus_status                     0x08003219   Thumb Code    62  ps2kb.o(i.ps2kb_get_bus_status)
-    ps2kb_init                               0x0800325d   Thumb Code    22  ps2kb.o(i.ps2kb_init)
-    ps2kb_press_key                          0x08003279   Thumb Code    40  ps2kb.o(i.ps2kb_press_key)
-    ps2kb_press_key_scancode_1               0x080032a5   Thumb Code    44  ps2kb.o(i.ps2kb_press_key_scancode_1)
-    ps2kb_press_key_scancode_2               0x080032d1   Thumb Code   396  ps2kb.o(i.ps2kb_press_key_scancode_2)
-    ps2kb_read                               0x08003461   Thumb Code   246  ps2kb.o(i.ps2kb_read)
-    ps2kb_release_lines                      0x0800355d   Thumb Code    26  ps2kb.o(i.ps2kb_release_lines)
-    ps2kb_reset                              0x0800357d   Thumb Code    12  ps2kb.o(i.ps2kb_reset)
-    ps2kb_update                             0x0800358d   Thumb Code   166  main.o(i.ps2kb_update)
-    ps2kb_write                              0x08003641   Thumb Code    62  ps2kb.o(i.ps2kb_write)
-    ps2kb_write_nowait                       0x08003685   Thumb Code   286  ps2kb.o(i.ps2kb_write_nowait)
-    ps2mouse_get_bus_status                  0x080037a9   Thumb Code    92  ps2mouse.o(i.ps2mouse_get_bus_status)
-    ps2mouse_get_outgoing_data               0x08003809   Thumb Code   224  ps2mouse.o(i.ps2mouse_get_outgoing_data)
-    ps2mouse_host_req_reply                  0x080038ed   Thumb Code   370  ps2mouse.o(i.ps2mouse_host_req_reply)
-    ps2mouse_init                            0x08003a65   Thumb Code    22  ps2mouse.o(i.ps2mouse_init)
-    ps2mouse_read                            0x08003a81   Thumb Code   244  ps2mouse.o(i.ps2mouse_read)
-    ps2mouse_release_lines                   0x08003b79   Thumb Code    26  ps2mouse.o(i.ps2mouse_release_lines)
-    ps2mouse_reset                           0x08003b99   Thumb Code    20  ps2mouse.o(i.ps2mouse_reset)
-    ps2mouse_restore_defaults                0x08003bb1   Thumb Code    22  ps2mouse.o(i.ps2mouse_restore_defaults)
-    ps2mouse_send_update                     0x08003bcd   Thumb Code    34  ps2mouse.o(i.ps2mouse_send_update)
-    ps2mouse_update                          0x08003bf1   Thumb Code   204  main.o(i.ps2mouse_update)
-    ps2mouse_wait_for_idle                   0x08003cc9   Thumb Code    38  ps2mouse.o(i.ps2mouse_wait_for_idle)
-    ps2mouse_write                           0x08003cef   Thumb Code    26  ps2mouse.o(i.ps2mouse_write)
-    ps2mouse_write_delay_start               0x08003d09   Thumb Code    34  ps2mouse.o(i.ps2mouse_write_delay_start)
-    ps2mouse_write_nowait                    0x08003d2d   Thumb Code   286  ps2mouse.o(i.ps2mouse_write_nowait)
-    spi_error_dump_reboot                    0x08003e51   Thumb Code    72  main.o(i.spi_error_dump_reboot)
-    wait_for_clk_high                        0x08003ec9   Thumb Code    44  xt_kb.o(i.wait_for_clk_high)
-    xtkb_check_for_softreset                 0x08003ef9   Thumb Code    60  xt_kb.o(i.xtkb_check_for_softreset)
-    xtkb_enable                              0x08003f39   Thumb Code    16  xt_kb.o(i.xtkb_enable)
-    xtkb_init                                0x08003f4d   Thumb Code    14  xt_kb.o(i.xtkb_init)
-    xtkb_press_key                           0x08003f61   Thumb Code   116  xt_kb.o(i.xtkb_press_key)
-    xtkb_release_lines                       0x08003fd9   Thumb Code    26  xt_kb.o(i.xtkb_release_lines)
-    xtkb_reset_bus                           0x08003ff9   Thumb Code    26  xt_kb.o(i.xtkb_reset_bus)
-    xtkb_update                              0x08004019   Thumb Code    52  main.o(i.xtkb_update)
-    xtkb_write                               0x08004055   Thumb Code   186  xt_kb.o(i.xtkb_write)
-    linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2 0x08004114   Data          89  ps2kb.o(.constdata)
-    linux_keycode_to_ps2_scancode_lookup_special_codeset2 0x0800416d   Data          32  ps2kb.o(.constdata)
-    mcp4451_wiper_id_to_reg_addr_lookup      0x0800418d   Data           4  mcp4451.o(.constdata)
-    boot_message                             0x08004191   Data          55  main.o(.constdata)
-    AHBPrescTable                            0x080041c8   Data          16  system_stm32f0xx.o(.constdata)
-    APBPrescTable                            0x080041d8   Data           8  system_stm32f0xx.o(.constdata)
-    Region$$Table$$Base                      0x080041e0   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08004200   Number         0  anon$$obj.o(Region$$Table)
+    handle_protocol_switch                   0x08002b39   Thumb Code   150  main.o(i.handle_protocol_switch)
+    is_protocol_enabled                      0x08002bd9   Thumb Code    16  main.o(i.is_protocol_enabled)
+    kb_buf_add                               0x08002bed   Thumb Code    48  helpers.o(i.kb_buf_add)
+    kb_buf_init                              0x08002c1d   Thumb Code    32  helpers.o(i.kb_buf_init)
+    kb_buf_is_full                           0x08002c3d   Thumb Code    28  helpers.o(i.kb_buf_is_full)
+    kb_buf_peek                              0x08002c59   Thumb Code    32  helpers.o(i.kb_buf_peek)
+    kb_buf_pop                               0x08002c79   Thumb Code    24  helpers.o(i.kb_buf_pop)
+    kb_buf_reset                             0x08002c91   Thumb Code    28  helpers.o(i.kb_buf_reset)
+    keyboard_reply                           0x08002cad   Thumb Code   250  ps2kb.o(i.keyboard_reply)
+    main                                     0x08002dad   Thumb Code   396  main.o(i.main)
+    malloc                                   0x08002f95   Thumb Code    92  malloc.o(i.malloc)
+    mcp4451_is_available                     0x08003001   Thumb Code    26  mcp4451.o(i.mcp4451_is_available)
+    mcp4451_reset                            0x08003021   Thumb Code    38  mcp4451.o(i.mcp4451_reset)
+    mcp4451_write_wiper                      0x0800304d   Thumb Code    46  mcp4451.o(i.mcp4451_write_wiper)
+    micros                                   0x08003085   Thumb Code    10  delay_us.o(i.micros)
+    microsoft_serial_mouse_update            0x08003095   Thumb Code   188  main.o(i.microsoft_serial_mouse_update)
+    mouse_buf_add                            0x08003159   Thumb Code    50  helpers.o(i.mouse_buf_add)
+    mouse_buf_init                           0x0800318b   Thumb Code    24  helpers.o(i.mouse_buf_init)
+    mouse_buf_is_full                        0x080031a3   Thumb Code    28  helpers.o(i.mouse_buf_is_full)
+    mouse_buf_peek                           0x080031bf   Thumb Code    22  helpers.o(i.mouse_buf_peek)
+    mouse_buf_pop                            0x080031d5   Thumb Code    24  helpers.o(i.mouse_buf_pop)
+    mouse_buf_reset                          0x080031ed   Thumb Code    22  helpers.o(i.mouse_buf_reset)
+    protocol_status_lookup_init              0x08003205   Thumb Code    30  main.o(i.protocol_status_lookup_init)
+    ps2kb_get_bus_status                     0x08003229   Thumb Code    62  ps2kb.o(i.ps2kb_get_bus_status)
+    ps2kb_init                               0x0800326d   Thumb Code    22  ps2kb.o(i.ps2kb_init)
+    ps2kb_press_key                          0x08003289   Thumb Code    40  ps2kb.o(i.ps2kb_press_key)
+    ps2kb_press_key_scancode_1               0x080032b5   Thumb Code    44  ps2kb.o(i.ps2kb_press_key_scancode_1)
+    ps2kb_press_key_scancode_2               0x080032e1   Thumb Code   396  ps2kb.o(i.ps2kb_press_key_scancode_2)
+    ps2kb_read                               0x08003471   Thumb Code   246  ps2kb.o(i.ps2kb_read)
+    ps2kb_release_lines                      0x0800356d   Thumb Code    26  ps2kb.o(i.ps2kb_release_lines)
+    ps2kb_reset                              0x0800358d   Thumb Code    12  ps2kb.o(i.ps2kb_reset)
+    ps2kb_update                             0x0800359d   Thumb Code   166  main.o(i.ps2kb_update)
+    ps2kb_write                              0x08003651   Thumb Code    62  ps2kb.o(i.ps2kb_write)
+    ps2kb_write_nowait                       0x08003695   Thumb Code   286  ps2kb.o(i.ps2kb_write_nowait)
+    ps2mouse_get_bus_status                  0x080037b9   Thumb Code    92  ps2mouse.o(i.ps2mouse_get_bus_status)
+    ps2mouse_get_outgoing_data               0x08003819   Thumb Code   224  ps2mouse.o(i.ps2mouse_get_outgoing_data)
+    ps2mouse_host_req_reply                  0x080038fd   Thumb Code   370  ps2mouse.o(i.ps2mouse_host_req_reply)
+    ps2mouse_init                            0x08003a75   Thumb Code    22  ps2mouse.o(i.ps2mouse_init)
+    ps2mouse_read                            0x08003a91   Thumb Code   244  ps2mouse.o(i.ps2mouse_read)
+    ps2mouse_release_lines                   0x08003b89   Thumb Code    26  ps2mouse.o(i.ps2mouse_release_lines)
+    ps2mouse_reset                           0x08003ba9   Thumb Code    20  ps2mouse.o(i.ps2mouse_reset)
+    ps2mouse_restore_defaults                0x08003bc1   Thumb Code    22  ps2mouse.o(i.ps2mouse_restore_defaults)
+    ps2mouse_send_update                     0x08003bdd   Thumb Code    36  ps2mouse.o(i.ps2mouse_send_update)
+    ps2mouse_update                          0x08003c01   Thumb Code   162  main.o(i.ps2mouse_update)
+    ps2mouse_wait_for_idle                   0x08003cb1   Thumb Code    38  ps2mouse.o(i.ps2mouse_wait_for_idle)
+    ps2mouse_write                           0x08003cd7   Thumb Code    26  ps2mouse.o(i.ps2mouse_write)
+    ps2mouse_write_delay_start               0x08003cf1   Thumb Code    34  ps2mouse.o(i.ps2mouse_write_delay_start)
+    ps2mouse_write_nowait                    0x08003d15   Thumb Code   286  ps2mouse.o(i.ps2mouse_write_nowait)
+    spi_error_dump_reboot                    0x08003e39   Thumb Code    72  main.o(i.spi_error_dump_reboot)
+    wait_for_clk_high                        0x08003eb1   Thumb Code    44  xt_kb.o(i.wait_for_clk_high)
+    xtkb_check_for_softreset                 0x08003ee1   Thumb Code    60  xt_kb.o(i.xtkb_check_for_softreset)
+    xtkb_enable                              0x08003f21   Thumb Code    16  xt_kb.o(i.xtkb_enable)
+    xtkb_init                                0x08003f35   Thumb Code    14  xt_kb.o(i.xtkb_init)
+    xtkb_press_key                           0x08003f49   Thumb Code   116  xt_kb.o(i.xtkb_press_key)
+    xtkb_release_lines                       0x08003fc1   Thumb Code    26  xt_kb.o(i.xtkb_release_lines)
+    xtkb_reset_bus                           0x08003fe1   Thumb Code    26  xt_kb.o(i.xtkb_reset_bus)
+    xtkb_update                              0x08004001   Thumb Code    52  main.o(i.xtkb_update)
+    xtkb_write                               0x0800403d   Thumb Code   186  xt_kb.o(i.xtkb_write)
+    linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2 0x080040fc   Data          89  ps2kb.o(.constdata)
+    linux_keycode_to_ps2_scancode_lookup_special_codeset2 0x08004155   Data          32  ps2kb.o(.constdata)
+    mcp4451_wiper_id_to_reg_addr_lookup      0x08004175   Data           4  mcp4451.o(.constdata)
+    boot_message                             0x08004179   Data          55  main.o(.constdata)
+    AHBPrescTable                            0x080041b0   Data          16  system_stm32f0xx.o(.constdata)
+    APBPrescTable                            0x080041c0   Data           8  system_stm32f0xx.o(.constdata)
+    Region$$Table$$Base                      0x080041c8   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x080041e8   Number         0  anon$$obj.o(Region$$Table)
     us_timer                                 0x20000000   Data           4  delay_us.o(.data)
     ps2kb_current_scancode_set               0x20000004   Data           1  ps2kb.o(.data)
     ps2kb_data_reporting_enabled             0x20000005   Data           1  ps2kb.o(.data)
@@ -2384,8 +2381,7 @@ Image Symbol Table
     serial_mouse_rts_response                0x2000004f   Data           1  main.o(.data)
     rts_active                               0x20000050   Data           1  main.o(.data)
     spi_error_occured                        0x20000051   Data           1  main.o(.data)
-    is_ps2_mouse_connected_prev              0x20000052   Data           1  main.o(.data)
-    serial_mouse_is_tx_in_progress           0x20000053   Data           1  main.o(.data)
+    serial_mouse_is_tx_in_progress           0x20000052   Data           1  main.o(.data)
     flash_size                               0x20000054   Data           2  main.o(.data)
     serial_mouse_output_buf                  0x20000056   Data           3  main.o(.data)
     my_mouse_buf                             0x2000005c   Data           8  main.o(.data)
@@ -2420,9 +2416,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000c1
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00004280, Max: 0x00010000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00004268, Max: 0x00010000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00004200, Max: 0x00010000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000041e8, Max: 0x00010000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2572,91 +2568,90 @@ Memory Map of the image
     0x08002a56   0x08002a56   0x00000002   PAD
     0x08002a58   0x08002a58   0x000000a4   Code   RO          602    i.gamepad_update    main.o
     0x08002afc   0x08002afc   0x0000003c   Code   RO          603    i.gameport_init     main.o
-    0x08002b38   0x08002b38   0x0000009c   Code   RO          604    i.handle_protocol_switch  main.o
-    0x08002bd4   0x08002bd4   0x00000014   Code   RO          605    i.is_protocol_enabled  main.o
-    0x08002be8   0x08002be8   0x00000030   Code   RO          159    i.kb_buf_add        helpers.o
-    0x08002c18   0x08002c18   0x00000020   Code   RO          160    i.kb_buf_init       helpers.o
-    0x08002c38   0x08002c38   0x0000001c   Code   RO          162    i.kb_buf_is_full    helpers.o
-    0x08002c54   0x08002c54   0x00000020   Code   RO          163    i.kb_buf_peek       helpers.o
-    0x08002c74   0x08002c74   0x00000018   Code   RO          164    i.kb_buf_pop        helpers.o
-    0x08002c8c   0x08002c8c   0x0000001c   Code   RO          165    i.kb_buf_reset      helpers.o
-    0x08002ca8   0x08002ca8   0x00000100   Code   RO          300    i.keyboard_reply    ps2kb.o
-    0x08002da8   0x08002da8   0x000001e0   Code   RO          606    i.main              main.o
-    0x08002f88   0x08002f88   0x0000006c   Code   RO         4224    i.malloc            mc_p.l(malloc.o)
-    0x08002ff4   0x08002ff4   0x00000020   Code   RO          484    i.mcp4451_is_available  mcp4451.o
-    0x08003014   0x08003014   0x0000002c   Code   RO          485    i.mcp4451_reset     mcp4451.o
-    0x08003040   0x08003040   0x00000038   Code   RO          486    i.mcp4451_write_wiper  mcp4451.o
-    0x08003078   0x08003078   0x00000010   Code   RO           14    i.micros            delay_us.o
-    0x08003088   0x08003088   0x000000c4   Code   RO          607    i.microsoft_serial_mouse_update  main.o
-    0x0800314c   0x0800314c   0x00000032   Code   RO          166    i.mouse_buf_add     helpers.o
-    0x0800317e   0x0800317e   0x00000018   Code   RO          167    i.mouse_buf_init    helpers.o
-    0x08003196   0x08003196   0x0000001c   Code   RO          169    i.mouse_buf_is_full  helpers.o
-    0x080031b2   0x080031b2   0x00000016   Code   RO          170    i.mouse_buf_peek    helpers.o
-    0x080031c8   0x080031c8   0x00000018   Code   RO          171    i.mouse_buf_pop     helpers.o
-    0x080031e0   0x080031e0   0x00000016   Code   RO          172    i.mouse_buf_reset   helpers.o
-    0x080031f6   0x080031f6   0x00000002   PAD
-    0x080031f8   0x080031f8   0x00000020   Code   RO          608    i.protocol_status_lookup_init  main.o
-    0x08003218   0x08003218   0x00000044   Code   RO          301    i.ps2kb_get_bus_status  ps2kb.o
-    0x0800325c   0x0800325c   0x0000001c   Code   RO          302    i.ps2kb_init        ps2kb.o
-    0x08003278   0x08003278   0x0000002c   Code   RO          303    i.ps2kb_press_key   ps2kb.o
-    0x080032a4   0x080032a4   0x0000002c   Code   RO          304    i.ps2kb_press_key_scancode_1  ps2kb.o
-    0x080032d0   0x080032d0   0x00000190   Code   RO          305    i.ps2kb_press_key_scancode_2  ps2kb.o
-    0x08003460   0x08003460   0x000000fc   Code   RO          306    i.ps2kb_read        ps2kb.o
-    0x0800355c   0x0800355c   0x00000020   Code   RO          307    i.ps2kb_release_lines  ps2kb.o
-    0x0800357c   0x0800357c   0x00000010   Code   RO          308    i.ps2kb_reset       ps2kb.o
-    0x0800358c   0x0800358c   0x000000b4   Code   RO          609    i.ps2kb_update      main.o
-    0x08003640   0x08003640   0x00000044   Code   RO          309    i.ps2kb_write       ps2kb.o
-    0x08003684   0x08003684   0x00000124   Code   RO          310    i.ps2kb_write_nowait  ps2kb.o
-    0x080037a8   0x080037a8   0x00000060   Code   RO          388    i.ps2mouse_get_bus_status  ps2mouse.o
-    0x08003808   0x08003808   0x000000e4   Code   RO          389    i.ps2mouse_get_outgoing_data  ps2mouse.o
-    0x080038ec   0x080038ec   0x00000178   Code   RO          390    i.ps2mouse_host_req_reply  ps2mouse.o
-    0x08003a64   0x08003a64   0x0000001c   Code   RO          391    i.ps2mouse_init     ps2mouse.o
-    0x08003a80   0x08003a80   0x000000f8   Code   RO          392    i.ps2mouse_read     ps2mouse.o
-    0x08003b78   0x08003b78   0x00000020   Code   RO          393    i.ps2mouse_release_lines  ps2mouse.o
-    0x08003b98   0x08003b98   0x00000018   Code   RO          394    i.ps2mouse_reset    ps2mouse.o
-    0x08003bb0   0x08003bb0   0x0000001c   Code   RO          395    i.ps2mouse_restore_defaults  ps2mouse.o
-    0x08003bcc   0x08003bcc   0x00000022   Code   RO          396    i.ps2mouse_send_update  ps2mouse.o
-    0x08003bee   0x08003bee   0x00000002   PAD
-    0x08003bf0   0x08003bf0   0x000000d8   Code   RO          610    i.ps2mouse_update   main.o
-    0x08003cc8   0x08003cc8   0x00000026   Code   RO          397    i.ps2mouse_wait_for_idle  ps2mouse.o
-    0x08003cee   0x08003cee   0x0000001a   Code   RO          398    i.ps2mouse_write    ps2mouse.o
-    0x08003d08   0x08003d08   0x00000022   Code   RO          399    i.ps2mouse_write_delay_start  ps2mouse.o
-    0x08003d2a   0x08003d2a   0x00000002   PAD
-    0x08003d2c   0x08003d2c   0x00000124   Code   RO          400    i.ps2mouse_write_nowait  ps2mouse.o
-    0x08003e50   0x08003e50   0x00000078   Code   RO          611    i.spi_error_dump_reboot  main.o
-    0x08003ec8   0x08003ec8   0x00000030   Code   RO          522    i.wait_for_clk_high  xt_kb.o
-    0x08003ef8   0x08003ef8   0x00000040   Code   RO          523    i.xtkb_check_for_softreset  xt_kb.o
-    0x08003f38   0x08003f38   0x00000014   Code   RO          524    i.xtkb_enable       xt_kb.o
-    0x08003f4c   0x08003f4c   0x00000014   Code   RO          525    i.xtkb_init         xt_kb.o
-    0x08003f60   0x08003f60   0x00000078   Code   RO          526    i.xtkb_press_key    xt_kb.o
-    0x08003fd8   0x08003fd8   0x00000020   Code   RO          527    i.xtkb_release_lines  xt_kb.o
-    0x08003ff8   0x08003ff8   0x00000020   Code   RO          528    i.xtkb_reset_bus    xt_kb.o
-    0x08004018   0x08004018   0x0000003c   Code   RO          612    i.xtkb_update       main.o
-    0x08004054   0x08004054   0x000000c0   Code   RO          529    i.xtkb_write        xt_kb.o
-    0x08004114   0x08004114   0x00000079   Data   RO          311    .constdata          ps2kb.o
-    0x0800418d   0x0800418d   0x00000004   Data   RO          487    .constdata          mcp4451.o
-    0x08004191   0x08004191   0x00000037   Data   RO          619    .constdata          main.o
-    0x080041c8   0x080041c8   0x00000010   Data   RO         3919    .constdata          system_stm32f0xx.o
-    0x080041d8   0x080041d8   0x00000008   Data   RO         3920    .constdata          system_stm32f0xx.o
-    0x080041e0   0x080041e0   0x00000020   Data   RO         4291    Region$$Table       anon$$obj.o
+    0x08002b38   0x08002b38   0x000000a0   Code   RO          604    i.handle_protocol_switch  main.o
+    0x08002bd8   0x08002bd8   0x00000014   Code   RO          605    i.is_protocol_enabled  main.o
+    0x08002bec   0x08002bec   0x00000030   Code   RO          159    i.kb_buf_add        helpers.o
+    0x08002c1c   0x08002c1c   0x00000020   Code   RO          160    i.kb_buf_init       helpers.o
+    0x08002c3c   0x08002c3c   0x0000001c   Code   RO          162    i.kb_buf_is_full    helpers.o
+    0x08002c58   0x08002c58   0x00000020   Code   RO          163    i.kb_buf_peek       helpers.o
+    0x08002c78   0x08002c78   0x00000018   Code   RO          164    i.kb_buf_pop        helpers.o
+    0x08002c90   0x08002c90   0x0000001c   Code   RO          165    i.kb_buf_reset      helpers.o
+    0x08002cac   0x08002cac   0x00000100   Code   RO          300    i.keyboard_reply    ps2kb.o
+    0x08002dac   0x08002dac   0x000001e8   Code   RO          606    i.main              main.o
+    0x08002f94   0x08002f94   0x0000006c   Code   RO         4224    i.malloc            mc_p.l(malloc.o)
+    0x08003000   0x08003000   0x00000020   Code   RO          484    i.mcp4451_is_available  mcp4451.o
+    0x08003020   0x08003020   0x0000002c   Code   RO          485    i.mcp4451_reset     mcp4451.o
+    0x0800304c   0x0800304c   0x00000038   Code   RO          486    i.mcp4451_write_wiper  mcp4451.o
+    0x08003084   0x08003084   0x00000010   Code   RO           14    i.micros            delay_us.o
+    0x08003094   0x08003094   0x000000c4   Code   RO          607    i.microsoft_serial_mouse_update  main.o
+    0x08003158   0x08003158   0x00000032   Code   RO          166    i.mouse_buf_add     helpers.o
+    0x0800318a   0x0800318a   0x00000018   Code   RO          167    i.mouse_buf_init    helpers.o
+    0x080031a2   0x080031a2   0x0000001c   Code   RO          169    i.mouse_buf_is_full  helpers.o
+    0x080031be   0x080031be   0x00000016   Code   RO          170    i.mouse_buf_peek    helpers.o
+    0x080031d4   0x080031d4   0x00000018   Code   RO          171    i.mouse_buf_pop     helpers.o
+    0x080031ec   0x080031ec   0x00000016   Code   RO          172    i.mouse_buf_reset   helpers.o
+    0x08003202   0x08003202   0x00000002   PAD
+    0x08003204   0x08003204   0x00000024   Code   RO          608    i.protocol_status_lookup_init  main.o
+    0x08003228   0x08003228   0x00000044   Code   RO          301    i.ps2kb_get_bus_status  ps2kb.o
+    0x0800326c   0x0800326c   0x0000001c   Code   RO          302    i.ps2kb_init        ps2kb.o
+    0x08003288   0x08003288   0x0000002c   Code   RO          303    i.ps2kb_press_key   ps2kb.o
+    0x080032b4   0x080032b4   0x0000002c   Code   RO          304    i.ps2kb_press_key_scancode_1  ps2kb.o
+    0x080032e0   0x080032e0   0x00000190   Code   RO          305    i.ps2kb_press_key_scancode_2  ps2kb.o
+    0x08003470   0x08003470   0x000000fc   Code   RO          306    i.ps2kb_read        ps2kb.o
+    0x0800356c   0x0800356c   0x00000020   Code   RO          307    i.ps2kb_release_lines  ps2kb.o
+    0x0800358c   0x0800358c   0x00000010   Code   RO          308    i.ps2kb_reset       ps2kb.o
+    0x0800359c   0x0800359c   0x000000b4   Code   RO          609    i.ps2kb_update      main.o
+    0x08003650   0x08003650   0x00000044   Code   RO          309    i.ps2kb_write       ps2kb.o
+    0x08003694   0x08003694   0x00000124   Code   RO          310    i.ps2kb_write_nowait  ps2kb.o
+    0x080037b8   0x080037b8   0x00000060   Code   RO          388    i.ps2mouse_get_bus_status  ps2mouse.o
+    0x08003818   0x08003818   0x000000e4   Code   RO          389    i.ps2mouse_get_outgoing_data  ps2mouse.o
+    0x080038fc   0x080038fc   0x00000178   Code   RO          390    i.ps2mouse_host_req_reply  ps2mouse.o
+    0x08003a74   0x08003a74   0x0000001c   Code   RO          391    i.ps2mouse_init     ps2mouse.o
+    0x08003a90   0x08003a90   0x000000f8   Code   RO          392    i.ps2mouse_read     ps2mouse.o
+    0x08003b88   0x08003b88   0x00000020   Code   RO          393    i.ps2mouse_release_lines  ps2mouse.o
+    0x08003ba8   0x08003ba8   0x00000018   Code   RO          394    i.ps2mouse_reset    ps2mouse.o
+    0x08003bc0   0x08003bc0   0x0000001c   Code   RO          395    i.ps2mouse_restore_defaults  ps2mouse.o
+    0x08003bdc   0x08003bdc   0x00000024   Code   RO          396    i.ps2mouse_send_update  ps2mouse.o
+    0x08003c00   0x08003c00   0x000000b0   Code   RO          610    i.ps2mouse_update   main.o
+    0x08003cb0   0x08003cb0   0x00000026   Code   RO          397    i.ps2mouse_wait_for_idle  ps2mouse.o
+    0x08003cd6   0x08003cd6   0x0000001a   Code   RO          398    i.ps2mouse_write    ps2mouse.o
+    0x08003cf0   0x08003cf0   0x00000022   Code   RO          399    i.ps2mouse_write_delay_start  ps2mouse.o
+    0x08003d12   0x08003d12   0x00000002   PAD
+    0x08003d14   0x08003d14   0x00000124   Code   RO          400    i.ps2mouse_write_nowait  ps2mouse.o
+    0x08003e38   0x08003e38   0x00000078   Code   RO          611    i.spi_error_dump_reboot  main.o
+    0x08003eb0   0x08003eb0   0x00000030   Code   RO          522    i.wait_for_clk_high  xt_kb.o
+    0x08003ee0   0x08003ee0   0x00000040   Code   RO          523    i.xtkb_check_for_softreset  xt_kb.o
+    0x08003f20   0x08003f20   0x00000014   Code   RO          524    i.xtkb_enable       xt_kb.o
+    0x08003f34   0x08003f34   0x00000014   Code   RO          525    i.xtkb_init         xt_kb.o
+    0x08003f48   0x08003f48   0x00000078   Code   RO          526    i.xtkb_press_key    xt_kb.o
+    0x08003fc0   0x08003fc0   0x00000020   Code   RO          527    i.xtkb_release_lines  xt_kb.o
+    0x08003fe0   0x08003fe0   0x00000020   Code   RO          528    i.xtkb_reset_bus    xt_kb.o
+    0x08004000   0x08004000   0x0000003c   Code   RO          612    i.xtkb_update       main.o
+    0x0800403c   0x0800403c   0x000000c0   Code   RO          529    i.xtkb_write        xt_kb.o
+    0x080040fc   0x080040fc   0x00000079   Data   RO          311    .constdata          ps2kb.o
+    0x08004175   0x08004175   0x00000004   Data   RO          487    .constdata          mcp4451.o
+    0x08004179   0x08004179   0x00000037   Data   RO          619    .constdata          main.o
+    0x080041b0   0x080041b0   0x00000010   Data   RO         3919    .constdata          system_stm32f0xx.o
+    0x080041c0   0x080041c0   0x00000008   Data   RO         3920    .constdata          system_stm32f0xx.o
+    0x080041c8   0x080041c8   0x00000020   Data   RO         4291    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08004200, Size: 0x000008f0, Max: 0x00004000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080041e8, Size: 0x000008f0, Max: 0x00004000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08004200   0x00000004   Data   RW           15    .data               delay_us.o
-    0x20000004   0x08004204   0x00000014   Data   RW          312    .data               ps2kb.o
-    0x20000018   0x08004218   0x0000001c   Data   RW          401    .data               ps2mouse.o
-    0x20000034   0x08004234   0x00000014   Data   RW          530    .data               xt_kb.o
-    0x20000048   0x08004248   0x00000024   Data   RW          620    .data               main.o
-    0x2000006c   0x0800426c   0x00000004   Data   RW         3214    .data               stm32f0xx_hal.o
-    0x20000070   0x08004270   0x00000004   Data   RW         3921    .data               system_stm32f0xx.o
-    0x20000074   0x08004274   0x00000004   Data   RW         4265    .data               mc_p.l(stdout.o)
-    0x20000078   0x08004278   0x00000004   Data   RW         4268    .data               mc_p.l(mvars.o)
-    0x2000007c   0x0800427c   0x00000004   Data   RW         4269    .data               mc_p.l(mvars.o)
+    0x20000000   0x080041e8   0x00000004   Data   RW           15    .data               delay_us.o
+    0x20000004   0x080041ec   0x00000014   Data   RW          312    .data               ps2kb.o
+    0x20000018   0x08004200   0x0000001c   Data   RW          401    .data               ps2mouse.o
+    0x20000034   0x0800421c   0x00000014   Data   RW          530    .data               xt_kb.o
+    0x20000048   0x08004230   0x00000024   Data   RW          620    .data               main.o
+    0x2000006c   0x08004254   0x00000004   Data   RW         3214    .data               stm32f0xx_hal.o
+    0x20000070   0x08004258   0x00000004   Data   RW         3921    .data               system_stm32f0xx.o
+    0x20000074   0x0800425c   0x00000004   Data   RW         4265    .data               mc_p.l(stdout.o)
+    0x20000078   0x08004260   0x00000004   Data   RW         4268    .data               mc_p.l(mvars.o)
+    0x2000007c   0x08004264   0x00000004   Data   RW         4269    .data               mc_p.l(mvars.o)
     0x20000080        -       0x0000026d   Zero   RW          613    .bss                main.o
-    0x200002ed   0x08004280   0x00000003   PAD
+    0x200002ed   0x08004268   0x00000003   PAD
     0x200002f0        -       0x00000200   Zero   RW            2    HEAP                startup_stm32f072xb.o
     0x200004f0        -       0x00000400   Zero   RW            1    STACK               startup_stm32f072xb.o
 
@@ -2669,11 +2664,11 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
         52         10          0          4          0     506987   delay_us.o
-       532          0          0          0          0      11932   helpers.o
-      2984        350         55         36        621      22700   main.o
+       532          0          0          0          0      11880   helpers.o
+      2960        356         55         36        621      22532   main.o
        132         22          4          0          0       2287   mcp4451.o
       1526         76        121         20          0       9446   ps2kb.o
-      1484         66          0         28          0      10990   ps2mouse.o
+      1486         66          0         28          0      11046   ps2mouse.o
         28          8        192          0       1536        628   startup_stm32f072xb.o
        122         18          0          4          0       3603   stm32f0xx_hal.o
        178         28          0          0          0      10499   stm32f0xx_hal_cortex.o
@@ -2694,9 +2689,9 @@ Image component sizes
        528         52          0         20          0       5894   xt_kb.o
 
     ----------------------------------------------------------------------
-     15666        978        428        116       2160     648376   Object Totals
+     15642        984        428        116       2160     648212   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-        34          0          0          0          3          0   (incl. Padding)
+        32          0          0          0          3          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -2740,15 +2735,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     16468       1022        428        128       2160     641680   Grand Totals
-     16468       1022        428        128       2160     641680   ELF Image Totals
-     16468       1022        428        128          0          0   ROM Totals
+     16444       1028        428        128       2160     641516   Grand Totals
+     16444       1028        428        128       2160     641516   ELF Image Totals
+     16444       1028        428        128          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                16896 (  16.50kB)
+    Total RO  Size (Code + RO Data)                16872 (  16.48kB)
     Total RW  Size (RW Data + ZI Data)              2288 (   2.23kB)
-    Total ROM Size (Code + RO Data + RW Data)      17024 (  16.63kB)
+    Total ROM Size (Code + RO Data + RW Data)      17000 (  16.60kB)
 
 ==============================================================================
 
