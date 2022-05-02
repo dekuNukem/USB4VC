@@ -26,12 +26,10 @@ void ps2mouse_restore_defaults(void);
 
 
 #define PS2_OK 0
-#define PS2_ERROR_SCAN_DISABLED 1
-#define PS2_ERROR_UNKNOWN_CODE_SET 9
+#define PS2_ERROR_REPORTING_DISABLED 1
 #define PS2_ERROR_HOST_INHIBIT 69
-#define PS2_ERROR_UNUSED_CODE 2
-#define PS2_ERROR_UNKNOWN 3
 #define PS2_ERROR_TIMEOUT 4
+#define PS2_ERROR_UNIMPLEMENTED_MODE 3
 
 #ifdef __cplusplus
 }
