@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html dir="ltr" class="client-nojs" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>"8042" PS/2 Controller - OSDev Wiki</title>
+<meta charset="UTF-8">
+<meta name="generator" content="MediaWiki 1.18.0">
+<link rel="shortcut icon" href="https://wiki.osdev.org/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://wiki.osdev.org/opensearch_desc.php" title="OSDev Wiki (en)">
+<link rel="EditURI" type="application/rsd+xml" href="https://wiki.osdev.org/api.php?action=rsd">
+<link rel="alternate" type="application/atom+xml" title="OSDev Wiki Atom feed" href="https://wiki.osdev.org/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="stylesheet" href="'8042'%20PS_2%20Controller%20-%20OSDev%20Wiki_files/load.css">
+<meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="'8042'%20PS_2%20Controller%20-%20OSDev%20Wiki_files/load_002.css" media="">
+<style>a:lang(ar),a:lang(ckb),a:lang(fa),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}a.new,#quickbar a.new{color:#ba0000}
+
+/* cache key: wikidb:resourceloader:filter:minify-css:4:c88e2bcd56513749bec09a7e29cb3ffa */
+</style>
+<script src="'8042'%20PS_2%20Controller%20-%20OSDev%20Wiki_files/load"></script>
+<script>if(window.mw){
+	mw.config.set({"wgCanonicalNamespace": "", "wgCanonicalSpecialPageName": false, "wgNamespaceNumber": 0, "wgPageName": "\"8042\"_PS/2_Controller", "wgTitle": "\"8042\" PS/2 Controller", "wgCurRevisionId": 26442, "wgArticleId": 3160, "wgIsArticle": true, "wgAction": "view", "wgUserName": null, "wgUserGroups": ["*"], "wgCategories": ["X86", "Common Devices"], "wgBreakFrames": false, "wgRestrictionEdit": [], "wgRestrictionMove": []});
+}
+</script><script>if(window.mw){
+	mw.loader.load(["mediawiki.page.startup"]);
+}
+</script>
+<style type="text/css">/*<![CDATA[*/
+.source-asm {line-height: normal;}
+.source-asm li, .source-asm pre {
+	line-height: normal; border: 0px none white;
+}
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for asm
+ * CSS class: source-asm, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.asm.source-asm .de1, .asm.source-asm .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.asm.source-asm  {font-family:monospace;}
+.asm.source-asm .imp {font-weight: bold; color: red;}
+.asm.source-asm li, .asm.source-asm .li1 {font-weight: normal; vertical-align:top;}
+.asm.source-asm .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.asm.source-asm .li2 {font-weight: bold; vertical-align:top;}
+.asm.source-asm .kw1 {color: #00007f; font-weight: bold;}
+.asm.source-asm .kw2 {color: #0000ff; font-weight: bold;}
+.asm.source-asm .kw3 {color: #00007f;}
+.asm.source-asm .kw4 {color: #000000; font-weight: bold;}
+.asm.source-asm .kw5 {color: #000000; font-weight: bold;}
+.asm.source-asm .co1 {color: #666666; font-style: italic;}
+.asm.source-asm .co2 {color: #adadad; font-style: italic;}
+.asm.source-asm .es0 {color: #000099; font-weight: bold;}
+.asm.source-asm .br0 {color: #009900; font-weight: bold;}
+.asm.source-asm .sy0 {color: #339933;}
+.asm.source-asm .st0 {color: #7f007f;}
+.asm.source-asm .nu0 {color: #0000ff;}
+.asm.source-asm .ln-xtra, .asm.source-asm li.ln-xtra, .asm.source-asm div.ln-xtra {background-color: #ffc;}
+.asm.source-asm span.xtra { display:block; }
+
+/*]]>*/
+</style>
+<style type="text/css" media="">/*<![CDATA[*/
+@import "/index.php?title=MediaWiki:Geshi.css&usemsgcache=yes&action=raw&ctype=text/css&smaxage=18000";
+/*]]>*/
+</style><!--[if lt IE 7]><style type="text/css">body{behavior:url("/skins/vector/csshover.min.htc")}</style><![endif]--></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-_8042_PS_2_Controller action-view skin-vector">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<!-- content -->
+		<div id="content">
+			<a id="top"></a>
+			<div id="mw-js-message" style="display:none;"></div>
+						<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">"8042" PS/2 Controller</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+								<!-- tagline -->
+				<div id="siteSub">From OSDev Wiki</div>
+				<!-- /tagline -->
+								<!-- subtitle -->
+				<div id="contentSub"></div>
+				<!-- /subtitle -->
+																<!-- jumpto -->
+				<div id="jump-to-nav">
+					Jump to: <a href="#mw-head">navigation</a>,
+					<a href="#p-search">search</a>
+				</div>
+				<!-- /jumpto -->
+								<!-- bodycontent -->
+				<div dir="ltr" class="mw-content-ltr" lang="en"><p>The PS/2 
+Controller (often called a “Keyboard controller”) is located on the 
+mainboard. In the early days the controller was a single chip (<b>Intel 8042</b>). As of today it is part of the <a href="https://wiki.osdev.org/Advanced_Integrated_Peripheral" title="Advanced Integrated Peripheral">Advanced Integrated Peripheral</a>.
+</p><p>The name is misleading because the controller does more than controlling communication with PS/2 devices.
+</p>
+<table>
+<tbody><tr>
+<td><div class="thumb tright"><div class="thumbinner" style="width:444px;"><a href="https://wiki.osdev.org/File:Ps2-kbc.png" class="image"><img alt="" src="'8042'%20PS_2%20Controller%20-%20OSDev%20Wiki_files/Ps2-kbc.png" class="thumbimage" width="442" height="291"></a>  <div class="thumbcaption">Overview of the PS/2-Controller</div></div></div>
+</td></tr></tbody></table>
+<p><br>
+</p>
+<table id="toc" class="toc"><tbody><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#History"><span class="tocnumber">1</span> <span class="toctext">History</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Translation"><span class="tocnumber">1.1</span> <span class="toctext">Translation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="#USB_Legacy_Support"><span class="tocnumber">2</span> <span class="toctext">USB Legacy Support</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Buffer_Naming_Perspective"><span class="tocnumber">3</span> <span class="toctext">Buffer Naming Perspective</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#PS.2F2_Controller_IO_Ports"><span class="tocnumber">4</span> <span class="toctext">PS/2 Controller IO Ports</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="#Data_Port"><span class="tocnumber">4.1</span> <span class="toctext">Data Port</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Status_Register"><span class="tocnumber">4.2</span> <span class="toctext">Status Register</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Command_Register"><span class="tocnumber">4.3</span> <span class="toctext">Command Register</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#PS.2F2_Controller_Commands"><span class="tocnumber">5</span> <span class="toctext">PS/2 Controller Commands</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#PS.2F2_Controller_Configuration_Byte"><span class="tocnumber">5.1</span> <span class="toctext">PS/2 Controller Configuration Byte</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#PS.2F2_Controller_Output_Port"><span class="tocnumber">5.2</span> <span class="toctext">PS/2 Controller Output Port</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Initialising_the_PS.2F2_Controller"><span class="tocnumber">6</span> <span class="toctext">Initialising the PS/2 Controller</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Step_1:_Initialise_USB_Controllers"><span class="tocnumber">6.1</span> <span class="toctext">Step 1: Initialise USB Controllers</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Step_2:_Determine_if_the_PS.2F2_Controller_Exists"><span class="tocnumber">6.2</span> <span class="toctext">Step 2: Determine if the PS/2 Controller Exists</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Step_3:_Disable_Devices"><span class="tocnumber">6.3</span> <span class="toctext">Step 3: Disable Devices</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Step_4:_Flush_The_Output_Buffer"><span class="tocnumber">6.4</span> <span class="toctext">Step 4: Flush The Output Buffer</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Step_5:_Set_the_Controller_Configuration_Byte"><span class="tocnumber">6.5</span> <span class="toctext">Step 5: Set the Controller Configuration Byte</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Step_6:_Perform_Controller_Self_Test"><span class="tocnumber">6.6</span> <span class="toctext">Step 6: Perform Controller Self Test</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Step_7:_Determine_If_There_Are_2_Channels"><span class="tocnumber">6.7</span> <span class="toctext">Step 7: Determine If There Are 2 Channels</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Step_8:_Perform_Interface_Tests"><span class="tocnumber">6.8</span> <span class="toctext">Step 8: Perform Interface Tests</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Step_9:_Enable_Devices"><span class="tocnumber">6.9</span> <span class="toctext">Step 9: Enable Devices</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Step_10:_Reset_Devices"><span class="tocnumber">6.10</span> <span class="toctext">Step 10: Reset Devices</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-23"><a href="#Detecting_PS.2F2_Device_Types"><span class="tocnumber">7</span> <span class="toctext">Detecting PS/2 Device Types</span></a></li>
+<li class="toclevel-1 tocsection-24"><a href="#Hot_Plug_PS.2F2_Devices"><span class="tocnumber">8</span> <span class="toctext">Hot Plug PS/2 Devices</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#Sending_Bytes_To_Device.2Fs"><span class="tocnumber">9</span> <span class="toctext">Sending Bytes To Device/s</span></a>
+<ul>
+<li class="toclevel-2 tocsection-26"><a href="#First_PS.2F2_Port"><span class="tocnumber">9.1</span> <span class="toctext">First PS/2 Port</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Second_PS.2F2_Port"><span class="tocnumber">9.2</span> <span class="toctext">Second PS/2 Port</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-28"><a href="#Receiving_Bytes_From_Device.2Fs"><span class="tocnumber">10</span> <span class="toctext">Receiving Bytes From Device/s</span></a>
+<ul>
+<li class="toclevel-2 tocsection-29"><a href="#Polling"><span class="tocnumber">10.1</span> <span class="toctext">Polling</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Interrupts"><span class="tocnumber">10.2</span> <span class="toctext">Interrupts</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-31"><a href="#CPU_Reset"><span class="tocnumber">11</span> <span class="toctext">CPU Reset</span></a></li>
+<li class="toclevel-1 tocsection-32"><a href="#See_Also"><span class="tocnumber">12</span> <span class="toctext">See Also</span></a>
+<ul>
+<li class="toclevel-2 tocsection-33"><a href="#Threads"><span class="tocnumber">12.1</span> <span class="toctext">Threads</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#External_Links"><span class="tocnumber">12.2</span> <span class="toctext">External Links</span></a></li>
+</ul>
+</li>
+</ul>
+</td></tr></tbody></table>
+<h2> <span class="mw-headline" id="History"> History </span></h2>
+<p>A multi-purpose PPI (Intel 8048, Programmable peripheral interface; 
+also used to control other functions, like sound and parity error) 
+controlled the original uni-directional, single channel IBM PC and PC-XT
+ keyboard interface.
+The XT controller is 100% obsolete and won't be discussed further in 
+this page.
+</p><p><br>
+With the PC-AT, IBM introduced new keyboards (with a new bi-directional 
+protocol) and a new keyboard controller (Intel 8042). The old PPI was 
+not part of the motherboard any more. 
+</p>
+<table>
+<tbody><tr>
+<td><div class="thumb tright"><div class="thumbinner" style="width:444px;"><a href="https://wiki.osdev.org/File:At-kbc.png" class="image"><img alt="" src="'8042'%20PS_2%20Controller%20-%20OSDev%20Wiki_files/At-kbc.png" class="thumbimage" width="442" height="215"></a>  <div class="thumbcaption">Overview of the AT-Controller</div></div></div>
+</td></tr></tbody></table>
+<p>The 8042 was a powerful micro-controller. To reduce costs, some of 
+the general purpose input/output capabilities of the AT controller was 
+used to control various functions unrelated to the keyboard, including:
+</p>
+<ul><li> System Reset
+</li><li> The <a href="https://wiki.osdev.org/A20_Line" title="A20 Line">A20-Gate</a>
+</li></ul>
+<p><br>
+With the introduction of the PS/2 series, the main change to the 
+keyboard controller subsystem was its expansion to control both a 
+keyboard and a mouse. Previously PC and compatible mice were connected 
+to different physical interfaces, including <a href="https://wiki.osdev.org/Serial_Ports" title="Serial Ports">Serial Ports</a>.
+ The AT keyboard controller and its “clones” were not capable of 
+interfacing the new PS/2 mouse. Eventually (around the late 80486 and 
+early Pentium time frame) PS/2 style mice became popular, and “PC 
+compatible” controllers have supported dual channels from then on 
+(nominally one keyboard and one mouse).
+</p><p>For the keyboard functions proper, the PS2 and AT controllers are
+ very similar. The adjunction of a second channel (for the mouse) has 
+forced however to redefine a few status and control bits.
+</p>
+<h3> <span class="mw-headline" id="Translation"> Translation </span></h3>
+<p>The original IBM-PC keyboards (using the old XT interface) used "scan
+ code set 1". The new AT keyboards generated different scan codes, or 
+"scan code set 2". This change would have created compatibility problems
+ for software that was expecting different scan codes from the keyboard.
+ To avoid the compatibility problem, the keyboard controller supports a 
+translation mode. If translation is enabled the controller will 
+translate "scan code set 2" into "scan code set 1".
+</p><p>Whenever this translation is enabled (and by default, it is) 
+there is no way to reverse it in software. For example, if you receive 
+the byte 0xB5 from the controller, then you can't know if the original 
+data (sent to the controller by the device) was the byte 0xB5; or if it 
+was the two bytes 0xF0, 0x33; or if it was the two bytes 0xF0, 0xB3.
+</p><p>For software to actually use "scan code set 2" (or the even 
+newer, rarely used, "scan code set 3"), or to allow different devices to
+ be used in the keyboard port, you need to disable this translation to 
+avoid having the data from the device mangled.
+</p>
+<h2> <span class="mw-headline" id="USB_Legacy_Support"> USB Legacy Support </span></h2>
+<p>By modern standards you will find many PCs bundled with <a href="https://wiki.osdev.org/Universal_Serial_Bus" title="Universal Serial Bus">USB</a>
+ input devices. Some PCs may not even have PS/2 connectors at all. To 
+remain compatible with old software, the mainboard emulates USB 
+Keyboards and Mice as PS/2 devices. This is called USB Legacy Support.
+</p><p>Because the implementation differ by manufacturer and mainboard there are flaws and sometimes even bugs:
+</p>
+<ul><li> Some emulation layers also handle the communication with the 
+real PS/2 connectors regardless of any connected USB device. So maybe 
+not all capabilities of the PS/2 connectors and devices can be used. For
+ example extended mouse modes needed to use the scroll wheel won't work 
+or the keyboard only works on the first PS/2 connector and the mouse 
+only on the second connector.
+</li><li> The <a href="https://wiki.osdev.org/index.php?title=SMM_BIOS&amp;action=edit&amp;redlink=1" class="new" title="SMM BIOS (page does not exist)">SMM BIOS</a> that's providing the PS/2 USB Legacy Support may not support extended memory techniques or <a href="https://wiki.osdev.org/Long_Mode" title="Long Mode" class="mw-redirect">Long Mode</a> and may cause system crashes.
+</li></ul>
+<p>This USB Legacy Support should be disabled by the OS as soon as the 
+OS initialises the USB Controller, and this should be done before the OS
+ attempts to initialise the real PS/2 controller. Otherwise the OS would
+ only initialise the emulated PS/2 controller and there's a large risk 
+of problems caused by deficiencies in the firmware's emulation.
+</p>
+<h2> <span class="mw-headline" id="Buffer_Naming_Perspective"> Buffer Naming Perspective </span></h2>
+<p>The PS/2 controller has two (one byte) buffers for data — one buffer 
+for data received from devices that is waiting to be read by your OS, 
+and one for data written by your OS that is waiting to be sent to a PS/2
+ device. Most data sheets for PS/2 controllers are written from the 
+perspective of the PS/2 device and not from the perspective of software 
+running on the host. Because of this, the names given to these buffers 
+are the opposite of what you expect: the output buffer contains a 
+device's output data (data waiting to be read by software), and the 
+input buffer contains a device's input (data that was sent by software).
+</p><p><br>
+</p>
+<h2> <span class="mw-headline" id="PS.2F2_Controller_IO_Ports"> PS/2 Controller IO Ports </span></h2>
+<p>The PS/2 Controller itself uses 2 IO ports (IO ports 0x60 and 0x64). 
+Like many IO ports, reads and writes may access different internal 
+registers.
+</p><p>Historical note: The PC-XT PPI had used port 0x61 to reset the 
+keyboard interrupt request signal  (among other unrelated functions). 
+Port 0x61 has no keyboard related functions on AT and PS/2 compatibles.
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> IO Port
+</th>
+<th> Access Type
+</th>
+<th> Purpose
+</th></tr>
+<tr>
+<td> 0x60
+</td>
+<td> Read/Write
+</td>
+<td> Data Port
+</td></tr>
+<tr>
+<td> 0x64
+</td>
+<td> Read
+</td>
+<td> Status Register
+</td></tr>
+<tr>
+<td> 0x64
+</td>
+<td> Write
+</td>
+<td> Command Register
+</td></tr></tbody></table>
+<p><br>
+</p>
+<h3> <span class="mw-headline" id="Data_Port"> Data Port </span></h3>
+<p>The Data Port (IO Port 0x60) is used for reading data that was 
+received from a PS/2 device or from the PS/2 controller itself and 
+writing data to a PS/2 device or to the PS/2 controller itself.
+</p><p><br>
+</p>
+<h3> <span class="mw-headline" id="Status_Register"> Status Register </span></h3>
+<p>The Status Register contains various flags that show the state of the PS/2 controller. The meanings for each bit are:
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Bit
+</th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 0
+</td>
+<td> Output buffer status (0 = empty, 1 = full)
+<p>(must be set before attempting to read data from IO port 0x60)
+</p>
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td> Input buffer status (0 = empty, 1 = full)
+<p>(must be clear before attempting to write data to IO port 0x60 or IO port 0x64)
+</p>
+</td></tr>
+<tr>
+<td> 2
+</td>
+<td> System Flag
+<p>Meant to be cleared on reset and set by firmware (via. PS/2 
+Controller Configuration Byte) if the system passes self tests (POST)
+</p>
+</td></tr>
+<tr>
+<td> 3
+</td>
+<td> Command/data (0 = data written to input buffer is data for PS/2 
+device, 1 = data written to input buffer is data for PS/2 controller 
+command)
+</td></tr>
+<tr>
+<td> 4
+</td>
+<td> Unknown (chipset specific)
+<p>May be "keyboard lock" (more likely unused on modern systems)
+</p>
+</td></tr>
+<tr>
+<td> 5
+</td>
+<td> Unknown (chipset specific)
+<p>May be "receive time-out" or "second PS/2 port output buffer full"
+</p>
+</td></tr>
+<tr>
+<td> 6
+</td>
+<td> Time-out error (0 = no error, 1 = time-out error)
+</td></tr>
+<tr>
+<td> 7
+</td>
+<td> Parity error (0 = no error, 1 = parity error)
+</td></tr>
+</tbody></table>
+<p><br>
+</p>
+<h3> <span class="mw-headline" id="Command_Register"> Command Register </span></h3>
+<p>The Command Port (IO Port 0x64) is used for sending commands to the PS/2 Controller (not to PS/2 devices).
+</p>
+<h2> <span class="mw-headline" id="PS.2F2_Controller_Commands"> PS/2 Controller Commands </span></h2>
+<p>The PS/2 Controller accepts commands and performs them. These 
+commands should not be confused with bytes sent to a PS/2 device (e.g. 
+keyboard, mouse).
+</p><p>To send a command to the controller, write the command byte to IO
+ port 0x64. If there is a "next byte" (the command is 2 bytes) then the 
+next byte needs to be written to IO Port 0x60 after making sure that the
+ controller is ready for it (by making sure bit 1 of the Status Register
+ is clear). If there is a response byte, then the response byte needs to
+ be read from IO Port 0x60 after making sure it has arrived (by making 
+sure bit 0 of the Status Register is set).
+</p><p><br>
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Command Byte
+</th>
+<th> Meaning
+</th>
+<th> Response Byte
+</th></tr>
+<tr>
+<td>0x20
+</td>
+<td>Read "byte 0" from internal RAM
+</td>
+<td>Controller Configuration Byte (see below)
+</td></tr>
+<tr>
+<td>0x21 to 0x3F
+</td>
+<td>Read "byte N" from internal RAM (where 'N' is the command byte &amp; 0x1F)
+</td>
+<td>Unknown (only the first byte of internal RAM has a standard purpose)
+</td></tr>
+<tr>
+<td>0x60
+</td>
+<td>Write next byte to "byte 0" of internal RAM (Controller Configuration Byte, see below)
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0x61 to 0x7F
+</td>
+<td>Write next byte to "byte N" of internal RAM (where 'N' is the command byte &amp; 0x1F)
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xA7
+</td>
+<td>Disable second PS/2 port (only if 2 PS/2 ports supported)
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xA8
+</td>
+<td>Enable second PS/2 port (only if 2 PS/2 ports supported)
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xA9
+</td>
+<td>Test second PS/2 port (only if 2 PS/2 ports supported)
+</td>
+<td>0x00 test passed
+<p>0x01 clock line stuck low
+0x02 clock line stuck high
+0x03 data line stuck low
+0x04 data line stuck high
+</p>
+</td></tr>
+<tr>
+<td>0xAA
+</td>
+<td>Test PS/2 Controller
+</td>
+<td>0x55 test passed
+<p>0xFC test failed
+</p>
+</td></tr>
+<tr>
+<td>0xAB
+</td>
+<td>Test first PS/2 port
+</td>
+<td>0x00 test passed
+<p>0x01 clock line stuck low
+0x02 clock line stuck high
+0x03 data line stuck low
+0x04 data line stuck high
+</p>
+</td></tr>
+<tr>
+<td>0xAC
+</td>
+<td>Diagnostic dump (read all bytes of internal RAM)
+</td>
+<td>Unknown
+</td></tr>
+<tr>
+<td>0xAD
+</td>
+<td>Disable first PS/2 port
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xAE
+</td>
+<td>Enable first PS/2 port
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xC0
+</td>
+<td>Read controller input port
+</td>
+<td>Unknown (none of these bits have a standard/defined purpose)
+</td></tr>
+<tr>
+<td>0xC1
+</td>
+<td>Copy bits 0 to 3 of input port to status bits 4 to 7
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xC2
+</td>
+<td>Copy bits 4 to 7 of input port to status bits 4 to 7
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xD0
+</td>
+<td>Read Controller Output Port
+</td>
+<td>Controller Output Port (see below)
+</td></tr>
+<tr>
+<td>0xD1
+</td>
+<td>Write next byte to Controller Output Port (see below)
+<p>Note: Check if output buffer is empty first
+</p>
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xD2
+</td>
+<td>Write next byte to first PS/2 port output buffer (only if 2 PS/2 ports supported)
+<p>(makes it look like the byte written was received from the first PS/2 port)
+</p>
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xD3
+</td>
+<td>Write next byte to second PS/2 port output buffer (only if 2 PS/2 ports supported)
+<p>(makes it look like the byte written was received from the second PS/2 port)
+</p>
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xD4
+</td>
+<td>Write next byte to second PS/2 port input buffer (only if 2 PS/2 ports supported)
+<p>(sends next byte to the second PS/2 port)
+</p>
+</td>
+<td>None
+</td></tr>
+<tr>
+<td>0xF0 to 0xFF
+</td>
+<td>Pulse output line low for 6 ms. Bits 0 to 3 are used as a mask (0 = 
+pulse line, 1 = don't pulse line) and correspond to 4 different output 
+lines.
+<p>Note: Bit 0 corresponds to the "reset" line. The other output lines don't have a standard/defined purpose.
+</p>
+</td>
+<td>None
+</td></tr></tbody></table>
+<p>Note: Command bytes not listed in the table above should be treated 
+as either "chipset specific" or "unknown" and shouldn't be issued. 
+Commands bytes that are marked as "only if 2 PS/2 ports supported" 
+should also be treated as either "chipset specific" or "unknown" if the 
+controller only supports one PS/2 port.
+</p><p><br>
+</p>
+<h3> <span class="mw-headline" id="PS.2F2_Controller_Configuration_Byte"> PS/2 Controller Configuration Byte </span></h3>
+<p>Commands 0x20 and 0x60 let you read and write the PS/2 Controller 
+Configuration Byte. This configuration byte has the following format:
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Bit
+</th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 0
+</td>
+<td> First PS/2 port interrupt (1 = enabled, 0 = disabled)
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td> Second PS/2 port interrupt (1 = enabled, 0 = disabled, only if 2 PS/2 ports supported)
+</td></tr>
+<tr>
+<td> 2
+</td>
+<td> System Flag (1 = system passed POST, 0 = your OS shouldn't be running)
+</td></tr>
+<tr>
+<td> 3
+</td>
+<td> Should be zero
+</td></tr>
+<tr>
+<td> 4
+</td>
+<td> First PS/2 port clock (1 = disabled, 0 = enabled)
+</td></tr>
+<tr>
+<td> 5
+</td>
+<td> Second PS/2 port clock (1 = disabled, 0 = enabled, only if 2 PS/2 ports supported)
+</td></tr>
+<tr>
+<td> 6
+</td>
+<td> First PS/2 port translation (1 = enabled, 0 = disabled)
+</td></tr>
+<tr>
+<td> 7
+</td>
+<td> Must be zero
+</td></tr>
+</tbody></table>
+<p>Note: Bits listed in the table above as "unknown" should be treated 
+as either "chipset specific" or "unknown". Bits that are marked as "only
+ if 2 PS/2 ports supported" should also be treated as either "chipset 
+specific" or "unknown" if the controller only supports one PS/2 port.
+</p><p><br>
+</p>
+<h3> <span class="mw-headline" id="PS.2F2_Controller_Output_Port"> PS/2 Controller Output Port </span></h3>
+<p>Commands 0xD0 and 0xD1 let you read and write the PS/2 Controller Output Port. This output port has the following format:
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Bit
+</th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 0
+</td>
+<td> System reset (output)
+<p><b>WARNING</b> always set to '1'. You need to pulse the reset line 
+(e.g. using command 0xFE), and setting this bit to '0' can lock the 
+computer up ("reset forever").
+</p>
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td> A20 gate (output)
+</td></tr>
+<tr>
+<td> 2
+</td>
+<td> Second PS/2 port clock (output, only if 2 PS/2 ports supported)
+</td></tr>
+<tr>
+<td> 3
+</td>
+<td> Second PS/2 port data (output, only if 2 PS/2 ports supported)
+</td></tr>
+<tr>
+<td> 4
+</td>
+<td> Output buffer full with byte from first PS/2 port (connected to IRQ1)
+</td></tr>
+<tr>
+<td> 5
+</td>
+<td> Output buffer full with byte from second PS/2 port (connected to IRQ12, only if 2 PS/2 ports supported)
+</td></tr>
+<tr>
+<td> 6
+</td>
+<td> First PS/2 port clock (output)
+</td></tr>
+<tr>
+<td> 7
+</td>
+<td> First PS/2 port data (output)
+</td></tr></tbody></table>
+<p>Note: Bits that are marked in the table above as "only if 2 PS/2 
+ports supported" should be treated as either "chipset specific" or 
+"unknown" if the controller only supports one PS/2 port.
+</p>
+<h2> <span class="mw-headline" id="Initialising_the_PS.2F2_Controller"> Initialising the PS/2 Controller </span></h2>
+<p>Some people assume the PS/2 controller exists and was configured 
+correctly by firmware. This approach can work, but isn't very robust and
+ doesn't correctly support "less simple" scenarios. Examples of why this
+ approach may not work well include:
+</p>
+<ul><li> Something (e.g. a Boot Manager) left the PS/2 Controller in a dodgy state
+</li><li> The PS/2 Controller has hardware faults and your OS did no testing
+</li><li> There's a USB keyboard and a PS/2 mouse, and the BIOS didn't 
+bother initialising the PS/2 controller because it was using USB Legacy 
+Support and not using the mouse
+</li><li> You want to reliably send data to the second PS/2 device on 
+older hardware and have to know the second PS/2 port exists (see the 
+warning for "Sending Bytes To The Second PS/2 Port" below).
+</li></ul>
+<p>The following steps are for "comprehensive PS/2 Controller 
+initialisation". It may be excessive for your purposes, and a more 
+limited version of it may be more suitable. However, it's easy enough to
+ (selectively) remove steps from the following description.
+</p>
+<h4> <span class="mw-headline" id="Step_1:_Initialise_USB_Controllers"> Step 1: Initialise USB Controllers </span></h4>
+<p>This has nothing to do with the PS/2 Controller or PS/2 Devices, 
+however if the system is using (typically limited/dodgy) USB Legacy 
+Support it will interfere with PS/2 Controller initialisation. Therefore
+ you need to initialise USB controllers and disable USB Legacy Support 
+beforehand.
+</p>
+<h4> <span class="mw-headline" id="Step_2:_Determine_if_the_PS.2F2_Controller_Exists"> Step 2: Determine if the PS/2 Controller Exists </span></h4>
+<p>Before you touch the PS/2 controller at all, you should determine if 
+it exists. On some systems (e.g. 80x86 Apple machines) it doesn't exist 
+and any attempt to touch it can cause a system crash. The correct way to
+ do this is is with <a href="https://wiki.osdev.org/ACPI" title="ACPI">ACPI</a>.
+ Check bit 1 (value = 2, the "8042" flag) in the "IA PC Boot 
+Architecture Flags" field at offset 109 in the Fixed ACPI Description 
+Table (FADT). If this bit is clear, then there is no PS/2 Controller to 
+configure. Otherwise, if the bit is set, or the system doesn't support 
+ACPI (no ACPI tables and no FADT) then there is a PS/2 Controller.
+</p>
+<h4> <span class="mw-headline" id="Step_3:_Disable_Devices"> Step 3: Disable Devices </span></h4>
+<p>So that any PS/2 devices can't send data at the wrong time and mess 
+up your initialisation; start by sending a command 0xAD and command 0xA7
+ to the PS/2 controller. If the controller is a "single channel" device,
+ it will ignore the "command 0xA7".
+</p>
+<h4> <span class="mw-headline" id="Step_4:_Flush_The_Output_Buffer"> Step 4: Flush The Output Buffer </span></h4>
+<p>Sometimes (e.g. due to interrupt controlled initialisation causing a 
+lost IRQ) data can get stuck in the PS/2 controller's output buffer. To 
+guard against this, now that the devices are disabled (and can't send 
+more data to the output buffer) it can be a good idea to flush the 
+controller's output buffer. There's 2 ways to do this - poll bit 0 of 
+the Status Register (while reading from IO Port 0x60 if/when bit 0 
+becomes set), or read from IO Port 0x60 without testing bit 0. Either 
+way should work (as you're discarding the data and don't care what it 
+was).
+</p>
+<h4> <span class="mw-headline" id="Step_5:_Set_the_Controller_Configuration_Byte"> Step 5: Set the Controller Configuration Byte  </span></h4>
+<p>Because some bits of the Controller Configuration Byte are "unknown",
+ this means reading the old value (command 0x20), changing some bits, 
+then writing the changed value back (command 0x60). You want to disable 
+all IRQs and disable translation (clear bits 0, 1 and 6).
+</p><p>While you've got the Configuration Byte, test if bit 5 was set. 
+If it was clear, then you know it can't be a "dual channel" PS/2 
+controller (because the second PS/2 port should be disabled).
+</p>
+<h4> <span class="mw-headline" id="Step_6:_Perform_Controller_Self_Test"> Step 6: Perform Controller Self Test  </span></h4>
+<p>To test the PS/2 controller, send command 0xAA to it. Then wait for 
+its response and check it replied with 0x55. Note: this can reset the 
+PS/2 controller on some hardware (tested on a 2016 laptop). At the very 
+least, the Controller Configuration Byte should be restored for 
+compatibility with such hardware. You can either determine the correct 
+value yourself based on the above table or restore the value read before
+ issuing 0xAA.
+</p>
+<h4> <span class="mw-headline" id="Step_7:_Determine_If_There_Are_2_Channels"> Step 7: Determine If There Are 2 Channels  </span></h4>
+<p>If you know it's a single channel controller (from Step 5) then skip 
+this step. Otherwise, send a command 0xAE to enable the second PS/2 port
+ and read the Controller Configuration Byte again. Now bit 5 of the 
+Controller Configuration Byte should be clear - if it's set then you 
+know it can't be a "dual channel" PS/2 controller (because the second 
+PS/2 port should be enabled). If it is a dual channel device, send a 
+command 0xA7 to disable the second PS/2 port again.
+</p>
+<h4> <span class="mw-headline" id="Step_8:_Perform_Interface_Tests"> Step 8: Perform Interface Tests  </span></h4>
+<p>This step tests the PS/2 ports. Use command 0xAB to test the first 
+PS/2 port, then check the result. Then (if it's a "dual channel" 
+controller) use command 0xA9 to test the second PS/2 port, then check 
+the result.
+</p><p>At this stage, check to see how many PS/2 ports are left. If 
+there aren't any that work you can just give up (display errors and 
+terminate the PS/2 Controller driver). <i>Note: If one of the PS/2 ports on a dual PS/2 controller fails, then you can still keep using/supporting the other PS/2 port.</i>
+</p>
+<h4> <span class="mw-headline" id="Step_9:_Enable_Devices"> Step 9: Enable Devices  </span></h4>
+<p>Enable any PS/2 port that exists and works using command 0xAE (for 
+the first port) and command 0xA8 (for the second port). If you're using 
+IRQs (recommended), also enable interrupts for any (usable) PS/2 ports 
+in the Controller Configuration Byte (set bit 0 for the first PS/2 port,
+ and/or bit 1 for the second PS/2 port, then set it with command 0x60).
+</p>
+<h4> <span class="mw-headline" id="Step_10:_Reset_Devices"> Step 10: Reset Devices  </span></h4>
+<p>All PS/2 devices should support the "reset" command (which is a 
+command for the device, and not a command for the PS/2 Controller). To 
+send the reset, just send the byte 0xFF to each (usable) device. The 
+device/s will respond with 0xFA (success) or 0xFC (failure), or won't 
+respond at all (no device present). If your code supports "hot-plug PS/2
+ devices" (see later), then you can assume each device is "not present" 
+and let the hot-plug code figure out that the device is present if/when 
+0xFA or 0xFC is received on a PS/2 port.
+</p><p><b>TODO</b>: Potential wiki error, the 0xFF reset device command seems to respond 0xAA and then 0xFA on self-test success, and <a href="https://wiki.osdev.org/PS/2_Keyboard" title="PS/2 Keyboard">PS/2_Keyboard</a> agrees. --<a href="https://wiki.osdev.org/User:Sortie" title="User:Sortie">Sortie</a> 14:15, 27 April 2015 (CDT)
+</p><p><b>TODO</b>: Sortie: I don't think so, I send byte 0xFF to 
+keyboard (or mouse), then received 0xFA (command acknowledged) after 
+that received 0xAA (self test successful) the last one was 0x00 - mouse 
+device ID. --<a href="https://wiki.osdev.org/User:Akasei" title="User:Akasei">Akasei</a> 00:35, 19 February 2017 (UTC+1)
+</p>
+<h2> <span class="mw-headline" id="Detecting_PS.2F2_Device_Types"> Detecting PS/2 Device Types </span></h2>
+<p>All PS/2 devices should support the "identify" command and the 
+"disable scanning" command (which are commands for the device, and not 
+commands for the PS/2 Controller). The device should respond to the 
+"identify" command by sending a sequence of none, one or two 
+identification bytes. However, if you just send the "identify" command 
+you can't prevent the response from the "identify" command from being 
+mixed up with keyboard/mouse data. To fix this problem, you need to send
+ the "disable scanning" command first. Disabling scanning means that the
+ device ignores the user (e.g. keyboards ignore key presses, mice ignore
+ mouse movement and button presses, etc) and won't send data to mess 
+your device identification code up.
+</p><p>The full sequence is:
+</p>
+<ul><li> Send the "disable scanning" command 0xF5 to the device
+</li><li> Wait for the device to send "ACK" back (0xFA)
+</li><li> Send the "identify" command 0xF2 to the device
+</li><li> Wait for the device to send "ACK" back (0xFA)
+</li><li> Wait for the device to send up to 2 bytes of reply, with a 
+time-out to determine when it's finished (e.g. in case it only sends 1 
+byte)
+</li></ul>
+<p>A partial list of responses includes:
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Byte/s
+</th>
+<th> Device Type
+</th></tr>
+<tr>
+<td> None
+</td>
+<td> Ancient AT keyboard with translation enabled in the PS/Controller (not possible for the second PS/2 port)
+</td></tr>
+<tr>
+<td> 0x00
+</td>
+<td> Standard PS/2 mouse
+</td></tr>
+<tr>
+<td> 0x03
+</td>
+<td> Mouse with scroll wheel
+</td></tr>
+<tr>
+<td> 0x04
+</td>
+<td> 5-button mouse
+</td></tr>
+<tr>
+<td> 0xAB, 0x41 or 0xAB, 0xC1
+</td>
+<td> MF2 keyboard with translation enabled in the PS/Controller (not possible for the second PS/2 port)
+</td></tr>
+<tr>
+<td> 0xAB, 0x83
+</td>
+<td> MF2 keyboard
+</td></tr></tbody></table>
+<p>Note: If anyone sees any other responses please add to the list above!
+</p><p>Once your PS/2 Controller driver knows what types of PS/2 devices
+ are present, it can start suitable device drivers for those devices. 
+Don't forget that we've left devices in a "scanning disabled" state.
+</p><p><br>
+</p>
+<h2> <span class="mw-headline" id="Hot_Plug_PS.2F2_Devices"> Hot Plug PS/2 Devices </span></h2>
+<p><b>WARNING:</b> PS/2 was never intentionally designed to support 
+hot-plug. Usually it is fine as most PS/2 controllers have reasonably 
+robust IO lines, however some PS/2 controllers (mostly those in old 
+chipsets) might get damaged.
+</p><p>Despite the warning, most OSs (Windows, Linux, etc) do support 
+hot-plug PS/2. It is also relied on by old "mechanical switch" KVMs 
+(which allow multiple computers to share the same PS/2 devices by 
+effectively disconnecting the device from one computer and connecting it
+ to the next).
+</p><p>When a PS/2 device is removed the PS/2 controller won't know. To 
+work around this, when no data has been received from the device for 
+some length of time (e.g. 2 seconds), an OS can periodically test for 
+the presence of the device by sending an "echo" command to the device 
+and checking for a reply. If the device doesn't respond, then assume the
+ device has been unplugged.
+</p><p>When a PS/2 device is first powered up (e.g. when it is plugged 
+in to a PS/2 port), the device should perform its Basic Assurance Test 
+and then attempt to send a "BAT completion code". This means that 
+software (e.g. an OS) can automatically detect when a PS/2 device has 
+been inserted. <i>Note: If a device is removed and then another device 
+(or the same device) is plugged in quickly enough, the software may not 
+have had time to detect the removal.</i>
+</p><p>When software detects that a device was plugged in it can 
+determine the type of device (see above). If the device was the same 
+type as before software can re-configure it so that the device is in the
+ same state as it was before removal. This means that (for example) 
+someone using an old "mechanical switch" KVMs doesn't lose state (things
+ like keyboard LEDs, typematic rate, etc) when switching between 
+computers. If the device is not the same as before or there was no 
+previously connected device, then software may need to start a new 
+device driver (and terminate the old device driver, if any).
+</p><p><br>
+</p>
+<h2> <span class="mw-headline" id="Sending_Bytes_To_Device.2Fs"> Sending Bytes To Device/s </span></h2>
+<p>Unfortunately, the PS/2 Controller does not support interrupt driven 
+transmission (e.g. you can't have a queue of bytes waiting to be sent 
+and then send each byte from inside a "transmitter empty" IRQ handler). 
+Fortunately, little data needs to be sent to typical PS/2 devices and 
+polling suffices.
+</p>
+<h3> <span class="mw-headline" id="First_PS.2F2_Port"> First PS/2 Port </span></h3>
+<p>To send data to the first PS/2 Port:
+</p>
+<ul><li> Set up some timer or counter to use as a time-out
+</li><li> Poll bit 1 of the Status Register ("Input buffer empty/full") until it becomes clear, or until your time-out expires
+</li><li> If the time-out expired, return an error
+</li><li> Otherwise, write the data to the Data Port (IO port 0x60)
+</li></ul>
+<h3> <span class="mw-headline" id="Second_PS.2F2_Port"> Second PS/2 Port </span></h3>
+<p>Sending data to the second PS/2 port is a little more complicated, as
+ you need to send a command to the PS/2 controller to tell it that you 
+want to talk to the second PS/2 port instead of the first PS/2 port. To 
+send data to the second PS/2 Port:
+</p>
+<ul><li> Write the command 0xD4 to IO Port 0x64
+</li><li> Set up some timer or counter to use as a time-out
+</li><li> Poll bit 1 of the Status Register ("Input buffer empty/full") until it becomes clear, or until your time-out expires
+</li><li> If the time-out expired, return an error
+</li><li> Otherwise, write the data to the Data Port (IO port 0x60)
+</li></ul>
+<p><b>WARNING:</b> If the PS/2 controller is an (older) "single PS/2 
+device only" controller, if you attempt to send a byte to the second 
+PS/2 port the controller will ignore the command 0xD4 you send to IO 
+Port 0x64, and therefore the byte you send will be sent to the first 
+PS/2 device. This means that (if you support older hardware) to reliably
+ send data to the second device you have to know that the PS/2 
+Controller actually has a second PS/2 port.
+</p><p><br>
+</p>
+<h2> <span class="mw-headline" id="Receiving_Bytes_From_Device.2Fs"> Receiving Bytes From Device/s </span></h2>
+<p>There are 2 ways to receive bytes from device/s: polling and using IRQ.
+</p>
+<h3> <span class="mw-headline" id="Polling"> Polling </span></h3>
+<p>To poll, wait until bit 0 of the Status Register becomes set, then read the received byte of data from IO Port 0x60.
+</p><p>There are 2 major problems with polling. The first problem is 
+that (like all polling) it wastes a lot of CPU time for nothing. The 
+second problem is that if the PS/2 controller supports two PS/2 devices,
+ there's no way to reliably determine which device sent the byte you 
+received, unless one of them is disabled and unable to send data.
+</p><p>Note: if the PS/2 controller uses bit 5 of the Status Register as
+ a "second PS/2 port output buffer full" flag, you'd still have problems
+ trying to determine which device sent a byte of data you've received 
+without race conditions. For example, there may be data from the second 
+PS/2 device waiting for you when you check the flag, but before you read
+ from IO Port 0x60 data from the first PS/2 device might arrive and you 
+might read data from the first PS/2 device when you think you're reading
+ data from the second PS/2 device. There's also no easy way to know if 
+the PS/2 controller uses bit 5 of the Status Register as a "second PS/2 
+port output buffer full" flag.
+</p>
+<h3> <span class="mw-headline" id="Interrupts"> Interrupts </span></h3>
+<p>Using interrupts is easy. When IRQ1 occurs you just read from IO Port
+ 0x60 (there is no need to check bit 0 in the Status Register first), 
+send the EOI to the interrupt controller and return from the interrupt 
+handler. You know that the data came from the first PS/2 device because 
+you received an IRQ1.
+</p><p>When IRQ12 occurs you read from IO Port 0x60 (there is no need to
+ check bit 0 in the Status Register first), send the EOI to the 
+interrupt controller/s and return from the interrupt handler. You know 
+that the data came from the second PS/2 device because you received an 
+IRQ12.
+</p><p>Unfortunately, there is one problem to worry about. If you send a
+ command to the PS/2 controller that involves a response, the PS/2 
+controller may generate IRQ1, IRQ12, or no IRQ (depending on the 
+firmware) when it puts the "response byte" into the buffer. In all three
+ cases, you can't tell if the byte came from a PS/2 device or the PS/2 
+controller. In the no IRQ case, you additionally will need to poll for 
+the byte. Fortunately, you should never need to send a command to the 
+PS/2 controller itself after initialisation (and you can disable IRQs 
+and both PS/2 devices where necessary during initialisation).
+</p>
+<h2> <span class="mw-headline" id="CPU_Reset"> CPU Reset </span></h2>
+<p>To trigger a CPU Reset, regardless of what state the CPU is in, write the value 0xFE to the Output port.
+</p>
+<div dir="ltr" class="mw-geshi" style="text-align: left;"><div class="asm source-asm"><pre class="de1"> <span class="co1">;Wait for a empty Input Buffer</span>
+ wait1<span class="sy0">:</span>
+ <span class="kw1">in</span>   <span class="kw3">al</span><span class="sy0">,</span> <span class="nu0">0x64</span>
+ <span class="kw1">test</span> <span class="kw3">al</span><span class="sy0">,</span> <span class="nu0">00000010b</span>
+ <span class="kw1">jne</span>  wait1
+&nbsp;
+ <span class="co1">;Send 0xFE to the keyboard controller.</span>
+ <span class="kw1">mov</span>  <span class="kw3">al</span><span class="sy0">,</span> <span class="nu0">0xFE</span>
+ <span class="kw1">out</span>  <span class="nu0">0x64</span><span class="sy0">,</span> <span class="kw3">al</span></pre></div></div>
+<h2> <span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li><a href="https://wiki.osdev.org/PS/2" title="PS/2">PS/2</a>
+</li><li><a href="https://wiki.osdev.org/PL050_PS/2_Controller" title="PL050 PS/2 Controller"> PL050 PS/2 Controller (ARM)</a>
+</li><li><a href="https://wiki.osdev.org/PS/2_Keyboard" title="PS/2 Keyboard">PS/2 Keyboard</a>
+</li><li><a href="https://wiki.osdev.org/PS/2_Mouse" title="PS/2 Mouse">PS/2 Mouse</a>
+</li></ul>
+<h3> <span class="mw-headline" id="Threads">Threads</span></h3>
+<ul><li><a href="http://forum.osdev.org/viewtopic.php?p=69151#p69151" class="extiw" title="post:69151">PS/2 controller initialisation</a>
+</li></ul>
+<h3> <span class="mw-headline" id="External_Links">External Links</span></h3>
+<ul><li> <a rel="nofollow" class="external text" href="http://www.diakom.ru/el/elfirms/datashts/Smsc/42w11.pdf">SMS "8042" Datasheet</a>
+</li></ul>
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 233/1000000
+Post-expand include size: 972/2097152 bytes
+Template argument size: 0/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key wikidb:pcache:idhash:3160-0!*!0!!en!2!* and timestamp 20220501200520 -->
+</div>				<!-- /bodycontent -->
+								<!-- printfooter -->
+				<div class="printfooter">
+				Retrieved from "<a href="https://wiki.osdev.org/index.php?title=%228042%22_PS/2_Controller&amp;oldid=26442">https://wiki.osdev.org/index.php?title=%228042%22_PS/2_Controller&amp;oldid=26442</a>"				</div>
+				<!-- /printfooter -->
+												<!-- catlinks -->
+				<div id="catlinks" class="catlinks"><div id="mw-normal-catlinks"><a href="https://wiki.osdev.org/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="https://wiki.osdev.org/Category:X86" title="Category:X86">X86</a></li><li><a href="https://wiki.osdev.org/Category:Common_Devices" title="Category:Common Devices">Common Devices</a></li></ul></div></div>				<!-- /catlinks -->
+												<div class="visualClear"></div>
+				<!-- debughtml -->
+								<!-- /debughtml -->
+			</div>
+			<!-- /bodyContent -->
+		</div>
+		<!-- /content -->
+		<!-- header -->
+		<div id="mw-head" class="noprint">
+			
+<!-- 0 -->
+<div id="p-personal" class="">
+	<h5>Personal tools</h5>
+	<ul>
+		<li id="pt-login"><a href="https://wiki.osdev.org/index.php?title=Special:UserLogin&amp;returnto=%228042%22_PS%2F2_Controller" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li>
+	</ul>
+</div>
+
+<!-- /0 -->
+			<div id="left-navigation">
+				
+<!-- 0 -->
+<div id="p-namespaces" class="vectorTabs">
+	<h5>Namespaces</h5>
+	<ul>
+					<li id="ca-nstab-main" class="selected"><span><a href="https://wiki.osdev.org/%228042%22_PS/2_Controller" title="View the content page [c]" accesskey="c">Page</a></span></li>
+					<li id="ca-talk"><span><a href="https://wiki.osdev.org/Talk:%228042%22_PS/2_Controller" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-variants" class="vectorMenu emptyPortlet">
+		<h5><span>Variants</span><a href="#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+			</div>
+			<div id="right-navigation">
+				
+<!-- 0 -->
+<div id="p-views" class="vectorTabs">
+	<h5>Views</h5>
+	<ul>
+					<li id="ca-view" class="selected"><span><a href="https://wiki.osdev.org/%228042%22_PS/2_Controller">Read</a></span></li>
+					<li id="ca-viewsource"><span><a href="https://wiki.osdev.org/index.php?title=%228042%22_PS/2_Controller&amp;action=edit" title="This page is protected.
+You can view its source [e]" accesskey="e">View source</a></span></li>
+					<li id="ca-history" class="collapsible"><span><a href="https://wiki.osdev.org/index.php?title=%228042%22_PS/2_Controller&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-cactions" class="vectorMenu emptyPortlet">
+	<h5><span>Actions</span><a href="#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+
+<!-- 2 -->
+<div id="p-search">
+	<h5><label for="searchInput">Search</label></h5>
+	<form action="/index.php" id="searchform">
+		<input type="hidden" name="title" value="Special:Search">
+				<input type="search" name="search" title="Search OSDev Wiki [f]" accesskey="f" id="searchInput">		<input type="submit" name="go" value="Go" title="Go to a page with this exact name if exists" id="searchGoButton" class="searchButton">		<input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton">			</form>
+</div>
+
+<!-- /2 -->
+			</div>
+		</div>
+		<!-- /header -->
+		<!-- panel -->
+			<div id="mw-panel" class="noprint">
+				<!-- logo -->
+					<div id="p-logo"><a style="background-image: url(/skins/common/images/osdev.png);" href="https://wiki.osdev.org/Main_Page" title="Visit the main page"></a></div>
+				<!-- /logo -->
+				
+<!-- navigation -->
+<div class="portal" id="p-navigation">
+	<h5>Navigation</h5>
+	<div class="body">
+		<ul>
+			<li id="n-mainpage"><a href="https://wiki.osdev.org/Main_Page" title="Visit the main page [z]" accesskey="z">Main Page</a></li>
+			<li id="n-portal"><a href="http://forum.osdev.org/" rel="nofollow" title="About the project, what you can do, where to find things">Forums</a></li>
+			<li id="n-FAQ"><a href="https://wiki.osdev.org/Category:FAQ">FAQ</a></li>
+			<li id="n-OS-Projects"><a href="https://wiki.osdev.org/Projects">OS Projects</a></li>
+			<li id="n-randompage"><a href="https://wiki.osdev.org/Special:Random" title="Load a random page [x]" accesskey="x">Random page</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /navigation -->
+
+<!-- about -->
+<div class="portal" id="p-about">
+	<h5>About</h5>
+	<div class="body">
+		<ul>
+			<li id="n-This-site"><a href="https://wiki.osdev.org/OSDevWiki:About">This site</a></li>
+			<li id="n-Joining"><a href="https://wiki.osdev.org/OSDevWiki:Joining">Joining</a></li>
+			<li id="n-Editing-help"><a href="https://wiki.osdev.org/OSDevWiki:Editing">Editing help</a></li>
+			<li id="n-recentchanges"><a href="https://wiki.osdev.org/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /about -->
+
+<!-- SEARCH -->
+
+<!-- /SEARCH -->
+
+<!-- TOOLBOX -->
+<div class="portal" id="p-tb">
+	<h5>Toolbox</h5>
+	<div class="body">
+		<ul>
+			<li id="t-whatlinkshere"><a href="https://wiki.osdev.org/Special:WhatLinksHere/%228042%22_PS/2_Controller" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li>
+			<li id="t-recentchangeslinked"><a href="https://wiki.osdev.org/Special:RecentChangesLinked/%228042%22_PS/2_Controller" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li>
+			<li id="t-specialpages"><a href="https://wiki.osdev.org/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li>
+			<li><a href="https://wiki.osdev.org/index.php?title=%228042%22_PS/2_Controller&amp;printable=yes" rel="alternate">Printable version</a></li>
+			<li id="t-permalink"><a href="https://wiki.osdev.org/index.php?title=%228042%22_PS/2_Controller&amp;oldid=26442" title="Permanent link to this revision of the page">Permanent link</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /TOOLBOX -->
+
+<!-- LANGUAGES -->
+<div class="portal" id="p-lang">
+	<h5>In other languages</h5>
+	<div class="body">
+		<ul>
+			<li class="interwiki-de"><a href="http://www.lowlevel.eu/wiki/Keyboard_Controller" title="Keyboard Controller">Deutsch</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /LANGUAGES -->
+			</div>
+		<!-- /panel -->
+		<!-- footer -->
+		<div id="footer">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last modified on 2 October 2021, at 19:22.</li>
+											<li id="footer-info-viewcount">This page has been accessed 142,110 times.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="https://wiki.osdev.org/OSDev_Wiki:Privacy_policy" title="OSDev Wiki:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="https://wiki.osdev.org/OSDev_Wiki:About" title="OSDev Wiki:About">About OSDev Wiki</a></li>
+											<li id="footer-places-disclaimer"><a href="https://wiki.osdev.org/OSDev_Wiki:General_disclaimer" title="OSDev Wiki:General disclaimer">Disclaimers</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+					<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="'8042'%20PS_2%20Controller%20-%20OSDev%20Wiki_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" width="88" height="31"></a>
+					</li>
+				</ul>
+						<div style="clear:both"></div>
+		</div>
+		<!-- /footer -->
+		<!-- fixalpha -->
+		<script type="text/javascript"> if ( window.isMSIE55 ) fixalpha(); </script>
+		<!-- /fixalpha -->
+		<script src="'8042'%20PS_2%20Controller%20-%20OSDev%20Wiki_files/load_002"></script>
+<script>if(window.mw){
+	mw.loader.load(["mediawiki.user", "mediawiki.util", "mediawiki.page.ready", "mediawiki.legacy.wikibits", "mediawiki.legacy.ajax"]);
+}
+</script>
+<script src="'8042'%20PS_2%20Controller%20-%20OSDev%20Wiki_files/load_003"></script>
+<script>if(window.mw){
+	mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":1,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":0,"extendwatchlist":0,"externaldiff":0,"externaleditor":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"highlightbroken":1,"imagesize":2,"justify":0,"math":1,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"quickbar":5,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":0,"showjumplinks":1,"shownumberswatching":1,"showtoc":1,"showtoolbar":1,"skin":"vector","stubthreshold":0,"thumbsize":2,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":0,"watchdefault":0,"watchdeletion":0,"watchlistdays":3,"watchlisthideanons":0,
+	"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"variant":"en","language":"en","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false});;mw.user.tokens.set({"editToken":"+\\","watchToken":false});;mw.loader.state({"user.options":"ready","user.tokens":"ready"});
+	
+	/* cache key: wikidb:resourceloader:filter:minify-js:4:19a4b18a9ac79a6b8c60b24af4668814 */
+}
+</script><!-- Served in 0.115 secs. -->
+	
+
+</body></html>

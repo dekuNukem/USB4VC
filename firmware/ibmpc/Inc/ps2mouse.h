@@ -22,6 +22,15 @@ uint8_t ps2mouse_get_outgoing_data(mouse_event* this_event, ps2_outgoing_buf* pb
 uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf);
 uint8_t ps2mouse_write_nowait(uint8_t data);
 void ps2mouse_reset(void);
+
+#define PS2_OK 0
+#define PS2_ERROR_SCAN_DISABLED 1
+#define PS2_ERROR_UNKNOWN_CODE_SET 9
+#define PS2_ERROR_HOST_INHIBIT 69
+#define PS2_ERROR_UNUSED_CODE 2
+#define PS2_ERROR_UNKNOWN 3
+#define PS2_ERROR_TIMEOUT 4
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,0 +1,71 @@
+/* $Id$ */
+
+body {
+	font-family: sans-serif, verdana, arial, helvetica;
+	padding: 0em;
+	border-width: 0em;
+}
+
+table.fullheight {
+	background-color: #c4c4c4;
+	height: 100%;
+}
+
+.gray {
+	background-color: #c4c4c4;
+}
+
+.white {
+	background-color: #ffffff;
+}
+
+.nomargin {
+	margin: 0em;
+}
+
+.bordertop {
+	background-color: #ffffff;
+	background-image: url("/gfx/border_top.gif");
+	background-repeat: repeat;
+}
+.borderbottom {
+	background-color: #ffffff;
+	background-image: url("/gfx/border_bottom.gif");
+	background-repeat: repeat;
+}
+.borderleft {
+	background-color: #ffffff;
+	background-image: url("/gfx/border_left.gif");
+	background-repeat: repeat;
+}
+.borderright {
+	background-color: #ffffff;
+	background-image: url("/gfx/border_right.gif");
+	background-repeat: repeat;
+}
+
+td.submenu {
+	white-space: nowrap;
+}
+
+a:link { text-decoration: none; font-weight: bold; color: #5555aa; }
+a:visited { text-decoration: none; font-weight: bold; color: #222266; }
+a:active { text-decoration: none; font-weight: bold; color: #7777ff; }
+a:hover { text-decoration: none; font-weight: bold; color: #7777ff; }
+a.active { text-decoration: none; font-weight: bold; color: #555555; }
+
+h1 {
+	font-size: xx-large;
+	font-weight: bold;
+}
+h2 {
+	font-size: x-large;
+	font-weight: bold;
+}
+h3 {
+	font-size: large;
+	font-weight: bold;
+}
+h4 {
+	font-weight: bold;
+}

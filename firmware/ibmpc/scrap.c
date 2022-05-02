@@ -1,3 +1,60 @@
+if(ps2mouse_send_update(&my_ps2_outbuf) == PS2_ERROR_HOST_INHIBIT)
+  {
+    HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+    while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
+      ;
+    // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
+    while(1)
+      ;
+  }
+
+  while(1)
+  {
+    uint8_t send_result = ps2mouse_send_update(&my_ps2_outbuf);
+    if(send_result == PS2_ERROR_HOST_INHIBIT)
+    {
+      HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+      while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
+        ;
+      HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
+      continue;
+    }
+    else
+    {
+      mouse_buf_pop(&my_mouse_buf);
+      return;
+    }
+  }
+  // uint8_t send_result = ps2mouse_send_update(&my_ps2_outbuf);
+  // while(send_result == PS2_ERROR_HOST_INHIBIT)
+  // {
+  //   HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+  //   HAL_Delay(10);
+  // }
+  // mouse_buf_pop(&my_mouse_buf);
+
+  while(1)
+  {
+    uint8_t send_result = ps2mouse_send_update(&my_ps2_outbuf);
+    if(send_result == PS2_ERROR_HOST_INHIBIT)
+    {
+      HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+      HAL_Delay(1);
+      HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
+      continue;
+    }
+    else
+    {
+      mouse_buf_pop(&my_mouse_buf);
+      return;
+    }
+  }
+  // only pop the item if sending is complete
+  if(ps2mouse_send_update(&my_ps2_outbuf))
+    HAL_Delay(1);
+  else
+    mouse_buf_pop(&my_mouse_buf);
+
 void xtkb_update(void)
 {
   xtkb_check_for_softreset();

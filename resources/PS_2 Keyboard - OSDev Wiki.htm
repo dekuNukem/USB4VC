@@ -1,0 +1,4458 @@
+<!DOCTYPE html>
+<html dir="ltr" class="client-nojs" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>PS/2 Keyboard - OSDev Wiki</title>
+<meta charset="UTF-8">
+<meta name="generator" content="MediaWiki 1.18.0">
+<link rel="shortcut icon" href="https://wiki.osdev.org/favicon.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="https://wiki.osdev.org/opensearch_desc.php" title="OSDev Wiki (en)">
+<link rel="EditURI" type="application/rsd+xml" href="https://wiki.osdev.org/api.php?action=rsd">
+<link rel="alternate" type="application/atom+xml" title="OSDev Wiki Atom feed" href="https://wiki.osdev.org/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="stylesheet" href="PS_2%20Keyboard%20-%20OSDev%20Wiki_files/load.css">
+<meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="PS_2%20Keyboard%20-%20OSDev%20Wiki_files/load_002.css">
+<style>a:lang(ar),a:lang(ckb),a:lang(fa),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}a.new,#quickbar a.new{color:#ba0000}
+
+/* cache key: wikidb:resourceloader:filter:minify-css:4:c88e2bcd56513749bec09a7e29cb3ffa */
+</style>
+<script src="PS_2%20Keyboard%20-%20OSDev%20Wiki_files/load_003"></script>
+<script>if(window.mw){
+	mw.config.set({"wgCanonicalNamespace": "", "wgCanonicalSpecialPageName": false, "wgNamespaceNumber": 0, "wgPageName": "PS/2_Keyboard", "wgTitle": "PS/2 Keyboard", "wgCurRevisionId": 27032, "wgArticleId": 1900, "wgIsArticle": true, "wgAction": "view", "wgUserName": null, "wgUserGroups": ["*"], "wgCategories": ["Human Interface Device", "Common Devices"], "wgBreakFrames": false, "wgRestrictionEdit": [], "wgRestrictionMove": []});
+}
+</script><script>if(window.mw){
+	mw.loader.load(["mediawiki.page.startup"]);
+}
+</script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/skins/vector/csshover.min.htc")}</style><![endif]--></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-PS_2_Keyboard action-view skin-vector">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<!-- content -->
+		<div id="content">
+			<a id="top"></a>
+			<div id="mw-js-message" style="display:none;"></div>
+						<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading">PS/2 Keyboard</h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent">
+								<!-- tagline -->
+				<div id="siteSub">From OSDev Wiki</div>
+				<!-- /tagline -->
+								<!-- subtitle -->
+				<div id="contentSub"></div>
+				<!-- /subtitle -->
+																<!-- jumpto -->
+				<div id="jump-to-nav">
+					Jump to: <a href="#mw-head">navigation</a>,
+					<a href="#p-search">search</a>
+				</div>
+				<!-- /jumpto -->
+								<!-- bodycontent -->
+				<div dir="ltr" class="mw-content-ltr" lang="en"><table id="toc" class="toc"><tbody><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Commands"><span class="tocnumber">2</span> <span class="toctext">Commands</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Special_Bytes"><span class="tocnumber">3</span> <span class="toctext">Special Bytes</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Driver_Model"><span class="tocnumber">4</span> <span class="toctext">Driver Model</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Command_Queue_and_State_Machine"><span class="tocnumber">4.1</span> <span class="toctext">Command Queue and State Machine</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Scan_Code_Sets.2C_Scan_Codes_and_Key_Codes"><span class="tocnumber">4.2</span> <span class="toctext">Scan Code Sets, Scan Codes and Key Codes</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Key_Codes.2C_Key_States_and_Key_Mappings"><span class="tocnumber">4.3</span> <span class="toctext">Key Codes, Key States and Key Mappings</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#Scan_Code_Sets"><span class="tocnumber">5</span> <span class="toctext">Scan Code Sets</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="#Scan_Code_Set_1"><span class="tocnumber">5.1</span> <span class="toctext">Scan Code Set 1</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Scan_Code_Set_2"><span class="tocnumber">5.2</span> <span class="toctext">Scan Code Set 2</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Scan_Code_Set_3"><span class="tocnumber">5.3</span> <span class="toctext">Scan Code Set 3</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#See_Also"><span class="tocnumber">6</span> <span class="toctext">See Also</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="#Forum_Threads"><span class="tocnumber">6.1</span> <span class="toctext">Forum Threads</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#External_Links"><span class="tocnumber">6.2</span> <span class="toctext">External Links</span></a>
+<ul>
+<li class="toclevel-3 tocsection-15"><a href="#Implementations"><span class="tocnumber">6.2.1</span> <span class="toctext">Implementations</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</td></tr></tbody></table>
+<h2> <span class="mw-headline" id="Overview"> Overview </span></h2>
+<p>The PS/2 Keyboard is a device that talks to a PS/2 controller using <a href="https://wiki.osdev.org/PS/2" title="PS/2">serial communication</a>.
+ Ideally, each different type of PS/2 controller driver should provide 
+some sort of standard/simple "send byte/receive byte" interface, and the
+ PS/2 Keyboard driver would use this interface without caring about 
+lower level details (like what type of PS/2 controller the device is 
+plugged into).
+</p><p>The PS/2 Keyboard accepts commands and sends responses to those 
+commands, and also sends scan codes indicating when a key was pressed or
+ released. Keep in mind that these scan codes (from the tables below) 
+may be altered (i.e. translated) by the PS/2 controller, depending on 
+the controller's settings.
+</p>
+<h2> <span class="mw-headline" id="Commands"> Commands </span></h2>
+<p>A PS/2 Keyboard accepts many types of commands. A command is one 
+byte. Some commands have data byte/s which must be sent after the 
+command byte. The keyboard typically responds to a command by sending 
+either an "ACK" (to acknowledge the command) or a "Resend" (to say 
+something was wrong with the previous command) back. Don't forget to 
+wait between the command, the data and the response from keyboard.
+</p><p>The commands that a PS/2 Keyboard accepts are:
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Command Byte
+</th>
+<th> Data Byte/s
+</th>
+<th> Meaning
+</th>
+<th> Response
+</th></tr>
+<tr>
+<td> 0xED
+</td>
+<td> LED states:
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Bit
+</th>
+<th> Use
+</th></tr>
+<tr>
+<td> 0
+</td>
+<td> ScrollLock
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td> NumberLock
+</td></tr>
+<tr>
+<td> 2
+</td>
+<td> CapsLock
+</td></tr></tbody></table>
+<p>Note: Other bits may be used in international keyboards for other 
+purposes (e.g. a Japanese keyboard might use bit 4 for a "Kana mode" 
+LED).
+</p>
+</td>
+<td> Set LEDs
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xEE
+</td>
+<td> None
+</td>
+<td> Echo (for diagnostic purposes, and useful for device removal detection)
+</td>
+<td> 0xEE (Echo) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xF0
+</td>
+<td> Sub-command:
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Value
+</th>
+<th> Use
+</th></tr>
+<tr>
+<td> 0
+</td>
+<td> Get current scan code set
+</td></tr>
+<tr>
+<td> 1
+</td>
+<td> Set scan code set 1
+</td></tr>
+<tr>
+<td> 2
+</td>
+<td> Set scan code set 2
+</td></tr>
+<tr>
+<td> 3
+</td>
+<td> Set scan code set 3
+</td></tr></tbody></table>
+</td>
+<td> Get/set current scan code set
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend) if scan code is being set; 0xFA (ACK) 
+then the scan code set number, or 0xFE (Resend) if you're getting the 
+scancode. If getting the scancode the table indicates the value that 
+identify each set:
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Value
+</th>
+<th> Use
+</th></tr>
+<tr>
+<td> 43
+</td>
+<td> Scan code set 1
+</td></tr>
+<tr>
+<td> 41
+</td>
+<td> Scan code set 2
+</td></tr>
+<tr>
+<td> 3f
+</td>
+<td> Scan code set 3
+</td></tr></tbody></table>
+</td></tr>
+<tr>
+<td> 0xF2
+</td>
+<td> None
+</td>
+<td> Identify keyboard
+</td>
+<td> 0xFA (ACK) followed by none or more ID bytes (see <a href="https://wiki.osdev.org/%228042%22_PS/2_Controller#Detecting_PS.2F2_Device_Types" title="&quot;8042&quot; PS/2 Controller">"Detecting Device Types"</a>)
+</td></tr>
+<tr>
+<td> 0xF3
+</td>
+<td> Typematic byte:
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Bit/s
+</th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 0 to 4
+</td>
+<td> Repeat rate (00000b = 30 Hz, ..., 11111b = 2 Hz)
+</td></tr>
+<tr>
+<td> 5 to 6
+</td>
+<td> Delay before keys repeat (00b = 250 ms, 01b = 500 ms, 10b = 750 ms, 11b = 1000 ms)
+</td></tr>
+<tr>
+<td> 7
+</td>
+<td> Must be zero
+</td></tr></tbody></table>
+</td>
+<td> Set typematic rate and delay
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xF4
+</td>
+<td> None
+</td>
+<td> Enable scanning (keyboard will send scan codes)
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xF5
+</td>
+<td> None
+</td>
+<td> Disable scanning (keyboard won't send scan codes)
+<p>Note: May also restore default parameters
+</p>
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xF6
+</td>
+<td> None
+</td>
+<td> Set default parameters
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xF7
+</td>
+<td> None
+</td>
+<td> Set all keys to typematic/autorepeat only (scancode set 3 only)
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xF8
+</td>
+<td> None
+</td>
+<td> Set all keys to make/release (scancode set 3 only)
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xF9
+</td>
+<td> None
+</td>
+<td> Set all keys to make only (scancode set 3 only)
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xFA
+</td>
+<td> None
+</td>
+<td> Set all keys to typematic/autorepeat/make/release (scancode set 3 only)
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xFB
+</td>
+<td> Scancode for key
+</td>
+<td> Set specific key to typematic/autorepeat only (scancode set 3 only)
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xFC
+</td>
+<td> Scancode for key
+</td>
+<td> Set specific key to make/release (scancode set 3 only)
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xFD
+</td>
+<td> Scancode for key
+</td>
+<td> Set specific key to make only (scancode set 3 only)
+</td>
+<td> 0xFA (ACK) or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xFE
+</td>
+<td> None
+</td>
+<td> Resend last byte
+</td>
+<td> Previously sent byte or 0xFE (Resend)
+</td></tr>
+<tr>
+<td> 0xFF
+</td>
+<td> None
+</td>
+<td> Reset and start self-test
+</td>
+<td> 0xAA (self-test passed), 0xFC or 0xFD (self test failed), or 0xFE (Resend)
+</td></tr></tbody></table>
+<h2> <span class="mw-headline" id="Special_Bytes"> Special Bytes </span></h2>
+<p>The keyboard sends bytes to the system. Some of these bytes have 
+special meaning (e.g. responses from the commands above). The bytes the 
+keyboard may send are:
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Response Byte
+</th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> 0x00
+</td>
+<td> Key detection error or internal buffer overrun
+</td></tr>
+<tr>
+<td> 0xAA
+</td>
+<td> Self test passed (sent after "0xFF (reset)" command or keyboard power up)
+</td></tr>
+<tr>
+<td> 0xEE
+</td>
+<td> Response to "0xEE (echo)" command
+</td></tr>
+<tr>
+<td> 0xFA
+</td>
+<td> Command acknowledged (ACK)
+</td></tr>
+<tr>
+<td> 0xFC and 0xFD
+</td>
+<td> Self test failed (sent after "0xFF (reset)" command or keyboard power up)
+</td></tr>
+<tr>
+<td> 0xFE
+</td>
+<td> Resend (keyboard wants controller to repeat last command it sent)
+</td></tr>
+<tr>
+<td> 0xFF
+</td>
+<td> Key detection error or internal buffer overrun
+</td></tr></tbody></table>
+<p>All other bytes sent by the keyboard are scan codes, where interpretation depends on the currently selected scan code set.
+</p>
+<h2> <span class="mw-headline" id="Driver_Model"> Driver Model </span></h2>
+<h3> <span class="mw-headline" id="Command_Queue_and_State_Machine"> Command Queue and State Machine </span></h3>
+<p>Commands must be sent one at a time (e.g. if your driver is interrupt
+ driven, you can't start sending a command within the IRQ handler 
+because code outside the IRQ handler may be in the middle of sending a 
+command). The command isn't completed until you've received an ACK for 
+it. For example, if you send a command and the keyboard responds with 
+"0xFE (resend)" then you have to send the command again (possibly 
+limited to 3 retries before you give up and assume the keyboard doesn't 
+support the command you're sending or there's been a hardware failure). 
+Finally, sometimes you want to send several commands at once. For 
+example, you might have a "reinitialise()" function that sets the scan 
+code set, sets the typematic byte, sets the LEDs and enables scanning.
+</p><p>The simplest way to achieve this is for the driver to maintain a 
+queue of commands. When you add a command to the queue, if the queue is 
+empty you start sending the command; otherwise you append the command to
+ the queue. When you receive an "0xFA (ACK)" from the keyboard you 
+discard the command at the head of the queue and start sending the next 
+command in the queue (if any). If you receive an "0xFE (Resend)" from 
+the keyboard you can resend the command at the head of the queue.
+</p><p>The remainder of the driver should be a kind of state machine. 
+The state machine moves into a different state when some commands are 
+successfully completed, and when various bytes are received from the 
+keyboard. For example, the driver might be in a default state and 
+receive a break code that puts it into a "waiting for scan code after 
+receiving break code" state. Then it might receive the first byte of a 
+multi-byte scan code and shift to a "waiting for second byte of scan 
+code after receiving break code" state. Finally it might receive the 
+second/last byte of the scan code and then switch back to the default 
+state.
+</p><p><br>
+</p>
+<h3> <span class="mw-headline" id="Scan_Code_Sets.2C_Scan_Codes_and_Key_Codes"> Scan Code Sets, Scan Codes and Key Codes </span></h3>
+<p>A scan code set is a set of codes that determine when a key is 
+pressed or repeated, or released. There are 3 different sets of scan 
+codes. The oldest is "scan code set 1", the default is "scan code set 
+2", and there is a newer (more complex) "scan code set 3". <i>Note: 
+Normally on PC compatible systems the keyboard itself uses scan code set
+ 2 and the keyboard controller translates this into scan code set 1 for 
+compatibility. See <a href="https://wiki.osdev.org/%228042%22_PS/2_Controller#Translation" title="&quot;8042&quot; PS/2 Controller">"8042"_PS/2_Controller</a> for more information about this translation.</i>
+</p><p>Modern keyboards should support all three scan code sets, however
+ some don't. Scan code set 2 (the default) is the only scan code set 
+that is guaranteed to be supported. In theory (I haven't tried it) it 
+should be possible to attempt to set scan code set 1 or scan code set 3,
+ and then ask the keyboard which scan code it is currently using and see
+ if it actually is using the requested scan code set. In this way it may
+ be possible to determine which scan code sets the keyboard does 
+support.
+</p><p>Scan codes themselves are sequences of one or more bytes. In some
+ cases the sequence can be as many as 6 bytes (e.g. the Pause/Break key 
+in scan code set 1 
+generates the sequence 0xE1, 0x1D, 0x45, 0xE1, 0x9D, 0xC5 when pressed).
+ This situation isn't really ideal. In general (for later processing) 
+you want to convert these "one or more byte sequences" into a single 
+integer that uniquely identifies a specific key, that can be used 
+effectively in things like lookup tables (without having sparsely used 
+"many GiB" lookup tables).
+</p><p>There is no standard for "key codes" - it's something you have to
+ make up or invent for your OS. I personally like the idea of having an 
+8-bit key code where the highest 3 bits determine which row on the 
+keyboard and the lowest 5 bits determine which column (essentially, the 
+keyboard is treated as a grid of up to 8 rows and up to 32 columns of 
+keys). Regardless of what you choose to use for your key codes, it 
+should be something that is used by all keyboard drivers (including USB 
+Keyboards) and could possibly also be used for other input devices (e.g.
+ left mouse button might be treated as "key code 0xF1").
+</p><p>Basically, when the keyboard driver's state machine knows it has 
+received a complete scan code, the next step is to convert the "one or 
+more byte" scan code into a key code.
+</p>
+<h3> <span class="mw-headline" id="Key_Codes.2C_Key_States_and_Key_Mappings"> Key Codes, Key States and Key Mappings </span></h3>
+<p>Once you've got key codes, then next step is to keep track of which 
+keys are currently being pressed. Imagine a computer game that uses the 
+"WASD" keys for player movement - when the 'A' key is being pressed the 
+player rotates clockwise. How does the game know if the 'A' key is 
+currently being pressed? For this you'd want an array of flags, where 
+each flag corresponds to a key code. There is a hidden bonus here - the 
+keyboard driver itself can use the same "array of flags" to determine if
+ a shift key, control key, alt key, etc is down, which can be quite 
+useful when trying to convert the key code into an actual ASCII 
+character or Unicode code point. For example, if the user presses the 
+'a' key then it might correspond to 'a' or 'A' (depending on capslock 
+state and whether or not a shift key is being held down at the time) or 
+might not correspond to a valid character at all (e.g. "control-a" or 
+"alt-a").
+</p><p>Also note that (for example) a "WASD" game doesn't care if the 
+keys are 'W', 'A', 'S' and 'D'. The game wants to know about keys in a 
+specific "T-shaped" pattern on the left of the keyboard. If the keyboard
+ happens to be something different, then the keys in the same location 
+may be completely different (e.g. they would be '&lt;', 'A', 'O' and 'E'
+ keys on a Dvorak keyboard). This helps to explain my preference of 
+having an 8-bit key code where the highest 3 bits determine which row on
+ the keyboard and the lowest 5 bits determine which column (it's easy 
+for a game to ask about the state of the third key on the left of the 
+third row).
+</p><p>Once you're able to keep track of which keys are currently being 
+pressed, the next step is to (attempt to) convert the key into an ASCII 
+character or Unicode code point. At this point you need to know what 
+type of keyboard the user has - is it "US QWERTY", or "French AZERTY", 
+some form of Dvorak, or perhaps it's Arabic. To handle many different 
+keyboard layouts, the keyboard driver needs to use tables to convert key
+ codes into ASCII characters or Unicode code points; so that you only 
+need to load a different "Key Mapping" table to support different 
+keyboard layouts.
+</p><p>However, it's not quite that simple. Different keyboard layouts 
+can have different meta keys, different status LEDs, etc. The Key 
+Mapping table has to sort these differences out too. This is why you 
+don't want to detect if the keyboard LEDs have changed earlier, but want
+ to send the "set LEDs" command (if necessary) *after* you've found the 
+entry for the key code in your key map table.
+</p><p>The final step of processing is to combine all relevant 
+information into some sort of "keypress packet" structure, and send it 
+to whomever (e.g. GUI). The entire "keypress packet" might include the 
+following:
+</p>
+<ul><li> Unicode code point (if applicable)
+</li><li> Key code
+</li><li> Pressed/released flag
+</li><li> Various other key states (shift, alt, control, etc)
+</li><li> Various "toggle" states (CapsLock, ScrollLock, NumberLock, etc)
+</li></ul>
+<h2> <span class="mw-headline" id="Scan_Code_Sets"> Scan Code Sets </span></h2>
+<p>As there are 3 different scan code sets, there are 3 different tables
+ (one for each scan code set). Some of the scan codes correspond to 
+extra keys that have been added over time and have become "relatively 
+standard". To help keep track scan codes have been categorized and 
+tagged in the tables below. The tags used are:
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Tag
+</th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> (keypad)
+</td>
+<td> A key that is on the numerics keypad (typically found on the right hand side of the keyboard).
+</td></tr>
+<tr>
+<td> (ACPI)
+</td>
+<td> A key that is part of the "ACPI" group of keys (typically found 
+near the top of the keyboard). A lot of modern keyboards don't actually 
+have these keys (if I remember right, they were fashionable in the late 
+1990's but have become less common since).
+<p>Note: Don't let the name fool you - these keys have nothing to do 
+with ACPI at all and do behave like any other normal key (but could be 
+useful for an OS that supports power management).
+</p>
+</td></tr>
+<tr>
+<td> (multimedia)
+</td>
+<td> A key that is part of the multimedia group of keys (typically found
+ near the top of the keyboard). A lot of modern keyboards do have at 
+least some of these keys. Some of these keys are intended to be used for
+ media players (volume control, play/pause, next track, previous track, 
+etc), some are intended for web browsing (previous web page, next web 
+page, refresh, favourites/bookmarks, etc), and and some are intended for
+ launching applications (e.g. starting an email client, starting a 
+calculator, opening "my computer", etc).
+</td></tr></tbody></table>
+<p><br>
+</p>
+<h3> <span class="mw-headline" id="Scan_Code_Set_1"> Scan Code Set 1 </span></h3>
+<p>The following table shows which scan codes correspond to which keys 
+when using scan code set 1 (for a "US QWERTY" keyboard only):
+</p><p>Note that scancodes with extended byte (E0) generates two 
+different interrupts: the first containing the E0 byte, the second 
+containing the scancode
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Scan code
+</th>
+<th> Key
+</th>
+<th style="background: #E8E8E8"> Scan code
+</th>
+<th style="background: #E8E8E8"> Key
+</th>
+<th> Scan code
+</th>
+<th> Key
+</th>
+<th style="background: #E8E8E8"> Scan code
+</th>
+<th style="background: #E8E8E8"> Key
+</th></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x01
+</td>
+<td style="background: #E8E8E8"> escape pressed
+</td>
+<td align="right"> 0x02
+</td>
+<td> 1 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x03
+</td>
+<td style="background: #E8E8E8"> 2 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x04
+</td>
+<td> 3 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x05
+</td>
+<td style="background: #E8E8E8"> 4 pressed
+</td>
+<td align="right"> 0x06
+</td>
+<td> 5 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x07
+</td>
+<td style="background: #E8E8E8"> 6 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x08
+</td>
+<td> 7 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x09
+</td>
+<td style="background: #E8E8E8"> 8 pressed
+</td>
+<td align="right"> 0x0A
+</td>
+<td> 9 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x0B
+</td>
+<td style="background: #E8E8E8"> 0 (zero) pressed
+</td></tr>
+<tr>
+<td align="right"> 0x0C
+</td>
+<td> - pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x0D
+</td>
+<td style="background: #E8E8E8"> = pressed
+</td>
+<td align="right"> 0x0E
+</td>
+<td> backspace pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x0F
+</td>
+<td style="background: #E8E8E8"> tab pressed
+</td></tr>
+<tr>
+<td align="right"> 0x10
+</td>
+<td> Q pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x11
+</td>
+<td style="background: #E8E8E8"> W pressed
+</td>
+<td align="right"> 0x12
+</td>
+<td> E pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x13
+</td>
+<td style="background: #E8E8E8"> R pressed
+</td></tr>
+<tr>
+<td align="right"> 0x14
+</td>
+<td> T pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x15
+</td>
+<td style="background: #E8E8E8"> Y pressed
+</td>
+<td align="right"> 0x16
+</td>
+<td> U pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x17
+</td>
+<td style="background: #E8E8E8"> I pressed
+</td></tr>
+<tr>
+<td align="right"> 0x18
+</td>
+<td> O pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x19
+</td>
+<td style="background: #E8E8E8"> P pressed
+</td>
+<td align="right"> 0x1A
+</td>
+<td> [ pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x1B
+</td>
+<td style="background: #E8E8E8"> ] pressed
+</td></tr>
+<tr>
+<td align="right"> 0x1C
+</td>
+<td> enter pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x1D
+</td>
+<td style="background: #E8E8E8"> left control pressed
+</td>
+<td align="right"> 0x1E
+</td>
+<td> A pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x1F
+</td>
+<td style="background: #E8E8E8"> S pressed
+</td></tr>
+<tr>
+<td align="right"> 0x20
+</td>
+<td> D pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x21
+</td>
+<td style="background: #E8E8E8"> F pressed
+</td>
+<td align="right"> 0x22
+</td>
+<td> G pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x23
+</td>
+<td style="background: #E8E8E8"> H pressed
+</td></tr>
+<tr>
+<td align="right"> 0x24
+</td>
+<td> J pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x25
+</td>
+<td style="background: #E8E8E8"> K pressed
+</td>
+<td align="right"> 0x26
+</td>
+<td> L pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x27
+</td>
+<td style="background: #E8E8E8">&nbsp;; pressed
+</td></tr>
+<tr>
+<td align="right"> 0x28
+</td>
+<td> ' (single quote) pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x29
+</td>
+<td style="background: #E8E8E8"> ` (back tick) pressed
+</td>
+<td align="right"> 0x2A
+</td>
+<td> left shift pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x2B
+</td>
+<td style="background: #E8E8E8"> \ pressed
+</td></tr>
+<tr>
+<td align="right"> 0x2C
+</td>
+<td> Z pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x2D
+</td>
+<td style="background: #E8E8E8"> X pressed
+</td>
+<td align="right"> 0x2E
+</td>
+<td> C pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x2F
+</td>
+<td style="background: #E8E8E8"> V pressed
+</td></tr>
+<tr>
+<td align="right"> 0x30
+</td>
+<td> B pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x31
+</td>
+<td style="background: #E8E8E8"> N pressed
+</td>
+<td align="right"> 0x32
+</td>
+<td> M pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x33
+</td>
+<td style="background: #E8E8E8"> , pressed
+</td></tr>
+<tr>
+<td align="right"> 0x34
+</td>
+<td> . pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x35
+</td>
+<td style="background: #E8E8E8"> / pressed
+</td>
+<td align="right"> 0x36
+</td>
+<td> right shift pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x37
+</td>
+<td style="background: #E8E8E8"> (keypad) * pressed
+</td></tr>
+<tr>
+<td align="right"> 0x38
+</td>
+<td> left alt pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x39
+</td>
+<td style="background: #E8E8E8"> space pressed
+</td>
+<td align="right"> 0x3A
+</td>
+<td> CapsLock pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x3B
+</td>
+<td style="background: #E8E8E8"> F1 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x3C
+</td>
+<td> F2 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x3D
+</td>
+<td style="background: #E8E8E8"> F3 pressed
+</td>
+<td align="right"> 0x3E
+</td>
+<td> F4 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x3F
+</td>
+<td style="background: #E8E8E8"> F5 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x40
+</td>
+<td> F6 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x41
+</td>
+<td style="background: #E8E8E8"> F7 pressed
+</td>
+<td align="right"> 0x42
+</td>
+<td> F8 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x43
+</td>
+<td style="background: #E8E8E8"> F9 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x44
+</td>
+<td> F10 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x45
+</td>
+<td style="background: #E8E8E8"> NumberLock pressed
+</td>
+<td align="right"> 0x46
+</td>
+<td> ScrollLock pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x47
+</td>
+<td style="background: #E8E8E8"> (keypad) 7 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x48
+</td>
+<td> (keypad) 8 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x49
+</td>
+<td style="background: #E8E8E8"> (keypad) 9 pressed
+</td>
+<td align="right"> 0x4A
+</td>
+<td> (keypad) - pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x4B
+</td>
+<td style="background: #E8E8E8"> (keypad) 4 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x4C
+</td>
+<td> (keypad) 5 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x4D
+</td>
+<td style="background: #E8E8E8"> (keypad) 6 pressed
+</td>
+<td align="right"> 0x4E
+</td>
+<td> (keypad) + pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x4F
+</td>
+<td style="background: #E8E8E8"> (keypad) 1 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x50
+</td>
+<td> (keypad) 2 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x51
+</td>
+<td style="background: #E8E8E8"> (keypad) 3 pressed
+</td>
+<td align="right"> 0x52
+</td>
+<td> (keypad) 0 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x53
+</td>
+<td style="background: #E8E8E8"> (keypad) . pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x57
+</td>
+<td style="background: #E8E8E8"> F11 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x58
+</td>
+<td> F12 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x81
+</td>
+<td style="background: #E8E8E8"> escape released
+</td>
+<td align="right"> 0x82
+</td>
+<td> 1 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x83
+</td>
+<td style="background: #E8E8E8"> 2 released
+</td></tr>
+<tr>
+<td align="right"> 0x84
+</td>
+<td> 3 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x85
+</td>
+<td style="background: #E8E8E8"> 4 released
+</td>
+<td align="right"> 0x86
+</td>
+<td> 5 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x87
+</td>
+<td style="background: #E8E8E8"> 6 released
+</td></tr>
+<tr>
+<td align="right"> 0x88
+</td>
+<td> 7 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x89
+</td>
+<td style="background: #E8E8E8"> 8 released
+</td>
+<td align="right"> 0x8A
+</td>
+<td> 9 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x8B
+</td>
+<td style="background: #E8E8E8"> 0 (zero) released
+</td></tr>
+<tr>
+<td align="right"> 0x8C
+</td>
+<td> - released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x8D
+</td>
+<td style="background: #E8E8E8"> = released
+</td>
+<td align="right"> 0x8E
+</td>
+<td> backspace released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x8F
+</td>
+<td style="background: #E8E8E8"> tab released
+</td></tr>
+<tr>
+<td align="right"> 0x90
+</td>
+<td> Q released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x91
+</td>
+<td style="background: #E8E8E8"> W released
+</td>
+<td align="right"> 0x92
+</td>
+<td> E released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x93
+</td>
+<td style="background: #E8E8E8"> R released
+</td></tr>
+<tr>
+<td align="right"> 0x94
+</td>
+<td> T released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x95
+</td>
+<td style="background: #E8E8E8"> Y released
+</td>
+<td align="right"> 0x96
+</td>
+<td> U released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x97
+</td>
+<td style="background: #E8E8E8"> I released
+</td></tr>
+<tr>
+<td align="right"> 0x98
+</td>
+<td> O released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x99
+</td>
+<td style="background: #E8E8E8"> P released
+</td>
+<td align="right"> 0x9A
+</td>
+<td> [ released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x9B
+</td>
+<td style="background: #E8E8E8"> ] released
+</td></tr>
+<tr>
+<td align="right"> 0x9C
+</td>
+<td> enter released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x9D
+</td>
+<td style="background: #E8E8E8"> left control released
+</td>
+<td align="right"> 0x9E
+</td>
+<td> A released
+</td>
+<td style="background: #E8E8E8" align="right"> 0x9F
+</td>
+<td style="background: #E8E8E8"> S released
+</td></tr>
+<tr>
+<td align="right"> 0xA0
+</td>
+<td> D released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xA1
+</td>
+<td style="background: #E8E8E8"> F released
+</td>
+<td align="right"> 0xA2
+</td>
+<td> G released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xA3
+</td>
+<td style="background: #E8E8E8"> H released
+</td></tr>
+<tr>
+<td align="right"> 0xA4
+</td>
+<td> J released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xA5
+</td>
+<td style="background: #E8E8E8"> K released
+</td>
+<td align="right"> 0xA6
+</td>
+<td> L released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xA7
+</td>
+<td style="background: #E8E8E8">&nbsp;; released
+</td></tr>
+<tr>
+<td align="right"> 0xA8
+</td>
+<td> ' (single quote) released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xA9
+</td>
+<td style="background: #E8E8E8"> ` (back tick) released
+</td>
+<td align="right"> 0xAA
+</td>
+<td> left shift released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xAB
+</td>
+<td style="background: #E8E8E8"> \ released
+</td></tr>
+<tr>
+<td align="right"> 0xAC
+</td>
+<td> Z released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xAD
+</td>
+<td style="background: #E8E8E8"> X released
+</td>
+<td align="right"> 0xAE
+</td>
+<td> C released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xAF
+</td>
+<td style="background: #E8E8E8"> V released
+</td></tr>
+<tr>
+<td align="right"> 0xB0
+</td>
+<td> B released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xB1
+</td>
+<td style="background: #E8E8E8"> N released
+</td>
+<td align="right"> 0xB2
+</td>
+<td> M released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xB3
+</td>
+<td style="background: #E8E8E8"> , released
+</td></tr>
+<tr>
+<td align="right"> 0xB4
+</td>
+<td> . released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xB5
+</td>
+<td style="background: #E8E8E8"> / released
+</td>
+<td align="right"> 0xB6
+</td>
+<td> right shift released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xB7
+</td>
+<td style="background: #E8E8E8"> (keypad) * released
+</td></tr>
+<tr>
+<td align="right"> 0xB8
+</td>
+<td> left alt released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xB9
+</td>
+<td style="background: #E8E8E8"> space released
+</td>
+<td align="right"> 0xBA
+</td>
+<td> CapsLock released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xBB
+</td>
+<td style="background: #E8E8E8"> F1 released
+</td></tr>
+<tr>
+<td align="right"> 0xBC
+</td>
+<td> F2 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xBD
+</td>
+<td style="background: #E8E8E8"> F3 released
+</td>
+<td align="right"> 0xBE
+</td>
+<td> F4 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xBF
+</td>
+<td style="background: #E8E8E8"> F5 released
+</td></tr>
+<tr>
+<td align="right"> 0xC0
+</td>
+<td> F6 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xC1
+</td>
+<td style="background: #E8E8E8"> F7 released
+</td>
+<td align="right"> 0xC2
+</td>
+<td> F8 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xC3
+</td>
+<td style="background: #E8E8E8"> F9 released
+</td></tr>
+<tr>
+<td align="right"> 0xC4
+</td>
+<td> F10 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xC5
+</td>
+<td style="background: #E8E8E8"> NumberLock released
+</td>
+<td align="right"> 0xC6
+</td>
+<td> ScrollLock released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xC7
+</td>
+<td style="background: #E8E8E8"> (keypad) 7 released
+</td></tr>
+<tr>
+<td align="right"> 0xC8
+</td>
+<td> (keypad) 8 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xC9
+</td>
+<td style="background: #E8E8E8"> (keypad) 9 released
+</td>
+<td align="right"> 0xCA
+</td>
+<td> (keypad) - released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xCB
+</td>
+<td style="background: #E8E8E8"> (keypad) 4 released
+</td></tr>
+<tr>
+<td align="right"> 0xCC
+</td>
+<td> (keypad) 5 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xCD
+</td>
+<td style="background: #E8E8E8"> (keypad) 6 released
+</td>
+<td align="right"> 0xCE
+</td>
+<td> (keypad) + released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xCF
+</td>
+<td style="background: #E8E8E8"> (keypad) 1 released
+</td></tr>
+<tr>
+<td align="right"> 0xD0
+</td>
+<td> (keypad) 2 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xD1
+</td>
+<td style="background: #E8E8E8"> (keypad) 3 released
+</td>
+<td align="right"> 0xD2
+</td>
+<td> (keypad) 0 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xD3
+</td>
+<td style="background: #E8E8E8"> (keypad) . released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xD7
+</td>
+<td style="background: #E8E8E8"> F11 released
+</td></tr>
+<tr>
+<td align="right"> 0xD8
+</td>
+<td> F12 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x10
+</td>
+<td> (multimedia) previous track pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x19
+</td>
+<td style="background: #E8E8E8"> (multimedia) next track pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x1C
+</td>
+<td> (keypad) enter pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x1D
+</td>
+<td style="background: #E8E8E8"> right control pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x20
+</td>
+<td> (multimedia) mute pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x21
+</td>
+<td style="background: #E8E8E8"> (multimedia) calculator pressed
+</td>
+<td align="right"> 0xE0, 0x22
+</td>
+<td> (multimedia) play pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x24
+</td>
+<td> (multimedia) stop pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0x2E
+</td>
+<td> (multimedia) volume down pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x30
+</td>
+<td> (multimedia) volume up pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0x32
+</td>
+<td> (multimedia) WWW home pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x35
+</td>
+<td style="background: #E8E8E8"> (keypad) / pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x38
+</td>
+<td> right alt (or altGr) pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x47
+</td>
+<td style="background: #E8E8E8"> home pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x48
+</td>
+<td> cursor up pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x49
+</td>
+<td style="background: #E8E8E8"> page up pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x4B
+</td>
+<td style="background: #E8E8E8"> cursor left pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x4D
+</td>
+<td style="background: #E8E8E8"> cursor right pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x4F
+</td>
+<td style="background: #E8E8E8"> end pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x50
+</td>
+<td> cursor down pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x51
+</td>
+<td style="background: #E8E8E8"> page down pressed
+</td>
+<td align="right"> 0xE0, 0x52
+</td>
+<td> insert pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x53
+</td>
+<td style="background: #E8E8E8"> delete pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x5B
+</td>
+<td style="background: #E8E8E8"> left GUI pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x5C
+</td>
+<td> right GUI pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x5D
+</td>
+<td style="background: #E8E8E8"> "apps" pressed
+</td>
+<td align="right"> 0xE0, 0x5E
+</td>
+<td> (ACPI) power pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x5F
+</td>
+<td style="background: #E8E8E8"> (ACPI) sleep pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x63
+</td>
+<td style="background: #E8E8E8"> (ACPI) wake pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x65
+</td>
+<td style="background: #E8E8E8"> (multimedia) WWW search pressed
+</td>
+<td align="right"> 0xE0, 0x66
+</td>
+<td> (multimedia) WWW favorites pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x67
+</td>
+<td style="background: #E8E8E8"> (multimedia) WWW refresh pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x68
+</td>
+<td> (multimedia) WWW stop pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x69
+</td>
+<td style="background: #E8E8E8"> (multimedia) WWW forward pressed
+</td>
+<td align="right"> 0xE0, 0x6A
+</td>
+<td> (multimedia) WWW back pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x6B
+</td>
+<td style="background: #E8E8E8"> (multimedia) my computer pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x6C
+</td>
+<td> (multimedia) email pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x6D
+</td>
+<td style="background: #E8E8E8"> (multimedia) media select pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x90
+</td>
+<td> (multimedia) previous track released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x99
+</td>
+<td style="background: #E8E8E8"> (multimedia) next track released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x9C
+</td>
+<td> (keypad) enter released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x9D
+</td>
+<td style="background: #E8E8E8"> right control released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xA0
+</td>
+<td> (multimedia) mute released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xA1
+</td>
+<td style="background: #E8E8E8"> (multimedia) calculator released
+</td>
+<td align="right"> 0xE0, 0xA2
+</td>
+<td> (multimedia) play released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xA4
+</td>
+<td> (multimedia) stop released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xAE
+</td>
+<td> (multimedia) volume down released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xB0
+</td>
+<td> (multimedia) volume up released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xB2
+</td>
+<td> (multimedia) WWW home released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xB5
+</td>
+<td style="background: #E8E8E8"> (keypad) / released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xB8
+</td>
+<td> right alt (or altGr) released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xC7
+</td>
+<td style="background: #E8E8E8"> home released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xC8
+</td>
+<td> cursor up released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xC9
+</td>
+<td style="background: #E8E8E8"> page up released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xCB
+</td>
+<td style="background: #E8E8E8"> cursor left released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xCD
+</td>
+<td style="background: #E8E8E8"> cursor right released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xCF
+</td>
+<td style="background: #E8E8E8"> end released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xD0
+</td>
+<td> cursor down released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xD1
+</td>
+<td style="background: #E8E8E8"> page down released
+</td>
+<td align="right"> 0xE0, 0xD2
+</td>
+<td> insert released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xD3
+</td>
+<td style="background: #E8E8E8"> delete released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xDB
+</td>
+<td style="background: #E8E8E8"> left GUI released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xDC
+</td>
+<td> right GUI released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xDD
+</td>
+<td style="background: #E8E8E8"> "apps" released
+</td>
+<td align="right"> 0xE0, 0xDE
+</td>
+<td> (ACPI) power released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xDF
+</td>
+<td style="background: #E8E8E8"> (ACPI) sleep released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xE3
+</td>
+<td style="background: #E8E8E8"> (ACPI) wake released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xE5
+</td>
+<td style="background: #E8E8E8"> (multimedia) WWW search released
+</td>
+<td align="right"> 0xE0, 0xE6
+</td>
+<td> (multimedia) WWW favorites released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xE7
+</td>
+<td style="background: #E8E8E8"> (multimedia) WWW refresh released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xE8
+</td>
+<td> (multimedia) WWW stop released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xE9
+</td>
+<td style="background: #E8E8E8"> (multimedia) WWW forward released
+</td>
+<td align="right"> 0xE0, 0xEA
+</td>
+<td> (multimedia) WWW back released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xEB
+</td>
+<td style="background: #E8E8E8"> (multimedia) my computer released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xEC
+</td>
+<td> (multimedia) email released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xED
+</td>
+<td style="background: #E8E8E8"> (multimedia) media select released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x2A, 0xE0, 0x37
+</td>
+<td style="background: #E8E8E8"> print screen pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xB7, 0xE0, 0xAA
+</td>
+<td style="background: #E8E8E8"> print screen released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE1, 0x1D, 0x45, 0xE1, 0x9D, 0xC5
+</td>
+<td style="background: #E8E8E8"> pause pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr></tbody></table>
+<p><br>
+Note: There is no scan code for "pause key released" (it behaves as if it is released as soon as it's pressed)
+</p>
+<h3> <span class="mw-headline" id="Scan_Code_Set_2"> Scan Code Set 2 </span></h3>
+<p>The following table shows which "make" scan codes correspond to which
+ keys when using scan code set 2 (for a "US QWERTY" keyboard only):
+</p>
+<table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th> Scan code
+</th>
+<th> Key
+</th>
+<th style="background: #E8E8E8"> Scan code
+</th>
+<th style="background: #E8E8E8"> Key
+</th>
+<th> Scan code
+</th>
+<th> Key
+</th>
+<th style="background: #E8E8E8"> Scan code
+</th>
+<th style="background: #E8E8E8"> Key
+</th></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x01
+</td>
+<td style="background: #E8E8E8"> F9 pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x03
+</td>
+<td style="background: #E8E8E8"> F5 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x04
+</td>
+<td> F3 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x05
+</td>
+<td style="background: #E8E8E8"> F1 pressed
+</td>
+<td align="right"> 0x06
+</td>
+<td> F2 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x07
+</td>
+<td style="background: #E8E8E8"> F12 pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x09
+</td>
+<td style="background: #E8E8E8"> F10 pressed
+</td>
+<td align="right"> 0x0A
+</td>
+<td> F8 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x0B
+</td>
+<td style="background: #E8E8E8"> F6 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x0C
+</td>
+<td> F4 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x0D
+</td>
+<td style="background: #E8E8E8"> tab pressed
+</td>
+<td align="right"> 0x0E
+</td>
+<td> ` (back tick) pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x11
+</td>
+<td style="background: #E8E8E8"> left alt pressed
+</td>
+<td align="right"> 0x12
+</td>
+<td> left shift pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0x14
+</td>
+<td> left control pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x15
+</td>
+<td style="background: #E8E8E8"> Q pressed
+</td>
+<td align="right"> 0x16
+</td>
+<td> 1 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0x1A
+</td>
+<td> Z pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x1B
+</td>
+<td style="background: #E8E8E8"> S pressed
+</td></tr>
+<tr>
+<td align="right"> 0x1C
+</td>
+<td> A pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x1D
+</td>
+<td style="background: #E8E8E8"> W pressed
+</td>
+<td align="right"> 0x1E
+</td>
+<td> 2 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x21
+</td>
+<td style="background: #E8E8E8"> C pressed
+</td>
+<td align="right"> 0x22
+</td>
+<td> X pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x23
+</td>
+<td style="background: #E8E8E8"> D pressed
+</td></tr>
+<tr>
+<td align="right"> 0x24
+</td>
+<td> E pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x25
+</td>
+<td style="background: #E8E8E8"> 4 pressed
+</td>
+<td align="right"> 0x26
+</td>
+<td> 3 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x29
+</td>
+<td style="background: #E8E8E8"> space pressed
+</td>
+<td align="right"> 0x2A
+</td>
+<td> V pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x2B
+</td>
+<td style="background: #E8E8E8"> F pressed
+</td></tr>
+<tr>
+<td align="right"> 0x2C
+</td>
+<td> T pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x2D
+</td>
+<td style="background: #E8E8E8"> R pressed
+</td>
+<td align="right"> 0x2E
+</td>
+<td> 5 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x31
+</td>
+<td style="background: #E8E8E8"> N pressed
+</td>
+<td align="right"> 0x32
+</td>
+<td> B pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x33
+</td>
+<td style="background: #E8E8E8"> H pressed
+</td></tr>
+<tr>
+<td align="right"> 0x34
+</td>
+<td> G pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x35
+</td>
+<td style="background: #E8E8E8"> Y pressed
+</td>
+<td align="right"> 0x36
+</td>
+<td> 6 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0x3A
+</td>
+<td> M pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x3B
+</td>
+<td style="background: #E8E8E8"> J pressed
+</td></tr>
+<tr>
+<td align="right"> 0x3C
+</td>
+<td> U pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x3D
+</td>
+<td style="background: #E8E8E8"> 7 pressed
+</td>
+<td align="right"> 0x3E
+</td>
+<td> 8 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x41
+</td>
+<td style="background: #E8E8E8"> , pressed
+</td>
+<td align="right"> 0x42
+</td>
+<td> K pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x43
+</td>
+<td style="background: #E8E8E8"> I pressed
+</td></tr>
+<tr>
+<td align="right"> 0x44
+</td>
+<td> O pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x45
+</td>
+<td style="background: #E8E8E8"> 0 (zero) pressed
+</td>
+<td align="right"> 0x46
+</td>
+<td> 9 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x49
+</td>
+<td style="background: #E8E8E8"> . pressed
+</td>
+<td align="right"> 0x4A
+</td>
+<td> / pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x4B
+</td>
+<td style="background: #E8E8E8"> L pressed
+</td></tr>
+<tr>
+<td align="right"> 0x4C
+</td>
+<td>&nbsp;; pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x4D
+</td>
+<td style="background: #E8E8E8"> P pressed
+</td>
+<td align="right"> 0x4E
+</td>
+<td> - pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0x52
+</td>
+<td> ' pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0x54
+</td>
+<td> [ pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x55
+</td>
+<td style="background: #E8E8E8"> = pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0x58
+</td>
+<td> CapsLock pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x59
+</td>
+<td style="background: #E8E8E8"> right shift pressed
+</td>
+<td align="right"> 0x5A
+</td>
+<td> enter pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x5B
+</td>
+<td style="background: #E8E8E8"> ] pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x5D
+</td>
+<td style="background: #E8E8E8"> \ pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8"> &nbsp;
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0x66
+</td>
+<td> backspace pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x69
+</td>
+<td style="background: #E8E8E8"> (keypad) 1 pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x6B
+</td>
+<td style="background: #E8E8E8"> (keypad) 4 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x6C
+</td>
+<td> (keypad) 7 pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0x70
+</td>
+<td> (keypad) 0 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x71
+</td>
+<td style="background: #E8E8E8"> (keypad) . pressed
+</td>
+<td align="right"> 0x72
+</td>
+<td> (keypad) 2 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x73
+</td>
+<td style="background: #E8E8E8"> (keypad) 5 pressed
+</td></tr>
+<tr>
+<td align="right"> 0x74
+</td>
+<td> (keypad) 6 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x75
+</td>
+<td style="background: #E8E8E8"> (keypad) 8 pressed
+</td>
+<td align="right"> 0x76
+</td>
+<td> escape pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x77
+</td>
+<td style="background: #E8E8E8"> NumberLock pressed
+</td></tr>
+<tr>
+<td align="right"> 0x78
+</td>
+<td> F11 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x79
+</td>
+<td style="background: #E8E8E8"> (keypad) + pressed
+</td>
+<td align="right"> 0x7A
+</td>
+<td> (keypad) 3 pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x7B
+</td>
+<td style="background: #E8E8E8"> (keypad) - pressed
+</td></tr>
+<tr>
+<td align="right"> 0x7C
+</td>
+<td> (keypad) * pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0x7D
+</td>
+<td style="background: #E8E8E8"> (keypad) 9 pressed
+</td>
+<td align="right"> 0x7E
+</td>
+<td> ScrollLock pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0x83
+</td>
+<td style="background: #E8E8E8"> F7 pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x10
+</td>
+<td> (multimedia) WWW search pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x11
+</td>
+<td style="background: #E8E8E8"> right alt pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x14
+</td>
+<td> right control pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x15
+</td>
+<td style="background: #E8E8E8"> (multimedia) previous track pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x18
+</td>
+<td> (multimedia) WWW favourites pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x1F
+</td>
+<td style="background: #E8E8E8"> left GUI pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x20
+</td>
+<td> (multimedia) WWW refresh pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x21
+</td>
+<td style="background: #E8E8E8"> (multimedia) volume down pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x23
+</td>
+<td style="background: #E8E8E8"> (multimedia) mute pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x27
+</td>
+<td style="background: #E8E8E8"> right GUI pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x28
+</td>
+<td> (multimedia) WWW stop pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x2B
+</td>
+<td style="background: #E8E8E8"> (multimedia) calculator pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x2F
+</td>
+<td style="background: #E8E8E8"> apps pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x30
+</td>
+<td> (multimedia) WWW forward pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0x32
+</td>
+<td> (multimedia) volume up pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x34
+</td>
+<td> (multimedia) play/pause pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x37
+</td>
+<td style="background: #E8E8E8"> (ACPI) power pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x38
+</td>
+<td> (multimedia) WWW back pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0x3A
+</td>
+<td> (multimedia) WWW home pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x3B
+</td>
+<td style="background: #E8E8E8"> (multimedia) stop pressed
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x3F
+</td>
+<td style="background: #E8E8E8"> (ACPI) sleep pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x40
+</td>
+<td> (multimedia) my computer pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x48
+</td>
+<td> (multimedia) email pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0x4A
+</td>
+<td> (keypad) / pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x4D
+</td>
+<td style="background: #E8E8E8"> (multimedia) next track pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x50
+</td>
+<td> (multimedia) media select pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0x5A
+</td>
+<td> (keypad) enter pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0x5E
+</td>
+<td> (ACPI) wake pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x69
+</td>
+<td style="background: #E8E8E8"> end pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x6B
+</td>
+<td style="background: #E8E8E8"> cursor left pressed
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x6C
+</td>
+<td> home pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x70
+</td>
+<td> insert pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x71
+</td>
+<td style="background: #E8E8E8"> delete pressed
+</td>
+<td align="right"> 0xE0, 0x72
+</td>
+<td> cursor down pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x74
+</td>
+<td> cursor right pressed
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x75
+</td>
+<td style="background: #E8E8E8"> cursor up pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0x7A
+</td>
+<td> page down pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0x7D
+</td>
+<td style="background: #E8E8E8"> page up pressed
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x01
+</td>
+<td style="background: #E8E8E8"> F9 released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x03
+</td>
+<td style="background: #E8E8E8"> F5 released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x04
+</td>
+<td> F3 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x05
+</td>
+<td style="background: #E8E8E8"> F1 released
+</td>
+<td align="right"> 0xF0, 0x06
+</td>
+<td> F2 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x07
+</td>
+<td style="background: #E8E8E8"> F12 released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x09
+</td>
+<td style="background: #E8E8E8"> F10 released
+</td>
+<td align="right"> 0xF0, 0x0A
+</td>
+<td> F8 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x0B
+</td>
+<td style="background: #E8E8E8"> F6 released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x0C
+</td>
+<td> F4 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x0D
+</td>
+<td style="background: #E8E8E8"> tab released
+</td>
+<td align="right"> 0xF0, 0x0E
+</td>
+<td> ` (back tick) released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x11
+</td>
+<td style="background: #E8E8E8"> left alt released
+</td>
+<td align="right"> 0xF0, 0x12
+</td>
+<td> left shift released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x14
+</td>
+<td> left control released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x15
+</td>
+<td style="background: #E8E8E8"> Q released
+</td>
+<td align="right"> 0xF0, 0x16
+</td>
+<td> 1 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xF0, 0x1A
+</td>
+<td> Z released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x1B
+</td>
+<td style="background: #E8E8E8"> S released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x1C
+</td>
+<td> A released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x1D
+</td>
+<td style="background: #E8E8E8"> W released
+</td>
+<td align="right"> 0xF0, 0x1E
+</td>
+<td> 2 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x21
+</td>
+<td style="background: #E8E8E8"> C released
+</td>
+<td align="right"> 0xF0, 0x22
+</td>
+<td> X released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x23
+</td>
+<td style="background: #E8E8E8"> D released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x24
+</td>
+<td> E released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x25
+</td>
+<td style="background: #E8E8E8"> 4 released
+</td>
+<td align="right"> 0xF0, 0x26
+</td>
+<td> 3 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x29
+</td>
+<td style="background: #E8E8E8"> space released
+</td>
+<td align="right"> 0xF0, 0x2A
+</td>
+<td> V released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x2B
+</td>
+<td style="background: #E8E8E8"> F released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x2C
+</td>
+<td> T released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x2D
+</td>
+<td style="background: #E8E8E8"> R released
+</td>
+<td align="right"> 0xF0, 0x2E
+</td>
+<td> 5 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x31
+</td>
+<td style="background: #E8E8E8"> N released
+</td>
+<td align="right"> 0xF0, 0x32
+</td>
+<td> B released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x33
+</td>
+<td style="background: #E8E8E8"> H released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x34
+</td>
+<td> G released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x35
+</td>
+<td style="background: #E8E8E8"> Y released
+</td>
+<td align="right"> 0xF0, 0x36
+</td>
+<td> 6 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xF0, 0x3A
+</td>
+<td> M released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x3B
+</td>
+<td style="background: #E8E8E8"> J released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x3C
+</td>
+<td> U released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x3D
+</td>
+<td style="background: #E8E8E8"> 7 released
+</td>
+<td align="right"> 0xF0, 0x3E
+</td>
+<td> 8 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x41
+</td>
+<td style="background: #E8E8E8"> , released
+</td>
+<td align="right"> 0xF0, 0x42
+</td>
+<td> K released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x43
+</td>
+<td style="background: #E8E8E8"> I released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x44
+</td>
+<td> O released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x45
+</td>
+<td style="background: #E8E8E8"> 0 (zero) released
+</td>
+<td align="right"> 0xF0, 0x46
+</td>
+<td> 9 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x49
+</td>
+<td style="background: #E8E8E8"> . released
+</td>
+<td align="right"> 0xF0, 0x4A
+</td>
+<td> / released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x4B
+</td>
+<td style="background: #E8E8E8"> L released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x4C
+</td>
+<td>&nbsp;; released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x4D
+</td>
+<td style="background: #E8E8E8"> P released
+</td>
+<td align="right"> 0xF0, 0x4E
+</td>
+<td> - released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xF0, 0x52
+</td>
+<td> ' released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x54
+</td>
+<td> [ released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x55
+</td>
+<td style="background: #E8E8E8"> = released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x58
+</td>
+<td> CapsLock released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x59
+</td>
+<td style="background: #E8E8E8"> right shift released
+</td>
+<td align="right"> 0xF0, 0x5A
+</td>
+<td> enter released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x5B
+</td>
+<td style="background: #E8E8E8"> ] released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x5D
+</td>
+<td style="background: #E8E8E8"> \ released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8"> &nbsp;
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xF0, 0x66
+</td>
+<td> backspace released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x69
+</td>
+<td style="background: #E8E8E8"> (keypad) 1 released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x6B
+</td>
+<td style="background: #E8E8E8"> (keypad) 4 released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x6C
+</td>
+<td> (keypad) 7 released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x70
+</td>
+<td> (keypad) 0 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x71
+</td>
+<td style="background: #E8E8E8"> (keypad) . released
+</td>
+<td align="right"> 0xF0, 0x72
+</td>
+<td> (keypad) 2 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x73
+</td>
+<td style="background: #E8E8E8"> (keypad) 5 released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x74
+</td>
+<td> (keypad) 6 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x75
+</td>
+<td style="background: #E8E8E8"> (keypad) 8 released
+</td>
+<td align="right"> 0xF0, 0x76
+</td>
+<td> escape released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x77
+</td>
+<td style="background: #E8E8E8"> NumberLock released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x78
+</td>
+<td> F11 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x79
+</td>
+<td style="background: #E8E8E8"> (keypad) + released
+</td>
+<td align="right"> 0xF0, 0x7A
+</td>
+<td> (keypad) 3 released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x7B
+</td>
+<td style="background: #E8E8E8"> (keypad) - released
+</td></tr>
+<tr>
+<td align="right"> 0xF0, 0x7C
+</td>
+<td> (keypad) * released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x7D
+</td>
+<td style="background: #E8E8E8"> (keypad) 9 released
+</td>
+<td align="right"> 0xF0, 0x7E
+</td>
+<td> ScrollLock released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xF0, 0x83
+</td>
+<td style="background: #E8E8E8"> F7 released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0x12, 0xE0, 0x7C
+</td>
+<td> print screen pressed
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x10
+</td>
+<td> (multimedia) WWW search released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x11
+</td>
+<td style="background: #E8E8E8"> right alt released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x14
+</td>
+<td> right control released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x15
+</td>
+<td style="background: #E8E8E8"> (multimedia) previous track released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x18
+</td>
+<td> (multimedia) WWW favourites released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x1F
+</td>
+<td style="background: #E8E8E8"> left GUI released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x20
+</td>
+<td> (multimedia) WWW refresh released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x21
+</td>
+<td style="background: #E8E8E8"> (multimedia) volume down released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x23
+</td>
+<td style="background: #E8E8E8"> (multimedia) mute released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x27
+</td>
+<td style="background: #E8E8E8"> right GUI released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x28
+</td>
+<td> (multimedia) WWW stop released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x2B
+</td>
+<td style="background: #E8E8E8"> (multimedia) calculator released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x2F
+</td>
+<td style="background: #E8E8E8"> apps released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x30
+</td>
+<td> (multimedia) WWW forward released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xF0, 0x32
+</td>
+<td> (multimedia) volume up released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x34
+</td>
+<td> (multimedia) play/pause released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x37
+</td>
+<td style="background: #E8E8E8"> (ACPI) power released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x38
+</td>
+<td> (multimedia) WWW back released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xF0, 0x3A
+</td>
+<td> (multimedia) WWW home released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x3B
+</td>
+<td style="background: #E8E8E8"> (multimedia) stop released
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x3F
+</td>
+<td style="background: #E8E8E8"> (ACPI) sleep released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x40
+</td>
+<td> (multimedia) my computer released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x48
+</td>
+<td> (multimedia) email released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xF0, 0x4A
+</td>
+<td> (keypad) / released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x4D
+</td>
+<td style="background: #E8E8E8"> (multimedia) next track released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x50
+</td>
+<td> (multimedia) media select released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xF0, 0x5A
+</td>
+<td> (keypad) enter released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xF0, 0x5E
+</td>
+<td> (ACPI) wake released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x69
+</td>
+<td style="background: #E8E8E8"> end released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x6B
+</td>
+<td style="background: #E8E8E8"> cursor left released
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x6C
+</td>
+<td> home released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x70
+</td>
+<td> insert released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x71
+</td>
+<td style="background: #E8E8E8"> delete released
+</td>
+<td align="right"> 0xE0, 0xF0, 0x72
+</td>
+<td> cursor down released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td align="right"> 0xE0, 0xF0, 0x74
+</td>
+<td> cursor right released
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x75
+</td>
+<td style="background: #E8E8E8"> cursor up released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xF0, 0x7A
+</td>
+<td> page down released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE0, 0xF0, 0x7D
+</td>
+<td style="background: #E8E8E8"> page up released
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td align="right"> 0xE0, 0xF0, 0x7C, 0xE0, 0xF0, 0x12
+</td>
+<td> print screen released
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td></tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td style="background: #E8E8E8">
+</td>
+<td>
+</td>
+<td>
+</td>
+<td style="background: #E8E8E8" align="right"> 0xE1, 0x14, 0x77, 0xE1, 0xF0, 0x14, 0xF0, 0x77
+</td>
+<td style="background: #E8E8E8"> pause pressed
+</td></tr></tbody></table>
+<p>Note: There is no scan code for "pause key released" (it behaves as if it is released as soon as it's pressed)
+</p>
+<h3> <span class="mw-headline" id="Scan_Code_Set_3"> Scan Code Set 3 </span></h3>
+<p>The following table shows which scan codes correspond to which keys 
+when using scan code set 3 (for a "US QWERTY" keyboard only):
+</p>
+<a rel="nofollow" class="external text" href="https://web.archive.org/web/20170108131104/http://www.computer-engineering.org/ps2keyboard/scancodes3.html">Scan code</a><h2> <span class="mw-headline" id="See_Also">See Also</span></h2><ul><li><a href="https://wiki.osdev.org/PS/2" title="PS/2">PS/2</a>
+</li><li><a href="https://wiki.osdev.org/%228042%22_PS/2_Controller" title="&quot;8042&quot; PS/2 Controller">"8042" PS/2 Controller</a>
+</li><li><a href="https://wiki.osdev.org/PL050_PS/2_Controller" title="PL050 PS/2 Controller"> PL050 PS/2 Controller (ARM)</a>
+</li><li><a href="https://wiki.osdev.org/PS/2_Mouse" title="PS/2 Mouse">PS/2 Mouse</a>
+</li></ul><h3> <span class="mw-headline" id="Forum_Threads">Forum Threads</span></h3><ul><li><a href="http://forum.osdev.org/viewtopic.php?t=9746" class="extiw" title="topic:9746">Keyboard input</a>
+</li><li><a href="http://forum.osdev.org/viewtopic.php?t=9761" class="extiw" title="topic:9761">Up or down press?</a>
+</li><li><a href="http://forum.osdev.org/viewtopic.php?t=9711" class="extiw" title="topic:9711">Change typerate</a>
+</li><li><a href="http://forum.osdev.org/viewtopic.php?t=9648" class="extiw" title="topic:9648">Converting the scancodes</a>
+</li><li><a href="http://forum.osdev.org/viewtopic.php?t=9448" class="extiw" title="topic:9448">Discussion about keyboard input in a GUI</a>
+</li><li><a href="http://forum.osdev.org/viewtopic.php?t=9590" class="extiw" title="topic:9590">Scroll-lock LED</a>
+</li><li><a href="http://forum.osdev.org/viewtopic.php?t=10153" class="extiw" title="topic:10153">Keyboard LEDs (asm source)</a>
+</li><li><a href="http://forum.osdev.org/viewtopic.php?t=10053" class="extiw" title="topic:10053">Keyboard LEDs (C source)</a>
+</li></ul><h3> <span class="mw-headline" id="External_Links">External Links</span></h3><ul><li><a rel="nofollow" class="external text" href="http://www.win.tue.nl/~aeb/linux/kbd/scancodes.html">Keyboard scancodes</a> - A complete reference on all scancodes you might encounter.
+</li><li><a rel="nofollow" class="external text" href="https://web.archive.org/web/20030621203107/http://www.microsoft.com/whdc/hwdev/tech/input/Scancode.mspx">USB HID to PS/2 Translation Table</a> - Microsoft's table of scancodes and USB equivalents
+</li><li><a rel="nofollow" class="external text" href="https://web.archive.org/web/20190301075756/http://download.microsoft.com/download/1/6/1/161ba512-40e2-4cc9-843a-923143f3456c/scancode.doc">Keyboard Scan Code Specification</a> - Microsoft's specification for scancodes
+</li><li><a rel="nofollow" class="external text" href="https://www.youtube.com/playlist?list=PLUZozxlhse-NUto5JeJ0EDXEUFloWBdAj">PS/2 keyboard interface playlist</a> - A video playlist of building a PS/2 keyboard interface on bread boards, by Ben Eater.
+</li></ul><h4> <span class="mw-headline" id="Implementations"> Implementations </span></h4><ul><li> <a rel="nofollow" class="external text" href="http://lxr.linux.no/#linux+v3.5.4/drivers/input/keyboard/atkbd.c">Linux</a> (C,GPL)
+</li><li> <a rel="nofollow" class="external text" href="https://github.com/Stichting-MINIX-Research-Foundation/minix/blob/master/minix/drivers/hid/pckbd/pckbd.c">Minix</a>
+</li></ul><table style="margin-top:1em; margin-bottom:1em; background:#f9f9f9; border:1px #aaa solid; border-collapse:collapse; {{{1}}}" cellspacing="0" cellpadding="4" border="2">
+
+<tbody><tr>
+<th>Key
+</th>
+<th>Code for Scan code set 3
+</th></tr>
+<tr>
+<td>A </td>
+<td> 1C
+</td></tr>
+<tr>
+<td>B </td>
+<td> 32
+</td></tr>
+<tr>
+<td>C </td>
+<td> 21
+</td></tr>
+<tr>
+<td>D </td>
+<td> 23
+</td></tr>
+<tr>
+<td>E </td>
+<td> 24
+</td></tr>
+<tr>
+<td>F </td>
+<td> 2B
+</td></tr>
+<tr>
+<td>G </td>
+<td> 34
+</td></tr>
+<tr>
+<td>H </td>
+<td> 33
+</td></tr>
+<tr>
+<td>I </td>
+<td> 43
+</td></tr>
+<tr>
+<td>J </td>
+<td> 3B
+</td></tr>
+<tr>
+<td>K </td>
+<td> 42
+</td></tr>
+<tr>
+<td>L </td>
+<td> 4B
+</td></tr>
+<tr>
+<td>M </td>
+<td> 3A
+</td></tr>
+<tr>
+<td>N </td>
+<td> 31
+</td></tr>
+<tr>
+<td>O </td>
+<td> 44
+</td></tr>
+<tr>
+<td>P </td>
+<td> 4D
+</td></tr>
+<tr>
+<td>Q </td>
+<td> 15
+</td></tr>
+<tr>
+<td>R </td>
+<td> 2D
+</td></tr>
+<tr>
+<td>S </td>
+<td> 1B
+</td></tr>
+<tr>
+<td>T </td>
+<td> 2C
+</td></tr>
+<tr>
+<td>U </td>
+<td> 3C
+</td></tr>
+<tr>
+<td>V </td>
+<td> 2A
+</td></tr>
+<tr>
+<td>W </td>
+<td> 1D
+</td></tr>
+<tr>
+<td>X </td>
+<td> 22
+</td></tr>
+<tr>
+<td>Y </td>
+<td> 35
+</td></tr>
+<tr>
+<td>Z </td>
+<td> 1A
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+</tbody></table>
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 136/1000000
+Post-expand include size: 1620/2097152 bytes
+Template argument size: 0/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key wikidb:pcache:idhash:1900-0!*!0!!en!*!* and timestamp 20220430232304 -->
+</div>				<!-- /bodycontent -->
+								<!-- printfooter -->
+				<div class="printfooter">
+				Retrieved from "<a href="https://wiki.osdev.org/index.php?title=PS/2_Keyboard&amp;oldid=27032">https://wiki.osdev.org/index.php?title=PS/2_Keyboard&amp;oldid=27032</a>"				</div>
+				<!-- /printfooter -->
+												<!-- catlinks -->
+				<div id="catlinks" class="catlinks"><div id="mw-normal-catlinks"><a href="https://wiki.osdev.org/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="https://wiki.osdev.org/Category:Human_Interface_Device" title="Category:Human Interface Device">Human Interface Device</a></li><li><a href="https://wiki.osdev.org/Category:Common_Devices" title="Category:Common Devices">Common Devices</a></li></ul></div></div>				<!-- /catlinks -->
+												<div class="visualClear"></div>
+				<!-- debughtml -->
+								<!-- /debughtml -->
+			</div>
+			<!-- /bodyContent -->
+		</div>
+		<!-- /content -->
+		<!-- header -->
+		<div id="mw-head" class="noprint">
+			
+<!-- 0 -->
+<div id="p-personal" class="">
+	<h5>Personal tools</h5>
+	<ul>
+		<li id="pt-login"><a href="https://wiki.osdev.org/index.php?title=Special:UserLogin&amp;returnto=PS%2F2_Keyboard" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li>
+	</ul>
+</div>
+
+<!-- /0 -->
+			<div id="left-navigation">
+				
+<!-- 0 -->
+<div id="p-namespaces" class="vectorTabs">
+	<h5>Namespaces</h5>
+	<ul>
+					<li id="ca-nstab-main" class="selected"><span><a href="https://wiki.osdev.org/PS/2_Keyboard" title="View the content page [c]" accesskey="c">Page</a></span></li>
+					<li id="ca-talk"><span><a href="https://wiki.osdev.org/Talk:PS/2_Keyboard" title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-variants" class="vectorMenu emptyPortlet">
+		<h5><span>Variants</span><a href="#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+			</div>
+			<div id="right-navigation">
+				
+<!-- 0 -->
+<div id="p-views" class="vectorTabs">
+	<h5>Views</h5>
+	<ul>
+					<li id="ca-view" class="selected"><span><a href="https://wiki.osdev.org/PS/2_Keyboard">Read</a></span></li>
+					<li id="ca-viewsource"><span><a href="https://wiki.osdev.org/index.php?title=PS/2_Keyboard&amp;action=edit" title="This page is protected.
+You can view its source [e]" accesskey="e">View source</a></span></li>
+					<li id="ca-history" class="collapsible"><span><a href="https://wiki.osdev.org/index.php?title=PS/2_Keyboard&amp;action=history" title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-cactions" class="vectorMenu emptyPortlet">
+	<h5><span>Actions</span><a href="#"></a></h5>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+
+<!-- 2 -->
+<div id="p-search">
+	<h5><label for="searchInput">Search</label></h5>
+	<form action="/index.php" id="searchform">
+		<input type="hidden" name="title" value="Special:Search">
+				<input type="search" name="search" title="Search OSDev Wiki [f]" accesskey="f" id="searchInput">		<input type="submit" name="go" value="Go" title="Go to a page with this exact name if exists" id="searchGoButton" class="searchButton">		<input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton">			</form>
+</div>
+
+<!-- /2 -->
+			</div>
+		</div>
+		<!-- /header -->
+		<!-- panel -->
+			<div id="mw-panel" class="noprint">
+				<!-- logo -->
+					<div id="p-logo"><a style="background-image: url(/skins/common/images/osdev.png);" href="https://wiki.osdev.org/Main_Page" title="Visit the main page"></a></div>
+				<!-- /logo -->
+				
+<!-- navigation -->
+<div class="portal" id="p-navigation">
+	<h5>Navigation</h5>
+	<div class="body">
+		<ul>
+			<li id="n-mainpage"><a href="https://wiki.osdev.org/Main_Page" title="Visit the main page [z]" accesskey="z">Main Page</a></li>
+			<li id="n-portal"><a href="http://forum.osdev.org/" rel="nofollow" title="About the project, what you can do, where to find things">Forums</a></li>
+			<li id="n-FAQ"><a href="https://wiki.osdev.org/Category:FAQ">FAQ</a></li>
+			<li id="n-OS-Projects"><a href="https://wiki.osdev.org/Projects">OS Projects</a></li>
+			<li id="n-randompage"><a href="https://wiki.osdev.org/Special:Random" title="Load a random page [x]" accesskey="x">Random page</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /navigation -->
+
+<!-- about -->
+<div class="portal" id="p-about">
+	<h5>About</h5>
+	<div class="body">
+		<ul>
+			<li id="n-This-site"><a href="https://wiki.osdev.org/OSDevWiki:About">This site</a></li>
+			<li id="n-Joining"><a href="https://wiki.osdev.org/OSDevWiki:Joining">Joining</a></li>
+			<li id="n-Editing-help"><a href="https://wiki.osdev.org/OSDevWiki:Editing">Editing help</a></li>
+			<li id="n-recentchanges"><a href="https://wiki.osdev.org/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /about -->
+
+<!-- SEARCH -->
+
+<!-- /SEARCH -->
+
+<!-- TOOLBOX -->
+<div class="portal" id="p-tb">
+	<h5>Toolbox</h5>
+	<div class="body">
+		<ul>
+			<li id="t-whatlinkshere"><a href="https://wiki.osdev.org/Special:WhatLinksHere/PS/2_Keyboard" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li>
+			<li id="t-recentchangeslinked"><a href="https://wiki.osdev.org/Special:RecentChangesLinked/PS/2_Keyboard" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li>
+			<li id="t-specialpages"><a href="https://wiki.osdev.org/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li>
+			<li><a href="https://wiki.osdev.org/index.php?title=PS/2_Keyboard&amp;printable=yes" rel="alternate">Printable version</a></li>
+			<li id="t-permalink"><a href="https://wiki.osdev.org/index.php?title=PS/2_Keyboard&amp;oldid=27032" title="Permanent link to this revision of the page">Permanent link</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /TOOLBOX -->
+
+<!-- LANGUAGES -->
+<div class="portal" id="p-lang">
+	<h5>In other languages</h5>
+	<div class="body">
+		<ul>
+			<li class="interwiki-de"><a href="http://www.lowlevel.eu/wiki/Keyboard_Controller" title="Keyboard Controller">Deutsch</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /LANGUAGES -->
+			</div>
+		<!-- /panel -->
+		<!-- footer -->
+		<div id="footer">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last modified on 11 April 2022, at 03:55.</li>
+											<li id="footer-info-viewcount">This page has been accessed 428,427 times.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="https://wiki.osdev.org/OSDev_Wiki:Privacy_policy" title="OSDev Wiki:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="https://wiki.osdev.org/OSDev_Wiki:About" title="OSDev Wiki:About">About OSDev Wiki</a></li>
+											<li id="footer-places-disclaimer"><a href="https://wiki.osdev.org/OSDev_Wiki:General_disclaimer" title="OSDev Wiki:General disclaimer">Disclaimers</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+					<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="PS_2%20Keyboard%20-%20OSDev%20Wiki_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" width="88" height="31"></a>
+					</li>
+				</ul>
+						<div style="clear:both"></div>
+		</div>
+		<!-- /footer -->
+		<!-- fixalpha -->
+		<script type="text/javascript"> if ( window.isMSIE55 ) fixalpha(); </script>
+		<!-- /fixalpha -->
+		<script src="PS_2%20Keyboard%20-%20OSDev%20Wiki_files/load"></script>
+<script>if(window.mw){
+	mw.loader.load(["mediawiki.user", "mediawiki.util", "mediawiki.page.ready", "mediawiki.legacy.wikibits", "mediawiki.legacy.ajax"]);
+}
+</script>
+<script src="PS_2%20Keyboard%20-%20OSDev%20Wiki_files/load_002"></script>
+<script>if(window.mw){
+	mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":1,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":0,"extendwatchlist":0,"externaldiff":0,"externaleditor":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"highlightbroken":1,"imagesize":2,"justify":0,"math":1,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"quickbar":5,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":0,"showjumplinks":1,"shownumberswatching":1,"showtoc":1,"showtoolbar":1,"skin":"vector","stubthreshold":0,"thumbsize":2,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":0,"watchdefault":0,"watchdeletion":0,"watchlistdays":3,"watchlisthideanons":0,
+	"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"variant":"en","language":"en","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false});;mw.user.tokens.set({"editToken":"+\\","watchToken":false});;mw.loader.state({"user.options":"ready","user.tokens":"ready"});
+	
+	/* cache key: wikidb:resourceloader:filter:minify-js:4:19a4b18a9ac79a6b8c60b24af4668814 */
+}
+</script><!-- Served in 0.027 secs. -->
+	
+
+</body></html>

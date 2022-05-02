@@ -324,9 +324,16 @@ void ps2mouse_update(void)
     return;
   }
 
-  // only pop the item if sending is complete
-  if(ps2mouse_send_update(&my_ps2_outbuf) == 0)
-    mouse_buf_pop(&my_mouse_buf);
+  if(ps2mouse_send_update(&my_ps2_outbuf) == PS2_ERROR_HOST_INHIBIT)
+  {
+    HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+    while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
+      ;
+    HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
+    while(1)
+      ;
+  }
+  mouse_buf_pop(&my_mouse_buf);
 }
 
 void ps2kb_update(void)
@@ -541,9 +548,9 @@ int main(void)
   MX_TIM2_Init();
   MX_USART1_UART_Init();
   MX_USART3_UART_Init();
-  MX_IWDG_Init();
+  // MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-  HAL_IWDG_Refresh(&hiwdg);
+  // HAL_IWDG_Refresh(&hiwdg);
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
   protocol_status_lookup_init();
@@ -582,7 +589,7 @@ int main(void)
 
   while (1)
   {
-    HAL_IWDG_Refresh(&hiwdg);
+    // HAL_IWDG_Refresh(&hiwdg);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */

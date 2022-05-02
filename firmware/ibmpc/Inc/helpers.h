@@ -118,6 +118,7 @@ void mouse_buf_init(mouse_buf *lb, uint8_t size);
 uint8_t mouse_buf_add(mouse_buf *lb, mouse_event* event);
 mouse_event* mouse_buf_peek(mouse_buf *lb);
 void mouse_buf_pop(mouse_buf *lb);
+void mouse_buf_reset(mouse_buf *lb);
 
 void gamepad_buf_init(gamepad_buf *lb, uint8_t size);
 uint8_t gamepad_buf_add(gamepad_buf *lb, gamepad_event* event);
