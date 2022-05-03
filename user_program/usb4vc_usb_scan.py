@@ -86,6 +86,20 @@ BTN_TR = 0x137
 BTN_TL2 = 0x138
 BTN_THUMBR = 0x13e
 
+BTN_TRIGGER = 0x120
+BTN_THUMB = 0x121
+BTN_THUMB2 = 0x122
+BTN_TOP = 0x123
+BTN_TOP2 = 0x124
+BTN_PINKIE = 0x125
+BTN_BASE = 0x126
+BTN_BASE2 = 0x127
+BTN_BASE3 = 0x128
+BTN_BASE4 = 0x129
+BTN_BASE5 = 0x12a
+BTN_BASE6 = 0x12b
+BTN_DEAD = 0x12f
+
 ABS_X = 0x00
 ABS_HAT3Y = 0x17
 
@@ -474,6 +488,10 @@ def make_unknown_raw_gamepad_spi_packet(gp_status_dict, this_device_info):
             this_msg[8] |= (gp_status_dict[gp_id][event_code] << (event_code - BTN_SOUTH))
         elif BTN_TL2 <= event_code <= BTN_THUMBR:
             this_msg[9] |= (gp_status_dict[gp_id][event_code] << (event_code - BTN_TL2))
+        elif BTN_TRIGGER <= event_code <= BTN_BASE2:
+            this_msg[18] |= (gp_status_dict[gp_id][event_code] << (event_code - BTN_TRIGGER))
+        elif BTN_BASE3 <= event_code <= BTN_BASE6:
+            this_msg[19] |= (gp_status_dict[gp_id][event_code] << (event_code - BTN_BASE3))
         elif ABS_X <= event_code <= ABS_HAT3Y:
             msg_index = usb4vc_gamepads.raw_usb_gamepad_abs_axes_to_spi_msg_index_lookup.get(event_code)
             if msg_index is not None:
