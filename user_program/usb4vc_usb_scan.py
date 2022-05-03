@@ -205,7 +205,9 @@ def translate_dict(old_mapping_dict, lookup_dict):
 def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     # print(source_code, mapping_dict, usb_gamepad_type)
     map_dict_copy = dict(mapping_dict)
-    if 'DualSense' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
+    if 'Generic' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
+        map_dict_copy = usb4vc_gamepads.GENERIC_DEFAULT_MAPPING
+    elif 'DualSense' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
         map_dict_copy = usb4vc_gamepads.PS5_DEFAULT_MAPPING
     elif 'DualShock 4' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_15PIN":
         map_dict_copy = usb4vc_gamepads.PS4_DEFAULT_MAPPING
@@ -813,7 +815,7 @@ def raw_input_event_worker():
                             this_gp_dict[axes_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
                     if gamepad_output != last_gamepad_msg:
-                        # print(gamepad_output)
+                        print(gamepad_output)
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
                         pcard_spi.xfer(list(gp_to_transfer))
                         if kb_to_transfer is not None:
