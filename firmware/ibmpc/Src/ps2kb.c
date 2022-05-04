@@ -107,7 +107,6 @@ const uint8_t linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2[LINUX_KE
     0x07, // KEY_F12            88
 };
 
-
 const uint8_t linux_keycode_to_ps2_scancode_lookup_special_codeset2[LINUX_KEYCODE_TO_PS2_SCANCODE_SPECIAL_SIZE] = 
 {
   0x5A, // KPENTER    96
@@ -365,9 +364,11 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
         ps2kb_write(0xFE, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
       break;
 	  case 0xF6: //set defaults
+      ps2kb_reset();
 	    PS2KB_SENDACK();
 	    break;
-	  case 0xF5: //disable data reporting
+	  case 0xF5: //disable data reporting, restore default
+      ps2kb_reset();
 	    PS2KB_SENDACK();
       ps2kb_data_reporting_enabled = 0;
 	    break;
