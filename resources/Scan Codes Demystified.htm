@@ -1,0 +1,851 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<!-- Copyright (c) 2003, 2007 John J. G. Savard -->
+<title>Scan Codes Demystified</title>
+</head>
+<body>
+[<a href="http://www.quadibloc.com/comp/scan01.htm">Next</a>]
+[<a href="http://www.quadibloc.com/comp/compint.htm">Up</a>]
+[<a href="http://www.quadibloc.com/comp/kyb0701.htm">Previous</a>]
+[<a href="http://www.quadibloc.com/comp/kybint.htm">Previous Section</a>]
+[<a href="http://www.quadibloc.com/main.htm">Home</a>]
+[<a href="http://www.quadibloc.com/other.htm">Other</a>]
+<hr>
+<h1>Scan Codes Demystified</h1>
+<p>As a few previous pages discussed keyboards, including the keyboard for the
+IBM PC, and ways in which I might like to modify and enlarge it, it seemed
+appropriate to investigate what could be possible, within the framework of the
+way in which the PC keyboard communicates with the keyboard to which it is attached.</p>
+<p>Here are links to three of the many pages I went to which contained
+useful information on the subject:</p>
+<p><a href="http://www.delorie.com/djgpp/doc/rbinter/it/06/0.html" target="_top">http://www.delorie.com/djgpp/doc/rbinter/it/06/0.html</a></p>
+<p><a href="http://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html" target="_top">http://www.win.tue.nl/~aeb/linux/kbt/scancodes-1.html</a></p>
+<p><a href="http://www.seasip.info/VintagePC/ibm_1390876.html" target="_top">http://www.seasip.info/VintagePC/ibm_1390876.html</a></p>
+<p><a href="https://web.stanford.edu/class/cs140/projects/pintos/specs/kbd/scancodes-7.html" target="_top">https://web.stanford.edu/class/cs140/projects/pintos/specs/kbd/scancodes-7.html</a></p>
+<p>The third of these pages includes one piece of information that had eluded me when I originally created this page;
+it shows the "official" Scan Code 1 equivalents of the keys on a 122-key Host Connected Keyboard.</p>
+<p>Both the international keyboard and the 122-keyboard with 24 function keys
+for 3270 emulation use include one key more in the main typing area of the
+keyboard than the normal United States 101-key (or 104-key with Windows keys)
+keyboard for the PC. One thing I wanted to do in making an enlarged keyboard
+was to include this key, so that it is available if needed, but put it in
+an unobtrusive spot. But attempting to do that actually raises a complicated
+issue; from one point of view, the 105-key keyboard actually has two
+added keys, and omits the key from the 104-key keyboard with | and \ on it
+instead of simply moving it to the other side of the keyboard to where the key
+with the same characters is located on a UK keyboard.</p>
+<p>Or so I thought; but the key with ~ and # on it on the UK 102-key keyboard
+actually does use the same
+scan code as the key with | and \ on the US 101-key keyboard, yet references
+still say that key is omitted rather than relabelled on foreign-language
+keyboards. But they are right; the scan code is the same in scan code sets 1
+and 2, but not in scan code set 3, where the U.S. version has scan code 5C,
+and the international version has scan code 5D, and the USB scan code differs
+as well.</p>
+<p>Because the original keyboards for the IBM Personal Computer AT and its
+predecessors had some keys that combined functions in a different fashion than
+is done on the 101-key keyboard, specifically:</p>
+<pre>*              Print Screen
+Scroll Lock    Break
+System Request
+</pre>
+<p>the keys on the 101-key keyboard embodying these functions in different
+combinations do not have simple scan codes (that is,
+in Scan Code Set 1 and Scan Code Set 2) but instead, for compatibility,
+cause extra signals to be sent so as to modify the current shift state
+before sending their make code (and to restore it after sending their
+break code). This is in addition to the cursor keypad keys which both
+send the E0 signal to distinguish themselves and extra signals to adjust
+the Num Lock and shift status as appropriate. The / key in the numeric
+keypad area was also a late addition, and also has to generate extra
+scan codes under some circumstances.</p>
+<p>The following diagram illustrates the layout of the keyboard
+on the original IBM Personal Computer, and the IBM Personal Computer XT as
+well:</p>
+<p><img src="Scan%20Codes%20Demystified_files/83c.gif" width="528" height="136"></p>
+<p>For simplicity, and to avoid having to abbreviate the legends on some
+keys, it does not show that many of the keys had a raised central
+portion, so that the faces of the larger keys were the same size as
+those of the smaller ones.</p>
+<p>However, I have since exerted myself to produce a more faithful diagram
+of the appearance of the original keyboard for the IBM Personal Computer:</p>
+<p><img src="Scan%20Codes%20Demystified_files/pc5150r9.gif" width="768" height="192"></p>
+<p>A keyboard with the same arrangement was also
+used with the IBM System/23 Datamaster
+computer, an 8085-based successor to the
+IBM 5110-3 processor used in the IBM 5120 system,
+which was introduced shortly before the IBM PC was announced, and
+this keyboard design was also used on the 68000-based CS9000 system
+from IBM intended for use with laboratory instrumentation.</p>
+<p>The positioning of the Enter key and the left shift key were
+unpopular with many users; these things were corrected in the
+keyboard for the IBM Personal Computer AT:</p>
+<p><img src="Scan%20Codes%20Demystified_files/84c.gif" width="536" height="136"></p>
+<p>This keyboard, except for the extra System Request key, has
+exactly the same keys as the original PC keyboard, they are only
+arranged differently. This keyboard was very popular with computer
+users, despite the fact that now the Backspace key was hard to
+reach. So much so that when the 101-key Enhanced Keyboard
+started to become common,
+many manufacturers of keyboards compatible with that
+keyboard produced keyboards with a layout that was modified to follow
+that of the 84-key AT keyboard more closely.</p>
+<p>As with the original PC keyboard, I have now made a more
+accurate image of its appearance:</p>
+<p><img src="Scan%20Codes%20Demystified_files/pc5170r2.gif" width="792" height="192"></p>
+<p>The diagram below shows the arrangement of keys on the 101-key
+Enhanced Keyboard. As this keyboard arrangement is likely to be very familiar, and to be
+at least the basis of the arrangement used on the computer at which you are
+viewing this web site, even if it is a Macintosh, it may seem hardly necessary to
+include an image.</p>
+<p><img src="Scan%20Codes%20Demystified_files/ssk.gif" width="840" height="264"></p>
+<p>This keyboard arrangement was introduced on the IBM RT PC, which was IBM's
+first RS/6000-based workstation, and which ran IBM's AIX operating system,
+its licensed implementation of UNIX.</p>
+<p>This keyboard design attracted notice, and became the industry standard,
+after the introduction of IBM's Personal System/2 line of computers, on which
+it was used; however, before then, it was used on other
+IBM systems, including the IBM XT 286, some later models of the
+Personal Computer AT. Prior to the Personal System/2,
+the Compaq Deskpro 386 offered a keyboard in this style as an option.</p>
+<p>This keyboard finally placed both shift keys, the Enter key, and the
+Backspace key all in the locations familiar to typists. As well, it
+offered a cursor keypad that was always available, so that one could
+keep the keyboard in Num Lock mode, and have the numeric keypad
+available as well. One noted computer columnist criticized the keyboard for having
+two extra function keys which would be unlikely to be used, due to compatibility
+concerns; this was, in itself, a valid criticism, but he overlooked the justification
+for this addition: that IBM's mainframe terminals generally had a set of either 12
+or 24 function keys, and thus this change made terminal emulation programs for them
+more convenient; on older keyboards, the programs could use the other keyboard mappings
+already used for those keyboards.</p>
+<p>But some subtler changes were made that led to scan codes becoming
+complicated. Since the + and - keys on the numeric keypad didn't become
+anything else when shifted, the Print Screen function was taken away
+from the numeric keypad's * key, and given its own key. Since the
+System Request function introduced on the AT was very rarely used, it
+was moved to that key. A Pause key was added to the keyboard, and
+the Break function was moved to that key, and away from the Scroll
+Lock key, since it seemed to be more closely related to that key.</p>
+<p>The PC architecture is designed to cope with different
+keyboard layouts for different languages, and some programs, like games,
+access key locations directly so that the physical relationships
+between keys used for different purposes will remain the same regardless
+of the language used with the computer on which the game is running.</p>
+<p>While the original 101-key keyboards could only be used on newer IBM
+computers designed to work with them, however, the merits of the new
+keyboard arrangement were such that there was a great demand for
+keyboards with this arrangement that would be compatible with older
+computers. This led to the assignments for Scan Code Set 1 and Scan Code
+Set 2, associated with the 83-key and 84-key keyboards respectively,
+for this keyboard becoming complicated, since these scan codes were
+assigned so that a 101-key keyboard would simulate an 84-key keyboard
+when the keys with the same function were pressed, regardless of their
+new location on the new keyboard.</p>
+<p>Scan Code Set 1 corresponds to the scan codes of the keyboard of the
+IBM PC, and to what most computer programs see when they request scan
+codes from the BIOS, despite that virtually all computers with
+conventionally-connected keyboards use Scan Code Set 2, which
+corresponds to the scan codes sent by the keyboard of the IBM Personal
+Computer AT, as the BIOS translates these. Scan Code Set 3 was designed to
+be native to the 101-key keyboard; it is used by keyboards connected to
+the higher-end members of the original IBM PS/2 family which had 386
+processors (some low-end machines in the original PS/2 family actually
+used Scan Code Set 1), and with a few computers running licensed
+commercial versions of the UNIX operating system (as well, perhaps, as some
+computers using Linux if they are configured for use with keyboards with a
+large number of keys that their owners had been fortunate enough to obtain):
+as it had not been implemented correctly
+on some 3rd-party keyboards, it has not achieved general acceptance. USB
+keyboards use their own different set of key codes, which have been
+defined and standardized by Microsoft.</p>
+<p>The keyboard sends both a make code and a break code for most of
+the keys. For scan code set 1, the break code is hexadecimal 80 XOR
+the regular scan code; for scan code sets 2 and 3, the break code
+consists of two bytes, hexadecimal F0 preceding the regular scan code.</p>
+<p>This is what the table of the scan codes of the keyboard pictured
+above might have looked like. It is incomplete, however.
+The top row shows the scan codes when the key is
+used with the Fn key.</p>
+<p>As noted above, the cursor keys whose functions match those
+provided by the numeric keypad also generate
+extra scan codes, representing the "Num Lock" key, if required, for the 101-key
+keyboard to simulate the 84-key keyboard of the IBM Personal Computer AT;
+the scan codes for these keys are marked by an asterisk.</p>
+<p>As the / key on the numeric keypad was added later, unlike the +, -,
+and * keys there which have their own scan codes, it has the scan code for the ?/
+key preceded by the E0 code which is used to distinguish the left and right
+Alt and Ctrl keys from each other precisely because it is ignored by older machines;
+hence, it wiggles out of being shifted to avoid making a question mark on those
+machines; newer machines are tipped off that it is a different key by the E0,
+and so they can use a 101-key keyboard for languages where something other
+than the slash is on the key used for the ? and / in the main typing area.</p>
+<p>In addition, the original
+IBM PC keyboard had the Print Screen function on the same key as the asterisk,
+and the Break function was on the Scroll Lock key, and
+the AT keyboard had the System Request function on its own key.</p>
+<p>Since different scan codes, not conflicting with those used by the
+122-key keyboard, are used for the other extra keyboard
+functions, such as a key to turn the computer on from the keyboard,
+keys to access the Internet, keys to change speaker volume, and since
+the letters of the alphabet still have <em>some</em> blank space left
+on the front of the keys, the Fn key could be used to allow the use of
+those functions as well, possibly even producing a universal keyboard.</p>
+<p>Here is a table of keyboard scan codes, compiled from numerous sources.
+The first part of the table is in the same order as the set 1 scan codes of the
+keys. The third column contains some popular added keys for multimedia and
+Internet keyboards from various keyboards, and some manufacturers may use
+different scan codes for these functions, although the codes shown here are
+generally popular ones, and the scan codes for the extra keys on a 122-key
+keyboard, about which I am not entirely certain.</p>
+<pre>Scan Code               Key       Scan Code               Key         Scan Code               Key
+  Set    Set  Set  USB              Set    Set  Set  USB                Set    Set  Set  USB
+   1      2    3                     1      2    3                       1      2    3
+
+   01     76   08   29  Esc          37     7C            * PrtSc     E0 5E  E0 37            Power
+   02     16   16   1E  ! 1          37+    7C+  7E   55  * KP        E0 5F  E0 3F            Sleep
+   03     1E   1E   1F  @ 2       37/54+ 7C/84   57   46  PrtSc       E0 63  E0 5E            Wake
+   04     26   26   20  # 3          38     11   19   E2  Alt L       E0 20  E0 23        7F  Mute
+   05     25   25   21  $ 4       E0 38  E0 11   39   E6  Alt R       E0 30  E0 33        80  Volume Up
+   06     2E   2E   22  % 5          39     29   29   2C  Space       E0 2E  E0 21        81  Volume Down
+   07     36   36   23  ^ 6          3A     58   14   39  Caps Lock   E0 17  E0 43        7B  Cut
+   08     3D   3D   24  &amp; 7          3B     05   07   3A  F1          E0 18  E0 44        7C  Copy
+   09     3E   3E   25  * 8          3C     06   0F   3B  F2          E0 0A  E0 46        7D  Paste
+   0A     46   46   26  ( 9          3D     04   17   3C  F3          E0 3B  E0 05        75  Help
+   0B     45   45   27  ) 0          3E     0C   1F   3D  F4          E0 08  E0 3D        7A  Undo
+   0C     4E   4E   2D  _ -          3F     03   27   3E  F5          E0 07  E0 36            Redo
+   0D     55   55   2E  + =          40     0B   2F   3F  F6          E0 22  E0 34            Play
+   0E     66   66   2A  Back Space   41     83   37   40  F7          E0 24  E0 3B            Stop
+   0F     0D   0D   2B  Tab          42     0A   3F   41  F8          E0 10  E0 15            Skip Back
+   10     15   15   14  Q            43     01   47   42  F9          E0 19  E0 4D            Skip Fwd
+   11     1D   1D   1A  W            44     09   4F   43  F10         E0 2C  E0 1A            Eject
+   12     24   24   08  E            45+    77+  76   53  Num Lock    E0 1E  E0 1C            Mail
+   13     2D   2D   15  R         45/46+ 77/7E+  62   48  Pause/Bk    E0 32  E0 3A            Web
+   14     2C   2C   17  T            46     7E            ScrLk/Bk    E0 3C  E0 06            Music
+   15     35   35   1C  Y            46+    7E+  5F   47  Scroll Lock E0 64  E0 08            Pictures
+   16     3C   3C   18  U            47     6C   6C   5F  7 Home KP   E0 6D  E0 50            Video
+   17     43   43   0C  I         E0 47* E0 6C*  6E   4A  Home CP
+   18     44   44   12  O            48     75   75   60  8 Up KP        5B     1F   08   68  F13
+   19     4D   4D   13  P         E0 48* E0 75*  63   52  Up CP          5C     27   10   69  F14
+   1A     54   54   2F  { [          49     7D   7D   61  9 PgUp KP      5D     2F   18   6A  F15
+   1B     5B   5B   30  } ]       E0 49* E0 7D*  6F   4B  PgUp CP        63     5E   2C   6B  F16
+   1C     5A   5A   28  Enter        4A     7B   84   56  - KP           64     08   2B   6C  F17
+E0 1C  E0 5A   79   58  Enter KP     4B     6B   6B   5C  4 Left KP      65     10   30   6D  F18
+   1D     14   11   E0  Ctrl L    E0 4B* E0 6B*  61   50  Left CP        66     18   38   6E  F19
+E0 1D  E0 14   58   E4  Ctrl R       4C     73   73   97  5 KP           67     20   40   6F  F20
+   1E     1C   1C   04  A            4D     74   74   5E  6 Right KP     68     28   48   70  F21     
+   1F     1B   1B   16  S         E0 4D* E0 74*  6A   4F  Right CP       69     30   50   71  F22
+   20     23   23   07  D            4E     79   7C   57  + KP           6A     38   57   72  F23
+   21     2B   2B   09  F            4F     69   69   59  1 End KP       6B     40   5F   73  F24
+   22     34   34   0A  G         E0 4F* E0 69*  65   4D  End CP                          75              Help
+   23     33   33   0B  H            50     72   72   5A  2 Down KP     [71]    19   05   9A  Attn  SysRq
+   24     3B   3B   0D  J         E0 50* E0 72*  60   51  Down CP        76     5F   06   9C  Clear
+   25     42   42   0E  K            51     7A   7A   5B  3 PgDn KP                       76              Stop
+   26     4B   4B   0F  L         E0 51* E0 7A*  6D   4E  PgDn CP                         77              Again
+   27     4C   4C   33  : ;          52     70   70   62  0 Ins KP       72     39   04   A3  CrSel       Properties
+   28     52   52   34  " '       E0 52* E0 70*  67   49  Ins CP                     0C       Pause ErInp
+   29     0E   0E   35  ~ `          53     71   71   63  . Del KP                        78              Undo
+   2A     12   12   E1  Shift L   E0 53* E0 71*  64   4C  Del CP         74     53   03   A4  ExSel SetUp
+   2B     5D   5C   31  | \          54     84            SysRq          6D     50   0E       ErEOF Recrd
+   2B     5D   53   53  (INT 2)      56     61   13   64  (INT 1)        
+   2C     1A   1A   1D  Z            57     78   56   44  F11                             80              Copy
+   2D     22   22   1B  X            58     07   5E   45  F12                        83       Print Ident
+   2E     21   21   06  C         E0 5B  E0 1F   8B   E3  Win L          6F     6F   0A       Copy  Test
+   2F     2A   2A   19  V         E0 5C  E0 27   8C   E7  Win R          
+   30     32   32   05  B         E0 5D  E0 2F   8D   65  WinMenu                         81              Paste
+   31     31   31   11  N            70     13   87   88  katakana       75     5C   01       Enl   Help
+   32     3A   3A   10  M            73     51   51   87  (INT 3)        6C     48   09       Ctrl
+   33     41   41   36  &lt; ,          77     62        8C  furigana                        82              Find
+   34     49   49   37  &gt; .          79     64   86   8A  kanji                           79              Cut
+   35     4A   4A   38  ? /          7B     67   85   8B  hiragana
+   35+    4A+  77   54  / KP         7D     6A   5D   89  (INT 4)     E0 4C  E0 73   62       Rule
+   36     59   59   E5  Shift R     [7E]    6D   7B       (INT 5)
+</pre>
+<p>The Microsoft standard for USB keyboards appears to define codes for the 
+extra keys on a Sun keyboard. As some of them are to the left of the main typewriter
+keyboard in the same way as the extra keys on a 122-key keyboard, they are noted
+together with those keys in the table above. In one case, the CrSel/Properties
+key, the key is explicitly given as having both the 122-key and the Sun functions for a
+key at the same position. (Also, the code A2 stands for a Clear/Again key, even though
+code 9C is given for the Clear key and code 77 for the Again key.)</p>
+<p>Incidentally, the keyboard with my Sony computer has keys for the functions
+Mail, Web, Music, Video, Pictures, and Help, but instead of being as listed in the
+table above, they are (as translated to Set 1 form Set 2, of course) E0 11, E0 12, E0 13,
+E0 14, E0 15, and E0 16, respectively. The key with the moon on it, though, is the standard
+E0 5F, so it is a sleep key, not a power key.</p>
+<p>As the keys are also labelled S1 through S6, assigning them consecutive codes is not without
+a measure of sense: the keyboard design provides for an overlay on those keys, so presumably
+they are to be regarded as reassignable.</p>
+<h3>Notes:</h3>
+<p>The keypad * key with Set 1 scan code shown as 37+
+causes the necessary actions to
+be taken to make it appear that no shift key is depressed
+while it is being pressed.</p>
+<p>The Print Screen key with Set 1 scan code shown as 37/54+
+sends E0 37, with a shift key forced to appear depressed,
+unless one already is depressed. Typically, if neither shift key
+is pressed, codes for the left shift key will be sent to
+achieve this. When a control key is held down, it will also
+send E0 37, but without modifying apparent shift key status,
+since ctrl-(PrtSc/*) had an alternative printing function with
+the 83-key and 84-key keyboards 
+(Behavior in scan code Set 2 is analogous,
+as the two sets are isomorphic except for a byte translation
+and the difference in break code handling.). When the Alt key
+is held down, it behaves as a System Request key, and sends
+scan code 54, which was assigned as the Scan Code Set 1
+equivalent of scan code 84, the Scan Code Set 2 code for
+the System Request key.</p>
+<p>The Num Lock key with Set 1 scan code shown as 45+
+(presumably) causes the necessary actions to be taken to make
+it appear that no control key is depressed while it is being
+pressed, since on the 83-key and 84-key keyboards, ctrl-Num Lock
+was used for the Pause function.</p>
+<p>The Pause/Break key with Set 1 scan code shown as 45/46+
+takes the necessary actions to make it appear that a control
+key is pressed when no control key is pressed, in which case
+it sends 45 (with an additional E1 code indicating the key is
+nonrepeating), and simply sends the code 46 when a control
+key is pressed. This key also has the property that the
+Break function does not come with a break code. To avoid
+problems when the shift state changes, when the control key is
+not held down, on the 101-key keyboard it will send the
+make code for the Pause function followed by the break code
+for the Pause function when the key is pressed, and no
+codes on release.</p>
+<p>The Scroll Lock key with Set 1 scan code shown as 46+
+(presumably) causes the necessary actions to be taken to make
+it appear that no control key is depressed while it is being
+pressed.</p>
+<p>The various cursor pad keys, as marked with an asterisk, in
+addition to having their scan codes in Set 1 and Set 2 prefixed
+with E0, take the necessary action to make it appear that
+the keyboard is not in Num Lock mode, and that no shift key is
+depressed, when they are pressed. (Alternatively, if the keyboard
+is in Num Lock mode, <em>and</em> a shift key is depressed, it might
+seem that these
+keys could get away with taking no special action. This is particularly
+useful when both shift keys are depressed; similarly, if both shift
+keys are depressed when not in Num Lock mode, the keys could make it
+appear that Num Lock mode is in effect instead of unpressing and
+subsequently restoring both shift keys. This is probably not done by
+any keyboard manufacturer, because of the danger of incompatibility
+with software using the keyboard in a nonstandard fashion.)</p>
+<p>Note that the INT 5 key for the Japanese keyboard and the Attn/Sys Rq
+key for the 122-key keyboard are shown with Scan Code Set 1 codes which
+could not actually be used by a keyboard with Scan Code Set 1, because their
+break codes conflict with protocol codes used by this keyboard. What
+is happening here is that keyboards with these keys, although they cannot
+use Scan Code Set 1, may use Scan Code Set 2, and the codes shown for Scan
+Code Set 1 are the codes to which the Scan Code Set 2 codes will normally
+be translated.</p> 
+<h3>International Keys</h3>
+<p>INT 1 is the key next to the left shift key on an international
+keyboard. On many international
+keyboards, it has the characters &lt; and &gt;, but on the United Kingdom
+keyboard, it has | and \.</p>
+<p>INT 2 is the lower key of the two to the right of the Enter key
+on an international keyboard. Confusingly, it, and not the one with
+| and \ on it in the UK, has the same scan code in some sets as the
+U. S. | and \ key; and on the Canadian French keyboard, it is this key
+that has &lt; and &gt; on it. In the United Kingdom, the characters on this
+key are ~ and #.</p>
+<p>INT 3 is found both on some Brazilian keyboards and on the Japanese
+keyboard used for a Kanji input method (it has hiragana on the keys,
+as opposed to the other form of a plain Japanese keyboard with katakana
+on the keys). On the Japanese keyboard, it has _ and \ on it, and is located
+next to the right shift key.</p>
+<p>INT 4 is also found on the Japanese keyboard. It has | and ¥ on
+it and is located next to the backspace key.</p>
+<p>INT 5 is located on the numeric keypad on some Brazilian keyboards.
+It has the same Group 3 scan code as the extra key on the numeric keypad
+of 122-key keyboards when the code assignments used for keyboards used
+with IBM terminals are followed.</p>
+<p>Also, the Korean keyboard has two extra keys, having scan codes F1 and
+F2, which are unique to that keyboard, rather than being chosen from
+among the extra keys used on other international keyboards.</p>
+<p>This diagram shows how the codes from Scan Code Set 1 appear to be allocated to the
+keys on a standard 101-key keyboard:</p>
+<pre> ---     ---------------   ---------------   ---------------   -----------
+| 01|   | 3B| 3C| 3D| 3E| | 3F| 40| 41| 42| | 43| 44| 57| 58| |+37|+46|+45| 
+ ---     ---------------   ---------------   ---------------   -----------
+
+ -----------------------------------------------------------   -----------   ---------------
+| 29| 02| 03| 04| 05| 06| 07| 08| 09| 0A| 0B| 0C| 0D|     0E| |*52|*47|*49| |+45|+35|+37| 4A|
+|-----------------------------------------------------------| |-----------| |---------------|
+|   0F| 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 1A| 1B|   2B| |*53|*4F|*51| | 47| 48| 49|   |
+|-----------------------------------------------------------|  -----------  |-----------| 4E|
+|    3A| 1E| 1F| 20| 21| 22| 23| 24| 25| 26| 27| 28|      1C|               | 4B| 4C| 4D|   |
+|-----------------------------------------------------------|      ---      |---------------|
+|      2A| 2C| 2D| 2E| 2F| 30| 31| 32| 33| 34| 35|        36|     |*4C|     | 4F| 50| 51|   |
+|-----------------------------------------------------------|  -----------  |-----------|-1C|
+|   1D|-5B|   38|                       39|-38|-5C|-5D|  -1D| |*4B|*50|*4D| |     52| 53|   |
+ -----------------------------------------------------------   -----------   ---------------
+</pre>
+<p>where the keys marked with - are simply prefixed with E0, and keys
+marked with * are prefixed with E0, but also require sending a Num Lock code before and
+after if necessary, and the keys marked with + require more complicated special steps.
+Thus, +35 and +37, the / and * keys on the numeric keypad, use the 35 code of the ?/ key in the
+alphabetic keyboard and the 37 code of the PrtSc * key on the XT and AT keyboards respectively.
+The key code itself is prefixed with E0, but in addition, to ensure that / and * are the functions
+generated, the keys are taken out of any shifts that are present.</p>
+<p>The AT keyboard had four keys with the codes and functions:</p>
+<pre>45 Num Lock/Pause
+46 Scroll Lock/Break
+54 Sys Req
+37 */Prt Sc
+</pre>
+<p>The keys on the 101-key keyboard, though, allocate these functions differently, and so when operating
+in Scan Code Set 2, the keyboard pretends to be an 84-key AT keyboard, sending scan codes corresponding
+to the equivalent keys being pressed on that keyboard. A simplified description of what happens, using
+Scan Code Set 1 codes, is below:</p>
+<pre>Prt Sc/Sys Req  if no control shift, shift, 37, restore; if control shift, unshift, 54, restore
+Scroll Lock     unshift, 46, restore
+Pause/Break     if no control shift: ctrl, 45, restore; if control shift, 46
+Num Lock        unshift, 45, restore
+* (keypad)      unshift, E0 37, restore
+</pre>
+<p>where unshifting can involve removing a control shift as well.</p>
+<p>This diagram illustrates the U.S. 101-key keyboard, the international 102-key
+keyboard, and the Japanese 106-key keyboard: They are shown with my own
+idiosyncratic color-coding, since that, by dividing the keys up into smaller
+visually-distinct groups, helps one to follow where the same key moves to from
+one keyboard to another.</p>
+<p><img src="Scan%20Codes%20Demystified_files/pca70.gif" width="840" height="840"></p>
+<p>The international keyboard is illustrated with the characters from the U.S.
+keyboard on its keys, to make it easier to see which key is which. The additional
+key in the main typing area is left blank.</p>
+<p>The allocation of scan codes to its keys is nearly identical to that of the U.S. keyboard,
+but with one important minor difference:</p>
+<pre> ---     ---------------   ---------------   ---------------   -----------
+| 01|   | 3B| 3C| 3D| 3E| | 3F| 40| 41| 42| | 43| 44| 57| 58| |+37|+46|+45| 
+ ---     ---------------   ---------------   ---------------   -----------
+
+ -----------------------------------------------------------   -----------   ---------------
+| 29| 02| 03| 04| 05| 06| 07| 08| 09| 0A| 0B| 0C| 0D|     0E| |*52|*47|*49| |+45|+35|+37| 4A|
+|-----------------------------------------------------------| |-----------| |---------------|
+|   0F| 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 1A| 1B|     | |*53|*4F|*51| | 47| 48| 49|   |
+|------------------------------------------------------|  1C|  -----------  |-----------| 4E|
+|    3A| 1E| 1F| 20| 21| 22| 23| 24| 25| 26| 27| 28|!2B|    |               | 4B| 4C| 4D|   |
+|-----------------------------------------------------------|      ---      |---------------|
+|  2A| 56| 2C| 2D| 2E| 2F| 30| 31| 32| 33| 34| 35|        36|     |*4C|     | 4F| 50| 51|   |
+|-----------------------------------------------------------|  -----------  |-----------|-1C|
+|   1D|-5B|   38|                       39|-38|-5C|-5D|  -1D| |*4B|*50|*4D| |     52| 53|   |
+ -----------------------------------------------------------   -----------   ---------------
+</pre>
+<p>The key with scan code 2B, located next to the Enter key, is the INT 2 key instead of the |\
+key of the U.S. keyboard, and so, while it has scan codes 2B in Scan Code Set 1 and 5D in
+Scan Code Set 2, the same as those on the U.S. keyboard, it has scan code 53 in Scan Code Set 3
+instead of 5C. As well, the INT 1 key is present on this keyboard, between the left shift key
+and the letter Z.</p>
+<p>Unlike the image above, this diagram shows the three keys with scan codes E0 5B, E0 5C,
+and E0 5D, shown as -5B, -5C, and -5D within it, the left Windows key, the right Windows key,
+and the Windows Menu key.</p>
+<p>The Japanese keyboard is a more complicated case, as it has several extra keys.</p>
+<pre> ---     ---------------   ---------------   ---------------   -----------
+| 01|   | 3B| 3C| 3D| 3E| | 3F| 40| 41| 42| | 43| 44| 57| 58| |+37|+46|+45| 
+ ---     ---------------   ---------------   ---------------   -----------
+
+ -----------------------------------------------------------   -----------   ---------------
+| 29| 02| 03| 04| 05| 06| 07| 08| 09| 0A| 0B| 0C| 0D| 7D| 0E| |*52|*47|*49| |+45|+35|+37| 4A|
+|-----------------------------------------------------------| |-----------| |---------------|
+|   0F| 10| 11| 12| 13| 14| 15| 16| 17| 18| 19| 1A| 1B|     | |*53|*4F|*51| | 47| 48| 49|   |
+|------------------------------------------------------|  1C|  -----------  |-----------| 4E|
+|    3A| 1E| 1F| 20| 21| 22| 23| 24| 25| 26| 27| 28|!2B|    |               | 4B| 4C| 4D|   |
+|-----------------------------------------------------------|      ---      |---------------|
+|      2A| 2C| 2D| 2E| 2F| 30| 31| 32| 33| 34| 35|        36|     |*4C|     | 4F| 50| 51|   |
+|-----------------------------------------------------------|  -----------  |-----------|-1C|
+|   1D|-5B|   38|   7B|       39|   79|  70|-38|-5C|-5D| -1D| |*4B|*50|*4D| |     52| 53|   |
+ -----------------------------------------------------------   -----------   ---------------
+</pre>
+<p>Given that it has the same position, I presume the key with scan code 2B is INT2 once
+again.</p>
+<p>It has additional keys with scan codes 7B, 79, and 70,
+the Hiragana, Kanji, and Katakana shift keys respectively,
+as well as the additional INT 4 key, with scan code 7D, next to the backspace,
+but is otherwise not that much
+different from other versions of the PC keybboard.</p>
+<p>Again, the diagram above shows the Windows key, unlike the image.</p><br>
+<p>In Scan Code 3, everything is strictly based on position. This was true of the earlier
+scan codes, but they were based on the positions of keys on earlier forms of the keyboard,
+and then the codes moved with the keys for newer versions of the keyboard for compatibility.
+Thus, a single diagram suffices to illustrate the Scan Code 3 equivalents of the keys in all
+three keyboards, by placing the scan codes of keys added to the basic 101-key keyboard (or the
+one removed from it in some of the other keyboards in one case) in
+parentheses, so that it is clear which code belongs to the Space Bar, or the Back Space key,
+or the Enter key, or the left-hand Shift key.</p>
+<pre> ---     ---------------   ---------------   ---------------   -----------
+| 08|   | 07| 0F| 17| 1F| | 27| 2F| 37| 3F| | 47| 4F| 56| 5E| | 57| 5F| 62|
+ ---     ---------------   ---------------   ---------------   -----------
+
+ -----------------------------------------------------------   -----------   ---------------
+| 0E| 16| 1E| 26| 25| 2E| 36| 3D| 3E| 46| 45| 4E| 55|(5D) 66| | 67| 6E| 7D| | 76| 77| 7E| 84|
+|-----------------------------------------------------------| |-----------| |---------------|
+|   0D| 15| 1D| 24| 2D| 2C| 35| 3C| 43| 44| 4D| 54| 5B| (5C)| | 64| 65| 6D| | 6C| 75| 7D|   |
+|-----------------------------------------------------------|  -----------  |-----------| 7C|
+|    14| 1C| 1B| 23| 2B| 34| 33| 3B| 42| 4B| 4C| 52|(53)  5A|               | 6B| 73| 74|   |
+|-----------------------------------------------------------|      ---      |---------------|
+| 12 (13)| 1A| 22| 21| 2A| 32| 31| 3A| 41| 49| 4A|(51)    59|     | 63|     | 69| 72| 7A|   |
+|-----------------------------------------------------------|  -----------  |-----------| 79|
+|   11|   |   19|  (85)|    29|  (86)|  (87)|   39|   |   58| | 61| 60| 6A| |     70| 71|   |
+ -----     ---------------------------------------     -----   -----------   ---------------
+</pre>
+<p>Many non-IBM keyboard manufacturers will move the key that is in either the 5C or 53
+position to the 5D position, while having it retain its old scan code, because of the popularity
+of the AT keyboard layout. Scan Code 2, of course, in which this is appropriate, is the one
+usually used by the PC, and some non-IBM keyboards have been found not to properly support
+Scan Code 3. Because Scan Code 3 is designed for the modern 101-key keyboard, while the earlier
+scan code sets were designed for the keyboards on the original PC and AT, some versions of
+Linux attempt to use Scan Code 3 if possible, which can lead to problems.</p>
+<p>One item of IBM documentation online interchanges the positions of the keys with scan codes
+13 and 53 from that shown in the diagram above. This appears to be a misprint, as it conflicts
+with other sources of information.</p>
+<p>This illustration of the Host Connected Keyboard can be compared to the chart below it of
+its scan codes in Scan Code Set 3:</p>
+<p><img src="Scan%20Codes%20Demystified_files/pca72.gif" width="936" height="320"></p>
+<pre>               -----------------------------------------------
+              | 08| 10| 18| 20| 28| 30| 38| 40| 48| 50| 57| 5F|
+              |-----------------------------------------------|
+              | 07| 0F| 17| 1F| 27| 2F| 37| 3F| 47| 4F| 56| 5E|
+               ----------------------------------------------- 
+
+ -------   -----------------------------------------------------------   -----------   ---------------
+| 05| 06| | 0E| 16| 1E| 26| 25| 2E| 36| 3D| 3E| 46| 45| 4E| 55|     66| | 67| 6E| 7D| | 76| 77| 7E| 84|
+|-------| |-----------------------------------------------------------| |-----------| |---------------|
+| 04| 0C| |   0D| 15| 1D| 24| 2D| 2C| 35| 3C| 43| 44| 4D| 54| 5B|     | | 64| 65| 6D| | 6C| 75| 7D| 7C|
+|-------| |-------------------------------------------------------  5A|  -----------  |-----------|---|
+| 03| 0B| |    14| 1C| 1B| 23| 2B| 34| 33| 3B| 42| 4B| 4C| 52| 53|    |     | 63|     | 6B| 73| 74| 7B|
+|-------| |-----------------------------------------------------------|  -----------  |---------------|
+| 83| 0A| |  12| 13| 1A| 22| 21| 2A| 32| 31| 3A| 41| 49| 4A|        59| | 61| 62| 6A| | 69| 72| 7A|   |
+|-------| |-----------------------------------------------------------|  -----------  |-----------| 79|
+| 01| 09| |   11|   |   19|                         29|   39|   |   58|     | 60|     |     70| 71|   |
+ -------   -----     ---------------------------------------     -----       ---       ---------------
+</pre>
+<p>Note that the keys for PF1 through PF12 have the same scan codes in Scan Code Set 3 as the keys
+for F1 through F12 on a 101-key keyboard. However, when a Host Connected Keyboard is connected to a
+PC, it is instead the group of ten keys to the left of the main typing area that behave as function
+keys F1 through F10, corresponding to their positions on an XT or AT keyboard. How can this be?</p>
+<p>The answer is that a Host Connected Keyboard <em>only</em> uses Scan Code Set 3. This code is similar,
+but not identical, to Scan Code Set 2. A regular 101-key keyboard, or any other keyboard intended for
+normal PC use, will be switched into Scan Code Set 2 mode by the computer.</p><p>
+</p><p>When a computer can't switch a keyboard from Scan Code Set 3 to Scan Code Set 2, it will just treat
+the scan codes from the keyboard as if they were in Scan Code Set 2 anyways. Thus, a 122-key keyboard
+will behave like an 84-key AT keyboard, with its different association of functions like Num Lock, Break,
+Scroll Lock, Pause, Print Screen... and even the asterisk on the numeric keypad, since the keyboards
+using Scan Code Set 3 don't engage in the tricks a 101-key keyboard uses in Scan Code Set 2 that allowed
+those functions to be rearranged on that keyboard.</p>
+<p>This only applies if the operating system on the computer, like Microsoft Windows, attempts to switch
+the keyboard to Scan Code Set 2. Linux implementations typically choose to use Scan Code Set 3, if it is
+available, by default, and therefore a 122-key keyboard, under Linux, will behave more like a 101-key
+keyboard instead of like an 84-key keyboard. This, however, brings with it its own set of problems, because
+some less-expensive keyboards are known to have problems with their Scan Code Set 3 implementations.</p><br>
+<p>In the U.S. keyboard, the key with | and \ on it has scan codes in
+Group 1, 2, and 3 respectively of 2B, 5D, and 5C.</p>
+<p>The key in the illustration of the international keyboard with | and \ on it,
+next to the Enter key, is the INT 2 key, with scan codes in Group 1, 2, and 3 respectively
+of 2B, 5D, and 53. Thus, when used with Scan Code 2, as is usually the case on most
+PC-compatible computers when the PS/2 connector is used, this key is the same key as
+the | and \ key on the U.S. keyboard, simply moved to a different location. On the
+IBM PS/2, which uses Scan Code 3, or when a USB keyboard is used, however, they are
+two different keys. Even then, since software asking the operating system for the scan
+code of the last key pressed will recieve a Scan Code 1 value, the difference will
+usually not be significant.</p>
+<p>The key between the left-hand Shift key and the letter Z has a new scan code in all
+sets, so its face is shown blank. Its scan codes in Group 1, 2, and 3 respectively are
+56, 61, and 13; this is the INT 1 key.</p>
+<p>The Japanese keyboard has several added keys.</p>
+<p>Because Scan Code 3 is strictly based on the positions of keys on the 101-key
+keyboard and its relatives, the Half Width
+key, used to cause Katakana and Hiragana to take up the same room as ordinary ASCII
+characters, instead of twice the space, as Kanji (or Chinese characters) do, since
+it is the same position as the ~ and ` key, 0E. In this case, the same is true
+of Scan Code 1 and 2, so in the three scan codes respectively, its codes are
+29, 0E, and 0E.</p>
+<p>The new key with | and the Yen symbol on it, next to the backspace key,
+has codes 7D, 6A, and 5D respectively in Scan Code 1, 2, and 3. This is the key
+noted as INT 4 in the table above.</p>
+<p>The key in the position of the INT 2 key, next to the lower half of the Enter key,
+is the INT 2 key, with scan codes 2B, 5D, and 53.</p>
+<p>The new key on the left of the right-hand shift key is the INT 3 key, with scan codes
+73, 51, and 51 in Scan Code 1, 2, and 3 respectively.</p>
+<p>The new key on the left of the space bar, used to turn off translation of
+entries into Kanji, has scan codes 7B, 67, and 85 respectively.</p>
+<p>The first new key on the right of the space bar, used to turn on translation
+of entries into Kanji, and used with shift and Alt to help select a Kanji character
+from those found by the computer, has scan codes 79, 64, and 86.</p>
+<p>The second key on the right of the space bar is used to select between Hiragana,
+Katakana, or the Latin alphabet. If Kanji is turned off, this determines what will be
+typed; if it is on, it determines how the phonetic values of the Japanese language will
+be entered on the keyboard. Its scan codes are 70, 13, and 87.</p>
+<p>Incidentally, the Japanese version of the 122-key keyboard omits the right-hand Alt
+key, and removes one key from the numeric keypad, so that it has 124 keys rather than
+126 keys:</p>
+<p><img src="Scan%20Codes%20Demystified_files/122j.gif" width="936" height="320"></p>
+<h3>The 122-key Host Connected Keyboard</h3>
+<p>Some information about the additional keys of the 122-key keyboard
+is integrated in the table above. The information that relates only to
+the added keys has been left in that table, since it fits there most
+efficiently.</p>
+<p>For those who are unfamiliar with the 122-key keyboard, the diagram below
+illustrates the arrangement of its keys:</p>
+<p><img src="Scan%20Codes%20Demystified_files/122hc.gif" width="624" height="208"></p>
+<p>The diagram above shows the Host Connected Keyboard, as offered with the
+IBM Personal System/2 computers. Previously, a 122-key keyboard with the
+same arrangement of keys, that of the IBM 3270 Personal Computer, illustrated
+a significantly different assignment of keys from the IBM PC to positions
+on the 122-key keyboard:</p>
+<p><img src="Scan%20Codes%20Demystified_files/3270pc.gif" width="624" height="208"></p>
+<p>Another version of the 122-key keyboard, purchased by someone at government
+surplus, formerly used by NASA, and including the APL character set, looked
+like this:</p>
+<p><img src="Scan%20Codes%20Demystified_files/122_apl.gif" width="936" height="320"></p>
+<p>Incidentally, for comparison, here is one of the more popular
+keyboard arrangements for the original IBM 3277 Display Station, part
+of the IBM 3270 display subsystem:</p>
+<p><img src="Scan%20Codes%20Demystified_files/3270e.gif" width="784" height="200"></p>
+<p>The key codes given in the table above are from sources which may refer to different
+versions of this keyboard style, and is also incomplete for some scan code sets.
+Where the information is incomplete, it may also be less reliable: I assigned
+the codes based on the IBM 5250 layout, where the IBM 3270 layout or another
+different one might have been appropriate. The Set 3 scan codes for the ten keys
+arranged like the F1 to F10 keys of early IBM keyboards are the same as
+the Set 2 scan codes for the F1 to F10 keys; this makes me confident that my
+source for those codes is likely to reflect an arrangement actually used
+on an IBM keyboard: the entire arrangement of those codes is also given
+in the table specific to the 122-key keyboard given below.
+And the USB codes are as officially standardized by
+Microsoft; but for the ten keys to the left of the main alphabetic area,
+they may have been standardized for a different keyboard layout.</p>
+<p>Thus, while the Scan Code 3 information is relatively trustworthy throughout
+(but even it is not absolutely certain to reflect any "standard"; it may just be
+valid for the one 3rd-party keyboard in whose documentation these codes were
+given) the USB information can only be
+regarded as reliable for F13-F24; the Scan Code 1 and 2 information is valid
+for at least some keyboard arrangement for F13-F24, but not necessarily the same
+one as that for which the Scan Code 3 information is given: it does appear
+to apply to some keyboard with a 5250 layout, so it is likely to have been
+assigned to the right key positions, while the case for the USB scan codes is
+more uncertain.</p>
+<p>The Reset and Enter keys have the same scan codes as the left and right
+Ctrl keys on a conventional keyboard, while the Carrage Return or Field Exit
+key has the same scan code as the Enter key on a conventional keyboard.
+There are USB code assignments, not shown here as these 122-key keyboard keys
+gave rise to no new table entries, which seem to follow the opposite convention,
+however. The &lt; and &gt; key is INT 1, and the } and { key is INT 2. The keypad
+tab key is the keypad + key, with all the other keys on the numeric keypad
+corresponding by position. The extra key, the keypad - key on a 122-key
+keyboard, is INT 5.</p>
+<p>The E0 4C and E0 73 scan codes are a mere surmise on my part, but indicate
+where the Rule key is located on the 122-key keyboard: in the middle of the
+cursor key cluster. It would be nice if I could just add E0 to the scan codes
+for function keys F1 through F10 to get the scan codes for the keys to the
+left of the main typewriter area, but that can't be true, according to the
+sources I've seen, more's the pity.</p>
+<p>However, because of the existence of
+several completely incompatible versions of the 122-key keyboard, some of which
+reassign keys already defined on the 101-key keyboard, it seems appropriate to
+give the 122-key keyboard its own table in which the different implementations of
+a 122-key keyboard can be examined in their entirety.</p>
+<pre>Key                                                                 IBM          Memorex-  Nokia
+5250               3270 PC                      3476                             Telex
+                                                                    SC3 SC1 SC2  SC1       Equiv 
+
+F13  Red           PF13  Red                    F13                 08  64  08   64        shift F1
+F14  Pink          PF14  Pink                   F14                 10  65  10   65        shift F2
+F15  Green         PF15  Green                  F15                 18* 66  18   66        shift F3
+F16  Yellow        PF16  Yellow                 F16                 20  67  20   67        shift F4
+F17  Blue          PF17  Blue                   F17                 28* 68  28   68        shift F5
+F18  Turq          PF18  Turq                   F18                 30  69  30   69        shift F6
+F19  White         PF19  White                  F19                 38  6A  38   6A        shift F7
+F20  ffw1          PF20  Black                  F20                 40  6B  40   6B        shift F8
+F21                PF21  ffw1                   F21                 48  6C  48   6C        shift F9
+F22  CrBnk         PF22                         F22                 50  6D  50   6D        shift F10
+F23  AltCr         PF23  AltCr                  F23                 57  6E  57   6E        shift F11
+F24  +Cr           PF24                         F24  +Cr            5F  76  5F   76        shift F12
+F1   PSA           PF1   PSA                    F1                  07  58  07   58        F1
+F2   PSB           PF2   PSB                    F2                  0F  59  0F   59        F2
+F3   ffw2          PF3   PSC                    F3                  17  5A  17   5A        F3
+F4                 PF4   PSD                    F4                  1F  5B  1F   5B        F4
+F5   box           PF5   PSE                    F5                  27  5C  27   5C        F5
+F6   ffw3          PF6   PSF                    F6                  2F  5D  2F   5D        F6
+F7                 PF7   ffw3                   F7                  37  5E  37   5E        F7
+F8                 PF8                          F8                  3F  5F  3F   5F        F8
+F9   inv           PF9   inv                    F9   Back           47  60  47   60        F9
+F10  bri           PF10  bri                    F10  Fwd            4F  61  4F   61        F10
+F11  und           PF11  und                    F11                 58  62  58   62        F11
+F12  ffw4          PF12  ffw4                   F12                 5E  63  5E   63        F12
+Attn      SysRq    Help         SysRq           SysRq        Attn   05  3B  05   3B        Esc
+Clear              Clear        Test                         Clear  06  3C  06   3C        Pause Break
+CrSel              WS Ctrl      ExSel                               04  3D  04   3D        ctrl F1
+Pause     ErInp    Finish       Attn            ErInp               0C  3E  0C   3E        Scr Lock
+ExSel     SetUp    ChgSc  Jump  CrSel           Print               03  3F  03   3F        ctrl F2
+ErEOF     Recrd    Erase EOF    ErInp           Help         Hex    0E  40  0E   40        Print Screen
+Print     Ident    enl          dscrn                               83  41  83   41        ctrl F3
+Copy Play Test     Copy  Auto   Pause           Play         Test   0A  42  0A   42        ctrl F5
+enl       Help     Print        Ident  * Print  SetUp               01  43  01   43        ctrl F4
+Ctrl                                   Ctrl     Recrd        Pause  09  44  09   44        alt Page Up
+~ `                                                                 0E  29  0E   29        ~ `
+| 1                | 1                 ! 1                          16* 02  16   02        ! 1
+@ 2                                                                 1E  03  1E   03        @ 2
+# 3                                                                 26  04  26   04        # 3
+$ 4                                                                 25  05  25   05        $ 4
+% 5                                                                 2E  06  2E   06        % 5
+¬ 6                ¬ 6                 ^ 6                          36  07  36   07        ^ 6
+&amp; 7                                                                 3D  08  3D   08        &amp; 7
+* 8                                                                 3E  09  3E   09        * 8
+( 9                                                                 46  0A  46   0A        ( 9
+) 0                                                                 45  0B  45   0B        ) 0
+_ -                                                                 4E  0C  4E   0C        _ -
++ =                                                                 55  0D  55   0D        + =
+                                                                    5D  2B
+Backspace                                                           66  0E  66   0E        Backspace
+Tab                                                                 0D  0F  0D   0F        Tab
+Q                                                                   15  10  15   10        Q
+W                                                                   1D  11  1D   11        W
+E                                                                   24  12  24   12        E
+R                                                                   2D  13  2D   13        R
+T                                                                   2C  14  2C   14        T
+Y                                                                   35  15  35   15        Y
+U                                                                   3C  16  3C   16        U
+I                                                                   43  17  43   17        I
+O                                                                   44  18  44   18        O
+P                                                                   4D  19  4D   19        P
+! ¢                ! ¢                 { [                          54  1A  54   1A        { [
+¦ \                                                                 5B  1B  5B   1B        } ]
+                                                                    5C  75
+Carriage Return    Carriage Return              Field Exit          5A  1C  5A   1C        Enter
+Caps Lock          Caps Lock                                        14  1D  14   1D        Caps Lock
+A                                                                   1C  1E  1C   1E        A
+S                                                                   1B  1F  1B   1F        S
+D                                                                   23  20  23   20        D
+F                                                                   2B  21  2B   21        F
+G                                                                   34  22  34   22        G
+H                                                                   33  23  33   23        H
+J                                                                   3B  24  3B   24        J
+K                                                                   42  25  42   25        K
+L                                                                   4B  26  4B   26        L
+: ;                                                                 4C  27  4C   27        : ;
+" '                                                                 52  28  52   28        " '
+} {                } {                 } [                          53  74  53   74        INT 2
+Shift L            Shift L                                          12  2A  12   2A        Shift L
+&gt; &lt;                                                                 13  70  13   70        INT 1
+Z                                                                   1A  2C  1A   2C        Z
+X                                                                   22  2D  22   2D        X
+C                                                                   21  2E  21   2E        C
+V                                                                   2A  2F  2A   2F        V
+B                                                                   32  30  32   30        B
+N                                                                   31  31  31   31        N
+M                                                                   3A  32  3A   32        M
+,                  ,                   &lt; ,                          41  33  41   33        ,
+.                  .                   &gt; .                          49  34  49   34        .
+? /                                                                 4A  35  4A   35        ? /
+                                                                    51  73  51
+Shift R            Shift R                                          59  36  59   36        Shift R
+Reset     Quit     Reset            Quit        Reset       Quit    11  38  11   38        Ctrl L
+Alt L              Alt L                                            19  71  19   71        Alt L
+Space              Space                                            29  39  29   39        Space
+Alt R              Alt R                                            39  72  39   72        Alt R
+Enter              Enter                                            58  3A  58   3A        Ctrl R
+Dup   PA1          Dup         PA1              Back Tab    enl     67  7B  67   7B        Insert
+FldMk PA2 ChgSc    Field Mark  PA2              Dup                 6E  7F  6E   7F        Home
+Jump      PA3                  PA3                          Jump    6F  6F  6F   6F        Page Up
+Back Tab           Back Tab                     Carriage Return     64  79  64   79        Delete
+super              super                        Insert              65  7A  65   7A        End
+del       dmulti   del                          Delete              6D  7E  6D   7E        Page Down
+Up        Back     Up                           Up  Roll Up         63  78  63   78        Up
+Left      DblLeft  Left        DblLeft          Left                61  56  61   56        Left
+Rule      Home                 Home             Rule        Home    62  77  62   77        ctrl F6
+Right     DblRight Right       DblRight         Right               6A  7D  6A   7D        Right
+Down      Fwd      Down                         Down  Roll Down     60  55  60   55        Down
+bk1                                    Esc      bk1                 76  01  76   01        Num Lock
+bk2                                    NumLk    bk2                 77  45  77   45        / KP
+, KP               , KP                ScrLK    bk3                 7E  46  7E   46        * KP
+Space KP           Space KP                     bk4                 84  54  84   54        - KP
+7 KP               7 KP                Home     7 KP                6C  47  6C   47        7 KP
+8 KP               8 KP                Up       8 KP                75  48  75   48        8 KP
+9 KP               9 KP                PgUp     9 KP                7D  49  7D   49        9 KP
+Tab KP             Tab KP                       Field -             7C  37  7C   37        Tab
+4 KP               4 KP                Left     4 KP                6B  4B  6B   4B        4 KP
+5 KP               5 KP                         5 KP                73  4C  73   4C        5 KP
+6 KP               6 KP                Right    6 KP                74  4D  74   4D        6 KP
+- KP               - KP                         bk5                 7B  4A  7B   4A        + KP
+1 KP               1 KP                End      1 KP                69  4F  69   4F        1 KP
+2 KP               2 KP                Down     2 KP                72  50  72   50        2 KP
+3 KP               3 KP                PgDn     3 KP                7A  51  7A   51        3 KP
+Enter KP           Enter KP            + KP     Field +             79  4E  79   4E        Enter KP
+                                                                    68  7C  68
+0 KP               0 KP                Ins      0 KP                70  52  70   52        0 KP
+. KP               . KP                Del      . KP                71  53  71   53        . KP
+                                                                    78  57  78
+</pre>
+<p>The three codes marked with asterisks were noted as 1B, 2B, and 18 instead of 18, 28, and 16
+previously; this was apparently in error.</p>
+<p>The Memorex-Telex keyboard, apparently designed before IBM came out with
+the 101-key keyboard, blithely assigns the scan codes for function keys F1 through
+F10 to the ten keys to the right of the main typewriter area; thus, F1 through
+F12 have scan codes 58 through 63. Having a specimen of this keyboard, purchased
+at a local thrift shop, and having used the following
+BASIC program</p>
+<pre>    sc%=0
+    sp%=0
+ 10 if sc%=57 then 90
+REM exits on space bar, since that's usually easy to find
+REM and outputs the correct code
+    sc% = inp(96)
+    if sc%&lt;&gt;sp% then print hex$(sc%): sp%=sc%
+    goto 10
+ 90 end
+</pre>
+<p>to plumb its scan codes, I obtained the information about its
+Scan Code Set 1 codes shown above.</p>
+<p>Later, from the third of the web sites noted at the top of this page, I found out
+that this would be the result of input, originally in Scan Code Set 3, from IBM's own
+Host Connected keyboard, to a PC as well, so this keyboard was apparently designed to
+match that keyboard.</p>
+<p>Here is a photograph of that keyboard:</p>
+<p><img src="Scan%20Codes%20Demystified_files/memx122.jpg" width="1168" height="480"></p>
+<p>Of course, in all likelihood it actually outputs Scan Code Set 3 codes,
+or possibly Scan Code Set 2 codes, obtainable by
+translation. Some keys, particularly the keyboard Enter key in the
+location of the right Ctrl key, do have special handling of their make
+and break codes, but the special operations of the 101-key keyboard
+are not present.</p>
+<p>The two other popular 122-key keyboards are that made by KeyTronic and that
+formerly made by IBM and now by Lexmark. (As may be expected, I won't be
+satisfied until I can exhibit the scan codes for all three now.)
+As noted, I suspect the Set 3 codes given in the table
+above correspond to those of IBM's keyboard. The keyboard Enter key actually outputs the sequence
+FA F0 BA and so I'm assuming that BA is a break code in the table above. The FA
+code in the sequence appears to be acting as a break
+code for NumLock, and so it isn't always output.</p>
+<p>The Nokia keyboard was described on a web page cited above as one of my
+sources; since it implements the extra keys by applying shifts to standard keys,
+it seemed simplest to describe the keyboard in terms of keys rather than scan
+codes: the scan codes are what a standard 101-key keyboard would send when the
+named keys are pressed.</p>
+<p>A keyboard such as the Nokia makes the extra keys more limited than regular
+keys, since now they are not distinct in every shift. The Memorex-Telex doesn't
+assign the codes for keys F1 to F12 to keys F1 to F12, which is an incompatibility
+difficult to accept; although one cannot but forgive it, since that keyboard
+was designed before those keys were added to the PC keyboard by IBM.
+The IBM layout would be the sensible one to regard as the
+standard, and so I hope soon to learn the complete set of scan codes for it in Scan Code
+Set 1 or Set 2 that I can add them to this page.</p>
+<p>Note that a discussion of Chinese-language keyboards formerly on
+this page has been moved to <a href="http://www.quadibloc.com/comp/kyb02.htm">a page within the
+previous section</a>, and some additional discussion of the history of
+the keyboard of the IBM PC has been moved to <a href="http://www.quadibloc.com/comp/kyb03.htm">the page
+following that</a>.</p>
+<p><font size="-2">Copyright (c) 2003, 2005, 2007, 2009 John J. G. Savard</font></p>
+<hr>
+[<a href="http://www.quadibloc.com/comp/scan01.htm">Next</a>]
+[<a href="http://www.quadibloc.com/comp/compint.htm">Up</a>]
+[<a href="http://www.quadibloc.com/comp/kyb0701.htm">Previous</a>]
+[<a href="http://www.quadibloc.com/comp/kybint.htm">Previous Section</a>]
+[<a href="http://www.quadibloc.com/main.htm">Home</a>]
+[<a href="http://www.quadibloc.com/other.htm">Other</a>]
+
+
+
+
+</body></html>

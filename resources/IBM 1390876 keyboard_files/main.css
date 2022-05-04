@@ -1,0 +1,69 @@
+
+BODY {
+	color: #000000;
+	background-color: #FFFFFF;
+	font-family: 'bitstream vera sans', tahoma, helvetica, sans-serif;
+}
+
+H1 {
+	font-family: spectrum, 'bitstream vera sans', tahoma, helvetica, sans-serif;
+	color: #000080;
+	background-color: #FFFFFF;
+}
+
+H2 {
+	font-family: spectrum, 'bitstream vera sans', tahoma, helvetica, sans-serif;
+	background-color: #FFFFFF;
+        color: #000080;
+}
+
+H3 {
+	font-family: spectrum, 'bitstream vera sans', tahoma, helvetica, sans-serif;
+	background-color: #FFFFFF;
+        color: #000080;
+}
+
+
+
+.banner {
+        font-family: 'bitstream vera sans', tahoma, Helvetica, Arial, sans-serif;
+	background-color: #E0FFFF;
+	color: #000000;
+}
+
+
+.fixedbanner
+{
+        font-family: 'bitstream vera sans', tahoma, Helvetica, Arial, sans-serif;
+	background-color:	#E0FFFF;
+	color:			#000000;
+	position:		fixed;
+	width:			100%;
+	height:			5em;
+	top:			0;
+	right:			0;
+	left:			0;
+	bottom:			auto;
+	border-bottom:		1px solid black;
+	z-index:		100;
+}
+
+.main
+{
+	position:		relative;
+	padding:		4em 4em 4em 0em;	
+	width:			auto;
+	height:			auto;
+	top:			0em;
+	right:			0;
+	left:			0;
+	bottom:			0;
+}
+
+
+
+
+.imgp {
+	text-align: center
+}
+

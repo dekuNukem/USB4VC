@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+	<meta name="generator" content="/bin/vi">
+	<title>IBM 1390876 keyboard</title>
+        <link href="http://www.seasip.info/index.html" rel="start">
+        <link href="http://www.seasip.info/VintagePC/index.html" rel="up">
+        <link rel="stylesheet" href="IBM%201390876%20keyboard_files/main.css" type="text/css">
+        <link rel="stylesheet" href="IBM%201390876%20keyboard_files/vpc.css" type="text/css">
+</head>
+<body bgcolor="#FFFFFF">
+<div class="fixedbanner"><img src="IBM%201390876%20keyboard_files/5150.png" alt="" width="32" height="32" align="middle"> Vintage PC pages
+<br> <a href="http://www.seasip.info/index.html">Home</a> -&gt;
+<a href="http://www.seasip.info/VintagePC/index.html">Vintage PCs</a> -&gt;
+IBM 1390876 Keyboard
+</div>
+<div class="main">
+	<h1> The IBM 1390876 Keyboard</h1>
+
+	<p><strong>Note:</strong> You need a browser capable of displaying
+	SVG images to see the keyboard layouts.</p>
+
+<p>The IBM 1390876 is a 122-key keyboard, originally intended for use with an
+IBM 3197 terminal. It is possible, with a little ingenuity, to connect it to 
+and use it on a PC (under DOS and Linux, if not Windows).</p>
+
+<p><img src="IBM%201390876%20keyboard_files/1390876.jpg" alt="" width="1005" height="349"></p>
+
+<p>The keyboard has a 5-pin DIN plug that uses the 240-degree spacing. From
+<a href="http://www.geocities.jp/kenjin_keyboard/1390876.htm">another site</a>,
+I was able to get a pinout:</p>
+
+<embed src="IBM%201390876%20keyboard_files/1390876_pinout.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="522" height="522">
+
+<p>A normal AT keyboard uses the 180-degree spacing and this pinout:</p>
+
+<embed src="IBM%201390876%20keyboard_files/modelf_pinout.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="522" height="522">
+
+<p>It would, therefore, be possible to construct a simple adaptor. I was able
+to use an alternative method: swap the keyboard lead with one from a real IBM
+AT keyboard. Inside both types of keyboard, the lead connects to a 3x2 Berg 
+connector with the same pinout, so I could simply swap the leads over.</p>
+
+<h2>LEDs</h2>
+<p>There are no LEDs, and no obvious connector for an LED panel. The 
+keyboard controller accepts commands to set them, though.</p>
+
+<h2>Identity</h2>
+<p>When sent an identify command (0xF2), the keyboard returns the byte 
+sequence 0xBF 0xBF. However, this can be changed. On the keyboard PCB is a
+12-pin header, marked as 6 pairs of pins (B2-B7). These correspond to bits
+5-0 of the second byte of the keyboard ID. Shorting a pair of pins sets that
+bit to zero. So placing a jumper on the B2 pair will change the keyboard ID
+to 0xBF 0x9F.</p>
+<p>Adjacent to this header is a space on the circuit board for an identical
+header, marked as pins A2-A7. Presumably these would have the same effect on
+the first byte of the keyboard ID.</p>
+
+<h2>Scancodes</h2>
+<p>The keys on the 1390876 are laid out like this:</p>
+<embed src="IBM%201390876%20keyboard_files/1390876_keytops.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+
+<p>When in use, the keyboard always uses <a href="http://www.win.tue.nl/~aeb/linux/kbd/scancodes-10.html">Scancode set 3</a>. It rejects requests to change the
+scancode set. The scancodes it returns are:</p>
+<embed src="IBM%201390876%20keyboard_files/1390876_raw.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+<p><strong>Notes:</strong>
+</p><ul>
+	<li>Only shaded keys send key-up sequences (F0 <var>xx</var>)</li>
+	<li>Smaller numbers shown in circles are holes in the keyboard with 
+	no springs, corresponding to unused positions covered by double-sized 
+	keys.</li>
+	<li>The unused position under the spacebar does not respond to being
+	poked with a screwdriver, whereas the others do.</li>
+</ul>
+<p></p>
+<p>These are then translated by the PC's keyboard controller to:</p>
+<embed src="IBM%201390876%20keyboard_files/1390876_xlated.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+<p>meaning that, on a PC, the keyboard behaves like an 84-key AT keyboard:</p>
+<embed src="IBM%201390876%20keyboard_files/1390876_xt.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+
+<h2>Commands</h2>
+<p>The keyboard accepts the following commands. Most of them behave as 
+documented for the 
+<a href="http://www.win.tue.nl/~aeb/linux/kbd/scancodes-12.html">102-key PS/2
+	keyboard</a>, but there are a couple of 
+<span style="color: #000; background-color: #FEE; ">exceptions</span>:</p>
+<table border="1">
+	<thead><tr><th>Command</th><th>Description</th></tr></thead>
+	<tbody>
+		<tr>
+			<td>ED <var>xx</var></td>
+			<td>Set LEDs. Despite the keyboard not having any 
+			  LEDs, it will accept this command and check that
+			  the parameter is in the correct range (0-7).</td>
+	  </tr>
+	  <tr><td>EE</td><td>Diagnostic echo.</td></tr>
+	  <tr><td>F2</td><td>Read keyboard ID (usually BF BF).</td></tr>
+	  <tr><td>F3 <var>xx</var></td><td>Set repeat rate and delay.</td></tr>
+	  <tr><td>F4</td><td>Enable keyboard (clear errors).</td></tr>
+	  <tr><td>F5</td><td>Disable keyboard.</td></tr>
+	<tr><td>F6</td><td>Set defaults.</td></tr>
+	<tr><td>F7</td><td>Set all keys to repeat. No keys will send
+			break codes.</td></tr>
+	<tr><td>F8</td><td>Set all keys to give make/break codes. No 
+			keys will repeat.</td></tr>
+	<tr><td>F9</td><td>Set all keys to give make codes only. No keys will 
+			repeat or send break codes.</td></tr>
+	<tr style="color: #000; background-color: #FEE; ">
+		<td>FA</td><td>Behaves as FB. On a 102-key PS/2 keyboard, would
+		set all keys to repeat and to give make/break codes.</td></tr> 
+	<tr><td>FB</td><td>Set specified key(s) to repeat. They will not send
+			break codes. Followed by a list of scancodes, which 
+			should be terminated by F4.</td></tr>	
+	<tr><td>FC</td><td>Set specified key(s) to give make/break codes. They
+		       	will not repeat. Followed by a list of scancodes, which 
+			should be terminated by F4.</td></tr>	
+	<tr><td>FD</td><td>Set specified key(s) to give make codes only. They
+			will not repeat or send break codes. Followed by a 
+			list of scancodes, which should be terminated by 
+			F4.</td></tr>	
+	<tr><td>FE</td><td>Resend last scancode.</td></tr>
+	<tr style="color: #000; background-color: #FEE; ">
+		<td>FF</td><td>Reset. The keyboard will respond with AA (as
+			for the 102-key keyboard) followed by the 2-byte
+			keyboard ID.</td></tr>
+
+	</tbody>
+
+</table>
+<p>The F0 command (set / get scancode set) is not supported.</p>
+
+<h2>Under Linux</h2>
+<p><img src="IBM%201390876%20keyboard_files/tarfile.png" alt="[TAR]" width="25" height="32" align="bottom"><a href="http://www.seasip.info/VintagePC/1390876.tar.gz">1390976.tar.gz</a> contains a script 
+and keymap which, combined, make the keyboard rather more usable in the Linux 
+console. Among other things, it makes the arrow keys work, moves the function
+keys from the left to the top, and makes the symbols produced match the
+keytops where possible.</p>
+
+<h2>Under Windows 2000</h2>
+<p>If the keyboard is connected directly to a Windows 2000 computer, it does
+not work. Windows, during initialisation, resets the keyboard, and then gets
+flummoxed by the extra bytes which result. It is possible to trick the 
+keyboard into working by using a KVM switch: switch away from the computer 
+when Windows starts to load, and switch back when Windows has loaded 
+completely.</p>
+
+<p><img src="IBM%201390876%20keyboard_files/regedt.png" alt="[REG]" width="47" height="39" align="bottom"><a href="http://www.seasip.info/VintagePC/1390876.reg">1390876.reg</a> remaps the cursor keys,
+function keys, and various other keys so that they produce the scancodes that
+Windows expects for their keycaps.</p> 
+
+<p>If you have a copy of the Windows 2000 DDK, it's possible to build a 
+patched version of the keyboard driver that doesn't try to do the reset. 
+Apply this patch:</p>
+<p><img src="IBM%201390876%20keyboard_files/text.png" alt="[DIFF]" width="25" height="32" align="bottom"> <a href="http://www.seasip.info/VintagePC/pnpi8042.diff">pnpi8042.diff</a></p>
+
+<p>to the i8042 driver
+(in <code>...\src\input\</code>), rebuild it, and replace 
+<code>\winnt\system32\drivers\i8042prt.sys</code> with what you just built
+(you may have to disable Windows File Protection or do the copy from an 
+alternative OS. I'm told that booting in Safe Mode also allows you to make
+the substitution).</p>
+
+<p>When using the custom driver, the keyboard's hardware key repeat is 
+disabled. If you turn on the FilterKeys functionality as described
+<a href="http://discuss.pcmag.com/forums/thread/1004407379.aspx">here</a>, 
+Windows will simulate key repeat in software.</p>
+
+<p>Although this section describes Windows 2000, it probably applies to other
+NT-based Windows systems such as Windows NT, XP and Vista. The supplied 
+registry file requires Windows 2000 or later, and I haven't tested the patch
+on later or earlier versions of the DDK.</p>
+
+<h2>A Theory</h2>
+
+<p>This is my guess at how the three scancode sets came to be:</p>
+<ul>
+	<li>Originally, there was only the IBM PC. This used Set 1.</li>
+	
+	<li>When the <a href="http://www.seasip.info/VintagePC/5271.html">3270 PC</a> was created in 1983, its 
+	keyboard used Set 3. A plug-in ISA card was used to convert the 
+	scancodes received to Set 1.</li>
+	<li>When the PC AT was designed, it was decided to make its scancodes
+	compatible with Set 3, so that you could connect either an 84-key 
+	keyboard or a 122-key keyboard and not have to bother with the ISA 
+	card. The keyboard controller would then translate back to Set 1
+	for program compatibility.</li>
+	<li>Then the 102-key extended keyboard entered the picture. It 
+	couldn't use the corresponding codes from Set 3 for its extra keys, 
+	because existing computers wouldn't be able to handle them. So Set 2
+	was created for it, where the extra keys send E0 prefixes.</li>
+	<li>But the option to switch to Set 3 was added, so that programs 
+	which <em>did</em> support the 122-key keyboard wouldn't need to be
+	changed. This also explains why the function keys are different in
+	Sets 2 and 3; in Set 2, for backward compatibility, they return the 
+	scancodes for the 'left' function key block, and in Set 3 they 
+	return the scancodes for the 'top' function key block, which is where
+	they now are.</li>
+</ul>
+<p>Just a theory, nothing more.</p>
+
+<hr>
+<p><a href="mailto:seasip.webmaster@gmail.com">John Elliott</a>
+19 January 2010.</p>
+</div>
+
+
+</body></html>

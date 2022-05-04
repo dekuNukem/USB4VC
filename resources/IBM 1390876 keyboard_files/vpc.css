@@ -1,0 +1,124 @@
+
+BODY {
+	font-family: 'bitstream vera sans', tahoma, helvetica, sans-serif;
+}
+
+H1 {
+	font-family: 'bitstream vera sans', tahoma, helvetica, sans-serif;
+	color: #004000;
+	background-color: #FFFFFF;
+}
+
+H2 {
+	font-family: 'bitstream vera sans', tahoma, helvetica, sans-serif;
+        color: #004000;
+	background-color: #FFFFFF;
+}
+
+H3 {
+	font-family: 'bitstream vera sans', tahoma, helvetica, sans-serif;
+        color: #004000;
+	background-color: #FFFFFF;
+}
+
+
+H4 {
+	font-family: 'bitstream vera sans', tahoma, helvetica, sans-serif;
+        color: #004000;
+	background-color: #FFFFFF;
+}
+
+H5 {
+	font-family: 'bitstream vera sans', tahoma, helvetica, sans-serif;
+        color: #004000;
+	background-color: #FFFFFF;
+}
+
+
+H6 {
+	font-family: 'bitstream vera sans', tahoma, helvetica, sans-serif;
+        color: #004000;
+	background-color: #FFFFFF;
+}
+
+DT { 
+	font-weight: bold;
+}
+
+.fixedbanner
+{
+        font-family: 'bitstream vera sans', tahoma, Helvetica, Arial, sans-serif;
+	background-color:	#E0FFE0;
+	color:			#000000;
+	position:		fixed;
+	width:			100%;
+	height:			5em;
+	top:			0;
+	right:			0;
+	left:			0;
+	bottom:			auto;
+	border-bottom:		1px solid black;
+	z-index:		100;
+}
+
+.main
+{
+	position:		relative;
+	padding:		4em 4em 4em 0em;	
+	width:			auto;
+	height:			auto;
+	top:			0em;
+	right:			0;
+	left:			0;
+	bottom:			0;
+}
+
+
+.banner {
+        font-family: 'bitstream vera sans', tahoma, Helvetica, Arial, sans-serif;
+	background-color: #E0FFE0;
+}
+
+.imgp {
+	text-align: center
+}
+
+
+.mm { 
+	background-color: #000000;
+	color: #000000;
+}
+
+.m0 { 
+	background-color: #000000;
+	color: #00C000;
+}
+
+.m1 { 
+	background-color: #000000;
+	color: #00C000;
+	text-decoration: underline;
+}
+
+.m2 { 
+	background-color: #000000;
+	color: #00FF00;
+}
+
+.m3 { 
+	background-color: #000000;
+	color: #00FF00;
+	text-decoration: underline;
+}
+
+
+.m4 { 
+	background-color: #00C000;
+	color: #000000;
+}
+
+.m5 { 
+	background-color: #00C000;
+	color: #004000;
+}
+	

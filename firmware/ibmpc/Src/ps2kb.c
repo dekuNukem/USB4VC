@@ -333,6 +333,15 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   return ps2kb_write_nowait(data);
 }
 
+uint8_t scancode_set_reply_lookup(uint8_t set)
+{
+  if(set == 1)
+    return 0x43;
+  if(set == 3)
+    return 0x3f;
+  return 0x41;
+}
+
 void keyboard_reply(uint8_t cmd, uint8_t *leds)
 {
   uint8_t received = 255;
@@ -382,7 +391,7 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
       {
 	    	PS2KB_SENDACK();
         if(received == 0)
-          ps2kb_write(ps2kb_current_scancode_set, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+          ps2kb_write(scancode_set_reply_lookup(ps2kb_current_scancode_set), 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
         else if(received <= 3)
           ps2kb_current_scancode_set = received;
       }
