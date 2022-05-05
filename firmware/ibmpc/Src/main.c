@@ -68,7 +68,7 @@ UART_HandleTypeDef huart3;
 /* Private variables ---------------------------------------------------------*/
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
-const uint8_t version_minor = 2;
+const uint8_t version_minor = 3;
 const uint8_t version_patch = 0;
 uint8_t hw_revision;
 
@@ -328,7 +328,7 @@ void ps2mouse_update(void)
 
   uint8_t inhibit_timeout_ms = 200;
   if(is_protocol_enabled(PROTOCOL_PS2_MOUSE_KVM))
-    inhibit_timeout_ms = 2;
+    inhibit_timeout_ms = 1;
   if(ps2mouse_send_update(&my_ps2_outbuf, inhibit_timeout_ms) != PS2_OK)
   {
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
