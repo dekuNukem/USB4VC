@@ -32,15 +32,15 @@ Select your SD card, then the image file, then press `START` to begin writing.
 
 ## (Optional) Set up WiFi
 
-After writing the SD card, go to the drive named `boot`, and open up `wpa_supplicant.conf` with a **proper text editor**:
+After burning the SD card, go to the drive named `boot`, and open up `wpa_supplicant.conf` with a **proper text editor**:
 
 ![Alt text](photos/wpa.png)
+
+If the file doesn't exist, [download a new one](https://github.com/dekuNukem/USB4VC/raw/master/resources/wpa_supplicant.zip), unzip, put it under `boot`, and continue.
 
 Edit the file with your WiFi information. You can find your [WiFi country code here.](https://www.arubanetworks.com/techdocs/InstantWenger_Mobile/Advanced/Content/Instant%20User%20Guide%20-%20volumes/Country_Codes_List.htm)
 
 ![Alt text](photos/wifi.png)
-
-If the file doesn't exist, [download a new one](https://github.com/dekuNukem/USB4VC/raw/master/resources/wpa_supplicant.zip), unzip, put it under `boot`, and update the information as above.
 
 ## Kit Assembly
 
@@ -126,6 +126,10 @@ Otherwise, press `Enter` button to go to the submenu, and use `Enter` button to 
 
 It is recommended to leave the sensitivity adjustments at default, and change them inside the OS or game first. Only do it on USB4VC if that's not possible.
 
+## (Optional) Software Updates
+
+Select `Internet Update` in main menu. It will update source code and P-Card firmware to latest version.
+
 ## Pair Bluetooth
 
 Select "Pair Bluetooth":
@@ -206,7 +210,7 @@ You can [download this DOS program](https://github.com/dekuNukem/USB4VC/raw/mast
 
 ![Alt text](photos/joycheck.png)
 
-## Software Updates
+## Software Update
 
 Connect RPi to internet. You can [set up WiFi](#optional-set-up-wifi), or plug in an Ethernet cable.
 
