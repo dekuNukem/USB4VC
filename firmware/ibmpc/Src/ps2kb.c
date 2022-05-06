@@ -505,7 +505,7 @@ GPIO_TypeDef* ps2kb_data_port;
 uint16_t ps2kb_data_pin;
 uint32_t ps2kb_wait_start;
 
-uint8_t ps2kb_current_scancode_set = 2;
+uint8_t ps2kb_current_scancode_set = 3;
 uint8_t ps2kb_data_reporting_enabled = 1;
 
 #define PS2KB_CLK_HI() HAL_GPIO_WritePin(ps2kb_clk_port, ps2kb_clk_pin, GPIO_PIN_SET)
@@ -527,7 +527,7 @@ void ps2kb_release_lines(void)
 
 void ps2kb_reset(void)
 {
-  ps2kb_current_scancode_set = 2;
+  ps2kb_current_scancode_set = 3;
   ps2kb_data_reporting_enabled = 1;
 }
 
@@ -885,6 +885,42 @@ uint8_t ps2kb_press_key_scancode_2(uint8_t linux_keycode, uint8_t linux_keyvalue
   return PS2_ERROR_UNKNOWN;
 }
 
+uint8_t ps2kb_press_key_scancode_3(uint8_t linux_keycode, uint8_t linux_keyvalue)
+{
+  // printf("%d %d", linux_keycode, linux_keyvalue);
+  // linux_keyvalue: release 0 press 1 autorepeat 2
+  if(linux_keycode >= LINUX_KEYCODE_TO_PS2_SCANCODE_SET3_SIZE)
+    return PS2_ERROR_UNKNOWN_EV;
+
+  uint8_t set3_scancode = linux_keycode_to_ps3_scancode_lookup_codeset3[linux_keycode];
+  if(set3_scancode == CODE_UNUSED)
+    return PS2_ERROR_UNUSED_CODE;
+
+  if(set3_scancode >= SET3_STATUS_LOOKUP_SIZE)
+    return PS2_ERROR_UNKNOWN_SCANCODE;
+
+  uint8_t key_status = scancode_set3_status[set3_scancode];
+
+  if(linux_keyvalue == 1) // make
+  {
+    if(ps2kb_write(set3_scancode, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS))
+      return PS2_ERROR_HOST_INHIBIT;
+  }
+  if(linux_keyvalue == 0 && (key_status == SET3_KEY_STATE_MAKE_BREAK || key_status == SET3_KEY_STATE_TYPEMATIC)) // break
+  {
+    if(ps2kb_write(0xf0, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS))
+      return PS2_ERROR_HOST_INHIBIT;
+    if(ps2kb_write(set3_scancode, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS))
+      return PS2_ERROR_HOST_INHIBIT;
+  }
+  if(linux_keyvalue == 2 && key_status == SET3_KEY_STATE_TYPEMATIC) // typematic
+  {
+    if(ps2kb_write(set3_scancode, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS))
+      return PS2_ERROR_HOST_INHIBIT;
+  }
+  return PS2_OK;
+}
+
 uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
 {
   if(ps2kb_data_reporting_enabled == 0)
@@ -895,6 +931,8 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t linux_keyvalue)
       return ps2kb_press_key_scancode_1(linux_keycode, linux_keyvalue);
     case 2:
       return ps2kb_press_key_scancode_2(linux_keycode, linux_keyvalue);
+    case 3:
+      return ps2kb_press_key_scancode_3(linux_keycode, linux_keyvalue);
     default:
       return PS2_ERROR_UNKNOWN_CODE_SET;
   }
