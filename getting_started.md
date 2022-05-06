@@ -202,7 +202,7 @@ You can also create your own USB Gamepad mapping or have it **control mouse and 
 
 You can [download this DOS program](https://github.com/dekuNukem/USB4VC/raw/master/resources/joytest.zip) to visualize what the gamepad is doing, great for troubleshooting! Found on this [vogons thread](https://www.vogons.org/viewtopic.php?p=187168#p187168).
 
-* It's OK if the value is slightly off. Games will calibrate before starting anyway.
+* It's OK if the values are slightly off. Games will calibrate before starting anyway.
 
 * Careful with pressing keyboard keys, it might mess up the display.
 

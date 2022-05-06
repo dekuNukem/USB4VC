@@ -6,7 +6,7 @@
 
 * Released 6 May 2022
 
-* Added PS/2 keyboard scancode set 3 support
+* Added PS/2 keyboard scancode set 3 support (experimental, do try it out!)
 
 * Removed separate PS/2 Mouse KVM compatibility mode
 
