@@ -1123,4 +1123,6 @@ for x in range(256):
 	ev_name = linux_ev_code_to_name_lookup.get(x, 'KEY_UNUSED')
 	set3_code = scancode_set3_to_map.get(ev_name, 'CODE_UNUSED')
 	# print(x, ev_name, set3_code)
+	if set3_code != 'CODE_UNUSED':
+		set3_code = hex(set3_code)
 	print(f"{set3_code}, // {ev_name}    {x}")

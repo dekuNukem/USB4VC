@@ -21,9 +21,6 @@ uint8_t ps2kb_press_key(uint8_t linux_keycode, uint8_t press1release0);
 void ps2kb_release_lines(void);
 void ps2kb_reset(void);
 
-#define LINUX_KEYCODE_TO_PS2_SCANCODE_SINGLE_SIZE 89
-#define LINUX_KEYCODE_TO_PS2_SCANCODE_SPECIAL_SIZE 32
-
 #define LINUX_KEYCODE_SYSRQ 99
 #define LINUX_KEYCODE_PAUSE 119
 
@@ -34,9 +31,6 @@ void ps2kb_reset(void);
 #define PS2_ERROR_UNUSED_CODE 2
 #define PS2_ERROR_UNKNOWN 3
 #define PS2_ERROR_TIMEOUT 4
-
-extern const uint8_t linux_keycode_to_ps2_scancode_lookup_single_byte_codeset2[LINUX_KEYCODE_TO_PS2_SCANCODE_SINGLE_SIZE];
-
 
 #ifdef __cplusplus
 }
