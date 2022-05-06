@@ -31,7 +31,12 @@ void ps2mouse_update(void)
   }
 
 
-
+case 0xF7: // set all keys to typematic only, set 3 only
+      if(ps2kb_current_scancode_set == 3)
+        PS2KB_SENDACK();
+      else
+        ps2kb_write(0xFE, 1, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      break;
 uint8_t is_ps2_mouse_connected_prev;
  uint8_t is_ps2_mouse_connected = IS_PS2MOUSE_PRESENT();
   uint8_t send_bat = 0;

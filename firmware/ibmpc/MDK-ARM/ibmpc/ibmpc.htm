@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ibmpc\ibmpc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ibmpc\ibmpc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri May 06 12:03:06 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri May 06 13:31:45 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -210,7 +210,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[97]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
+<BR><BR>[Called By]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_reset
+<LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
 <LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gamepad_buf_add
 </UL>
 
@@ -856,8 +857,7 @@ Global Symbols
 <P><STRONG><a name="[b3]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_3
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<BR>[Called By]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -1049,8 +1049,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 </UL>
 
-<P><STRONG><a name="[ae]"></a>keyboard_reply</STRONG> (Thumb, 264 bytes, Stack size 16 bytes, ps2kb.o(i.keyboard_reply))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = keyboard_reply &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
+<P><STRONG><a name="[ae]"></a>keyboard_reply</STRONG> (Thumb, 310 bytes, Stack size 24 bytes, ps2kb.o(i.keyboard_reply))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = keyboard_reply &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;scancode_set_reply_lookup
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
@@ -1220,7 +1220,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[a2]"></a>ps2kb_init</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ps2kb_init &rArr; ps2kb_release_lines
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = ps2kb_init &rArr; ps2kb_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_reset
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_release_lines
@@ -1230,7 +1230,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[c6]"></a>ps2kb_press_key</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = ps2kb_press_key &rArr; ps2kb_press_key_scancode_3 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = ps2kb_press_key &rArr; ps2kb_press_key_scancode_3 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_3
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_2
@@ -1255,11 +1255,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
 </UL>
 
-<P><STRONG><a name="[c9]"></a>ps2kb_press_key_scancode_3</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, ps2kb.o(i.ps2kb_press_key_scancode_3))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = ps2kb_press_key_scancode_3 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
+<P><STRONG><a name="[c9]"></a>ps2kb_press_key_scancode_3</STRONG> (Thumb, 114 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_press_key_scancode_3))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = ps2kb_press_key_scancode_3 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
-<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key
 </UL>
@@ -1288,14 +1287,18 @@ Global Symbols
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
-<P><STRONG><a name="[a6]"></a>ps2kb_reset</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, ps2kb.o(i.ps2kb_reset))
-<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_init
+<P><STRONG><a name="[a6]"></a>ps2kb_reset</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_reset))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ps2kb_reset
+</UL>
+<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
+</UL>
+<BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_init
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keyboard_reply
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
 <P><STRONG><a name="[bd]"></a>ps2kb_update</STRONG> (Thumb, 166 bytes, Stack size 16 bytes, main.o(i.ps2kb_update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = ps2kb_update &rArr; ps2kb_press_key &rArr; ps2kb_press_key_scancode_3 &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = ps2kb_update &rArr; keyboard_reply &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
