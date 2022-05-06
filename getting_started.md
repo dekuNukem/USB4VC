@@ -194,9 +194,7 @@ Unsupported USB controllers might still work, but the default mapping might be w
 
 ## Custom Gamepad Mapping
 
-You can also create your own USB Gamepad mapping so suit your exact needs.
-
-You can even have it **control mouse and keyboard**, in order to play games that did not have native gamepad support!
+You can also create your own USB Gamepad mapping or have it **control mouse and keyboard**, in order to play games that did not have native gamepad support!
 
 [Download the configurator](https://github.com/dekuNukem/usb4vc-configurator/blob/master/README.md) and follow the instruction to set it up.
 

@@ -509,7 +509,7 @@ GPIO_TypeDef* ps2kb_data_port;
 uint16_t ps2kb_data_pin;
 uint32_t ps2kb_wait_start;
 
-uint8_t ps2kb_current_scancode_set = 3;
+uint8_t ps2kb_current_scancode_set = 2;
 uint8_t ps2kb_data_reporting_enabled = 1;
 
 #define PS2KB_CLK_HI() HAL_GPIO_WritePin(ps2kb_clk_port, ps2kb_clk_pin, GPIO_PIN_SET)
@@ -531,7 +531,7 @@ void ps2kb_release_lines(void)
 
 void ps2kb_reset(void)
 {
-  ps2kb_current_scancode_set = 3;
+  ps2kb_current_scancode_set = 2;
   ps2kb_data_reporting_enabled = 1;
   memcpy(scancode_set3_current_status, scancode_set3_default_status, SET3_STATUS_LOOKUP_SIZE);
 }
@@ -692,28 +692,72 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   return ps2kb_write_nowait(data);
 }
 
-uint8_t scancode_set_reply_lookup(uint8_t set)
+#define PS2_RECEIVE_MODE_NORMAL 0
+#define PS2_RECEIVE_MODE_TYPEMATIC_ONLY 1
+#define PS2_RECEIVE_MODE_MAKE_BREAK 2
+#define PS2_RECEIVE_MODE_MAKE_ONLY 3
+
+uint8_t ps2_receive_mode;
+
+#define SET3_CMD_BACK_TO_NORMAL_MODE 0
+#define SET3_CMD_CODE_UPDATED 1
+#define SET3_CMD_ERROR 2
+
+uint8_t handle_set3_commands(uint8_t current_mode, uint8_t cmd)
 {
-  if(set == 1)
-    return 0x43;
-  if(set == 3)
-    return 0x3f;
-  return 0x41;
+  // printf("%x %x", current_mode, cmd);
+  if(current_mode == PS2_RECEIVE_MODE_NORMAL)
+    return SET3_CMD_BACK_TO_NORMAL_MODE;
+  if(current_mode != PS2_RECEIVE_MODE_NORMAL && cmd >= 0xED)
+    return SET3_CMD_BACK_TO_NORMAL_MODE;
+  if(ps2_receive_mode == PS2_RECEIVE_MODE_TYPEMATIC_ONLY && cmd < SET3_STATUS_LOOKUP_SIZE)
+    scancode_set3_current_status[cmd] = SET3_KEY_STATE_TYPEMATIC_ONLY;
+  else if(ps2_receive_mode == PS2_RECEIVE_MODE_MAKE_BREAK && cmd < SET3_STATUS_LOOKUP_SIZE)
+    scancode_set3_current_status[cmd] = SET3_KEY_STATE_MAKE_BREAK;
+  else if(ps2_receive_mode == PS2_RECEIVE_MODE_MAKE_ONLY && cmd < SET3_STATUS_LOOKUP_SIZE)
+    scancode_set3_current_status[cmd] = SET3_KEY_STATE_MAKE_ONLY;
+  return SET3_CMD_CODE_UPDATED;
 }
 
 void keyboard_reply(uint8_t cmd, uint8_t *leds)
 {
   uint8_t received = 255;
+  if(handle_set3_commands(ps2_receive_mode, cmd) == SET3_CMD_BACK_TO_NORMAL_MODE)
+  {
+    ps2_receive_mode = PS2_RECEIVE_MODE_NORMAL;
+  }
+  else
+  {
+    PS2KB_SENDACK();
+    return;
+  }
+
   switch (cmd)
   {
 	  case 0xFF: //reset
 	    PS2KB_SENDACK();
       ps2kb_reset();
+      HAL_Delay(333); // probably unnecessary, but that's what most keyboards do
 	    ps2kb_write(0xAA, 0, 250);
+      // IBM battlecruiser 1394324 sends two extra keyboard ID bytes after reset
+      // ps2kb_write(0xBF, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      // ps2kb_write(0xAC, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
 	  case 0xFE: //resend
 	    PS2KB_SENDACK();
 	    break;
+    case 0xFD:
+      ps2_receive_mode = PS2_RECEIVE_MODE_MAKE_ONLY;
+      PS2KB_SENDACK();
+      break;
+    case 0xFC:
+      ps2_receive_mode = PS2_RECEIVE_MODE_MAKE_BREAK;
+      PS2KB_SENDACK();
+      break;
+    case 0xFB:
+      ps2_receive_mode = PS2_RECEIVE_MODE_TYPEMATIC_ONLY;
+      PS2KB_SENDACK();
+      break;
     case 0xFA: // set all keys to all, set 3 only
       for (int i = 0; i < SET3_STATUS_LOOKUP_SIZE; ++i)
         scancode_set3_current_status[i] = SET3_KEY_STATE_ALL;
@@ -756,6 +800,8 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	    PS2KB_SENDACK();
 	    ps2kb_write(0xAB, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
 	    ps2kb_write(0x83, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+      // ps2kb_write(0xBF, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS); // ID for IBM battlecruiser 1394324
+      // ps2kb_write(0xAC, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
 	    break;
 	  case 0xF0: //get/change scan code set
 	    PS2KB_SENDACK();
@@ -763,7 +809,7 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
       {
 	    	PS2KB_SENDACK();
         if(received == 0)
-          ps2kb_write(scancode_set_reply_lookup(ps2kb_current_scancode_set), 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
+          ps2kb_write(ps2kb_current_scancode_set, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
         else if(received <= 3)
           ps2kb_current_scancode_set = received;
       }
@@ -776,6 +822,9 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
 	    if(ps2kb_read(leds, 30) == PS2_OK)
 	    	PS2KB_SENDACK();
 	    break;
+    default:
+      PS2KB_SENDACK();
+      break;
   }
 }
 

@@ -1,0 +1,668 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+	<meta name="generator" content="/bin/vi">
+	<title>IBM 1397000 keyboard</title>
+        <link href="http://www.seasip.info/index.html" rel="start">
+        <link href="https://www.seasip.info/VintagePC/index.html" rel="up">
+        <link rel="stylesheet" href="IBM%201397000%20keyboard_files/main.css" type="text/css">
+        <link rel="stylesheet" href="IBM%201397000%20keyboard_files/vpc.css" type="text/css">
+	<style>
+		.diff { color : #000000; background-color : #95FFFF; }
+	</style>
+</head>
+<body bgcolor="#FFFFFF">
+<div class="fixedbanner"><img src="IBM%201397000%20keyboard_files/5150.png" alt="" width="32" height="32" align="middle"> Vintage PC pages
+<br> <a href="http://www.seasip.info/index.html">Home</a> -&gt;
+<a href="https://www.seasip.info/VintagePC/index.html">Vintage PCs</a> -&gt;
+IBM 1397000 Keyboard
+</div>
+<div class="main">
+	<h1> The IBM 1397000 Keyboard</h1>
+
+	<p><strong>Note:</strong> You need a browser capable of displaying
+	SVG images to see the keyboard layouts.</p>
+
+	<p>The IBM 1397000 keyboard (described on the box as the "IBM 
+	Personal System/2 Host Connected Keyboard") is a 122-key Model M 
+	terminal emulator keyboard.</p>
+	
+	<p><img src="IBM%201397000%20keyboard_files/1397000.jpg" alt="" width="1005" height="413"></p>
+<p>This particular model uses the US layout and has a detachable SDL cable.</p> 
+
+	<p>Some serial numbers associated with this keyboard are:</p>
+<dl>
+<dt>1397000</dt><dd>The keyboard part number</dd>
+<dt>1397050</dt><dd>The keyboard FRU number</dd>
+<dt>1396400</dt><dd>The part number for the complete package (keyboard plus
+driver floppy)</dd>
+<dt>1396063</dt><dd>Controller PCB</dd>
+<dt>1396064</dt><dd>6805 Microcontroller</dd>
+</dl>
+
+<h2>Identity</h2>
+<p>When sent an identify command (0xF2), the keyboard returns the byte 
+sequence 0xAB 0x86.</p>
+
+<h2>Scancodes</h2>
+<p>The keys on the 1397000 are laid out like this:</p>
+<embed src="IBM%201397000%20keyboard_files/1227T_keytops.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300"><p></p>
+
+<p>The keyboard supports <a href="http://www.win.tue.nl/~aeb/linux/kbd/scancodes-10.html">all three IBM scancode sets</a>. The scancodes it returns are:</p>
+
+<h3>Set 1</h3>
+<embed src="IBM%201397000%20keyboard_files/1227T_raw1.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+<p><strong>Notes:</strong>
+</p><ul>
+	<li>Smaller numbers shown in circles are holes in the keyboard with 
+	no springs, corresponding to unused positions covered by double-sized 
+	keys.</li>
+	<li>As on other Model M keyboards I've seen, there's a second hole 
+	under the spacebar, which doesn't respond when poked with a screwdriver
+	and is therefore probably just for a stabiliser.</li>
+	<li>Attn / SysRQ (shaded magenta) generates 71 if Alt is not held
+	down, 54 if it is.</li>
+	<li>Pause / ErInp (shaded yellow) generates the sequence 
+	E11D,45,E19D,C5 when pressed (ie, Press fake Ctrl, press NumLock, 
+	release fake Ctrl, release NumLock) and nothing on release. If 
+	real Ctrl is held, it sends scancodes E145, E1C5 on press and 
+	nothing on release.</li>
+	<li>Print / PrtSc (shaded green) generates scancodes E02A, E037 
+	(ie: Press fake Shift, press PrintScreen) on press, and E0B7, E0AA 
+	on release. If any of Shift, Ctrl or Alt are pressed, it generates 
+	only E037 on press and E0B7 on release.</li>
+	<li>NumLk / ScrLk (shaded cyan) generates scancode 46 [Scroll Lock]
+	if Shift is not pressed, 45 [Num lock] if Shift is pressed.</li>
+	<li>Space / Slash / Break (shaded violet) generates E035 (Keypad /) if
+	no Ctrl key is down. If one is it sends E046 E0C6 (Ctrl-Break down,
+	Ctrl-Break up) on press, and nothing on release.</li>
+	<li>A number of keys send fake shift press and release codes under
+	various circumstances. I am assuming these to be the same as for the
+	101-key PS/2 keyboard, listed
+<a href="http://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html#fakeshifts">here</a>.
+</li></ul><p></p>
+<p>Set 1 is not intended to be translated by the keyboard controller. If you
+do turn translation on, you get these codes:</p>
+<embed src="IBM%201397000%20keyboard_files/1227T_xlated1.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+<p><strong>Notes:</strong>
+</p><ul>
+	<li>These are 'make' codes. The 'break' codes, being in the 80-FF 
+	range, mostly avoid being translated; so (for example) A has the 
+	make code 03 but the break code 9E.</li>
+</ul>
+
+<h3>Set 2</h3>
+<embed src="IBM%201397000%20keyboard_files/1227T_raw2.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+<p><strong>Notes:</strong>
+</p><ul>
+	<li>The five highlighted keys, as in Set 1, send different key
+	sequences depending on what shifts are pressed:</li>
+	<li>Attn / SysRQ sends 19 if Alt is not pressed, 84 if it is.</li>
+	<li>Pause / ErInp sends E114 77 E1F014 F077 if Ctrl is not pressed,
+	E177 E1F077 if it is.</li>
+	<li>Print / Prtsc sends E012 E07C if none of Shift / Ctrl / Alt is
+	pressed, E07C if one is.</li>
+	<li>NumLk / ScrLk sends 7E if Shift is not pressed, 77 if it is.</li>
+	<li>Space / Slash / Break sends E04A if Ctrl is not pressed. If Ctrl
+	is pressed it sends E07E E0F07E on press and nothing on release.</li>
+</ul><p></p>
+<p>These scancodes are expected to be translated by the keyboard controller,
+producing the same output that you'd get from (untranslated) Set 1:</p>
+<embed src="IBM%201397000%20keyboard_files/1227T_xlated2.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+
+<h3>Set 3</h3>
+<p>Set 3 uses the same position-based coding as the 
+<a href="https://www.seasip.info/VintagePC/ibm_1390876.html">122-key terminal keyboards</a> and the 
+<a href="https://www.seasip.info/VintagePC/ibm_6450225.html">84-key AT keyboard</a>. It is the only set to
+distinguish between the key position above Return (where Backslash is on a 
+101-key keyboard) and the one to the left of Return (where Hash is on a 
+102-key keyboard).</p>
+<embed src="IBM%201397000%20keyboard_files/1227T_raw3.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+<p><strong>Notes:</strong>
+</p><ul>
+	<li>Only the keys highlighted in grey return break codes (F0 xx).</li>
+	<li>Compared to a 102-key keyboard, some keys have different Set 3 
+	scancodes. For example, on a 102-key keyboard PgUp and PgDn have
+	the set 3 scancodes 6F and 6D, respectively. On a 122-key keyboard
+	they have set 3 scancodes 6E and 6F, because they're in different
+	places.</li>
+</ul>
+<p></p>
+<p>After translation by the keyboard controller, these codes become:<br>
+<embed src="IBM%201397000%20keyboard_files/1227T_xlated3.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" width="1005" height="300">
+</p>
+
+<p>So, here's my grand unified list of Set 3 scancodes, sorted by number.</p>
+<ul>
+	<li>The "Key position" columns are an indication of position rather 
+	than keycap.</li>
+	<li>Keys where the set 1 / 2 scancode differs between the 122-key
+	keyboard and a normal 101 / 102-key keyboard are 
+	<span class="diff">highlighted</span>.</li>
+</ul>
+
+<table border="1">
+	<thead>
+		<tr>
+			<th rowspan="2">Set 3 code</th>
+			<th rowspan="2">Translated Set 3 code</th>
+			<th colspan="3">122-key</th>
+			<th colspan="3">101 / 102-key</th>
+		</tr>
+		<tr><th>Key position</th>
+		<th>Set 2 code</th>
+		<th>Set 1 code</th>
+		<th>Key position</th>
+		<th>Set 2 code</th>
+		<th>Set 1 code</th>
+	</tr></thead>
+	<tbody>
+	<tr><td>01</td><td>43</td><td>F9 (left function key block)</td>
+		<td>5C</td><td>75</td></tr>
+	<tr><td>02</td><td>--</td><td>Not assigned (why?)</td>
+		<td>--</td><td>--</td></tr>
+	<tr><td>03</td><td>3F</td><td>F5 (left function key block)</td>
+		<td>53</td><td>74</td></tr>
+	<tr><td>04</td><td>3D</td><td>F3 (left function key block)</td>
+		<td>39</td><td>72</td></tr>
+	<tr><td>05</td><td>3B</td><td>F1 (left function key block)</td>
+		<td>19 / 84</td><td>71 / 54</td></tr>
+	<tr><td>06</td><td>3C</td><td>F2 (left function key block)</td>
+		<td>5F</td><td>76</td></tr>
+	<tr><td>07</td><td>58</td><td>F1 (top function key block)</td>
+		<td>05</td><td>3B</td>
+		<td>same</td><td>05</td><td>3B</td></tr>
+	<tr class="diff">
+		<td>08</td><td>64</td><td>F13 (top function key block)</td>
+		<td>1F</td><td>5B</td>
+		<td>Esc</td><td>76</td><td>01</td></tr>
+	<tr><td>09</td><td>44</td><td>F10 (left function key block)</td>
+		<td>48</td><td>6C</td></tr>
+	<tr><td>0A</td><td>42</td><td>F8 (left function key block)</td>
+		<td>6F</td><td>6F</td></tr>
+	<tr><td>0B</td><td>40</td><td>F6 (left function key block)</td>
+		<td>50</td><td>6D</td></tr>
+	<tr><td>0C</td><td>3E</td><td>F4 (left function key block)</td>
+		<td>77 / E177</td><td>45 / E145</td></tr>
+	<tr><td>0D</td><td>0F</td><td>Tab</td>
+		<td>0D</td><td>0F</td>
+		<td>same</td><td>0D</td><td>0F</td></tr>
+	<tr><td>0E</td><td>29</td><td>Key to the left of 1</td>
+		<td>0E</td><td>29</td>
+		<td>same</td><td>0E</td><td>29</td></tr>
+	<tr><td>0F</td><td>59</td><td>F2 (top function key block)</td>
+		<td>06</td><td>3C</td>
+		<td>same</td><td>06</td><td>3C</td></tr>
+	<tr><td>10</td><td>65</td><td>F14 (top function key block)</td>
+		<td>27</td><td>5C</td></tr>
+	<tr><td>11</td><td>38</td><td>Left Ctrl</td>
+		<td>14</td><td>1D</td>
+		<td>same</td><td>14</td><td>1D</td></tr>
+	<tr><td>12</td><td>2A</td><td>Left Shift</td>
+		<td>12</td><td>2A</td>
+		<td>same</td><td>12</td><td>2A</td></tr>
+	<tr><td>13</td><td>70</td><td>\ (if adjacent to left Shift)</td>
+		<td>61</td><td>56</td>
+		<td>same</td><td>61</td><td>56</td></tr>
+	<tr><td>14</td><td>1D</td><td>Caps Lock</td>
+		<td>58</td><td>3A</td>
+		<td>same</td><td>58</td><td>3A</td></tr>
+	<tr><td>15</td><td>10</td><td>Q</td>
+		<td>15</td><td>10</td>
+		<td>same</td><td>15</td><td>10</td></tr>
+	<tr><td>16</td><td>02</td><td>1</td>
+		<td>16</td><td>02</td>
+		<td>same</td><td>16</td><td>02</td></tr>
+	<tr><td>17</td><td>5A</td><td>F3 (top function key block)</td>
+		<td>04</td><td>3D</td>
+		<td>same</td><td>04</td><td>3D</td></tr>
+	<tr><td>18</td><td>66</td><td>F15 (top function key block)</td>
+		<td>5E</td><td>5D</td></tr>
+	<tr><td>19</td><td>71</td><td>Left Alt</td>
+		<td>11</td><td>38</td>
+		<td>same</td><td>11</td><td>38</td></tr>
+	<tr><td>1A</td><td>2C</td><td>Z</td>
+		<td>1A</td><td>2C</td>
+		<td>same</td><td>1A</td><td>2C</td></tr>
+	<tr><td>1B</td><td>1F</td><td>S</td>
+		<td>1B</td><td>1F</td>
+		<td>same</td><td>1B</td><td>1F</td></tr>
+	<tr><td>1C</td><td>1E</td><td>A</td>
+		<td>1C</td><td>1E</td>
+		<td>same</td><td>1C</td><td>1E</td></tr>
+	<tr><td>1D</td><td>11</td><td>W</td>
+		<td>1D</td><td>11</td>
+		<td>same</td><td>1D</td><td>11</td></tr>
+	<tr><td>1E</td><td>03</td><td>2</td>
+		<td>1E</td><td>03</td>
+		<td>same</td><td>1E</td><td>03</td></tr>
+	<tr><td>1F</td><td>5B</td><td>F4 (top function key block)</td>
+		<td>0C</td><td>3E</td>
+		<td>same</td><td>0C</td><td>3E</td></tr>
+	<tr><td>20</td><td>67</td><td>F16 (top function key block)</td>
+		<td>5E</td><td>63</td></tr>
+	<tr><td>21</td><td>2E</td><td>C</td>
+		<td>21</td><td>2E</td>
+		<td>same</td><td>21</td><td>2E</td></tr>
+	<tr><td>22</td><td>2D</td><td>X</td>
+		<td>22</td><td>2D</td>
+		<td>same</td><td>22</td><td>2D</td></tr>
+	<tr><td>23</td><td>20</td><td>D</td>
+		<td>23</td><td>20</td>
+		<td>same</td><td>23</td><td>20</td></tr>
+	<tr><td>24</td><td>12</td><td>E</td>
+		<td>24</td><td>12</td>
+		<td>same</td><td>24</td><td>12</td></tr>
+	<tr><td>25</td><td>05</td><td>4</td>
+		<td>25</td><td>05</td>
+		<td>same</td><td>25</td><td>05</td></tr>
+	<tr><td>26</td><td>04</td><td>3</td>
+		<td>26</td><td>04</td>
+		<td>same</td><td>26</td><td>04</td></tr>
+	<tr><td>27</td><td>5C</td><td>F5 (top function key block)</td>
+		<td>03</td><td>3F</td>
+		<td>same</td><td>03</td><td>3F</td></tr>
+	<tr><td>28</td><td>68</td><td>F17 (top function key block)</td>
+		<td>08</td><td>64</td></tr>
+	<tr><td>29</td><td>39</td><td>Spacebar</td>
+		<td>29</td><td>39</td>
+		<td>same</td><td>29</td><td>39</td></tr>
+	<tr><td>2A</td><td>2F</td><td>V</td>
+		<td>2A</td><td>2F</td>
+		<td>same</td><td>2A</td><td>2F</td></tr>
+	<tr><td>2B</td><td>21</td><td>F</td>
+		<td>2B</td><td>21</td>
+		<td>same</td><td>2B</td><td>21</td></tr>
+	<tr><td>2C</td><td>14</td><td>T</td>
+		<td>2C</td><td>14</td>
+		<td>same</td><td>2C</td><td>14</td></tr>
+	<tr><td>2D</td><td>13</td><td>R</td>
+		<td>2D</td><td>13</td>
+		<td>same</td><td>2D</td><td>13</td></tr>
+	<tr><td>2E</td><td>06</td><td>5</td>
+		<td>2E</td><td>06</td>
+		<td>same</td><td>2E</td><td>06</td></tr>
+	<tr><td>2F</td><td>5D</td><td>F6 (top function key block)</td>
+		<td>0B</td><td>40</td>
+		<td>same</td><td>0B</td><td>40</td></tr>
+	<tr><td>30</td><td>69</td><td>F18 (top function key block)</td>
+		<td>10</td><td>65</td></tr>
+	<tr><td>31</td><td>31</td><td>N</td>
+		<td>31</td><td>31</td>
+		<td>same</td><td>31</td><td>31</td></tr>
+	<tr><td>32</td><td>30</td><td>B</td>
+		<td>32</td><td>30</td>
+		<td>same</td><td>32</td><td>30</td></tr>
+	<tr><td>33</td><td>23</td><td>H</td>
+		<td>33</td><td>23</td>
+		<td>same</td><td>33</td><td>23</td></tr>
+	<tr><td>34</td><td>22</td><td>G</td>
+		<td>34</td><td>22</td>
+		<td>same</td><td>34</td><td>22</td></tr>
+	<tr><td>35</td><td>15</td><td>Y</td>
+		<td>35</td><td>15</td>
+		<td>same</td><td>35</td><td>15</td></tr>
+	<tr><td>36</td><td>07</td><td>6</td>
+		<td>36</td><td>07</td>
+		<td>same</td><td>36</td><td>07</td></tr>
+	<tr><td>37</td><td>5E</td><td>F7 (top function key block)</td>
+		<td>83</td><td>41</td>
+		<td>same</td><td>83</td><td>41</td></tr>
+	<tr><td>38</td><td>6A</td><td>F19 (top function key block)</td>
+		<td>18</td><td>66</td></tr>
+	<tr><td>39</td><td>72</td><td>Right Alt</td>
+		<td>E011</td><td>E038</td>
+		<td>same</td><td>E011</td><td>E038</td></tr>
+	<tr><td>3A</td><td>32</td><td>M</td>
+		<td>3A</td><td>32</td>
+		<td>same</td><td>3A</td><td>32</td></tr>
+	<tr><td>3B</td><td>24</td><td>J</td>
+		<td>3B</td><td>24</td>
+		<td>same</td><td>3B</td><td>24</td></tr>
+	<tr><td>3C</td><td>16</td><td>U</td>
+		<td>3C</td><td>16</td>
+		<td>same</td><td>3C</td></tr>
+	<tr><td>3D</td><td>08</td><td>7</td>
+		<td>3D</td><td>08</td>
+		<td>same</td><td>3D</td><td>08</td></tr>
+	<tr><td>3E</td><td>09</td><td>8</td>
+		<td>3E</td><td>09</td>
+		<td>same</td><td>3E</td><td>09</td></tr>
+	<tr><td>3F</td><td>5F</td><td>F8 (top function key block)</td>
+		<td>0A</td><td>42</td>
+		<td>same</td><td>0A</td><td>42</td></tr>
+	<tr><td>40</td><td>6B</td><td>F20 (top function key block)</td>
+		<td>20</td><td>67</td></tr>
+	<tr><td>41</td><td>33</td><td>&lt;</td>
+		<td>41</td><td>33</td>
+		<td>same</td><td>41</td><td>33</td></tr>
+	<tr><td>42</td><td>25</td><td>K</td>
+		<td>42</td><td>25</td>
+		<td>same</td><td>42</td><td>25</td></tr>
+	<tr><td>43</td><td>17</td><td>I</td>
+		<td>43</td><td>17</td>
+		<td>same</td><td>43</td><td>17</td></tr>
+	<tr><td>44</td><td>18</td><td>O</td>
+		<td>44</td><td>18</td>
+		<td>same</td><td>44</td><td>18</td></tr>
+	<tr><td>45</td><td>0B</td><td>0</td>
+		<td>45</td><td>0B</td>
+		<td>same</td><td>45</td><td>0B</td></tr>
+	<tr><td>46</td><td>0A</td><td>9</td>
+		<td>46</td><td>0A</td>
+		<td>same</td><td>46</td><td>0A</td></tr>
+	<tr><td>47</td><td>60</td><td>F9 (top function key block)</td>
+		<td>01</td><td>43</td>
+		<td>same</td><td>01</td><td>43</td></tr>
+	<tr><td>48</td><td>6C</td><td>F21 (top function key block)</td>
+		<td>28</td><td>68</td></tr>
+	<tr><td>49</td><td>34</td><td>&gt;</td>
+		<td>49</td><td>34</td>
+		<td>same</td><td>49</td><td>34</td></tr>
+	<tr><td>4A</td><td>35</td><td>?</td>
+		<td>4A</td><td>35</td>
+		<td>same</td><td>4A</td><td>35</td></tr>
+	<tr><td>4B</td><td>26</td><td>L</td>
+		<td>4B</td><td>26</td>
+		<td>same</td><td>4B</td><td>26</td></tr>
+	<tr><td>4C</td><td>27</td><td>:</td>
+		<td>4C</td><td>27</td>
+		<td>same</td><td>4C</td><td>27</td></tr>
+	<tr><td>4D</td><td>19</td><td>P</td>
+		<td>4D</td><td>19</td>
+		<td>same</td><td>4D</td><td>19</td></tr>
+	<tr><td>4E</td><td>0C</td><td>-</td>
+		<td>4E</td><td>0C</td>
+		<td>same</td><td>4E</td><td>0C</td></tr>
+	<tr><td>4F</td><td>61</td><td>F10 (top function key block)</td>
+		<td>09</td><td>44</td>
+		<td>same</td><td>09</td><td>44</td></tr>
+	<tr><td>50</td><td>6D</td><td>F22 (top function key block)</td>
+		<td>30</td><td>69</td></tr>
+	<tr><td>51</td><td>73</td><td>Unused position under right Shift</td>
+		<td>51</td><td>73</td>
+		<td>same</td><td>51</td><td>73</td></tr>
+	<tr><td>52</td><td>28</td><td>@</td>
+		<td>52</td><td>28</td>
+		<td>same</td><td>52</td><td>28</td></tr>
+	<tr><td>53</td><td>74</td><td>\ (if adjacent to Enter)</td>
+		<td>5D</td><td>2B</td>
+		<td>same</td><td>5D</td><td>2B</td></tr>
+	<tr><td>54</td><td>1A</td><td>[</td>
+		<td>54</td><td>1A</td>
+		<td>same</td><td>54</td><td>1A</td></tr>
+	<tr><td>55</td><td>0D</td><td>+</td>
+		<td>55</td><td>0D</td>
+		<td>same</td><td>55</td><td>0D</td></tr>
+	<tr><td>56</td><td>62</td><td>F11 (top function key block)</td>
+		<td>78</td><td>57</td>
+		<td>same</td><td>78</td><td>57</td></tr>
+	<tr class="diff">
+		<td>57</td><td>6E</td><td>F23 (top function key block)</td>
+		<td>40</td><td>6A</td>
+		<td>Print Screen / SysRQ</td><td>E07C / 84</td>
+		<td>E037 / 54</td></tr>
+	<tr><td>58</td><td>3A</td><td>Right Ctrl</td>
+		<td>E014</td><td>E01D</td>
+		<td>same</td><td>E014</td><td>E01D</td></tr>
+	<tr><td>59</td><td>36</td><td>Right Shift</td>
+		<td>59</td><td>36</td>
+		<td>same</td><td>59</td><td>36</td></tr>
+	<tr><td>5A</td><td>1C</td><td>Enter</td>
+		<td>5A</td><td>1C</td>
+		<td>same</td><td>5A</td><td>1C</td></tr>
+	<tr><td>5B</td><td>1B</td><td>]</td>
+		<td>5B</td><td>1B</td>
+		<td>same</td><td>5B</td><td>1B</td></tr>
+	<tr><td>5C</td><td>75</td><td>\ (if above Enter)</td>
+		<td>5D</td><td>2B</td>
+		<td>same</td><td>5D</td><td>2B</td></tr>
+	<tr><td>5D</td><td>2B</td><td>\ (if adjacent to Backspace)</td>
+		<td>6A</td><td>7D</td>
+		<td>same</td><td>6A</td><td>7D</td></tr>
+	<tr><td>5E</td><td>63</td><td>F12 (top function key block)</td>
+		<td>07</td><td>58</td>
+		<td>same</td><td>07</td><td>58</td></tr>
+	<tr class="diff">
+		<td>5F</td><td>76</td><td>F24 (top function key block)</td>
+		<td>40</td><td>6B</td>		
+		<td>Scroll Lock</td><td>7E</td><td>46</td></tr>
+	<tr><td>60</td><td>55</td><td>Cursor down</td>
+		<td>E072</td><td>E050</td>
+		<td>same</td><td>E072</td><td>E050</td></tr>
+	<tr><td>61</td><td>56</td><td>Cursor left</td>
+		<td>E06B</td><td>E04B</td>
+		<td>same</td><td>E06B</td><td>E04B</td></tr>
+	<tr class="diff">
+		<td>62</td><td>77</td><td>Key between cursor keys</td>
+		<td>E06C</td><td>E047</td>
+	<td>Pause / Break</td><td>77 / E07E</td><td>45 / E046</td></tr>
+	<tr><td>63</td><td>78</td><td>Cursor up</td>
+		<td>E075</td><td>E048</td>
+		<td>same</td><td>E075</td><td>E048</td></tr>
+	<tr class="diff">
+		<td>64</td><td>79</td><td>3x2 block, lower row, left column 
+			(End)</td>
+		<td>E069</td><td>E04F</td>
+		<td>(Delete)</td><td>E071</td><td>E053</td></tr>
+	<tr class="diff">
+		<td>65</td><td>7A</td><td>3x2 block, lower row, middle 
+			column (Insert)</td>
+		<td>E070</td><td>E052</td>
+		<td>(End)</td><td>E069</td><td>E04F</td></tr>
+	<tr><td>66</td><td>0E</td><td>Backspace</td>
+		<td>66</td><td>0E</td>
+		<td>same</td><td>66</td><td>0E</td></tr>
+	<tr class="diff">
+		<td>67</td><td>7B</td><td>3x2 block, upper row, left column 
+			(PA1)</td>
+		<td>17</td><td>5A</td>
+		<td>(Insert)</td><td>E070</td><td>E052</td></tr>
+	<tr><td>68</td><td>7C</td><td>Unused position under keypad 0</td>
+		<td>68</td><td>7C</td>
+		<td>same</td><td>68</td><td>7C</td></tr>
+	<tr><td>69</td><td>4F</td><td>Keypad 1</td>
+		<td>69</td><td>4F</td>
+		<td>same</td><td>69</td><td>4F</td></tr>
+	<tr><td>6A</td><td>7D</td><td>Cursor right</td>
+		<td>E074</td><td>E04D</td>
+		<td>same</td><td>E074</td><td>E04D</td></tr>
+	<tr><td>6B</td><td>4B</td><td>Keypad 4</td>
+		<td>6B</td><td>4B</td>
+		<td>same</td><td>6B</td><td>4B</td></tr>
+	<tr><td>6C</td><td>47</td><td>Keypad 7</td>
+		<td>6C</td><td>47</td>
+		<td>same</td><td>6C</td><td>47</td></tr>
+	<tr class="diff">
+		<td>6D</td><td>7E</td><td>3x2 block, lower row, right column 
+			(Delete)</td>
+		<td>E071</td><td>E053</td>
+		<td>(PgDn)</td><td>E07A</td><td>E051</td></tr>
+	<tr class="diff">
+		<td>6E</td><td>7F</td><td>3x2 block, upper row, middle column
+		       	(PgUp)</td>
+		<td>E07D</td><td>E049</td>
+		<td>(Home)</td><td>E06C</td><td>E047</td></tr>
+	<tr class="diff">
+		<td>6F</td><td>6F</td><td>3x2 block, upper row, right column
+		       	(PgDn)</td>
+		<td>E07A</td><td>E051</td>
+		<td>(PgUp)</td><td>E07D</td><td>E049</td></tr>
+	<tr><td>70</td><td>52</td><td>Keypad 0</td>
+		<td>70</td><td>52</td>
+		<td>same</td><td>70</td><td>52</td></tr>
+	<tr><td>71</td><td>53</td><td>Keypad .</td>
+		<td>71</td><td>53</td>
+		<td>same</td><td>71</td><td>53</td></tr>
+	<tr><td>72</td><td>50</td><td>Keypad 2</td>
+		<td>72</td><td>50</td>
+		<td>same</td><td>72</td><td>50</td></tr>
+	<tr><td>73</td><td>4C</td><td>Keypad 5</td>
+		<td>73</td><td>4C</td>
+		<td>same</td><td>73</td><td>4C</td></tr>
+	<tr><td>74</td><td>4D</td><td>Keypad 6</td>
+		<td>74</td><td>4D</td>
+		<td>same</td><td>74</td><td>4D</td></tr>
+	<tr><td>75</td><td>48</td><td>Keypad 8</td>
+		<td>75</td><td>48</td>
+		<td>same</td><td>75</td><td>48</td></tr>
+	<tr class="diff"><td>76</td><td>01</td><td>Keypad top left corner
+		(Esc)</td>
+		<td>76</td><td>01</td>
+		<td>(Num Lock)</td><td>77</td><td>46</td></tr>
+	
+	<tr class="diff"><td>77</td><td>45</td><td>Keypad top row, second 
+			column (NumLk / ScrLk)</td>
+		<td>7E / 77</td><td>46 / 45</td>
+		<td>(Keypad /)</td><td>E04A</td><td>E035</td></tr>
+	<tr class="diff"><td>78</td><td>57</td><td>Unused position under 
+			keypad Enter</td>
+		<td>63</td><td>78</td>
+		<td>same</td><td>63</td><td>78</td></tr>
+	<tr><td>79</td><td>4E</td><td>Keypad Enter</td>
+		<td>E05A</td><td>E01C</td>
+		<td>same</td><td>E05A</td><td>E01C</td></tr>
+	<tr><td>7A</td><td>51</td><td>Keypad 3</td>
+		<td>7A</td><td>51</td>
+		<td>same</td><td>7A</td><td>51</td></tr>
+	<tr class="diff">
+		<td>7B</td><td>4A</td><td>Keypad -</td>
+		<td>7B</td><td>4A</td>
+		<td>Unused position under Keypad +</td>
+		<td>6D</td><td>7E</td></tr>
+	<tr><td>7C</td><td>37</td><td>Keypad +</td>
+		<td>79</td><td>4E</td>
+		<td>same</td><td>79</td><td>4E</td></tr>
+	<tr><td>7D</td><td>49</td><td>Keypad 9</td>
+		<td>7D</td><td>49</td>
+		<td>same</td><td>7D</td><td>49</td></tr>
+	<tr><td>7E</td><td>46</td><td>Keypad top row, third column (*)</td>
+		<td>7C</td><td>37</td>
+		<td>same</td><td>7C</td><td>37</td></tr>
+	<tr><td>83</td><td>41</td><td>F7 (left function key block)</td>
+		<td>E07C</td><td>E037</td></tr>
+	<tr class="diff">
+		<td>84</td><td>54</td><td>Keypad top right hand corner (/)</td>
+		<td>E04A / E07E</td><td>E035 / E046</td>
+		<td>(keypad -)</td><td>7B</td><td>4A</td></tr>
+	<tr><td colspan="8">And the following six aren't present on
+			the 122-key board, but are included for 
+			completeness:</td></tr>
+	<tr><td>8B</td><td>8B</td><td></td>
+		<td></td><td></td>
+		<td>Left Windows</td><td>E01F</td><td>E05B</td></tr>
+	<tr><td>8C</td><td>8C</td><td></td>
+		<td></td><td></td>
+		<td>Right Windows</td><td>E027</td><td>E05C</td></tr>
+	<tr><td>8D</td><td>8D</td><td></td>
+		<td></td><td></td>
+		<td>Menu</td><td>E02F</td><td>E05D</td></tr>
+	<tr><td>none</td><td>none</td><td></td>
+		<td></td><td></td>
+		<td>Wake</td><td>E05E</td><td>E063</td></tr>
+	<tr><td>none</td><td>none</td><td></td>
+		<td></td><td></td>
+		<td>Sleep</td><td>E03F</td><td>E05F</td></tr>
+	<tr><td>none</td><td>none</td><td></td>
+		<td></td><td></td>
+		<td>Power</td><td>E037</td><td>E05E</td></tr>
+</tbody>
+</table>
+<p>A minor oddity: A 122-key IBM board in set 3 can return 127 scancodes. 
+These are all in a nice consecutive 7-bit range, except for two. The key that
+(from diagrams) you'd expect to send 02h, sends 83h. And the 7Fh key sends 
+84h. If the microcontroller on the motherboard is translating scancodes, it
+treats these pairs as identical: both 02h and 83h get mapped to 41h, and both 
+7Fh and 84h get mapped to 54h.</p>
+<p>Possibly these two keys had some special meaning on the 3270-series 
+terminals where set 3 scancodes seem to have originated.</p>
+
+<h2>Under Windows 3.0</h2>
+<p>The keyboard is supplied with a driver for Windows 3.0, which must be 
+installed by editing SYSTEM.INI. The driver makes scancodes from the extra
+keys on the keyboard register as Windows virtual keys.</p>
+
+<p>Oddly, the VK codes returned by function keys F17-F24 do not match the 
+ones defined in &lt;windows.h&gt;. This appears to be because VK_F17 and 
+VK_F18 have different definitions in the Windows SDK and DDK, and VK_F19 and 
+up just aren't there. The same mismatch on VK_F17 and VK_F18 is still present 
+in the Windows 98 DDK. There is a brief mention in the DDK documentation that
+the 'wrong' F17 and F18 are specific to the Olivetti M24 102-key keyboard, 
+but that still doesn't explain why the same symbols were used for different
+keycodes, or why the DDK is missing VK_F19 to VK_F24.</p>
+<table border="1">
+<thead><tr><th>Key</th><th>VK_ code in Windows 3.1 SDK</th><th>Driver returns</th></tr></thead>
+<tbody>
+<tr><td>F17</td><td>0x80</td><td>0xE0 (Olivetti F17)</td></tr>
+<tr><td>F18</td><td>0x81</td><td>0xE1 (Olivetti F18)</td></tr>
+<tr><td>F19</td><td>0x82</td><td>0x8A</td></tr>
+<tr><td>F20</td><td>0x83</td><td>0x8B</td></tr>
+<tr><td>F21</td><td>0x84</td><td>0x8C</td></tr>
+<tr><td>F22</td><td>0x85</td><td>0x8D</td></tr>
+<tr><td>F23</td><td>0x86</td><td>0x8E</td></tr>
+<tr><td>F24</td><td>0x87</td><td>0x8F</td></tr>
+</tbody>
+</table>
+
+<h3>Driver Internals</h3>
+<p>Internally, the driver is very similar to the one that comes with Windows
+3.0. The points of difference are:</p>
+<ul>
+<li>The keyboard subtype (obtained by <code>GetKeyboardType(1)</code> ) is 
+set to 1. The normal driver returns subtype 0.</li>
+<li>Scancode tables are longer to support the extra scan codes.</li>
+<li>The <code>GetKeyNameText()</code> function supports the extra scan 
+codes.</li>
+<li>If interrogated by <code>GetKeyboardType(2)</code>, the driver reports 24 
+function keys rather than 12.</li>
+<li>Keys with scancodes between 0x70 and 0x76 (ie: Attn, Clear, CrSel, ExSel
+and Zoom) generate key-down and key-up events when pressed, and nothing when
+released.</li>
+<li>Since SysRq is not on the same key as PrintScreen, the code that 
+distinguishes between SysRq and PrintScreen is slightly different.</li>
+<li>On keyboards with a Shift Lock (rather than Caps Lock) key, there is
+extra code in ToASCII() to distinguish real shifts from shifts generated
+by Shift Lock being on.</li>
+</ul>
+
+<h2>Under Windows NT / 2000 / XP</h2>
+<p>The extra keys (F13-F24 and so on) return scancodes under Windows NT 3.5 
+and later. However, the VK_ codes they use do not match the keycaps. 
+This can be corrected with replacement layout DLLs. Suitable US/UK files 
+are available <a href="https://www.seasip.info/Misc/122key_nt.html">here</a>, with instructions
+how to generate your own in other languages.</p>
+
+<h2>Under Linux</h2>
+<p>The following scripts allow the extra keys to be used under Linux (tested
+on Ubuntu 9.10, in X11):</p>
+<ol>
+<li><a href="https://www.seasip.info/Misc/keycodes_1227t">keycodes_1227t</a>: Assigns Linux keycodes to the 
+extra keys. Put this in (say) /usr/local/sbin:
+<blockquote>
+<kbd>sudo install -m 755 keycodes_1227t /usr/local/sbin</kbd>
+</blockquote>
+and then add a line to /etc/rc.local to call it, just before the "exit 0":
+<blockquote>
+<tt># By default this script does nothing.<br>
+<br>
+<b>/usr/local/sbin/keycodes_1227t</b><br>
+exit 0</tt>
+</blockquote>
+</li>
+<li><a href="https://www.seasip.info/Misc/xmodmap">xmodmap</a> should be saved in your home directory and
+renamed to <code>.Xmodmap</code>, with a leading dot and a capital X. The 
+next time you log in, you should be asked whether to load the file. Highlight
+the ".Xmodmap" file and click "Load".</li>
+<li>You will probably also need to add the option <tt>atkbd.softraw=0</tt> to
+the kernel command line. Edit <code> /boot/grub/menu.lst</code> and add it
+to the end of the line that starts <code>kernel</code>.
+</li></ol>
+<p>If this worked, you should be able to run <kbd>xev</kbd> and see keypresses
+on the extra keys being detected.</p>
+<hr>
+<p><a href="mailto:seasip.webmaster@gmail.com">John Elliott</a>
+21 July 2011.</p>
+</div>
+
+
+</body></html>
