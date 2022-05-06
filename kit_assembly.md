@@ -56,7 +56,7 @@ Orient plate the plate as shown, insert four `8mm Screws` into the marked holes:
 
 Put something rigid (cardboard, etc) over the screws, and flip the whole thing over.
 
-The screws should stay in place, insert four `2.5mm Standoffs` over the screws:
+The screws should stay in place, insert four `2.5mm Spacers` over the screws:
 
 ![Alt text](photos/flip.jpeg)
 
