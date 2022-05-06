@@ -170,7 +170,6 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_PS2_MOUSE:
-      case PROTOCOL_PS2_MOUSE_KVM:
         ps2mouse_init(PS2MOUSE_CLK_GPIO_Port, PS2MOUSE_CLK_Pin, PS2MOUSE_DATA_GPIO_Port, PS2MOUSE_DATA_Pin);
         break;
 
@@ -199,7 +198,6 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_PS2_MOUSE:
-      case PROTOCOL_PS2_MOUSE_KVM:
         ps2mouse_reset();
         ps2mouse_release_lines();
         break;
@@ -326,10 +324,7 @@ void ps2mouse_update(void)
     return;
   }
 
-  uint8_t inhibit_timeout_ms = 200;
-  if(is_protocol_enabled(PROTOCOL_PS2_MOUSE_KVM))
-    inhibit_timeout_ms = 1;
-  if(ps2mouse_send_update(&my_ps2_outbuf, inhibit_timeout_ms) != PS2_OK)
+  if(ps2mouse_send_update(&my_ps2_outbuf) != PS2_OK)
   {
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
     uint32_t enter_time = HAL_GetTick();
@@ -462,7 +457,6 @@ void protocol_status_lookup_init(void)
   protocol_status_lookup[PROTOCOL_AT_PS2_KB] = PROTOCOL_STATUS_ENABLED;
   protocol_status_lookup[PROTOCOL_XT_KB] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_PS2_MOUSE] = PROTOCOL_STATUS_ENABLED;
-  protocol_status_lookup[PROTOCOL_PS2_MOUSE_KVM] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_MICROSOFT_SERIAL_MOUSE] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_GENERIC_GAMEPORT_GAMEPAD] = PROTOCOL_STATUS_ENABLED;
 }
@@ -604,7 +598,7 @@ int main(void)
   /* USER CODE BEGIN 3 */
 
     // If both enabled, PS2 mouse takes priority
-    if((is_protocol_enabled(PROTOCOL_PS2_MOUSE) || is_protocol_enabled(PROTOCOL_PS2_MOUSE_KVM)) && IS_PS2MOUSE_PRESENT())
+    if(is_protocol_enabled(PROTOCOL_PS2_MOUSE) && IS_PS2MOUSE_PRESENT())
       ps2mouse_update();
     else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
       microsoft_serial_mouse_update();

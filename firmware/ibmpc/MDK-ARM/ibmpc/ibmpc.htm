@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ibmpc\ibmpc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ibmpc\ibmpc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri May 06 17:32:07 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri May 06 20:56:08 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -977,7 +977,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
-<P><STRONG><a name="[60]"></a>handle_protocol_switch</STRONG> (Thumb, 152 bytes, Stack size 16 bytes, main.o(i.handle_protocol_switch))
+<P><STRONG><a name="[60]"></a>handle_protocol_switch</STRONG> (Thumb, 148 bytes, Stack size 16 bytes, main.o(i.handle_protocol_switch))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = handle_protocol_switch &rArr; gameport_init &rArr; mcp4451_reset &rArr; HAL_Delay
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xtkb_release_lines
@@ -999,8 +999,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[3a]"></a>is_protocol_enabled</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, main.o(i.is_protocol_enabled))
-<BR><BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
-<LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR><BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_EXTI_Callback
 </UL>
 
@@ -1067,7 +1066,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_update
 </UL>
 
-<P><STRONG><a name="[26]"></a>main</STRONG> (Thumb, 426 bytes, Stack size 16 bytes, main.o(i.main))
+<P><STRONG><a name="[26]"></a>main</STRONG> (Thumb, 416 bytes, Stack size 16 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 212<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART3_UART_Init
@@ -1207,7 +1206,7 @@ Global Symbols
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
 </UL>
 
-<P><STRONG><a name="[b4]"></a>protocol_status_lookup_init</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, main.o(i.protocol_status_lookup_init))
+<P><STRONG><a name="[b4]"></a>protocol_status_lookup_init</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, main.o(i.protocol_status_lookup_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = protocol_status_lookup_init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
@@ -1434,7 +1433,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[d4]"></a>ps2mouse_send_update</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, ps2mouse.o(i.ps2mouse_send_update))
+<P><STRONG><a name="[d4]"></a>ps2mouse_send_update</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, ps2mouse.o(i.ps2mouse_send_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = ps2mouse_send_update &rArr; ps2mouse_write &rArr; ps2mouse_write_nowait &rArr; ps2mouse_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_write
@@ -1442,7 +1441,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
 </UL>
 
-<P><STRONG><a name="[bb]"></a>ps2mouse_update</STRONG> (Thumb, 162 bytes, Stack size 16 bytes, main.o(i.ps2mouse_update))
+<P><STRONG><a name="[bb]"></a>ps2mouse_update</STRONG> (Thumb, 146 bytes, Stack size 16 bytes, main.o(i.ps2mouse_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = ps2mouse_update &rArr; ps2mouse_host_req_reply &rArr; ps2mouse_write_delay_start &rArr; ps2mouse_write_nowait &rArr; ps2mouse_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_send_update
@@ -1456,7 +1455,6 @@ Global Symbols
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
-<LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_protocol_enabled
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>

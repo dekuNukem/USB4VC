@@ -390,14 +390,13 @@ uint8_t ps2mouse_write_nowait(uint8_t data)
   return PS2_OK;
 }
 
-uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf, uint8_t inhibit_timeout_ms)
+uint8_t ps2mouse_send_update(ps2_outgoing_buf* pbuf)
 {
   uint8_t write_result;
   for (int i = 0; i < pbuf->size; ++i)
   {
     // return error if inhibited or interrupted while transmitting
-    // kvm mode = 3, direct mode = 200
-    write_result = ps2mouse_write(pbuf->data[i], inhibit_timeout_ms);
+    write_result = ps2mouse_write(pbuf->data[i], 200);
     if(write_result)
       return write_result;
   }
