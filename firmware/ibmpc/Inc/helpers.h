@@ -64,6 +64,7 @@ typedef struct
   uint8_t button_right;
   uint8_t button_side;
   uint8_t button_extra;
+  uint8_t has_button_transition;
 } mouse_event;
 
 typedef struct

@@ -1,3 +1,37 @@
+    uint8_t payload = 0x4D;
+    mouse_uart_switch_to_8bit();
+    HAL_UART_Transmit(&huart3, (unsigned char *)&payload, 1, 100);
+    HAL_Delay(100);
+    mouse_uart_switch_to_7bit();
+    HAL_UART_Transmit(&huart3, (unsigned char *)&payload, 1, 100);
+    HAL_Delay(100);
+    HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
+    
+
+void mouse_uart_switch_to_8bit(void)
+{
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  printf("8 %d", HAL_UART_Init(&huart3));
+}
+
+void mouse_uart_switch_to_7bit(void)
+{
+  huart3.Init.WordLength = UART_WORDLENGTH_7B;
+  // HAL_UART_Init(&huart3);
+  printf("7 %d", HAL_UART_Init(&huart3));
+}
+while (1)
+  {
+    uint8_t payload = 0xaa;
+    // mouse_uart_switch_to_8bit();
+    HAL_UART_Transmit(&huart3, (unsigned char *)&payload, 1, 100);
+    HAL_Delay(100);
+    // mouse_uart_switch_to_7bit();
+    // payload = 0xaa;
+    // HAL_UART_Transmit(&huart3, (unsigned char *)&payload, 1, 100);
+    // HAL_Delay(100);
+    HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
+
 uint8_t is_ps2_mouse_connected_prev;
 
 void ps2mouse_update(void)
