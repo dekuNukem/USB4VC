@@ -1,3 +1,9 @@
+
+def get_stick_axes(this_device):
+    if 'DualSense' in this_device['gamepad_type']:
+        return ["ABS_X", "ABS_Y", "ABS_Z", "ABS_RZ"]
+    return ["ABS_X", "ABS_Y", "ABS_RX", "ABS_RY"]
+
     # "ABS_X",
     # "ABS_Y",
     # "ABS_Z",

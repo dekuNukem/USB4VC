@@ -724,10 +724,7 @@ def multiply_round_up_0(number, multi):
         new_number = -1
     return int(new_number)
 
-def get_stick_axes(this_device):
-    if 'DualSense' in this_device['gamepad_type']:
-        return ["ABS_X", "ABS_Y", "ABS_Z", "ABS_RZ"]
-    return ["ABS_X", "ABS_Y", "ABS_RX", "ABS_RY"]
+USB_GAMEPAD_STICK_AXES_NAMES = ["ABS_X", "ABS_Y", "ABS_RX", "ABS_RY"]
 
 gamepad_status_dict = {}
 gamepad_hold_check_interval = 0.02
@@ -826,11 +823,11 @@ def raw_input_event_worker():
                         clear_mouse_movement(mouse_status_dict)
                         last_mouse_msg = list(this_mouse_msg)
                 if this_device['is_gp']:
-                    for stick_axes_name in get_stick_axes(this_device):
-                        axes_code = usb4vc_shared.code_name_to_value_lookup.get(stick_axes_name)[0]
+                    for axis_name in USB_GAMEPAD_STICK_AXES_NAMES:
+                        axis_code = usb4vc_shared.code_name_to_value_lookup.get(axis_name)[0]
                         this_gp_dict = gamepad_status_dict[this_device['id']]
-                        if axes_code in this_gp_dict and 127 - 12 <= this_gp_dict[axes_code] <= 127 + 12:
-                            this_gp_dict[axes_code] = 127
+                        if axis_code in this_gp_dict and 127 - 12 <= this_gp_dict[axis_code] <= 127 + 12:
+                            this_gp_dict[axis_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
                     if gamepad_output != last_gamepad_msg:
                         # print(gamepad_output)
