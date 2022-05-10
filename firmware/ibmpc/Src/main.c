@@ -121,6 +121,19 @@ static void MX_IWDG_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
+
+void mouse_uart_switch_to_8bit(void)
+{
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  HAL_UART_Init(&huart3);
+}
+
+void mouse_uart_switch_to_7bit(void)
+{
+  huart3.Init.WordLength = UART_WORDLENGTH_7B;
+  HAL_UART_Init(&huart3);
+}
+
 int fputc(int ch, FILE *f)
 {
   HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
@@ -177,6 +190,11 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
+        mouse_uart_switch_to_7bit();
+        break;
+
+      case PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE:
+        mouse_uart_switch_to_8bit();
         break;
 
       case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
@@ -206,6 +224,9 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_MICROSOFT_SERIAL_MOUSE:
+        break;
+
+      case PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE:
         break;
 
       case PROTOCOL_GENERIC_GAMEPORT_GAMEPAD:
@@ -415,7 +436,7 @@ void microsoft_serial_mouse_update(void)
 
   if(serial_mouse_is_tx_in_progress)
   {
-    if(this_mouse_event->has_button_transition == 0)
+    if(this_mouse_event->has_button_transition == 0) // dont throw away events that have button transitions
       mouse_buf_pop(&my_mouse_buf);
     return;
   }
@@ -471,6 +492,7 @@ void protocol_status_lookup_init(void)
   protocol_status_lookup[PROTOCOL_XT_KB] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_PS2_MOUSE] = PROTOCOL_STATUS_ENABLED;
   protocol_status_lookup[PROTOCOL_MICROSOFT_SERIAL_MOUSE] = PROTOCOL_STATUS_DISABLED;
+  protocol_status_lookup[PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_GENERIC_GAMEPORT_GAMEPAD] = PROTOCOL_STATUS_ENABLED;
 }
 
@@ -527,19 +549,7 @@ huart3.Init.WordLength = UART_WORDLENGTH_7B;
 !!!!!!!!!!!!!!!!!!!!!!
 */
 
-void mouse_uart_switch_to_8bit(void)
-{
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  HAL_UART_Init(&huart3);
-}
-
-void mouse_uart_switch_to_7bit(void)
-{
-  huart3.Init.WordLength = UART_WORDLENGTH_7B;
-  HAL_UART_Init(&huart3);
-}
-
-void mousesystem_update(void)
+void mousesystems_serial_mouse_update(void)
 {
   mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
   if(this_mouse_event == NULL)
@@ -547,7 +557,7 @@ void mousesystem_update(void)
 
   if(serial_mouse_is_tx_in_progress)
   {
-    if(this_mouse_event->has_button_transition == 0)
+    if(this_mouse_event->has_button_transition == 0) // don't throw away mouse events that has button transitions
       mouse_buf_pop(&my_mouse_buf);
     return;
   }
@@ -568,7 +578,7 @@ void mousesystem_update(void)
   HAL_UART_Transmit_IT(&huart3, mousesystems_serial_mouse_output_buf, MOUSESYSTEMS_SERIAL_MOUSE_BUF_SIZE);
   serial_mouse_is_tx_in_progress = 1;
   if(this_mouse_event->has_button_transition)
-    HAL_Delay(10);
+    HAL_Delay(10); // wait a bit for the computer to register button press
 }
 
 /* USER CODE END 0 */
@@ -646,32 +656,31 @@ int main(void)
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
   }
 
-  mouse_uart_switch_to_8bit();
   while (1)
   {
     HAL_IWDG_Refresh(&hiwdg);
-    mousesystem_update();
-
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
 
-    // // If both enabled, PS2 mouse takes priority
-    // if(is_protocol_enabled(PROTOCOL_PS2_MOUSE) && IS_PS2MOUSE_PRESENT())
-    //   ps2mouse_update();
-    // else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
-    //   microsoft_serial_mouse_update();
-    // // If both enabled, PS2 keyboard takes priority
-    // if(is_protocol_enabled(PROTOCOL_AT_PS2_KB) && IS_KB_PRESENT())
-    //   ps2kb_update();
-    // else if(is_protocol_enabled(PROTOCOL_XT_KB) && IS_KB_PRESENT())
-    //   xtkb_update();
+    // If more than one enabled, PS2 mouse takes priority
+    if(is_protocol_enabled(PROTOCOL_PS2_MOUSE) && IS_PS2MOUSE_PRESENT())
+      ps2mouse_update();
+    else if(is_protocol_enabled(PROTOCOL_MICROSOFT_SERIAL_MOUSE))
+      microsoft_serial_mouse_update();
+    else if(is_protocol_enabled(PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE))
+      mousesystems_serial_mouse_update();
+    // If both enabled, PS2 keyboard takes priority
+    if(is_protocol_enabled(PROTOCOL_AT_PS2_KB) && IS_KB_PRESENT())
+      ps2kb_update();
+    else if(is_protocol_enabled(PROTOCOL_XT_KB) && IS_KB_PRESENT())
+      xtkb_update();
 
-    // if(is_protocol_enabled(PROTOCOL_GENERIC_GAMEPORT_GAMEPAD))
-    //   gamepad_update();
+    if(is_protocol_enabled(PROTOCOL_GENERIC_GAMEPORT_GAMEPAD))
+      gamepad_update();
 
-    // if(spi_error_occured)
-    //   spi_error_dump_reboot();
+    if(spi_error_occured)
+      spi_error_dump_reboot();
   }
   /* USER CODE END 3 */
 

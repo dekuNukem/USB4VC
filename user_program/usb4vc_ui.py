@@ -145,6 +145,7 @@ PROTOCOL_PS2_MOUSE_NORMAL = {'pid':4, 'display_name':"PS/2"}
 PROTOCOL_MICROSOFT_SERIAL_MOUSE = {'pid':5, 'display_name':"Microsft Serial"}
 PROTOCOL_ADB_MOUSE = {'pid':6, 'display_name':"ADB"}
 PROTOCOL_15PIN_GAMEPORT_GAMEPAD = {'pid':7, 'display_name':"Generic 15-Pin", 'mapping':IBM_GENERIC_USB_GAMEPAD_TO_15PIN_GAMEPORT_GAMEPAD_DEAULT_MAPPING}
+PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE = {'pid':8, 'display_name':"MouseSys Serial"}
 PROTOCOL_USB_GP_TO_MOUSE_KB = {'pid':0, 'display_name':'Mouse & KB', 'mapping':GENERIC_USB_GAMEPAD_TO_MOUSE_KB_DEAULT_MAPPING}
 PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
@@ -294,7 +295,7 @@ def update_from_usb(usb_config_path):
         os.system("mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
 
 ibmpc_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
-ibmpc_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE_NORMAL, PROTOCOL_MICROSOFT_SERIAL_MOUSE]
+ibmpc_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE_NORMAL, PROTOCOL_MICROSOFT_SERIAL_MOUSE, PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE]
 ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_15PIN_GAMEPORT_GAMEPAD, PROTOCOL_USB_GP_TO_MOUSE_KB]
 
 adb_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_KB]
