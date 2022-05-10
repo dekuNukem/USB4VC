@@ -20,12 +20,10 @@ def gamepad_type_lookup(vendor_id, product_id):
     return GAMEPAD_TYPE_UNKNOWN
 
 ABS_Z = 0x02
-ABS_RX = 0x03
-ABS_RY = 0x04
 ABS_RZ = 0x05
 xbox_one_analog_trigger_codes = {ABS_Z, ABS_RZ}
 ps4_analog_trigger_codes = {ABS_Z, ABS_RZ}
-ps5_analog_trigger_codes = {ABS_RX, ABS_RY}
+ps5_analog_trigger_codes = {ABS_Z, ABS_RZ}
 
 def is_analog_trigger(ev_code, gamepad_type):
     if "Xbox" in gamepad_type and ev_code in xbox_one_analog_trigger_codes:
@@ -221,27 +219,26 @@ XBOX_DEFAULT_MAPPING = {
 
 PS5_DEFAULT_MAPPING = {
     # buttons to buttons
-    'BTN_EAST': {'code':'IBM_GGP_BTN_1'},
-    'BTN_SOUTH': {'code':'IBM_GGP_BTN_2'},
-    'BTN_C': {'code':'IBM_GGP_BTN_3'},
-    'BTN_NORTH': {'code':'IBM_GGP_BTN_4'},
+    'PS_CROSS': {'code':'IBM_GGP_BTN_1'},
+    'PS_SQUARE': {'code':'IBM_GGP_BTN_2'},
+    'PS_CIRCLE': {'code':'IBM_GGP_BTN_3'},
+    'PS_TRIANGLE': {'code':'IBM_GGP_BTN_4'},
     
-    'BTN_WEST': {'code':'IBM_GGP_BTN_3'},
-    'BTN_Z': {'code':'IBM_GGP_BTN_4'},
+    'PS_L1': {'code':'IBM_GGP_BTN_3'},
+    'PS_R1': {'code':'IBM_GGP_BTN_4'},
 
-    # 'BTN_TL': {'code':'IBM_GGP_BTN_3'},
-    # 'BTN_TR': {'code':'IBM_GGP_BTN_4'},
+    # 'PS_L2_BUTTON': {'code':'IBM_GGP_BTN_3'},
+    # 'PS_R2_BUTTON': {'code':'IBM_GGP_BTN_4'},
 
     # analog axes to analog axes
-    'ABS_X': {'code':'IBM_GGP_JS1_X'},
-    'ABS_Y': {'code':'IBM_GGP_JS1_Y'},
-    'ABS_HAT0X': {'code':'IBM_GGP_JS1_X'},
-    'ABS_HAT0Y': {'code':'IBM_GGP_JS1_Y'},
-    'ABS_Z': {'code':'IBM_GGP_JS2_X'},
-    'ABS_RZ': {'code':'IBM_GGP_JS2_Y'},
-
-    'ABS_RX':{'code':'IBM_GGP_JS2_YP'},
-    'ABS_RY':{'code':'IBM_GGP_JS2_YN'},
+    'PS_LSX': {'code':'IBM_GGP_JS1_X'},
+    'PS_LSY': {'code':'IBM_GGP_JS1_Y'},
+    'PS_DPX': {'code':'IBM_GGP_JS1_X'},
+    'PS_DPY': {'code':'IBM_GGP_JS1_Y'},
+    'PS_RSX': {'code':'IBM_GGP_JS2_X'},
+    'PS_RSY': {'code':'IBM_GGP_JS2_Y'},
+    'PS_L2_ANALOG':{'code':'IBM_GGP_JS2_YP'},
+    'PS_R2_ANALOG':{'code':'IBM_GGP_JS2_YN'},
 }
 
 PS4_DEFAULT_MAPPING = {
@@ -267,7 +264,6 @@ PS4_DEFAULT_MAPPING = {
     'PS_L2_ANALOG':{'code':'IBM_GGP_JS2_YP'},
     'PS_R2_ANALOG':{'code':'IBM_GGP_JS2_YN'},
 }
-
 
 GENERIC_DEFAULT_MAPPING = {
     # buttons to buttons

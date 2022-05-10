@@ -826,11 +826,11 @@ def raw_input_event_worker():
                     for axis_name in USB_GAMEPAD_STICK_AXES_NAMES:
                         axis_code = usb4vc_shared.code_name_to_value_lookup.get(axis_name)[0]
                         this_gp_dict = gamepad_status_dict[this_device['id']]
-                        if axis_code in this_gp_dict and 127 - 12 <= this_gp_dict[axis_code] <= 127 + 12:
+                        if axis_code in this_gp_dict and 127 - 10 <= this_gp_dict[axis_code] <= 127 + 10:
                             this_gp_dict[axis_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
                     if gamepad_output != last_gamepad_msg:
-                        # print(gamepad_output)
+                        print(gamepad_output)
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
                         pcard_spi.xfer(list(gp_to_transfer))
                         if kb_to_transfer is not None:

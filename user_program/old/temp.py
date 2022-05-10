@@ -1,3 +1,20 @@
+ABS_Z = 0x02
+ABS_RX = 0x03
+ABS_RY = 0x04
+ABS_RZ = 0x05
+xbox_one_analog_trigger_codes = {ABS_Z, ABS_RZ}
+ps4_analog_trigger_codes = {ABS_Z, ABS_RZ}
+ps5_analog_trigger_codes = {ABS_Z, ABS_RZ}
+
+def is_analog_trigger(ev_code, gamepad_type):
+    if "Xbox" in gamepad_type and ev_code in xbox_one_analog_trigger_codes:
+        return True
+    if 'DualSense' in gamepad_type and ev_code in ps5_analog_trigger_codes:
+        return True
+    if 'DualShock' in gamepad_type and ev_code in ps4_analog_trigger_codes:
+        return True
+    return False
+
 
 def get_stick_axes(this_device):
     if 'DualSense' in this_device['gamepad_type']:
