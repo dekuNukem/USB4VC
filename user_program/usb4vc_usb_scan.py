@@ -830,7 +830,7 @@ def raw_input_event_worker():
                             this_gp_dict[axis_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
                     if gamepad_output != last_gamepad_msg:
-                        print(gamepad_output)
+                        # print(gamepad_output)
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
                         pcard_spi.xfer(list(gp_to_transfer))
                         if kb_to_transfer is not None:
