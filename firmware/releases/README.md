@@ -2,6 +2,14 @@
 
 ## IBM PC Protocol Card
 
+### 0.5.0
+
+* Released 10 May 2022
+
+* Added Mousesystems serial mouse protocol
+
+* Tested working with CTMOUSE driver on a Pentium 1 DOS PC.
+
 ### 0.4.0
 
 * Released 6 May 2022
