@@ -2,6 +2,12 @@
 
 ## IBM PC Protocol Card
 
+### 0.5.1
+
+* Released 12 May 2022
+
+* Improved PS/2 mouse line idle detection.
+
 ### 0.5.0
 
 * Released 10 May 2022

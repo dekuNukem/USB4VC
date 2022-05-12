@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ibmpc\ibmpc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ibmpc\ibmpc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue May 10 13:07:42 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu May 12 22:57:32 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1160,7 +1160,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[95]"></a>micros</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, delay_us.o(i.micros))
-<BR><BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
+<BR><BR>[Called By]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 
 <P><STRONG><a name="[be]"></a>microsoft_serial_mouse_update</STRONG> (Thumb, 206 bytes, Stack size 16 bytes, main.o(i.microsoft_serial_mouse_update))
@@ -1367,12 +1368,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[b3]"></a>ps2kb_write</STRONG> (Thumb, 62 bytes, Stack size 24 bytes, ps2kb.o(i.ps2kb_write))
+<P><STRONG><a name="[b3]"></a>ps2kb_write</STRONG> (Thumb, 90 bytes, Stack size 24 bytes, ps2kb.o(i.ps2kb_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_get_bus_status
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_press_key_scancode_3

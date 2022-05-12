@@ -69,7 +69,7 @@ UART_HandleTypeDef huart3;
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 5;
-const uint8_t version_patch = 0;
+const uint8_t version_patch = 1;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -400,9 +400,15 @@ void ps2kb_update(void)
   else if(ps2kb_bus_status == PS2_BUS_IDLE && (kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0))
   {
     if(ps2kb_press_key(buffered_code, buffered_value) == PS2_ERROR_HOST_INHIBIT) // host inhibited line during transmission
+    {
+      // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
       HAL_Delay(1);
+      // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
+    }
     else
+    {
       kb_buf_pop(&my_kb_buf);
+    }
   }
 }
 

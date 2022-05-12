@@ -676,13 +676,23 @@ uint8_t ps2kb_write_nowait(uint8_t data)
 
   return PS2_OK;
 }
+
 uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
 {
+  ps2kb_write_idle_check:
   ps2kb_wait_start = HAL_GetTick();
   while(ps2kb_get_bus_status() != PS2_BUS_IDLE)
   {
   	if(HAL_GetTick() - ps2kb_wait_start >= timeout_ms)
-  		return 1;
+  		return PS2_ERROR_TIMEOUT;
+  }
+
+  ps2kb_wait_start = micros();
+  // make sure idle is more than 50us, some PC will actually spike clock line briefly during inhibition in certain DOS games
+  while(micros() - ps2kb_wait_start < 60)
+  {
+    if(ps2kb_get_bus_status() != PS2_BUS_IDLE)
+      goto ps2kb_write_idle_check;
   }
 
   // if responding to host, wait a little while for it to get ready
