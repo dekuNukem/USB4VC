@@ -2,6 +2,12 @@
 
 ## IBM PC Protocol Card
 
+### 0.5.3
+
+* Released 13 May 2022
+
+* Added mouse event consolidation and adjusted PS/2 timing to better handle high-reporting-rate USB mice.
+
 ### 0.5.2
 
 * Released 13 May 2022
