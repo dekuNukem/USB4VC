@@ -16,11 +16,12 @@ USB4VC is [now available on Tindie](https://www.tindie.com/products/dekuNukem/us
 
 #### IBM PC Compatible
 
-* PS/2 Keyboard
+* PS/2 Keyboard (Scancode set 1, 2 and 3)
 * PS/2 Mouse
 * AT Keyboard
 * XT Keyboard
-* Serial Mouse
+* Microsoft Serial Mouse
+* Mouse Systems Serial Mouse
 * 15-pin Gameport Gamepad
 * Mapping USB Gamepad to PC Mouse/Keyboard
 
@@ -53,6 +54,10 @@ Click to see USB4VC in action!
     <td><a href="https://www.youtube.com/watch?v=54sdPELuu4g" title="YouTube" rel="noopener"><img src="https://i.imgur.com/pFqa7sO.png"></a></td>
   </tr>
 </table>
+
+* [Click me for LGR Review!](https://www.youtube.com/watch?v=tbHr7ULpusM)
+
+* [Click me for Michael MJD Review!](https://www.youtube.com/watch?v=Hv4A9p7Cn2s)
 
 ## Highlights
 
