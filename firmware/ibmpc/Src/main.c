@@ -236,9 +236,6 @@ void handle_protocol_switch(uint8_t spi_byte)
   }
 }
 
-#define MOUSE_BUTTON_HISTORY_SIZE 5
-uint8_t mouse_button_history[MOUSE_BUTTON_HISTORY_SIZE];
-
 /*
   This is called when a new SPI packet is received
   This is part of an ISR, so keep it short!
@@ -267,10 +264,6 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     latest_mouse_event.button_middle = backup_spi1_recv_buf[15];
     latest_mouse_event.button_side = backup_spi1_recv_buf[16];
     latest_mouse_event.button_extra = backup_spi1_recv_buf[17];
-    latest_mouse_event.has_button_transition = 0;
-    if(memcmp(mouse_button_history, &backup_spi1_recv_buf[13], MOUSE_BUTTON_HISTORY_SIZE))
-      latest_mouse_event.has_button_transition = 1;
-    memcpy(mouse_button_history, &backup_spi1_recv_buf[13], MOUSE_BUTTON_HISTORY_SIZE);
     mouse_buf_add(&my_mouse_buf, &latest_mouse_event);
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_MAPPED_IBMPC)
@@ -374,7 +367,14 @@ void ps2mouse_update(void)
     // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
   }
   last_mouse_send = micros();
-  mouse_buf_reset(&my_mouse_buf); // don't change this!
+  int i;
+  for (i = 0; i < 100; ++i)
+  {
+    if(mouse_buf_peek(&my_mouse_buf) == NULL)
+      break;
+    mouse_buf_pop(&my_mouse_buf);
+  }
+  printf("%d", i);
 }
 
 void ps2kb_update(void)
@@ -448,11 +448,7 @@ void microsoft_serial_mouse_update(void)
     return;
 
   if(serial_mouse_is_tx_in_progress)
-  {
-    if(this_mouse_event->has_button_transition == 0) // dont throw away events that have button transitions
-      mouse_buf_pop(&my_mouse_buf);
     return;
-  }
 
   memset(microsoft_serial_mouse_output_buf, 0, MICROSOFT_SERIAL_MOUSE_BUF_SIZE);
   microsoft_serial_mouse_output_buf[0] = 0xc0;
@@ -478,8 +474,6 @@ void microsoft_serial_mouse_update(void)
   mouse_buf_pop(&my_mouse_buf);
   HAL_UART_Transmit_IT(&huart3, microsoft_serial_mouse_output_buf, MICROSOFT_SERIAL_MOUSE_BUF_SIZE);
   serial_mouse_is_tx_in_progress = 1;
-  if(this_mouse_event->has_button_transition)
-    HAL_Delay(10);
 }
 
 void spi_error_dump_reboot(void)
@@ -569,11 +563,7 @@ void mousesystems_serial_mouse_update(void)
     return;
 
   if(serial_mouse_is_tx_in_progress)
-  {
-    if(this_mouse_event->has_button_transition == 0) // don't throw away mouse events that has button transitions
-      mouse_buf_pop(&my_mouse_buf);
     return;
-  }
 
   memset(mousesystems_serial_mouse_output_buf, 0, MOUSESYSTEMS_SERIAL_MOUSE_BUF_SIZE);
   mousesystems_serial_mouse_output_buf[0] = 0x87;
@@ -590,8 +580,6 @@ void mousesystems_serial_mouse_update(void)
   mouse_buf_pop(&my_mouse_buf);
   HAL_UART_Transmit_IT(&huart3, mousesystems_serial_mouse_output_buf, MOUSESYSTEMS_SERIAL_MOUSE_BUF_SIZE);
   serial_mouse_is_tx_in_progress = 1;
-  if(this_mouse_event->has_button_transition)
-    HAL_Delay(10); // wait a bit for the computer to register button press
 }
 
 /* USER CODE END 0 */
@@ -644,9 +632,9 @@ int main(void)
   if(is_protocol_enabled(PROTOCOL_XT_KB))
     xtkb_enable();
 
-  kb_buf_init(&my_kb_buf, 16);
-  mouse_buf_init(&my_mouse_buf, 16);
-  gamepad_buf_init(&my_gamepad_buf, 16);
+  kb_buf_init(&my_kb_buf, KEYBOARD_EVENT_BUFFER_SIZE);
+  mouse_buf_init(&my_mouse_buf, MOUSE_EVENT_BUFFER_SIZE);
+  gamepad_buf_init(&my_gamepad_buf, GAMEPAD_EVENT_BUFFER_SIZE);
 
   mcp4451_reset();
 

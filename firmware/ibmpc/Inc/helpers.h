@@ -45,6 +45,10 @@
 #define PROTOCOL_GENERIC_GAMEPORT_GAMEPAD 7
 #define PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE 8
 
+#define MOUSE_EVENT_BUFFER_SIZE 8
+#define KEYBOARD_EVENT_BUFFER_SIZE 8
+#define GAMEPAD_EVENT_BUFFER_SIZE 8
+
 typedef struct
 {
   uint8_t head;
@@ -56,8 +60,8 @@ typedef struct
 
 typedef struct
 {
-  int16_t movement_x;
-  int16_t movement_y;
+  int32_t movement_x;
+  int32_t movement_y;
   int8_t scroll_vertical;
   int8_t scroll_horizontal;
   uint8_t button_left;
@@ -65,7 +69,6 @@ typedef struct
   uint8_t button_right;
   uint8_t button_side;
   uint8_t button_extra;
-  uint8_t has_button_transition;
 } mouse_event;
 
 typedef struct
