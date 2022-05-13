@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ibmpc\ibmpc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ibmpc\ibmpc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri May 13 10:27:47 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri May 13 11:17:57 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -239,7 +239,6 @@ Global Symbols
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_reset
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gamepad_buf_reset
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;protocol_status_lookup_init
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mousesystems_serial_mouse_update
 </UL>
 
 <P><STRONG><a name="[61]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
@@ -353,7 +352,6 @@ Global Symbols
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write_nowait
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_release_lines
 <LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_read
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_update
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameport_init
@@ -1163,6 +1161,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_wait_for_idle
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2kb_write
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
 </UL>
 
 <P><STRONG><a name="[be]"></a>microsoft_serial_mouse_update</STRONG> (Thumb, 206 bytes, Stack size 16 bytes, main.o(i.microsoft_serial_mouse_update))
@@ -1244,14 +1243,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
-<P><STRONG><a name="[bf]"></a>mousesystems_serial_mouse_update</STRONG> (Thumb, 144 bytes, Stack size 16 bytes, main.o(i.mousesystems_serial_mouse_update))
+<P><STRONG><a name="[bf]"></a>mousesystems_serial_mouse_update</STRONG> (Thumb, 140 bytes, Stack size 16 bytes, main.o(i.mousesystems_serial_mouse_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = mousesystems_serial_mouse_update &rArr; mouse_buf_pop &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_IT
-<LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1483,7 +1481,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_update
 </UL>
 
-<P><STRONG><a name="[bd]"></a>ps2mouse_update</STRONG> (Thumb, 146 bytes, Stack size 16 bytes, main.o(i.ps2mouse_update))
+<P><STRONG><a name="[bd]"></a>ps2mouse_update</STRONG> (Thumb, 148 bytes, Stack size 16 bytes, main.o(i.ps2mouse_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = ps2mouse_update &rArr; ps2mouse_host_req_reply &rArr; ps2mouse_write_delay_start &rArr; ps2mouse_write_nowait &rArr; ps2mouse_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_send_update
@@ -1493,10 +1491,10 @@ Global Symbols
 <LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_outgoing_data
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ps2mouse_get_bus_status
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_pop
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>

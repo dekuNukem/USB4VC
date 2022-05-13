@@ -329,6 +329,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
 }
 
+uint32_t last_mouse_send;
 void ps2mouse_update(void)
 {
   ps2mouse_bus_status = ps2mouse_get_bus_status();
@@ -355,17 +356,24 @@ void ps2mouse_update(void)
     return;
   }
 
+  if(micros() - last_mouse_send < 1000)
+  {
+    mouse_buf_reset(&my_mouse_buf);
+    return;
+  }
+
   if(ps2mouse_send_update(&my_ps2_outbuf) != PS2_OK)
   {
-    HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+    // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
     uint32_t enter_time = HAL_GetTick();
     while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
     {
-      if(HAL_GetTick() - enter_time > 25)
+      if(HAL_GetTick() - enter_time > 20)
         break;
     }
-    HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
+    // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
   }
+  last_mouse_send = micros();
   mouse_buf_reset(&my_mouse_buf); // don't change this!
 }
 
@@ -420,7 +428,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 
 uint8_t serial_mouse_is_tx_in_progress;
-
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
   serial_mouse_is_tx_in_progress = 0;
