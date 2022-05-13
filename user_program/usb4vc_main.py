@@ -58,6 +58,16 @@ def check_rpi_model():
 
 check_rpi_model()
 
+try:
+    boot_config = os.popen('cat /boot/cmdline.txt').read()
+    if "usbhid.mousepoll".lower() not in boot_config.lower():
+        print("@@@@@@@@@@@@ writing usbhid.mousepoll to /boot/cmdline.txt @@@@@@@@@@@@")
+        new_config = boot_config.replace('\r', '').replace('\n', '').strip() + ' usbhid.mousepoll=0\n'
+        with open('/boot/cmdline.txt', 'w') as ffff:
+            ffff.write(new_config)
+except Exception as e:
+    print('usbhid.mousepoll exception:', e)
+
 usb4vc_ui.ui_init()
 usb4vc_ui.ui_thread.start()
 
