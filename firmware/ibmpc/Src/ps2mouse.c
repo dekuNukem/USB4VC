@@ -61,7 +61,7 @@ void ps2mouse_restore_defaults(void)
   ps2mouse_sampling_rate = 100;
   ps2mouse_resolution = 2;
   ps2mouse_scale = 1;
-  ps2mouse_data_reporting_enabled = 1;
+  ps2mouse_data_reporting_enabled = 0;
   ps2mouse_current_mode = PS2MOUSE_MODE_STREAM;
 }
 

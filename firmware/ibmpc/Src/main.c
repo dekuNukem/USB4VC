@@ -69,7 +69,7 @@ UART_HandleTypeDef huart3;
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 5;
-const uint8_t version_patch = 2;
+const uint8_t version_patch = 3;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -82,6 +82,7 @@ uint16_t flash_size;
 
 uint8_t ps2kb_host_cmd, ps2mouse_host_cmd, buffered_code, buffered_value, ps2mouse_bus_status, ps2kb_bus_status;
 mouse_event latest_mouse_event;
+mouse_event consolidated_mouse_event;
 gamepad_event latest_gamepad_event;
 ps2_outgoing_buf my_ps2_outbuf;
 #define MICROSOFT_SERIAL_MOUSE_BUF_SIZE 3
@@ -322,6 +323,45 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
 }
 
+void cap_to_127(int32_t *number)
+{
+  if(*number > 127)
+    *number = 127;
+  if(*number < -127)
+    *number = -127;
+}
+
+void get_consolidated_mouse_event(mouse_buf* mbuf, mouse_event* cme_result)
+{
+  cme_result->movement_x = 0;
+  cme_result->movement_y = 0;
+  cme_result->scroll_vertical = 0;
+  cme_result->scroll_horizontal = 0;
+  cme_result->button_left = 0;
+  cme_result->button_right = 0;
+  cme_result->button_middle = 0;
+  cme_result->button_side = 0;
+  cme_result->button_extra = 0;
+  while(1)
+  {
+    mouse_event* this_mouse_event = mouse_buf_peek(mbuf);
+    if(this_mouse_event == NULL)
+      break;
+    cme_result->movement_x += this_mouse_event->movement_x;
+    cme_result->movement_y += this_mouse_event->movement_y;
+    cme_result->scroll_vertical += this_mouse_event->scroll_vertical;
+    cme_result->scroll_horizontal += this_mouse_event->scroll_horizontal;
+    cme_result->button_left |= this_mouse_event->button_left;
+    cme_result->button_right |= this_mouse_event->button_right;
+    cme_result->button_middle |= this_mouse_event->button_middle;
+    cme_result->button_side |= this_mouse_event->button_side;
+    cme_result->button_extra |= this_mouse_event->button_extra;
+    mouse_buf_pop(mbuf);
+  }
+  cap_to_127(&cme_result->movement_x);
+  cap_to_127(&cme_result->movement_y);
+}
+
 uint32_t last_mouse_send;
 void ps2mouse_update(void)
 {
@@ -338,43 +378,30 @@ void ps2mouse_update(void)
     return;
   }
 
-  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
-  if(this_mouse_event == NULL)
+  if(micros() - last_mouse_send < 700)
     return;
 
-  if(ps2mouse_get_outgoing_data(this_mouse_event, &my_ps2_outbuf))
-  {
-    // if return value is not 0, no need to send out packets
-    mouse_buf_pop(&my_mouse_buf);
+  if(mouse_buf_peek(&my_mouse_buf) == NULL)
     return;
-  }
 
-  if(micros() - last_mouse_send < 1000)
-  {
-    mouse_buf_reset(&my_mouse_buf);
-    return;
-  }
+  get_consolidated_mouse_event(&my_mouse_buf, &consolidated_mouse_event);
+  // mouse buffer now empty
 
+  if(ps2mouse_get_outgoing_data(&consolidated_mouse_event, &my_ps2_outbuf))
+    return; // if return value is not 0, no need to send out packets
+
+  // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
   if(ps2mouse_send_update(&my_ps2_outbuf) != PS2_OK)
   {
-    // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
     uint32_t enter_time = HAL_GetTick();
     while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
     {
       if(HAL_GetTick() - enter_time > 20)
         break;
     }
-    // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
   }
   last_mouse_send = micros();
-  int i;
-  for (i = 0; i < 100; ++i)
-  {
-    if(mouse_buf_peek(&my_mouse_buf) == NULL)
-      break;
-    mouse_buf_pop(&my_mouse_buf);
-  }
-  printf("%d", i);
+  // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
 }
 
 void ps2kb_update(void)
@@ -443,22 +470,24 @@ void microsoft_serial_mouse_update(void)
     rts_active = 0;
   }
 
-  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
-  if(this_mouse_event == NULL)
+  if(mouse_buf_peek(&my_mouse_buf) == NULL)
     return;
 
   if(serial_mouse_is_tx_in_progress)
     return;
 
+  get_consolidated_mouse_event(&my_mouse_buf, &consolidated_mouse_event);
+  // mouse buffer now empty
+
   memset(microsoft_serial_mouse_output_buf, 0, MICROSOFT_SERIAL_MOUSE_BUF_SIZE);
   microsoft_serial_mouse_output_buf[0] = 0xc0;
-  if(this_mouse_event->button_left)
+  if(consolidated_mouse_event.button_left)
     microsoft_serial_mouse_output_buf[0] |= 0x20;
-  if(this_mouse_event->button_right)
+  if(consolidated_mouse_event.button_right)
     microsoft_serial_mouse_output_buf[0] |= 0x10;
 
-  int16_t serial_x = this_mouse_event->movement_x;
-  int16_t serial_y = -1* this_mouse_event->movement_y;
+  int16_t serial_x = consolidated_mouse_event.movement_x;
+  int16_t serial_y = -1* consolidated_mouse_event.movement_y;
 
   if(serial_y & 0x80)
     microsoft_serial_mouse_output_buf[0] |= 0x8;
@@ -471,7 +500,6 @@ void microsoft_serial_mouse_update(void)
 
   microsoft_serial_mouse_output_buf[1] = 0x3f & serial_x;
   microsoft_serial_mouse_output_buf[2] = 0x3f & serial_y;
-  mouse_buf_pop(&my_mouse_buf);
   HAL_UART_Transmit_IT(&huart3, microsoft_serial_mouse_output_buf, MICROSOFT_SERIAL_MOUSE_BUF_SIZE);
   serial_mouse_is_tx_in_progress = 1;
 }
@@ -558,25 +586,27 @@ huart3.Init.WordLength = UART_WORDLENGTH_7B;
 
 void mousesystems_serial_mouse_update(void)
 {
-  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
-  if(this_mouse_event == NULL)
+  if(mouse_buf_peek(&my_mouse_buf) == NULL)
     return;
 
   if(serial_mouse_is_tx_in_progress)
     return;
 
+  get_consolidated_mouse_event(&my_mouse_buf, &consolidated_mouse_event);
+  // mouse buffer now empty
+
   memset(mousesystems_serial_mouse_output_buf, 0, MOUSESYSTEMS_SERIAL_MOUSE_BUF_SIZE);
   mousesystems_serial_mouse_output_buf[0] = 0x87;
-  if(this_mouse_event->button_left)
+  if(consolidated_mouse_event.button_left)
     mousesystems_serial_mouse_output_buf[0] &= 0xfb;
-  if(this_mouse_event->button_middle)
+  if(consolidated_mouse_event.button_middle)
     mousesystems_serial_mouse_output_buf[0] &= 0xfd;
-  if(this_mouse_event->button_right)
+  if(consolidated_mouse_event.button_right)
     mousesystems_serial_mouse_output_buf[0] &= 0xfe;
-  mousesystems_serial_mouse_output_buf[1] = (int8_t)(this_mouse_event->movement_x);
-  mousesystems_serial_mouse_output_buf[2] = (int8_t)(this_mouse_event->movement_y);
-  mousesystems_serial_mouse_output_buf[3] = (int8_t)(this_mouse_event->movement_x);
-  mousesystems_serial_mouse_output_buf[4] = (int8_t)(this_mouse_event->movement_y);
+  mousesystems_serial_mouse_output_buf[1] = (int8_t)(consolidated_mouse_event.movement_x);
+  mousesystems_serial_mouse_output_buf[2] = (int8_t)(consolidated_mouse_event.movement_y);
+  mousesystems_serial_mouse_output_buf[3] = 0;
+  mousesystems_serial_mouse_output_buf[4] = 0;
   mouse_buf_pop(&my_mouse_buf);
   HAL_UART_Transmit_IT(&huart3, mousesystems_serial_mouse_output_buf, MOUSESYSTEMS_SERIAL_MOUSE_BUF_SIZE);
   serial_mouse_is_tx_in_progress = 1;

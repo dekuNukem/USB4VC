@@ -1,3 +1,31 @@
+  if(ps2mouse_send_update(&my_ps2_outbuf) != PS2_OK)
+  {
+    // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+    uint32_t enter_time = HAL_GetTick();
+    while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
+    {
+      if(HAL_GetTick() - enter_time > 20)
+        break;
+    }
+    // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
+  }
+  last_mouse_send = micros();
+  // int i;
+  // for (i = 0; i < 100; ++i)
+  // {
+  //   if(mouse_buf_peek(&my_mouse_buf) == NULL)
+  //     break;
+  //   mouse_buf_pop(&my_mouse_buf);
+  // }
+  // printf("%d", i);
+
+  // mouse_event_reset(&consolidated_mouse_event);
+  // mouse_buf_reset(&my_mouse_buf);
+  consolidate_mouse_buf();
+
+
+------
+
     uint8_t payload = 0x4D;
     mouse_uart_switch_to_8bit();
     HAL_UART_Transmit(&huart3, (unsigned char *)&payload, 1, 100);
