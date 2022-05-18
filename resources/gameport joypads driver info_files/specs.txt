@@ -1,0 +1,387 @@
+  Intorduction
+  ~~~~~~~~~~~~
+  This file contains various interesting bits of information I have
+  gathered in time, as a reference for writing the linux joystick driver.
+  You may find it useful, or not ...
+
+  Game port pinout
+  ~~~~~~~~~~~~~~~~
+
+		  .------------------------.
+		  \ 8  7  6  5  4  3  2  1 /
+		   \ 15 14 13 12 11 10  9 /
+		     ~~~~~~~~~~~~~~~~~~~~
+
+	  Pin	Function	Pin	Function
+	   1	+5V (A0+A1)	 9	+5V (A2+A3)/MIDI
+	   2	Button 0	10	Button 2
+	   3	Axis 0		11	Axis 2
+	   4	Gnd (B0)	12	Gnd (B2+B3)/MIDI TX
+	   5	Gnd (B1)	13	Axis 3
+	   6	Axis 1		14	Button 3
+	   7	Button 1	15	+5V (A3)/NC/MIDI RX
+	   8	+5V (A1)/NC
+
+  Each button grounds the respective pin. Axes are wired via variable
+  resistors to +5V. Switches connect to GND.
+
+
+  Special game ports
+  ~~~~~~~~~~~~~~~~~~
+  TecnoPlus:	PowerCard TP-164
+  Gravis:	UltraSound		- SW setup
+		Eliminator
+  ThrustMaster:	ACM			- HW setup
+		ACM Pro
+  CH Products:	GameCard 3 Automatic	- SW setup
+  QuickShot:	QS-163 Smart		- SW setup
+  PDPI:		L4			- full DAC
+  Aureal:	Vortex AU8820, Vortex2	- full DAC, PCI
+  S3:		SonicVibes		- PCI
+  Ensoniq:	ES1370, ES1371		- PCI
+  nVidia:	NV1			- Sega port
+
+  nVidia NV1 comments
+  ~~~~~~~~~~~~~~~~~~~
+  On the Diamond Edge 3D videocard with the NV1 chipset, there
+  seems to be a special Sega gameport used in games distributed
+  with the videocard.
+
+  Aureal Vortex comments
+  ~~~~~~~~~~~~~~~~~~~~~~
+  PCI audio chip used in
+	Turtle Beach Montego A3DXstream
+	Diamond Monster Sound MX200
+	Aztech PCI 338-A3D
+  Contains full joystick DACs - no need for timing
+  Contact: info@aureal.com, webmaster@aureal.com
+
+  Gravis UltraSound gameport setup
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Outb to 0x103+GUS base, value 0x4b  - joystick register index
+  Outb to 0x105+GUS base, value 0..31 - joystick output voltage
+					(0.59V-4.52V or 0.389V-2.98V)
+
+  QuickShot QS-163 setup
+  ~~~~~~~~~~~~~~~~~~~~~~
+  Outb to 0x200, speed 0..15
+
+	Bits		Meaning
+	7654....	Unknown - 0
+	....3210	Gameport speed (negated & M/LSB reversed)
+
+  CH GC 3 Automatic setup
+  ~~~~~~~~~~~~~~~~~~~~~~~
+  Outb to 0x200, speed 0..31
+
+	Bits		Meaning
+	76......	Unknown - 0
+	..54321.	Gameport speed
+	.......0	Gameport enable (1 enabled, 0 disabled)
+
+  The MCA version uses 0x202 instead.
+
+  TecnoPlus Power Card TP-164
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Though the manual says it autodetects speed of the machine, it does not.
+  Though the manual says it supports two 4-axis joysticks it supports only
+  one. It's a simple, one-port at 0x201, unconfigurable card, except for that
+  it is about twice faster than standard, making it incompatible with most
+  digitally communicating joysticks.
+
+  ThtustMaster ACM
+  ~~~~~~~~~~~~~~~~
+  Normal one-port gamecard, configurable at 0x201, 0x203, 0x207, 0x209, 0x20B.
+  Speed can be tuned by a knob connected to the card.
+
+  Yamaha OPL3-SA2
+  ~~~~~~~~~~~~~~~
+  A PnP Soundcard. The gameport is simple one-port, and can be configured via
+  ISAPnP to 0x201, 0x202, 0x203 and 0x204.
+
+  Standard game port
+  ~~~~~~~~~~~~~~~~~~
+  Outb to 0x201 to start axis timing
+  Read 0x201 to get info
+
+  Bits		Meaning
+  ....3210	Axes 3, 2, 1, 0
+  3210....	Buttons 3, 2, 1, 0
+
+  Button bits are inverted - 1 means released, 0 pressed
+  Axis bits - 0 means timing finished, 1 - timing in progress
+
+  Time to change from 1 to 0 from the trigger is linear to axis resistance.
+  Standard joysticks use resistance 0-100 kOhm (some up to 200 kOhm), and for
+  standard gameports the time is approximately 10 us/kOhm.
+
+  To detect, out to 0x201, then read, expecting 0xff. Then wait, then
+  read again, expecting 0xfx ...
+
+  Joystick extensions
+  ~~~~~~~~~~~~~~~~~~~
+
+  Additional buttons and hats ala CH Flightstick Pro
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Button state	Meaning
+	 0	Nothing pressed
+	 1	Button 1
+	 2	Button 2
+	 3	Hat 1 left
+	 4	Button 3
+	 5	Button 5
+	 6	Hat 2 down
+	 7	Hat 1 down
+	 8	Button 4
+	 9	Button 6
+	10	Hat 2 right
+	11	Hat 1 right
+	12	Hat 2 left
+	13	Undefined
+	14	Hat 2 up
+	15	Hat 1 up
+
+  If more than one button is pressed they are either ORed together, or the
+  lowest one is signalled, depending on joystick model.
+
+
+  Hat switch ala TM FCS
+  ~~~~~~~~~~~~~~~~~~~~~
+    Axis 3 resistance	Meaning
+	 0.2 kOhm	Up
+	20.0 kOhm	Left
+	40.0 kOhm	Down
+	60.0 kOhm	Right
+	82.0 kOhm	Center
+
+
+  Digital mode of MS SideWinder joysticks
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  SideWinders send data through buttons. The transmission starts on a normal
+  measure trigger (out to port 0x201).  Button 0 is used as clock (100 kHz),
+  other three buttons carry data. Data is valid at clock 0->1 transition,
+  LSB is transmitted first.
+
+  SideWinder 3D Pro packet
+  ~~~~~~~~~~~~~~~~~~~~~~~~
+  The SW 3DP sends three packets, each 22 triplets long (64 + 2 bits). The
+  packets have all the same contents. The packet layout seems to originate
+  from the Mac version of SW3DP. Transmit speed is 300 kbit/sec, first packet
+  takes 320 us to transmit, all three take 760 us.
+
+  Byte 0:
+	7....... - Always 1
+	.6...... - Hat bit 3
+	..543... - Axis 0 (X) bits 7-9
+	.....210 - Axis 1 (Y) bits 7-9
+
+  Byte 1:
+	7....... - Always 0
+	.6543210 - Buttons bits 0-6
+
+  Byte 2:
+	7....... - Always 0
+	.6543210 - Axis 0 (X) bits 0-6
+
+  Byte 3:
+	7....... - Always 0
+	.6543210 - Axis 1 (Y) bits 0-6
+
+  Byte 4:
+	7....... - Always 0
+	.6...... - Buttons bit 7
+	..5..... - CHF (0) / TM (1) switch
+	...43... - Axis 2 (Twist) bits 7-8
+	.....210 - Axis 3 (Throttle) bits 7-9
+
+  Byte 5:
+	7....... - Always 0
+	.6543210 - Axis 2 (Twist) bits 0-6
+
+  Byte 6:
+	7....... - Always 0
+	.6543210 - Axis 3 (Throttle) bits 0-6
+
+  Byte 7:
+	7....... - Always 0
+	.654.... - Hat bits 0-2
+	....3210 - Checksum bits 0-3
+
+  The last two bits are zeroes.
+
+
+  Sidewinder Force Feedback Pro packet
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  SW FFP sends 16 triplets (48 bits).
+
+	  Bits     Meaning
+
+	 0 ..  8 - Buttons		( 9 bits)
+	 9 .. 18 - Axis 0 (X)		(10 bits)
+	19 .. 28 - Axis 1 (Y)		(10 bits)
+	29 .. 35 - Axis 2 (Twist)	( 7 bits)
+	36 .. 41 - Axis 3 (Throttle)	( 6 bits)
+	42 .. 45 - Hat			( 4 bits)
+	      46 - Always 1
+	      47 - Parity
+
+  Sidewinder Precision Pro packet
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  SW PP probably sends the same packet layout as the FFP version. This wasn't
+  tested yet, though.
+
+  Sidewinder hat data (for SW 3DP, FFP and PP)
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Value	Direction
+	0	Center
+	1	Up
+	2	Up-Left
+	3	Left
+	4	Down-Left
+	5	Down
+	6	Down-Right
+	7	Right
+	8	Up-Right
+
+  Sidewinder GamePad packet
+  ~~~~~~~~~~~~~~~~~~~~~~~~~
+	Bit    Button
+	 0	Axis 1 Up	(y)
+	 1	Axis 1 Down	(y)
+	 2	Axis 0 Right	(x)
+	 3	Axis 0 Left	(x)
+	 4	Button 0	(A)
+	 5	Button 1	(B)
+	 6	Button 2	(C)
+	 7	Button 3	(X)
+	 8	Button 4	(Y)
+	 9	Button 5	(Z)
+	10	Button 6	(L1)
+	11	Button 7	(R1)
+	12	Button 8	(Start)
+	13	Button 9	(M)
+	14	Parity
+
+  Can be either organized as 15 triplets carrying data in bit 0 only, or can
+  be five triplets (15 bits) using all three bits. The type of packet the SW
+  GP sends seems to be random? Because there can be more than one SW GP
+  chained, the data stream can be 15*n or 5*n bits long.  The 15-triplet mode
+  allows connecting the SW GP only to a half of the joystick port.
+  Transmission speed is 100 or 300 kbit/sec, packet takes 250 us or 150 us
+  to transmit, depending on mode.
+
+  Digital mode of Gravis GamePad Pro
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  As well as SW joysticks the Gravis GPP uses digital transfer through
+  buttons, which is very similar to the Mode A of SW GP pad. Button 0 is used
+  for timing, button 1 for data. LSB goes first.
+
+  Gravis GamePad Pro packet
+  ~~~~~~~~~~~~~~~~~~~~~~~~~
+	Bit    Button
+	 0	0
+	 1	1
+	 2	1
+	 3	1
+	 4	1
+	 5	1
+	 6	0
+	 7	Button 0	(Select)
+	 8	Button 1	(Start)
+	 9	Button 2	(R2)
+	10	Button 3	(Blue)
+	11	0
+	12	Button 4	(L2)
+	13	Button 5	(Green)
+	14	Button 6	(Yellow)
+	15	Button 7	(Red)
+	16	0
+	17	Button 8	(L1)
+	18	Button 9	(R1)
+	19	Axis 1 Down	(Y)
+	20	Axis 1 Up	(Y)
+	21	0
+	22	Axis 0 Left	(X)
+	23	Axis 0 Right	(X)
+
+  The GPP doesn't use axis trigger as a start of packet, but provides the
+  five consecutive 1's for synchronization, while the packet is repeated all
+  the time. The clock is 20 kHz, data is valid on 1->0 clock transition.
+  Transmission speed is 20 kbit/sec, packet takes 1.2 ms to transmit.
+
+  Digital mode of Gravis GrIP MultiPort, Gravis Xterminator
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  These devices probably use the same digital protocol as the GPP, but the
+  packet layout is still unknown to me.
+
+
+  Digital mode of Logitech WingMan Extreme Digital
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The LTWMED uses an interesting technique for timing the data stream. It
+  doesn't use a clock bit, but rather uses two bits per data 'channel'.
+  Because there are four buttons available, there are two data channels.
+  Buttons 0 and 1 carry the upper 21 bits of the data packet, buttons 2 and 3
+  carry the lower 21 bits, making it 42 bits total. It seems that Logitech
+  joysticks are capable of switching into a mode where they only use two
+  of the four buttons.
+  Unlike the other joysticks, LTWMED sends the packet MSB first, except for
+  the buttons, which are sent LSB first ...
+  The two bits are used as follows: When 1 is transmitted, the upper bit
+  changes state, and when 0 is transmitted, the lower bit changes state.
+  Transmission speed is 100 kHz (200 kbit/sec), packet takes 320 us to
+  transmit.
+
+  Logitech WingMan Extreme Digital packet
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Bits     Meaning
+	 0 ..  3 - Hat			(4 bits)
+	 4 ..  9 - Buttons		(6 bits)
+	10 .. 17 - Axis 2 (Twist)	(8 bits)
+	18 .. 25 - Axis 1 (Y)		(8 bits)
+	26 .. 33 - Axis 0 (X)		(8 bits)
+	34 .. 41 - 0x00			(8 bits)
+
+
+  Digital mode of Logitech CyberMan2
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The LTCM2 uses the same protocol as LTMWED, except that the packet has 64
+  bits.
+
+  Logitech CyberMan2 packet
+  ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+       Byte Meaning
+	0 - Buttons
+	1 - Axis 5 (Roll)
+	2 - Axis 4 (Pitch)
+	3 - Axis 3 (Yaw)
+	4 - Axis 2 (Z)
+	5 - Axis 1 (Y)
+	6 - Axis 0 (X)
+	7 - 0x30
+
+  Digital mode of Logitech ThunderPad Digital
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  The LTTPD uses the same protocol as LTMWED, except that the packet has 20
+  bits.
+
+  Logitech ThunderPad Digital packet
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	Bits	   Meaning
+	 0       - Button 7	(:)
+	 1	 - Button 6	(.)
+	 2	 - Button 5	(R)
+	 3	 - Button 4	(L)
+	 4	 - Axis 0 Left	(X)
+	 5	 - Axis 1 Down	(Y)
+	 6	 - Axis 0 Right	(X)
+	 7	 - Axis 1 Up	(Y)
+	 8	 - Button 3	(D)
+	 9	 - Button 2	(C)
+	10	 - Button 1	(B)
+	11	 - Button 0	(A)
+	12 .. 20 - 0x10		(8 bits)
+
+This file (c) 1998 Vojtech Pavlik
