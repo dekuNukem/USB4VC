@@ -77,6 +77,7 @@ uint8_t spi_recv_buf[SPI_BUF_SIZE];
 kb_buf my_kb_buf;
 mouse_buf my_mouse_buf;
 mouse_event latest_mouse_event;
+mouse_event consolidated_mouse_event;
 uint8_t spi_error_occured;
 uint8_t protocol_status_lookup[PROTOCOL_LOOKUP_SIZE];
 
@@ -99,6 +100,43 @@ int fputc(int ch, FILE *f)
 {
     HAL_UART_Transmit(&huart2, (unsigned char *)&ch, 1, 10);
     return ch;
+}
+
+void cap_to_127(int32_t *number)
+{
+  if(*number > 127)
+    *number = 127;
+  if(*number < -127)
+    *number = -127;
+}
+
+void get_consolidated_mouse_event(mouse_buf* mbuf, mouse_event* cme_result)
+{
+  cme_result->movement_x = 0;
+  cme_result->movement_y = 0;
+  cme_result->scroll_vertical = 0;
+  cme_result->button_left = 0;
+  cme_result->button_right = 0;
+  cme_result->button_middle = 0;
+  cme_result->button_side = 0;
+  cme_result->button_extra = 0;
+  while(1)
+  {
+    mouse_event* this_mouse_event = mouse_buf_peek(mbuf);
+    if(this_mouse_event == NULL)
+      break;
+    cme_result->movement_x += this_mouse_event->movement_x;
+    cme_result->movement_y += this_mouse_event->movement_y;
+    cme_result->scroll_vertical += this_mouse_event->scroll_vertical;
+    cme_result->button_left |= this_mouse_event->button_left;
+    cme_result->button_right |= this_mouse_event->button_right;
+    cme_result->button_middle |= this_mouse_event->button_middle;
+    cme_result->button_side |= this_mouse_event->button_side;
+    cme_result->button_extra |= this_mouse_event->button_extra;
+    mouse_buf_pop(mbuf);
+  }
+  cap_to_127(&cme_result->movement_x);
+  cap_to_127(&cme_result->movement_y);
 }
 
 uint8_t is_protocol_enabled(uint8_t this_protocol)
@@ -147,7 +185,7 @@ void parse_spi_buf(uint8_t* spibuf)
   if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
   {
     latest_mouse_event.movement_x = byte_to_int16_t(spibuf[4], spibuf[5]);
-    latest_mouse_event.movement_y = 1 * byte_to_int16_t(spibuf[6], spibuf[7]);
+    latest_mouse_event.movement_y = byte_to_int16_t(spibuf[6], spibuf[7]);
     latest_mouse_event.scroll_vertical = -1 * spibuf[8];
     latest_mouse_event.button_left = spibuf[13];
     latest_mouse_event.button_right = spibuf[14];
@@ -211,7 +249,8 @@ uint8_t temp_spi_msg_buf[SPI_BUF_SIZE];
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
-  
+  HAL_GPIO_WritePin(DEBUG2_GPIO_Port, DEBUG2_Pin, GPIO_PIN_SET);
+
   if(spi_recv_buf[0] != 0xde)
     spi_error_occured = 1;
   if(adb_rw_in_progress)
@@ -237,6 +276,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(DEBUG2_GPIO_Port, DEBUG2_Pin, GPIO_PIN_RESET);
 }
 
 void spi_error_dump_reboot(void)
@@ -276,18 +316,20 @@ uint8_t int16_to_uint6(int16_t value)
 
 void adb_mouse_update(void)
 {
-  mouse_event* this_mouse_event = mouse_buf_peek(&my_mouse_buf);
-  if(this_mouse_event == NULL)
+  if(mouse_buf_peek(&my_mouse_buf) == NULL)
     return;
+
+  get_consolidated_mouse_event(&my_mouse_buf, &consolidated_mouse_event);
+  // mouse buffer now empty
+
   uint16_t response = 0;
-  if(this_mouse_event->button_left == 0)
+  if(consolidated_mouse_event.button_left == 0)
     response |= 0x8000;
-  if(this_mouse_event->button_right == 0)
+  if(consolidated_mouse_event.button_right == 0)
     response |= 0x80;
-  response |= int16_to_uint6(this_mouse_event->movement_x) & 0x7f;
-  response |= (int16_to_uint6(this_mouse_event->movement_y) & 0x7f) << 8;
+  response |= int16_to_uint6(consolidated_mouse_event.movement_x) & 0x7f;
+  response |= (int16_to_uint6(consolidated_mouse_event.movement_y) & 0x7f) << 8;
   adb_send_response_16b(response);
-  mouse_buf_reset(&my_mouse_buf);
 }
 
 #define KEY_DELETE 111
@@ -406,6 +448,8 @@ void process_spi_kb_events(void)
   memset(temp_kb_value_buf, 0, TEMP_BUF_SIZE);
 }
 
+uint8_t power_button_status;
+
 /* USER CODE END 0 */
 
 /**
@@ -444,8 +488,8 @@ int main(void)
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
   protocol_status_lookup_init();
-  kb_buf_init(&my_kb_buf, 16);
-  mouse_buf_init(&my_mouse_buf, 16);
+  kb_buf_init(&my_kb_buf, KEYBOARD_EVENT_BUFFER_SIZE);
+  mouse_buf_init(&my_mouse_buf, MOUSE_EVENT_BUFFER_SIZE);
   uint8_t adb_data, adb_status, this_addr;
   uint8_t kb_srq = 0;
   uint8_t mouse_srq = 0;
@@ -458,6 +502,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    power_button_status = HAL_GPIO_ReadPin(ADB_PSW_GPIO_Port, ADB_PSW_Pin);
+    // printf("%d", power_button_status);
+    // HAL_Delay(5);
     if(spi_error_occured)
       spi_error_dump_reboot();
     process_spi_kb_events();
@@ -672,10 +719,14 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOF, DEBUG2_Pin|DEBUG3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ADB_PSW_GPIO_Port, ADB_PSW_Pin, GPIO_PIN_SET);
@@ -692,6 +743,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(USER_LED_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : DEBUG2_Pin DEBUG3_Pin */
+  GPIO_InitStruct.Pin = DEBUG2_Pin|DEBUG3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ADB_PSW_Pin */
   GPIO_InitStruct.Pin = ADB_PSW_Pin;

@@ -47,6 +47,8 @@
 #define PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD  8
 #define PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER 9
 
+#define MOUSE_EVENT_BUFFER_SIZE 16
+#define KEYBOARD_EVENT_BUFFER_SIZE 8
 
 typedef struct
 {
@@ -59,9 +61,9 @@ typedef struct
 
 typedef struct
 {
-  int16_t movement_x;
-  int16_t movement_y;
-  int16_t scroll_vertical;
+  int32_t movement_x;
+  int32_t movement_y;
+  int8_t scroll_vertical;
   uint8_t button_left;
   uint8_t button_middle;
   uint8_t button_right;

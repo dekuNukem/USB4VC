@@ -51,6 +51,10 @@
 
 #define USER_LED_Pin GPIO_PIN_8
 #define USER_LED_GPIO_Port GPIOB
+#define DEBUG2_Pin GPIO_PIN_0
+#define DEBUG2_GPIO_Port GPIOF
+#define DEBUG3_Pin GPIO_PIN_1
+#define DEBUG3_GPIO_Port GPIOF
 #define ADB_PSW_Pin GPIO_PIN_0
 #define ADB_PSW_GPIO_Port GPIOA
 #define SLAVE_REQ_Pin GPIO_PIN_1
