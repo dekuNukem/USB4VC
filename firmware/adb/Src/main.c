@@ -58,6 +58,8 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+IWDG_HandleTypeDef hiwdg;
+
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
@@ -68,9 +70,8 @@ UART_HandleTypeDef huart2;
 /* Private variables ---------------------------------------------------------*/
 const uint8_t board_id = 2;
 const uint8_t version_major = 0;
-const uint8_t version_minor = 1;
-const uint8_t version_patch = 1;
-uint8_t hw_revision = 0;
+const uint8_t version_minor = 2;
+const uint8_t version_patch = 0;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
@@ -89,6 +90,7 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_IWDG_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -218,7 +220,6 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     spi_transmit_buf[SPI_BUF_INDEX_SEQNUM] = spi_recv_buf[SPI_BUF_INDEX_SEQNUM];
     spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_INFO_REQUEST;
     spi_transmit_buf[3] = board_id;
-    spi_transmit_buf[4] = hw_revision;
     spi_transmit_buf[5] = version_major;
     spi_transmit_buf[6] = version_minor;
     spi_transmit_buf[7] = version_patch;
@@ -445,8 +446,10 @@ int main(void)
   MX_SPI1_Init();
   MX_USART2_UART_Init();
   MX_TIM2_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-  printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
+  printf("%s\n v%d.%d.%d\n", boot_message, version_major, version_minor, version_patch);
+  HAL_IWDG_Refresh(&hiwdg);
   delay_us_init(&htim2);
   protocol_status_lookup_init();
   kb_buf_init(&my_kb_buf, KEYBOARD_EVENT_BUFFER_SIZE);
@@ -463,6 +466,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    HAL_IWDG_Refresh(&hiwdg);
     power_button_status = HAL_GPIO_ReadPin(ADB_PSW_GPIO_Port, ADB_PSW_Pin);
     // printf("%d", power_button_status);
     // HAL_Delay(5);
@@ -548,8 +552,9 @@ void SystemClock_Config(void)
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -579,6 +584,21 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/* IWDG init function */
+static void MX_IWDG_Init(void)
+{
+
+  hiwdg.Instance = IWDG;
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_32;
+  hiwdg.Init.Window = 4095;
+  hiwdg.Init.Reload = 4095;
+  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
 }
 
 /* SPI1 init function */

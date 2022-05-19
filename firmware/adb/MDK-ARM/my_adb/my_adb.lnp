@@ -6,6 +6,7 @@
 "my_adb\main.o"
 "my_adb\stm32f0xx_it.o"
 "my_adb\stm32f0xx_hal_msp.o"
+"my_adb\stm32f0xx_hal_iwdg.o"
 "my_adb\stm32f0xx_hal_spi.o"
 "my_adb\stm32f0xx_hal_spi_ex.o"
 "my_adb\stm32f0xx_hal_tim.o"
