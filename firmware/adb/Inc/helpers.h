@@ -75,7 +75,6 @@ typedef struct
 {
   uint8_t head;
   uint8_t tail;
-  uint8_t size;
   mouse_event* mouse_events;
 } mouse_buf;
 
@@ -86,7 +85,7 @@ void kb_buf_pop(kb_buf *lb);
 uint8_t kb_buf_is_empty(kb_buf *lb);
 void kb_buf_reset(kb_buf *lb);
 
-void mouse_buf_init(mouse_buf *lb, uint8_t size);
+void mouse_buf_init(mouse_buf *lb);
 uint8_t mouse_buf_add(mouse_buf *lb, mouse_event* event);
 mouse_event* mouse_buf_peek(mouse_buf *lb);
 void mouse_buf_pop(mouse_buf *lb);

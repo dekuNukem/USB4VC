@@ -59,7 +59,7 @@ void kb_buf_init(kb_buf *lb, uint8_t size)
 
 uint8_t mouse_buf_is_full(mouse_buf *lb)
 {
-	return lb->tail == (lb->head + 1) % lb->size;
+	return lb->tail == (lb->head + 1) % MOUSE_EVENT_BUFFER_SIZE;
 }
 
 uint8_t mouse_buf_is_empty(mouse_buf *lb)
@@ -72,7 +72,7 @@ uint8_t mouse_buf_add(mouse_buf *lb, mouse_event* event)
 	if(mouse_buf_is_full(lb))
 		return 1;
 	memcpy(&lb->mouse_events[lb->head], event, sizeof(mouse_event));
-	lb->head = (lb->head + 1) % lb->size;
+	lb->head = (lb->head + 1) % MOUSE_EVENT_BUFFER_SIZE;
 	return 0;
 }
 
@@ -86,20 +86,19 @@ mouse_event* mouse_buf_peek(mouse_buf *lb)
 void mouse_buf_pop(mouse_buf *lb)
 {
 	if(!mouse_buf_is_empty(lb))
-		lb->tail = (lb->tail + 1) % lb->size;
+		lb->tail = (lb->tail + 1) % MOUSE_EVENT_BUFFER_SIZE;
 }
 
 void mouse_buf_reset(mouse_buf *lb)
 {
   lb->head = 0;
   lb->tail = 0;
-  memset(lb->mouse_events, 0, lb->size * sizeof(mouse_event));
+  memset(lb->mouse_events, 0, MOUSE_EVENT_BUFFER_SIZE * sizeof(mouse_event));
 }
 
-void mouse_buf_init(mouse_buf *lb, uint8_t size)
+void mouse_buf_init(mouse_buf *lb)
 {
-  lb->size = size;
-  lb->mouse_events = malloc(size * sizeof(mouse_event));
+  lb->mouse_events = malloc(MOUSE_EVENT_BUFFER_SIZE * sizeof(mouse_event));
   mouse_buf_reset(lb);
 }
 
