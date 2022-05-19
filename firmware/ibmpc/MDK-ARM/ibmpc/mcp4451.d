@@ -37,3 +37,4 @@ ibmpc\mcp4451.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h
 ibmpc\mcp4451.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h
 ibmpc\mcp4451.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
 ibmpc\mcp4451.o: ../Inc/shared.h
+ibmpc\mcp4451.o: ../Inc/delay_us.h

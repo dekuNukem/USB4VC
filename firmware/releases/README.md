@@ -2,6 +2,12 @@
 
 ## IBM PC Protocol Card
 
+### 0.5.4
+
+* Released 19 May 2022
+
+* Fixed a bug where turning off gameport gamepad will cause a crash.
+
 ### 0.5.3
 
 * Released 13 May 2022
