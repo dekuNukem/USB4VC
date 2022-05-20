@@ -403,10 +403,16 @@ void adb_keyboard_update(void)
   }
 }
 
+#define KEY_POWER   116
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   if(GPIO_Pin == ADB_PSW_Pin && is_protocol_enabled(PROTOCOL_ADB_MOUSE))
-    printf("d");
+  {
+    if(HAL_GPIO_ReadPin(ADB_PSW_GPIO_Port, ADB_PSW_Pin) == 0) // button pressed
+      kb_buf_add(&my_kb_buf, KEY_POWER, 1);
+    else
+      kb_buf_add(&my_kb_buf, KEY_POWER, 0);
+  }
 }
 
 /* USER CODE END 0 */
@@ -720,7 +726,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : ADB_PSW_Pin */
   GPIO_InitStruct.Pin = ADB_PSW_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(ADB_PSW_GPIO_Port, &GPIO_InitStruct);
 
