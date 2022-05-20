@@ -1,3 +1,8 @@
+uint8_t power_button_status;
+
+    power_button_status = HAL_GPIO_ReadPin(ADB_PSW_GPIO_Port, ADB_PSW_Pin);
+    // printf("%d", power_button_status);
+    // HAL_Delay(5);
   for (int i = 0; i < SPI_BUF_SIZE; ++i)
     printf("%d ", backup_spi1_recv_buf[i]);
   printf("\n");

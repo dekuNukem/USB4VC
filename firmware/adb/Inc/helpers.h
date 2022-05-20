@@ -78,7 +78,7 @@ typedef struct
   mouse_event* mouse_events;
 } mouse_buf;
 
-void kb_buf_init(kb_buf *lb, uint8_t size);
+void kb_buf_init(kb_buf *lb);
 uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value);
 uint8_t kb_buf_peek(kb_buf *lb, uint8_t* code, uint8_t* value);
 void kb_buf_pop(kb_buf *lb);

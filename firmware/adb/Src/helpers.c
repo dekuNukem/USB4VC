@@ -8,13 +8,13 @@ void kb_buf_reset(kb_buf *lb)
 {
   lb->head = 0;
   lb->tail = 0;
-  memset(lb->keycode_buf, 0, lb->size);
-  memset(lb->keyvalue_buf, 0, lb->size);
+  memset(lb->keycode_buf, 0, KEYBOARD_EVENT_BUFFER_SIZE);
+  memset(lb->keyvalue_buf, 0, KEYBOARD_EVENT_BUFFER_SIZE);
 }
 
 uint8_t kb_buf_is_full(kb_buf *lb)
 {
-	return lb->tail == (lb->head + 1) % lb->size;
+	return lb->tail == (lb->head + 1) % KEYBOARD_EVENT_BUFFER_SIZE;
 }
 
 uint8_t kb_buf_is_empty(kb_buf *lb)
@@ -28,7 +28,7 @@ uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value)
 		return 1;
 	lb->keycode_buf[lb->head] = code;
 	lb->keyvalue_buf[lb->head] = value;
-	lb->head = (lb->head + 1) % lb->size;
+	lb->head = (lb->head + 1) % KEYBOARD_EVENT_BUFFER_SIZE;
 	return 0;
 }
 
@@ -44,14 +44,13 @@ uint8_t kb_buf_peek(kb_buf *lb, uint8_t* code, uint8_t* value)
 void kb_buf_pop(kb_buf *lb)
 {
 	if(!kb_buf_is_empty(lb))
-		lb->tail = (lb->tail + 1) % lb->size;;
+		lb->tail = (lb->tail + 1) % KEYBOARD_EVENT_BUFFER_SIZE;
 }
 
-void kb_buf_init(kb_buf *lb, uint8_t size)
+void kb_buf_init(kb_buf *lb)
 {
-  lb->size = size;
-  lb->keycode_buf = malloc(size);
-  lb->keyvalue_buf = malloc(size);
+  lb->keycode_buf = malloc(KEYBOARD_EVENT_BUFFER_SIZE);
+  lb->keyvalue_buf = malloc(KEYBOARD_EVENT_BUFFER_SIZE);
   kb_buf_reset(lb);
 }
 

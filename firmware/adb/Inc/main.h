@@ -57,6 +57,7 @@
 #define DEBUG3_GPIO_Port GPIOF
 #define ADB_PSW_Pin GPIO_PIN_0
 #define ADB_PSW_GPIO_Port GPIOA
+#define ADB_PSW_EXTI_IRQn EXTI0_1_IRQn
 #define SLAVE_REQ_Pin GPIO_PIN_1
 #define SLAVE_REQ_GPIO_Port GPIOA
 #define ADB_5V_DET_Pin GPIO_PIN_3

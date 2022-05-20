@@ -182,13 +182,6 @@ void handle_protocol_switch(uint8_t spi_byte)
     protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
 }
 
-/*
-  a full rundown of this ISR takes around 30us, so if it comes in 
-  while reading or writing ADB message, it will mess up the timing
-  
-  solution: cache the data and return immediately, only takes around 6us,
-  then process the data in main loop.
-*/
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
@@ -410,7 +403,11 @@ void adb_keyboard_update(void)
   }
 }
 
-uint8_t power_button_status;
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(GPIO_Pin == ADB_PSW_Pin && is_protocol_enabled(PROTOCOL_ADB_MOUSE))
+    printf("d");
+}
 
 /* USER CODE END 0 */
 
@@ -452,7 +449,7 @@ int main(void)
   HAL_IWDG_Refresh(&hiwdg);
   delay_us_init(&htim2);
   protocol_status_lookup_init();
-  kb_buf_init(&my_kb_buf, KEYBOARD_EVENT_BUFFER_SIZE);
+  kb_buf_init(&my_kb_buf);
   mouse_buf_init(&my_mouse_buf);
   uint8_t adb_data, adb_status, this_addr;
   uint8_t kb_srq = 0;
@@ -467,9 +464,7 @@ int main(void)
   while (1)
   {
     HAL_IWDG_Refresh(&hiwdg);
-    power_button_status = HAL_GPIO_ReadPin(ADB_PSW_GPIO_Port, ADB_PSW_Pin);
-    // printf("%d", power_button_status);
-    // HAL_Delay(5);
+
     if(spi_error_occured)
       spi_error_dump_reboot();
 
@@ -704,9 +699,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOF, DEBUG2_Pin|DEBUG3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(ADB_PSW_GPIO_Port, ADB_PSW_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, SLAVE_REQ_Pin|DEBUG1_Pin|DEBUG0_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -728,9 +720,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : ADB_PSW_Pin */
   GPIO_InitStruct.Pin = ADB_PSW_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(ADB_PSW_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : SLAVE_REQ_Pin DEBUG1_Pin DEBUG0_Pin */
@@ -752,6 +743,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ADB_DATA_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_1_IRQn, 3, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
 
 }
 

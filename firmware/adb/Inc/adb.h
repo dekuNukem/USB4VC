@@ -14,7 +14,7 @@
 #define ADB_LINE_STATUS_ERROR 5
 #define ADB_LINE_STATUS_COLLISION 6
 
-#define ADB_TIMEOUT -1
+#define ADB_TIMEOUT 255
 #define ADB_OK 0
 #define ADB_KB_POLL 2
 #define ADB_KB_POLL_REG2 3
