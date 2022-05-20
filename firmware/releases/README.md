@@ -1,5 +1,11 @@
 # USB4VC Firmware Release History
 
+## Table of Contents
+
+[Firmware history for IBM PC Protocol Card](#ibm-pc-protocol-card)
+
+[Firmware history for Apple Desktop Bus (ADB) Protocol Card](#apple-desktop-bus-adb-protocol-card)
+
 ## IBM PC Protocol Card
 
 ### 0.5.4
@@ -51,5 +57,23 @@
 * Added PS/2 Mouse KVM compatibility mode, not sure if I wanna keep this.
 
 ### 0.2.0
+
+* Initial Release
+
+## Apple Desktop Bus (ADB) Protocol Card
+
+### 0.2.0
+
+* Released 20 May 2022
+
+* Improved mouse and keyboard event buffering
+
+* Added mouse event consolidation to better support high refresh rate mice
+
+* Enabled watchdog timer
+
+* Pressing `ADB POWER` button now sends a message through ADB too.
+
+### 0.1.0
 
 * Initial Release
