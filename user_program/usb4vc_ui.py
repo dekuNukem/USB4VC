@@ -234,7 +234,7 @@ def enter_dfu():
     time.sleep(0.05)
     # Release RESET, BOOT0 still HIGH, STM32 now in DFU mode
     GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
-    time.sleep(0.5)
+    time.sleep(1.5)
 
 def exit_dfu():
     # Release BOOT0
@@ -245,7 +245,7 @@ def exit_dfu():
     time.sleep(0.05)
     # Release RESET, BOOT0 is LOW, STM32 boots in normal mode
     GPIO.setup(PBOARD_RESET_PIN, GPIO.IN)
-    time.sleep(0.5)
+    time.sleep(1.5)
 
 def fw_update(fw_path, pbid):
     is_updated = False
