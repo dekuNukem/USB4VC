@@ -14,6 +14,8 @@
 
 * Fixed a bug where turning off gameport gamepad will cause a crash.
 
+* Improved input event buffer performance
+
 ### 0.5.3
 
 * Released 13 May 2022

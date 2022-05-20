@@ -662,9 +662,9 @@ int main(void)
   if(is_protocol_enabled(PROTOCOL_XT_KB))
     xtkb_enable();
 
-  kb_buf_init(&my_kb_buf, KEYBOARD_EVENT_BUFFER_SIZE);
-  mouse_buf_init(&my_mouse_buf, MOUSE_EVENT_BUFFER_SIZE);
-  gamepad_buf_init(&my_gamepad_buf, GAMEPAD_EVENT_BUFFER_SIZE);
+  kb_buf_init(&my_kb_buf);
+  mouse_buf_init(&my_mouse_buf);
+  gamepad_buf_init(&my_gamepad_buf);
 
   mcp4451_reset();
 
