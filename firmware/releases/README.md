@@ -62,7 +62,7 @@
 
 ## Apple Desktop Bus (ADB) Protocol Card
 
-### 0.2.0
+### 0.2.1
 
 * Released 20 May 2022
 

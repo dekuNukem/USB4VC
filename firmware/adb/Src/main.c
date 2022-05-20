@@ -71,7 +71,7 @@ UART_HandleTypeDef huart2;
 const uint8_t board_id = 2;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 2;
-const uint8_t version_patch = 0;
+const uint8_t version_patch = 1;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
@@ -185,7 +185,7 @@ void handle_protocol_switch(uint8_t spi_byte)
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(DEBUG2_GPIO_Port, DEBUG2_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(DEBUG2_GPIO_Port, DEBUG2_Pin, GPIO_PIN_RESET);
 
   if(spi_recv_buf[0] != 0xde)
     spi_error_occured = 1;
@@ -242,7 +242,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(DEBUG2_GPIO_Port, DEBUG2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(DEBUG2_GPIO_Port, DEBUG2_Pin, GPIO_PIN_SET);
 }
 
 void spi_error_dump_reboot(void)
@@ -508,7 +508,6 @@ int main(void)
       mouse_srq = 0;
     }
 
-    HAL_GPIO_WritePin(DEBUG1_GPIO_Port, DEBUG1_Pin, kb_srq || mouse_srq);
     if((kb_srq && kb_enabled) || (mouse_srq && mouse_enabled))
       send_srq();
     else
@@ -702,13 +701,16 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, DEBUG2_Pin|DEBUG3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOF, DEBUG2_Pin|DEBUG3_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, SLAVE_REQ_Pin|DEBUG1_Pin|DEBUG0_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ADB_DATA_GPIO_Port, ADB_DATA_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, DEBUG1_Pin|DEBUG0_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : USER_LED_Pin */
   GPIO_InitStruct.Pin = USER_LED_Pin;
@@ -719,8 +721,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : DEBUG2_Pin DEBUG3_Pin */
   GPIO_InitStruct.Pin = DEBUG2_Pin|DEBUG3_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
@@ -730,12 +732,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(ADB_PSW_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SLAVE_REQ_Pin DEBUG1_Pin DEBUG0_Pin */
-  GPIO_InitStruct.Pin = SLAVE_REQ_Pin|DEBUG1_Pin|DEBUG0_Pin;
+  /*Configure GPIO pin : SLAVE_REQ_Pin */
+  GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ADB_5V_DET_Pin */
   GPIO_InitStruct.Pin = ADB_5V_DET_Pin;
@@ -749,6 +751,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ADB_DATA_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : DEBUG1_Pin DEBUG0_Pin */
+  GPIO_InitStruct.Pin = DEBUG1_Pin|DEBUG0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI0_1_IRQn, 3, 0);
