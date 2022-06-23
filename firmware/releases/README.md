@@ -8,13 +8,21 @@
 
 ## IBM PC Protocol Card
 
+### 0.5.5
+
+* Released 23 June 2022
+
+* Fixed a XT keyboard mapping bug.
+
+* Improved serial mouse RTS line handling.
+
 ### 0.5.4
 
 * Released 19 May 2022
 
 * Fixed a bug where turning off gameport gamepad will cause a crash.
 
-* Improved input event buffer performance
+* Improved input event buffer performance.
 
 ### 0.5.3
 

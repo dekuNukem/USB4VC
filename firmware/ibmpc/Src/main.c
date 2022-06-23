@@ -69,7 +69,7 @@ UART_HandleTypeDef huart3;
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 5;
-const uint8_t version_patch = 4;
+const uint8_t version_patch = 5;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -467,6 +467,7 @@ void microsoft_serial_mouse_update(void)
   {
     serial_mouse_rts_response = 0x4d; // 0x4d = 'M'
     HAL_UART_Transmit_IT(&huart3, &serial_mouse_rts_response, 1);
+    serial_mouse_is_tx_in_progress = 1;
     rts_active = 0;
   }
 

@@ -143,13 +143,13 @@ uint8_t xtkb_press_key(uint8_t code, uint8_t status)
       code = 72;
       break;
     case KEY_PAGEUP:
-      code = 74;
+      code = 73;
       break;
     case KEY_LEFT:
       code = 75;
       break;
     case KEY_RIGHT:
-      code = 78;
+      code = 77;
       break;
     case KEY_END:
       code = 79;
