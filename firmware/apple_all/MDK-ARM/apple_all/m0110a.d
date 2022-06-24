@@ -37,3 +37,4 @@ apple_all\m0110a.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h
 apple_all\m0110a.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
 apple_all\m0110a.o: ../Inc/shared.h
 apple_all\m0110a.o: ../Inc/m0110a.h
+apple_all\m0110a.o: ../Inc/delay_us.h
