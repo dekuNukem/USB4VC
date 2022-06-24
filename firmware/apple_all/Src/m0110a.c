@@ -10,11 +10,8 @@
 #define CLK_LOW_HOST_TO_KB 180
 #define CLK_READ_DELAY_HOST_TO_KB 80
 
-
-#define CLK_HIGH_FULL_KB_TO_HOST 170
-#define CLK_LOW_FULL_KB_TO_HOST 160
-#define CLK_HIGH_HALF_KB_TO_HOST (CLK_HIGH_KB_TO_HOST/2)
-#define CLK_LOW_HALF_KB_TO_HOST (CLK_LOW_KB_TO_HOST/2)
+#define CLK_HIGH_KB_TO_HOST 170
+#define CLK_LOW_KB_TO_HOST 160
 
 #define M0110A_CLK_HI() HAL_GPIO_WritePin(MAC_KB_CLK_GPIO_Port, MAC_KB_CLK_Pin, GPIO_PIN_SET)
 #define M0110A_CLK_LOW() HAL_GPIO_WritePin(MAC_KB_CLK_GPIO_Port, MAC_KB_CLK_Pin, GPIO_PIN_RESET)
@@ -80,55 +77,92 @@ uint8_t m0110a_get_update(uint8_t* result, uint16_t timeout_ms)
 	return wait_for_data_idle(timeout_ms);
 }
 
+uint8_t m0110a_write(uint8_t data)
+{
+	// clk is high at the start
+	for(int i=7; i>=0; i--)
+	{
+		// write data bit on falling edge, host latches on rising edge
+		if(data & (1 << i))
+			M0110A_DATA_HI();
+		else
+			M0110A_DATA_LOW();
+		M0110A_CLK_LOW();
+		delay_us(CLK_LOW_KB_TO_HOST);
+		M0110A_CLK_HI();
+		delay_us(CLK_HIGH_KB_TO_HOST);
+	}
+  return M0110A_OK;
+}
+
 
 /*
-
-uint8_t ps2kb_read(uint8_t* result, uint8_t timeout_ms)
+uint8_t ps2kb_write_nowait(uint8_t data)
 {
-  uint16_t data = 0x00;
-  uint16_t bit = 0x01;
+  uint8_t parity = 1;
 
-  ps2kb_wait_start = HAL_GetTick();
-  while(ps2kb_get_bus_status() != PS2_BUS_REQ_TO_SEND)
-  {
-  	if(HAL_GetTick() - ps2kb_wait_start >= timeout_ms)
-  		return PS2_ERROR_TIMEOUT;
-  }
-
+  PS2KB_DATA_LOW();
   delay_us(CLKHALF);
-  PS2KB_CLK_LOW();
+  // device sends on falling clock
+  PS2KB_CLK_LOW(); // start bit
   delay_us(CLKFULL);
   PS2KB_CLK_HI();
   delay_us(CLKHALF);
-
-  while (bit < 0x0100)
+  if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
   {
-    if (PS2KB_READ_DATA_PIN() == GPIO_PIN_SET)
-	    data = data | bit;
-    bit = bit << 1;
+    ps2kb_release_lines();
+    return PS2_ERROR_HOST_INHIBIT;
+  }
+
+  for (int i=0; i < 8; i++)
+  {
+    if (data & 0x01)
+      PS2KB_DATA_HI();
+    else
+      PS2KB_DATA_LOW();
+
     delay_us(CLKHALF);
     PS2KB_CLK_LOW();
     delay_us(CLKFULL);
     PS2KB_CLK_HI();
     delay_us(CLKHALF);
+    if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
+    {
+      ps2kb_release_lines();
+      return PS2_ERROR_HOST_INHIBIT;
+    }
+
+    parity = parity ^ (data & 0x01);
+    data = data >> 1;
+  }
+
+  // parity bit
+  if (parity)
+    PS2KB_DATA_HI();
+  else
+    PS2KB_DATA_LOW();
+
+  delay_us(CLKHALF);
+  PS2KB_CLK_LOW();
+  delay_us(CLKFULL);
+  PS2KB_CLK_HI();
+  delay_us(CLKHALF);
+  if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
+  {
+    ps2kb_release_lines();
+    return PS2_ERROR_HOST_INHIBIT;
   }
 
   // stop bit
-  delay_us(CLKHALF);
-  PS2KB_CLK_LOW();
-  delay_us(CLKFULL);
-  PS2KB_CLK_HI();
-  delay_us(CLKHALF);
-
-  delay_us(CLKHALF);
-  PS2KB_DATA_LOW();
-  PS2KB_CLK_LOW();
-  delay_us(CLKFULL);
-  PS2KB_CLK_HI();
-  delay_us(CLKHALF);
   PS2KB_DATA_HI();
+  delay_us(CLKHALF);
+  PS2KB_CLK_LOW();
+  delay_us(CLKFULL);
+  PS2KB_CLK_HI();
+  delay_us(CLKHALF);
 
-  *result = data & 0x00FF;
+  delay_us(BYTEWAIT_END);
+
   return PS2_OK;
 }
 

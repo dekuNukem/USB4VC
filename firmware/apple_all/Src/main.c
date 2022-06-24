@@ -264,8 +264,19 @@ int main(void)
       continue;
 
     m0110a_status = m0110a_get_update(&m0110a_host_cmd, 600);
-    if(m0110a_status != M0110A_LINE_IDLE)
-      printf("%d", m0110a_host_cmd);
+    if(m0110a_status != M0110A_OK)
+      continue;
+
+    if(m0110a_host_cmd == 0x16)
+      m0110a_write(0xb);
+    else if(m0110a_host_cmd == 0x10)
+      m0110a_write(0x7b);
+    else if(m0110a_host_cmd == 0x14)
+      m0110a_write(0x7b);
+    else if(m0110a_host_cmd == 0x36)
+      m0110a_write(0x7d);
+
+    // printf("%d", m0110a_host_cmd);
   }
   /* USER CODE END 3 */
 
