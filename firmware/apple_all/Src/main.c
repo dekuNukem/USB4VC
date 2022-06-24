@@ -47,6 +47,7 @@
 #include "shared.h"
 #include "helpers.h"
 #include "quad_encoder.h"
+#include "m0110a.h"
 
 #define PROTOCOL_STATUS_NOT_AVAILABLE 0
 #define PROTOCOL_STATUS_ENABLED 1
@@ -181,7 +182,7 @@ void spi_error_dump_reboot(void)
   NVIC_SystemReset();
 }
 
-const char boot_message[] = "USB4VC Protocol Board\nEarly Macintosh & Apple Desktop Bus\ndekuNukem 2022";
+const char boot_message[] = "USB4VC Protocol Board\nApple Lisa, Mac & ADB\ndekuNukem 2022";
 
 /*
 
@@ -198,6 +199,8 @@ REMEMBER TO ENABLE ARR PRELOAD ON TIMER 16
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 */
+
+uint8_t m0110a_host_cmd;
 
 /* USER CODE END 0 */
 
@@ -244,7 +247,7 @@ int main(void)
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
-  quad_init(&my_mouse_buf, &htim17, &htim16, &htim14, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12, GPIOB, GPIO_PIN_14, GPIOB, GPIO_PIN_15);
+  // quad_init(&my_mouse_buf, &htim17, &htim16, &htim14, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12, GPIOB, GPIO_PIN_14, GPIOB, GPIO_PIN_15);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -257,8 +260,11 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    // printf("hello\n");
-    // HAL_Delay(500);
+    // printf("%d\n", HAL_GPIO_ReadPin(MAC_KB_DATA_GPIO_Port, MAC_KB_DATA_Pin));
+    // HAL_Delay(5);
+    // HAL_GPIO_TogglePin(MAC_KB_CLK_GPIO_Port, MAC_KB_CLK_Pin);
+    if(m0110a_get_line_status() == M0110A_LINE_HOST_REQ)
+      printf("hello!\n");
   }
   /* USER CODE END 3 */
 
@@ -494,7 +500,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = MAC_KB_CLK_Pin|MAC_KB_DATA_Pin|GPIO_PIN_12|GPIO_PIN_13 
                           |GPIO_PIN_14|GPIO_PIN_15|ADB_PWR_Pin|ADB_DATA_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
