@@ -442,6 +442,11 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32f0xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>m0110a.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\m0110a.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

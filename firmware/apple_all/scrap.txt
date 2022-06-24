@@ -1,0 +1,36 @@
+    // int32_t ddd = calc_arr(avg_speed);
+    // if(ddd != 65535)
+    //   printf("%d\n", calc_arr(avg_speed));
+
+
+  // return (uint16_t)(-190*speed_val + 12690); // 1, 12500 | 64, 500
+int32_t result = -307*speed_val + 12807; // 1, 12500, 40, 500
+
+
+uint16_t calc_arr(int32_t speed_val)
+{
+  speed_val = abs(speed_val);
+  if(speed_val <= 0 || speed_val >= ARR_LOOKUP_SIZE)
+    return 500;
+  // int32_t result = -190*speed_val + 12690; // 1, 12500 | 64, 500
+  int32_t result = -307*speed_val + 12807; // 1, 12500, 40, 500
+  if (result < 500)
+    result = 500;
+  if(result > 12500)
+    result = 12500;
+  return (uint16_t)result;
+}
+
+
+
+#define ARR_LOOKUP_SIZE 40
+const uint16_t arr_lookup[ARR_LOOKUP_SIZE] = {500, 12500, 10245, 8926, 7990, 7264, 6671, 6170, 5735, 5352, 5010, 4699, 4416, 4156, 3915, 3691, 3481, 3283, 3098, 2922, 2755, 2596, 2445, 2300, 2162, 2029, 1901, 1779, 1660, 1546, 1436, 1329, 1226, 1126, 1029, 934, 843, 754, 667, 582};
+
+uint16_t calc_arr(int32_t speed_val)
+{
+  return 500;
+  speed_val = abs(speed_val);
+  if(speed_val <= 0 || speed_val >= ARR_LOOKUP_SIZE)
+    return 500;
+  return arr_lookup[speed_val];
+}
