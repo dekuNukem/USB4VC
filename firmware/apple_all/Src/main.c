@@ -78,6 +78,8 @@ uint8_t hw_revision = 0;
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
 kb_buf my_kb_buf;
+m0110a_cmd_buf my_m0110a_buf;
+
 mouse_buf my_mouse_buf;
 mouse_event latest_mouse_event;
 uint8_t spi_error_occured;
@@ -290,6 +292,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
+  m0110a_cmd_buf_init(&my_m0110a_buf);
   kb_buf_init(&my_kb_buf);
   mouse_buf_init(&my_mouse_buf);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);

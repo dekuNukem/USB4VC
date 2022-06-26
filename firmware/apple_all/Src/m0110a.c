@@ -95,75 +95,50 @@ uint8_t m0110a_write(uint8_t data)
   return M0110A_OK;
 }
 
+// -----------------------
 
-/*
-uint8_t ps2kb_write_nowait(uint8_t data)
+void m0110a_cmd_buf_reset(m0110a_cmd_buf *lb)
 {
-  uint8_t parity = 1;
-
-  PS2KB_DATA_LOW();
-  delay_us(CLKHALF);
-  // device sends on falling clock
-  PS2KB_CLK_LOW(); // start bit
-  delay_us(CLKFULL);
-  PS2KB_CLK_HI();
-  delay_us(CLKHALF);
-  if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
-  {
-    ps2kb_release_lines();
-    return PS2_ERROR_HOST_INHIBIT;
-  }
-
-  for (int i=0; i < 8; i++)
-  {
-    if (data & 0x01)
-      PS2KB_DATA_HI();
-    else
-      PS2KB_DATA_LOW();
-
-    delay_us(CLKHALF);
-    PS2KB_CLK_LOW();
-    delay_us(CLKFULL);
-    PS2KB_CLK_HI();
-    delay_us(CLKHALF);
-    if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
-    {
-      ps2kb_release_lines();
-      return PS2_ERROR_HOST_INHIBIT;
-    }
-
-    parity = parity ^ (data & 0x01);
-    data = data >> 1;
-  }
-
-  // parity bit
-  if (parity)
-    PS2KB_DATA_HI();
-  else
-    PS2KB_DATA_LOW();
-
-  delay_us(CLKHALF);
-  PS2KB_CLK_LOW();
-  delay_us(CLKFULL);
-  PS2KB_CLK_HI();
-  delay_us(CLKHALF);
-  if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
-  {
-    ps2kb_release_lines();
-    return PS2_ERROR_HOST_INHIBIT;
-  }
-
-  // stop bit
-  PS2KB_DATA_HI();
-  delay_us(CLKHALF);
-  PS2KB_CLK_LOW();
-  delay_us(CLKFULL);
-  PS2KB_CLK_HI();
-  delay_us(CLKHALF);
-
-  delay_us(BYTEWAIT_END);
-
-  return PS2_OK;
+  lb->head = 0;
+  lb->tail = 0;
+  memset(lb->cmd_buf, 0, M0110A_KB_TO_PC_CMD_BUF_SIZE);
 }
 
-*/
+uint8_t m0110a_cmd_buf_is_full(m0110a_cmd_buf *lb)
+{
+	return lb->tail == (lb->head + 1) % M0110A_KB_TO_PC_CMD_BUF_SIZE;
+}
+
+uint8_t m0110a_cmd_buf_is_empty(m0110a_cmd_buf *lb)
+{
+	return lb->tail == lb->head;
+}
+
+uint8_t m0110a_cmd_buf_add(m0110a_cmd_buf *lb, uint8_t code)
+{
+	if(m0110a_cmd_buf_is_full(lb))
+		return 1;
+	lb->cmd_buf[lb->head] = code;
+	lb->head = (lb->head + 1) % M0110A_KB_TO_PC_CMD_BUF_SIZE;
+	return 0;
+}
+
+uint8_t m0110a_cmd_buf_peek(m0110a_cmd_buf *lb, uint8_t* code)
+{
+	if(m0110a_cmd_buf_is_empty(lb))
+		return 1;
+	*code = lb->cmd_buf[lb->tail];
+	return 0;
+}
+
+void m0110a_cmd_buf_pop(m0110a_cmd_buf *lb)
+{
+	if(!m0110a_cmd_buf_is_empty(lb))
+		lb->tail = (lb->tail + 1) % M0110A_KB_TO_PC_CMD_BUF_SIZE;
+}
+
+void m0110a_cmd_buf_init(m0110a_cmd_buf *lb)
+{
+  lb->cmd_buf = malloc(M0110A_KB_TO_PC_CMD_BUF_SIZE);
+  m0110a_cmd_buf_reset(lb);
+}
