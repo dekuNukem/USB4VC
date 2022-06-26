@@ -47,12 +47,13 @@
 #define PROTOCOL_GAMEPORT_GRAVIS_GAMEPAD  8
 #define PROTOCOL_GAMEPORT_MICROSOFT_SIDEWINDER 9
 
+#define MOUSE_EVENT_BUFFER_SIZE 16
+#define KEYBOARD_EVENT_BUFFER_SIZE 8
 
 typedef struct
 {
   uint8_t head;
   uint8_t tail;
-  uint8_t size;
   uint8_t* keycode_buf;
   uint8_t* keyvalue_buf;
 } kb_buf;
@@ -73,18 +74,17 @@ typedef struct
 {
   uint8_t head;
   uint8_t tail;
-  uint8_t size;
   mouse_event* mouse_events;
 } mouse_buf;
 
-void kb_buf_init(kb_buf *lb, uint8_t size);
+void kb_buf_init(kb_buf *lb);
 uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value);
 uint8_t kb_buf_peek(kb_buf *lb, uint8_t* code, uint8_t* value);
 void kb_buf_pop(kb_buf *lb);
 uint8_t kb_buf_is_empty(kb_buf *lb);
 void kb_buf_reset(kb_buf *lb);
 
-void mouse_buf_init(mouse_buf *lb, uint8_t size);
+void mouse_buf_init(mouse_buf *lb);
 uint8_t mouse_buf_add(mouse_buf *lb, mouse_event* event);
 mouse_event* mouse_buf_peek(mouse_buf *lb);
 void mouse_buf_pop(mouse_buf *lb);

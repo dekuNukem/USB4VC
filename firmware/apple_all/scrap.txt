@@ -38,7 +38,11 @@ uint16_t calc_arr(int32_t speed_val)
     return 500;
   return arr_lookup[speed_val];
 }
-
+    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      printf("%d %d\n", buffered_code, buffered_value);
+      kb_buf_pop(&my_kb_buf);
+    }
 
   uint8_t bit = 0x80;
   while(bit)

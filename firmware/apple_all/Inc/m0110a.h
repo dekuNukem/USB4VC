@@ -14,7 +14,7 @@
 
 
 uint8_t m0110a_get_line_status(void);
-uint8_t m0110a_get_update(uint8_t* result, uint16_t timeout_ms);
+uint8_t m0110a_read_host_cmd(uint8_t* result, uint16_t timeout_ms);
 uint8_t m0110a_write(uint8_t data);
 
 #ifdef __cplusplus

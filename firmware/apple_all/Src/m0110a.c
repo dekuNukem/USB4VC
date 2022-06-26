@@ -67,7 +67,7 @@ uint8_t wait_for_data_idle(uint16_t timeout_ms)
 	return M0110A_OK;
 }
 
-uint8_t m0110a_get_update(uint8_t* result, uint16_t timeout_ms)
+uint8_t m0110a_read_host_cmd(uint8_t* result, uint16_t timeout_ms)
 {
 	if(m0110a_get_line_status() == M0110A_LINE_IDLE)
 		return M0110A_LINE_IDLE;

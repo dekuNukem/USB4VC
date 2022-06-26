@@ -201,24 +201,53 @@ REMEMBER TO ENABLE ARR PRELOAD ON TIMER 16
 Configure GPIO pins : MAC_KB_CLK_Pin
 
 */
-
+uint8_t m0110a_inquiry_active;
+uint32_t m0110a_last_inquiry;
+uint8_t buffered_code, buffered_value;
 
 void m0110a_update(void)
 {
   static uint8_t m0110a_host_cmd, m0110a_status;
 
-  m0110a_status = m0110a_get_update(&m0110a_host_cmd, 600);
+  m0110a_status = m0110a_read_host_cmd(&m0110a_host_cmd, 600);
   if(m0110a_status != M0110A_OK)
     return;
 
-  if(m0110a_host_cmd == 0x16)
+  if(m0110a_host_cmd == 0x10) // inquiry
+  {
+    m0110a_inquiry_active = 1;
+    m0110a_last_inquiry = HAL_GetTick();
+  }
+  else if(m0110a_host_cmd == 0x14) // instant
+    m0110a_write(0x7b);
+  else if(m0110a_host_cmd == 0x16) // model number
     m0110a_write(0xb);
-  else if(m0110a_host_cmd == 0x10)
-    m0110a_write(0x7b);
-  else if(m0110a_host_cmd == 0x14)
-    m0110a_write(0x7b);
-  else if(m0110a_host_cmd == 0x36)
+  else if(m0110a_host_cmd == 0x36) // test
     m0110a_write(0x7d);
+
+  printf("%x", m0110a_host_cmd);
+}
+
+void m0100a_handle_inquiry(void)
+{
+  // "If no key transition has occurred after 0.25 second
+  // the keyboard sends back a Null response to let the computer know it's still there"
+  if(m0110a_inquiry_active && HAL_GetTick() - m0110a_last_inquiry > 250)
+  {
+    m0110a_write(0x7b);
+    m0110a_inquiry_active = 0;
+  }
+  else if(m0110a_inquiry_active && kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+  {
+    if(buffered_value)
+      m0110a_write(0x23);
+    else
+      m0110a_write(0xa3);
+    kb_buf_pop(&my_kb_buf);
+    m0110a_inquiry_active = 0;
+    printf("%d\n", buffered_code);
+  }
+
 }
 
 /* USER CODE END 0 */
@@ -261,8 +290,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
-  kb_buf_init(&my_kb_buf, 16);
-  mouse_buf_init(&my_mouse_buf, 16);
+  kb_buf_init(&my_kb_buf);
+  mouse_buf_init(&my_mouse_buf);
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
@@ -278,10 +307,12 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+
     if(HAL_GPIO_ReadPin(MAC_KB_CLK_GPIO_Port, MAC_KB_CLK_Pin) == GPIO_PIN_RESET)
       continue;
 
-    // printf("%d", m0110a_host_cmd);
+    m0110a_update();
+    m0100a_handle_inquiry();
   }
   /* USER CODE END 3 */
 
