@@ -207,6 +207,15 @@ uint8_t m0110a_inquiry_active;
 uint32_t m0110a_last_inquiry;
 uint8_t buffered_code, buffered_value;
 
+void m0110a_write_1b_from_buf(void)
+{
+  uint8_t m0100a_byte;
+  m0110a_cmd_buf_peek(&my_m0110a_buf, &m0100a_byte);
+  m0110a_cmd_buf_pop(&my_m0110a_buf);
+  m0110a_write(m0100a_byte);
+  printf("b%x", m0100a_byte);
+}
+
 void m0110a_update(void)
 {
   static uint8_t m0110a_host_cmd, m0110a_status;
@@ -221,13 +230,18 @@ void m0110a_update(void)
     m0110a_last_inquiry = HAL_GetTick();
   }
   else if(m0110a_host_cmd == 0x14) // instant
-    m0110a_write(0x7b);
+  {
+    if(m0110a_cmd_buf_is_empty(&my_m0110a_buf) == 0)
+      m0110a_write_1b_from_buf();
+    else
+      m0110a_write(0x7b);
+  }
   else if(m0110a_host_cmd == 0x16) // model number
     m0110a_write(0xb);
   else if(m0110a_host_cmd == 0x36) // test
     m0110a_write(0x7d);
 
-  printf("%x", m0110a_host_cmd);
+  printf("a%x", m0110a_host_cmd);
 }
 
 void m0100a_handle_inquiry(void)
@@ -239,17 +253,30 @@ void m0100a_handle_inquiry(void)
     m0110a_write(0x7b);
     m0110a_inquiry_active = 0;
   }
+  else if(m0110a_inquiry_active && m0110a_cmd_buf_is_empty(&my_m0110a_buf) == 0)
+  {
+    m0110a_write_1b_from_buf();
+    m0110a_inquiry_active = 0;
+  }
   else if(m0110a_inquiry_active && kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
   {
+    m0110a_cmd_buf_reset(&my_m0110a_buf);
     if(buffered_value)
-      m0110a_write(0x23);
+    {
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x71);
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x79);
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x0d);
+    }
     else
-      m0110a_write(0xa3);
+    {
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0xf1);
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x79);
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x8d);
+    }
     kb_buf_pop(&my_kb_buf);
+    m0110a_write_1b_from_buf();
     m0110a_inquiry_active = 0;
-    printf("%d\n", buffered_code);
   }
-
 }
 
 /* USER CODE END 0 */

@@ -12,7 +12,7 @@
 #define M0110A_LINE_HOST_REQ 2
 #define M0110A_TIMEOUT 3
 
-#define M0110A_KB_TO_PC_CMD_BUF_SIZE 3
+#define M0110A_KB_TO_PC_CMD_BUF_SIZE 4
 
 typedef struct
 {

@@ -25,7 +25,16 @@ uint16_t calc_arr(int32_t speed_val)
   return (uint16_t)result;
 }
 
-
+else if(m0110a_inquiry_active && kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+  {
+    if(buffered_value)
+      m0110a_write(0x23);
+    else
+      m0110a_write(0xa3);
+    kb_buf_pop(&my_kb_buf);
+    m0110a_inquiry_active = 0;
+    printf("%d\n", buffered_code);
+  }
 
 #define ARR_LOOKUP_SIZE 40
 const uint16_t arr_lookup[ARR_LOOKUP_SIZE] = {500, 12500, 10245, 8926, 7990, 7264, 6671, 6170, 5735, 5352, 5010, 4699, 4416, 4156, 3915, 3691, 3481, 3283, 3098, 2922, 2755, 2596, 2445, 2300, 2162, 2029, 1901, 1779, 1660, 1546, 1436, 1329, 1226, 1126, 1029, 934, 843, 754, 667, 582};
