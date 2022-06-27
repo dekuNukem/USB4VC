@@ -213,7 +213,7 @@ void m0110a_write_1b_from_buf(void)
   m0110a_cmd_buf_peek(&my_m0110a_buf, &m0100a_byte);
   m0110a_cmd_buf_pop(&my_m0110a_buf);
   m0110a_write(m0100a_byte);
-  printf("b%x", m0100a_byte);
+  printf("w%x", m0100a_byte);
 }
 
 void m0110a_update(void)
@@ -241,12 +241,12 @@ void m0110a_update(void)
   else if(m0110a_host_cmd == 0x36) // test
     m0110a_write(0x7d);
 
-  printf("a%x", m0110a_host_cmd);
+  printf("r%x", m0110a_host_cmd);
 }
 
 void m0100a_handle_inquiry(void)
 {
-  // "If no key transition has occurred after 0.25 second
+  // "If no key transition has occurred after 0.25 seconds
   // the keyboard sends back a Null response to let the computer know it's still there"
   if(m0110a_inquiry_active && HAL_GetTick() - m0110a_last_inquiry > 250)
   {
@@ -261,21 +261,26 @@ void m0100a_handle_inquiry(void)
   else if(m0110a_inquiry_active && kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
   {
     m0110a_cmd_buf_reset(&my_m0110a_buf);
+
+    uint8_t lookup_result = CODE_UNUSED;
+    if(buffered_code < LINUX_KEYCODE_TO_M0110A_SCANCODE_SIZE)
+      lookup_result = linux_keycode_to_m0110a_scancode_lookup[buffered_code];
+    if(lookup_result == CODE_UNUSED || lookup_result == CODE_HANDLE_SEPARATELY)
+      goto m0110a_kb_write_end;
+
     if(buffered_value)
     {
-      m0110a_cmd_buf_add(&my_m0110a_buf, 0x71);
-      m0110a_cmd_buf_add(&my_m0110a_buf, 0x79);
-      m0110a_cmd_buf_add(&my_m0110a_buf, 0x0d);
+      m0110a_cmd_buf_add(&my_m0110a_buf, lookup_result);
     }
     else
     {
-      m0110a_cmd_buf_add(&my_m0110a_buf, 0xf1);
-      m0110a_cmd_buf_add(&my_m0110a_buf, 0x79);
-      m0110a_cmd_buf_add(&my_m0110a_buf, 0x8d);
+      m0110a_cmd_buf_add(&my_m0110a_buf, lookup_result | 0x80);
     }
-    kb_buf_pop(&my_kb_buf);
     m0110a_write_1b_from_buf();
     m0110a_inquiry_active = 0;
+
+    m0110a_kb_write_end:
+    kb_buf_pop(&my_kb_buf);
   }
 }
 

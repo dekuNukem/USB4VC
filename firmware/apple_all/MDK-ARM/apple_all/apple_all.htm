@@ -3,7 +3,7 @@
 <title>Static Call Graph - [apple_all\apple_all.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image apple_all\apple_all.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Jun 26 23:16:28 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Jun 27 14:28:58 2022
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -831,8 +831,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 </UL>
 
-<P><STRONG><a name="[8a]"></a>m0100a_handle_inquiry</STRONG> (Thumb, 156 bytes, Stack size 16 bytes, main.o(i.m0100a_handle_inquiry))
-<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = m0100a_handle_inquiry &rArr; m0110a_write_1b_from_buf &rArr; m0110a_write &rArr; delay_us
+<P><STRONG><a name="[8a]"></a>m0100a_handle_inquiry</STRONG> (Thumb, 140 bytes, Stack size 16 bytes, main.o(i.m0100a_handle_inquiry))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = m0100a_handle_inquiry &rArr; m0110a_write_1b_from_buf &rArr; m0110a_write &rArr; wait_for_data_idle
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_reset
@@ -919,7 +919,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[99]"></a>m0110a_update</STRONG> (Thumb, 96 bytes, Stack size 8 bytes, main.o(i.m0110a_update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = m0110a_update &rArr; m0110a_read_host_cmd &rArr; m0110a_read &rArr; delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = m0110a_update &rArr; m0110a_write_1b_from_buf &rArr; m0110a_write &rArr; wait_for_data_idle
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
@@ -931,10 +931,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8b]"></a>m0110a_write</STRONG> (Thumb, 72 bytes, Stack size 24 bytes, m0110a.o(i.m0110a_write))
-<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = m0110a_write &rArr; delay_us
+<P><STRONG><a name="[8b]"></a>m0110a_write</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, m0110a.o(i.m0110a_write))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = m0110a_write &rArr; wait_for_data_idle
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
@@ -943,7 +944,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[90]"></a>m0110a_write_1b_from_buf</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, main.o(i.m0110a_write_1b_from_buf))
-<BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = m0110a_write_1b_from_buf &rArr; m0110a_write &rArr; delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = m0110a_write_1b_from_buf &rArr; m0110a_write &rArr; wait_for_data_idle
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_pop
@@ -1080,7 +1081,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[39]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
 </UL>
 <P>
 <H3>

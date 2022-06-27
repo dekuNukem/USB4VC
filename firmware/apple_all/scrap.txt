@@ -9,7 +9,18 @@
 
   // return (uint16_t)(-190*speed_val + 12690); // 1, 12500 | 64, 500
 int32_t result = -307*speed_val + 12807; // 1, 12500, 40, 500
-
+if(buffered_value)
+    {
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x71);
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x79);
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x0d);
+    }
+    else
+    {
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0xf1);
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x79);
+      m0110a_cmd_buf_add(&my_m0110a_buf, 0x8d);
+    }
 
 uint16_t calc_arr(int32_t speed_val)
 {

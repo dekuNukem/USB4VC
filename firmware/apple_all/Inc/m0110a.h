@@ -13,6 +13,12 @@
 #define M0110A_TIMEOUT 3
 
 #define M0110A_KB_TO_PC_CMD_BUF_SIZE 4
+#define LINUX_KEYCODE_TO_M0110A_SCANCODE_SIZE 128
+
+#define CODE_UNUSED 0
+#define CODE_HANDLE_SEPARATELY 0xff
+
+extern const uint8_t linux_keycode_to_m0110a_scancode_lookup[LINUX_KEYCODE_TO_M0110A_SCANCODE_SIZE];
 
 typedef struct
 {
