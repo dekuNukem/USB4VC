@@ -11,12 +11,12 @@
 #define M0110A_LINE_IDLE 1
 #define M0110A_LINE_HOST_REQ 2
 #define M0110A_TIMEOUT 3
+#define M0110A_UNKNOWN_CODE 4
 
 #define M0110A_KB_TO_PC_CMD_BUF_SIZE 4
 #define LINUX_KEYCODE_TO_M0110A_SCANCODE_SIZE 128
 
 #define CODE_UNUSED 0
-#define CODE_HANDLE_SEPARATELY 0xff
 
 extern const uint8_t linux_keycode_to_m0110a_scancode_lookup[LINUX_KEYCODE_TO_M0110A_SCANCODE_SIZE];
 
@@ -37,6 +37,8 @@ uint8_t m0110a_cmd_buf_peek(m0110a_cmd_buf *lb, uint8_t* code);
 void m0110a_cmd_buf_pop(m0110a_cmd_buf *lb);
 uint8_t m0110a_cmd_buf_is_empty(m0110a_cmd_buf *lb);
 void m0110a_cmd_buf_reset(m0110a_cmd_buf *lb);
+uint8_t make_m0110a_scancode(uint8_t linux_key_code, uint8_t linux_key_value, m0110a_cmd_buf *lb);
+
 
 #ifdef __cplusplus
 }

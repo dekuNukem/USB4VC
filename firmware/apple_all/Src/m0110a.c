@@ -55,12 +55,12 @@ const uint8_t linux_keycode_to_m0110a_scancode_lookup[LINUX_KEYCODE_TO_M0110A_SC
   0x3d, // KEY_RIGHTBRACE    27
   0x49, // KEY_ENTER    28
   0x75, // KEY_LEFTCTRL    29 !!!!! MAPPED TO LEFT OPTION
-  0x1, // KEY_A    30
-  0x3, // KEY_S    31
-  0x5, // KEY_D    32
-  0x7, // KEY_F    33
-  0xb, // KEY_G    34
-  0x9, // KEY_H    35
+  0x01, // KEY_A    30
+  0x03, // KEY_S    31
+  0x05, // KEY_D    32
+  0x07, // KEY_F    33
+  0x0b, // KEY_G    34
+  0x09, // KEY_H    35
   0x4d, // KEY_J    36
   0x51, // KEY_K    37
   0x4b, // KEY_L    38
@@ -69,8 +69,8 @@ const uint8_t linux_keycode_to_m0110a_scancode_lookup[LINUX_KEYCODE_TO_M0110A_SC
   0x65, // KEY_GRAVE    41
   0x71, // KEY_LEFTSHIFT    42
   0x55, // KEY_BACKSLASH    43
-  0xd, // KEY_Z    44
-  0xf, // KEY_X    45
+  0x0d, // KEY_Z    44
+  0x0f, // KEY_X    45
   0x11, // KEY_C    46
   0x13, // KEY_V    47
   0x17, // KEY_B    48
@@ -80,10 +80,10 @@ const uint8_t linux_keycode_to_m0110a_scancode_lookup[LINUX_KEYCODE_TO_M0110A_SC
   0x5f, // KEY_DOT    52
   0x59, // KEY_SLASH    53
   0x71, // KEY_RIGHTSHIFT    54
-  CODE_HANDLE_SEPARATELY, // KEY_KPASTERISK    55
+  0x05, // KEY_KPASTERISK    55
   0x6f, // KEY_LEFTALT    56 !!!!! MAPPED TO LEFT COMMAND
   0x63, // KEY_SPACE    57
-  CODE_HANDLE_SEPARATELY, // KEY_CAPSLOCK    58
+  0x73, // KEY_CAPSLOCK    58
   CODE_UNUSED, // KEY_F1    59
   CODE_UNUSED, // KEY_F2    60
   CODE_UNUSED, // KEY_F3    61
@@ -94,24 +94,24 @@ const uint8_t linux_keycode_to_m0110a_scancode_lookup[LINUX_KEYCODE_TO_M0110A_SC
   CODE_UNUSED, // KEY_F8    66
   CODE_UNUSED, // KEY_F9    67
   CODE_UNUSED, // KEY_F10    68
-  CODE_HANDLE_SEPARATELY, // KEY_NUMLOCK    69 !!!!! MAPPED TO CLEAR
+  0x0f, // KEY_NUMLOCK    69 !!!!! MAPPED TO CLEAR
   CODE_UNUSED, // KEY_SCROLLLOCK    70
-  CODE_HANDLE_SEPARATELY, // KEY_KP7    71
-  CODE_HANDLE_SEPARATELY, // KEY_KP8    72
-  CODE_HANDLE_SEPARATELY, // KEY_KP9    73
-  CODE_HANDLE_SEPARATELY, // KEY_KPMINUS    74
-  CODE_HANDLE_SEPARATELY, // KEY_KP4    75
-  CODE_HANDLE_SEPARATELY, // KEY_KP5    76
-  CODE_HANDLE_SEPARATELY, // KEY_KP6    77
-  CODE_HANDLE_SEPARATELY, // KEY_KPPLUS    78
-  CODE_HANDLE_SEPARATELY, // KEY_KP1    79
-  CODE_HANDLE_SEPARATELY, // KEY_KP2    80
-  CODE_HANDLE_SEPARATELY, // KEY_KP3    81
-  CODE_HANDLE_SEPARATELY, // KEY_KP0    82
-  CODE_HANDLE_SEPARATELY, // KEY_KPDOT    83
+  0x33, // KEY_KP7    71
+  0x37, // KEY_KP8    72
+  0x39, // KEY_KP9    73
+  0x1d, // KEY_KPMINUS    74
+  0x2d, // KEY_KP4    75
+  0x2f, // KEY_KP5    76
+  0x31, // KEY_KP6    77
+  0x0d, // KEY_KPPLUS    78
+  0x27, // KEY_KP1    79
+  0x29, // KEY_KP2    80
+  0x2b, // KEY_KP3    81
+  0x25, // KEY_KP0    82
+  0x03, // KEY_KPDOT    83
   CODE_UNUSED, // KEY_UNUSED    84
   CODE_UNUSED, // KEY_ZENKAKUHANKAKU    85
-  CODE_UNUSED, // KEY_102ND    86
+  0x55, // KEY_102ND    86
   CODE_UNUSED, // KEY_F11    87
   CODE_UNUSED, // KEY_F12    88
   CODE_UNUSED, // KEY_RO    89
@@ -121,19 +121,19 @@ const uint8_t linux_keycode_to_m0110a_scancode_lookup[LINUX_KEYCODE_TO_M0110A_SC
   CODE_UNUSED, // KEY_KATAKANAHIRAGANA    93
   CODE_UNUSED, // KEY_MUHENKAN    94
   CODE_UNUSED, // KEY_KPJPCOMMA    95
-  CODE_HANDLE_SEPARATELY, // KEY_KPENTER    96
+  0x19, // KEY_KPENTER    96
   0x75, // KEY_RIGHTCTRL    97 !!!!! MAPPED TO LEFT OPTION
-  CODE_HANDLE_SEPARATELY, // KEY_KPSLASH    98
+  0x1b, // KEY_KPSLASH    98
   CODE_UNUSED, // KEY_SYSRQ    99
   0x6f, // KEY_RIGHTALT    100 !!!!! MAPPED TO LEFT COMMAND
   CODE_UNUSED, // KEY_LINEFEED    101
   CODE_UNUSED, // KEY_HOME    102
-  CODE_HANDLE_SEPARATELY, // KEY_UP    103
+  0x1b, // KEY_UP    103
   CODE_UNUSED, // KEY_PAGEUP    104
-  CODE_HANDLE_SEPARATELY, // KEY_LEFT    105
-  CODE_HANDLE_SEPARATELY, // KEY_RIGHT    106
+  0x0d, // KEY_LEFT    105
+  0x05, // KEY_RIGHT    106
   CODE_UNUSED, // KEY_END    107
-  CODE_HANDLE_SEPARATELY, // KEY_DOWN    108
+  0x11, // KEY_DOWN    108
   CODE_UNUSED, // KEY_PAGEDOWN    109
   CODE_UNUSED, // KEY_INSERT    110
   CODE_UNUSED, // KEY_DELETE    111
@@ -225,6 +225,109 @@ uint8_t m0110a_write(uint8_t data)
 		M0110A_CLK_HI();
 		delay_us(CLK_HIGH_KB_TO_HOST);
 	}
+  return M0110A_OK;
+}
+
+
+#define KEY_CAPSLOCK  58
+
+#define KEY_KPASTERISK  55
+#define KEY_KPPLUS  78
+#define KEY_KPSLASH  98
+
+#define KEY_NUMLOCK  69
+#define KEY_KP7  71
+#define KEY_KP8  72
+#define KEY_KP9  73
+#define KEY_KPMINUS  74
+#define KEY_KP4  75
+#define KEY_KP5  76
+#define KEY_KP6  77
+#define KEY_KP1  79
+#define KEY_KP2  80
+#define KEY_KP3  81
+#define KEY_KP0  82
+#define KEY_KPDOT  83
+#define KEY_KPENTER  96
+#define KEY_UP 103
+#define KEY_LEFT 105
+#define KEY_RIGHT 106
+#define KEY_DOWN 108
+
+uint8_t is_capslock_on;
+
+uint8_t make_m0110a_scancode(uint8_t linux_key_code, uint8_t linux_key_value, m0110a_cmd_buf *lb)
+{
+  uint8_t lookup_result = CODE_UNUSED;
+  if(linux_key_code < LINUX_KEYCODE_TO_M0110A_SCANCODE_SIZE)
+    lookup_result = linux_keycode_to_m0110a_scancode_lookup[linux_key_code];
+  // m0110a does not generate key autorepeat itself
+  if(linux_key_value == 2 || lookup_result == CODE_UNUSED)
+    return M0110A_UNKNOWN_CODE;
+
+  if(linux_key_code == KEY_CAPSLOCK)
+  {
+  	if(linux_key_value == 0)
+  		return M0110A_UNKNOWN_CODE;
+  	is_capslock_on = (is_capslock_on + 1) % 2;
+  	if(is_capslock_on)
+      m0110a_cmd_buf_add(lb, lookup_result);
+    else
+      m0110a_cmd_buf_add(lb, lookup_result | 0x80);
+  }
+  else if(linux_key_code == KEY_KPASTERISK || linux_key_code == KEY_KPPLUS || linux_key_code == KEY_KPSLASH)
+  {
+    if(linux_key_value)
+    {
+      m0110a_cmd_buf_add(lb, 0x71);
+      m0110a_cmd_buf_add(lb, 0x79);
+      m0110a_cmd_buf_add(lb, lookup_result);
+    }
+    else
+    {
+      m0110a_cmd_buf_add(lb, 0xf1);
+      m0110a_cmd_buf_add(lb, 0x79);
+      m0110a_cmd_buf_add(lb, lookup_result | 0x80);
+    }
+  }
+  else if(linux_key_code == KEY_NUMLOCK || 
+    linux_key_code == KEY_KP7 || 
+    linux_key_code == KEY_KP8 || 
+    linux_key_code == KEY_KP9 || 
+    linux_key_code == KEY_KPMINUS || 
+    linux_key_code == KEY_KP4 || 
+    linux_key_code == KEY_KP5 || 
+    linux_key_code == KEY_KP6 || 
+    linux_key_code == KEY_KP1 || 
+    linux_key_code == KEY_KP2 || 
+    linux_key_code == KEY_KP3 || 
+    linux_key_code == KEY_KP0 || 
+    linux_key_code == KEY_KPDOT || 
+    linux_key_code == KEY_KPENTER || 
+    linux_key_code == KEY_UP || 
+    linux_key_code == KEY_LEFT || 
+    linux_key_code == KEY_RIGHT || 
+    linux_key_code == KEY_DOWN)
+  {
+    if(linux_key_value)
+    {
+      m0110a_cmd_buf_add(lb, 0x79);
+      m0110a_cmd_buf_add(lb, lookup_result);
+    }
+    else
+    {
+      m0110a_cmd_buf_add(lb, 0x79);
+      m0110a_cmd_buf_add(lb, lookup_result | 0x80);
+    }
+    return M0110A_OK;
+  }
+  else
+  {
+    if(linux_key_value)
+      m0110a_cmd_buf_add(lb, lookup_result);
+    else
+      m0110a_cmd_buf_add(lb, lookup_result | 0x80);
+  }
   return M0110A_OK;
 }
 
