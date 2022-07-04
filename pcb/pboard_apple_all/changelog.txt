@@ -1,0 +1,10 @@
+pt1:
+initial prototype
+
+pt2:
+wired up mouse connector
+single rj11 socket with autodetect
+added quarter inch jack for apple lisa keyboard
+
+pt3:
+added mouse power detect
