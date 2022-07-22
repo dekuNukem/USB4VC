@@ -10,3 +10,4 @@ pt3:
 added mouse power detect
 moved rj11 socket down slightly
 fixed a mislabeled debug header pin
+updated mouse header labels

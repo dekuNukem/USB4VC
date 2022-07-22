@@ -227,11 +227,11 @@
 <text x="50.0126" y="30.1752" size="1.143" layer="26" rot="MR0" align="center">8</text>
 <text x="50.0126" y="32.7152" size="1.143" layer="26" rot="MR0" align="center">9</text>
 <text x="45.7708" y="1.4224" size="1.143" layer="25" align="center">ADB PSW</text>
-<text x="38.1508" y="26.2636" size="1.143" layer="25" rot="R180" align="center">B12</text>
-<text x="38.1508" y="28.8036" size="1.143" layer="25" rot="R180" align="center">B13</text>
-<text x="38.1508" y="31.4706" size="1.143" layer="25" rot="R180" align="center">B14</text>
-<text x="38.1508" y="34.0106" size="1.143" layer="25" rot="R180" align="center">B15</text>
-<text x="37.8968" y="36.5506" size="1.143" layer="25" rot="R180" align="center">A8</text>
+<text x="37.8968" y="26.2636" size="1.143" layer="25" rot="R180" align="center">Y2</text>
+<text x="38.1508" y="28.8036" size="1.143" layer="25" rot="R180" align="center">BTN</text>
+<text x="37.8968" y="31.4706" size="1.143" layer="25" rot="R180" align="center">X1</text>
+<text x="37.8968" y="34.0106" size="1.143" layer="25" rot="R180" align="center">Y1</text>
+<text x="37.8968" y="36.5506" size="1.143" layer="25" rot="R180" align="center">X2</text>
 <text x="22.1488" y="43.9166" size="1.4224" layer="26" rot="MR180" align="center">USB4VC Protocol Card for
 Apple Lisa, Early Macintosh
 &amp; Apple Desktop Bus
