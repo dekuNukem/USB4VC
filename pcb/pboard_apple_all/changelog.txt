@@ -9,3 +9,4 @@ added quarter inch jack for apple lisa keyboard
 pt3:
 added mouse power detect
 moved rj11 socket down slightly
+fixed a mislabeled debug header pin

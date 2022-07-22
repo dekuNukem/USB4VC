@@ -201,7 +201,7 @@
 <text x="33.9598" y="44.7294" size="1.143" layer="25" rot="R180" align="center">DIO</text>
 <text x="42.1386" y="44.6532" size="1.143" layer="25" rot="R180" align="center">CLK</text>
 <text x="42.164" y="42.1132" size="1.016" layer="25" rot="R180" align="center">GND</text>
-<text x="42.3418" y="47.2186" size="1.143" layer="25" rot="R180" align="center">A14</text>
+<text x="42.0878" y="47.3456" size="1.143" layer="25" rot="R180" align="center">B3</text>
 <text x="33.8836" y="47.2186" size="1.143" layer="25" rot="R180" align="center">A15</text>
 <text x="21.5646" y="48.514" size="1.143" layer="25" align="center">G</text>
 <text x="14.351" y="48.4886" size="1.143" layer="25" align="center">5</text>
@@ -250,6 +250,13 @@ Apple Lisa, Early Macintosh
 <text x="21.844" y="27.559" size="1.143" layer="25" rot="R270" align="center">L5V</text>
 <text x="17.272" y="31.369" size="1.143" layer="25" align="center">LD</text>
 <text x="12.2428" y="27.559" size="1.27" layer="25" rot="R270" align="center">GND</text>
+<text x="71.12" y="6.477" size="1.778" layer="25">APPLE CABLE:
+G 5
+D C
+
+HEADSET CABLE:
+IDK PROBABLY MIRRORED</text>
+<wire x1="69.85" y1="20.701" x2="29.083" y2="29.337" width="1.016" layer="25"/>
 </plain>
 <libraries>
 <library name="f1c100s">
