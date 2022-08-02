@@ -1,27 +1,22 @@
 from PIL import Image
 
-im = Image.open('ccc.png', 'r').convert('RGB')
+im = Image.open('bitmap.png', 'r').convert('RGB')
 width, height = im.size
 
-if width < 128 or height < 128:
-	print("Wrong size, should be exactly 128x128")
-	exit()
-
-# x: left 0, right 128
-# y: top 0, bottom 128
+# x: left 0, right width
+# y: top 0, bottom height
 pix = im.load()
 
-curve_dict = {}
+curve_list = []
 
-for horizontal_location in range(128):
-	col_dict = {}
-	for y in range(128):
-		col_dict[sum(pix[horizontal_location,y])] = y
-	# print(horizontal_location, 128 - col_dict[min(col_dict.keys())])
-	curve_dict[horizontal_location] = 128 - col_dict[min(col_dict.keys())]
-	if curve_dict[horizontal_location] < 0:
-		curve_dict[horizontal_location] = 0
-	if curve_dict[horizontal_location] > 127:
-		curve_dict[horizontal_location] = 127
+for x in range(width):
+	col_list = []
+	for y in range(height):
+		col_list.append((y, sum(pix[x,y])))
+	col_list = sorted(col_list, key=lambda x: x[1])
+	curve_list.append((x, height - col_list[0][0]))
 
-print(curve_dict)
+
+adjusted_list = [(int(x[0]/4), int((x[1]/255)*12000) + 500) for x in curve_list[::4]]
+print(adjusted_list)
+print([x[1] for x in adjusted_list])

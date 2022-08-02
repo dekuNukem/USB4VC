@@ -314,7 +314,8 @@ int main(void)
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
-  // quad_init(&my_mouse_buf, &htim17, &htim16, &htim14, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12, GPIOB, GPIO_PIN_14, GPIOB, GPIO_PIN_15);
+  quad_init(&my_mouse_buf, &htim17, &htim16, &htim14, GPIOA, GPIO_PIN_8, GPIOB, GPIO_PIN_14, GPIOB, GPIO_PIN_15, GPIOB, GPIO_PIN_12);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

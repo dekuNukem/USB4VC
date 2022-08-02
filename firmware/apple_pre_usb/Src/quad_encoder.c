@@ -14,8 +14,10 @@ TIM_HandleTypeDef* arr_timer_y;
 
 mouse_buf* mouse_buffer;
 
-#define ARR_LOOKUP_SIZE 40
-const uint16_t arr_lookup[ARR_LOOKUP_SIZE] = {500, 12500, 10245, 8926, 7990, 7264, 6671, 6170, 5735, 5352, 5010, 4699, 4416, 4156, 3915, 3691, 3481, 3283, 3098, 2922, 2755, 2596, 2445, 2300, 2162, 2029, 1901, 1779, 1660, 1546, 1436, 1329, 1226, 1126, 1029, 934, 843, 754, 667, 582};
+#define ARR_LOOKUP_SIZE 64
+const uint16_t arr_lookup[ARR_LOOKUP_SIZE] = {
+12217, 10241, 8829, 7700, 6758, 5958, 5347, 4782, 4311, 3888, 3558, 3276, 3041, 2852, 2711, 2570, 2429, 2335, 2241, 2147, 2052, 1958, 1911, 1817, 1770, 1723, 1629, 1582, 1535, 1488, 1441, 1394, 1347, 1300, 1252, 1205, 1158, 1158, 1111, 1064, 1017, 1017, 970, 923, 923, 876, 876, 829, 829, 782, 782, 735, 735, 688, 688, 641, 641, 641, 594, 594, 594, 547, 547, 547
+};
 const uint8_t grey_code_lookup[4] = {0, 1, 3, 2};
 
 /*
@@ -121,7 +123,6 @@ void quad_decrement(quad_output *qo)
   this gets called every 10ms, fetches mouse event and put them into a running buffer
   a window average is calculated, used to adjust the timer autoreload register
 */
-
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
