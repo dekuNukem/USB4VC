@@ -101,3 +101,39 @@ void mouse_buf_init(mouse_buf *lb)
   mouse_buf_reset(lb);
 }
 
+// -------------
+
+mouse_event consolidated_mouse_event;
+
+void cap_to_127(int32_t *number)
+{
+  if(*number > 127)
+    *number = 127;
+  if(*number < -127)
+    *number = -127;
+}
+
+uint8_t get_consolidated_mouse_event(mouse_buf* mbuf, mouse_event* cme_result)
+{
+	uint8_t this_count = 0;
+  cme_result->movement_x = 0;
+  cme_result->movement_y = 0;
+  cme_result->button_left = 0;
+  cme_result->button_right = 0;
+  while(1)
+  {
+    mouse_event* this_mouse_event = mouse_buf_peek(mbuf);
+    if(this_mouse_event == NULL)
+      break;
+    cme_result->movement_x += this_mouse_event->movement_x;
+    cme_result->movement_y += this_mouse_event->movement_y;
+    cme_result->button_left |= this_mouse_event->button_left;
+    cme_result->button_right |= this_mouse_event->button_right;
+    mouse_buf_pop(mbuf);
+    this_count++;
+  }
+  cap_to_127(&cme_result->movement_x);
+  cap_to_127(&cme_result->movement_y);
+  return this_count;
+}
+

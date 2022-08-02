@@ -126,31 +126,27 @@ void quad_decrement(quad_output *qo)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+  uint8_t cme_count;
   // every 10ms
   if(htim == avg_timer)
   {
-    mouse_event* this_mouse_event = mouse_buf_peek(mouse_buffer);
-    if(this_mouse_event == NULL)
-    {
-      avg_buf_add(&quad_x, 0);
-      avg_buf_add(&quad_y, 0);
-    }
-    else
-    {
-      avg_buf_add(&quad_x, this_mouse_event->movement_x);
-      avg_buf_add(&quad_y, this_mouse_event->movement_y);
-      mouse_buf_pop(mouse_buffer);
-    }
+    cme_count = get_consolidated_mouse_event(mouse_buffer, &consolidated_mouse_event);
+    // mouse buffer now empty
+
+    avg_buf_add(&quad_x, consolidated_mouse_event.movement_x);
+    avg_buf_add(&quad_y, consolidated_mouse_event.movement_y);
+
     quad_x.avg_speed = get_buf_avg(&quad_x);
     quad_y.avg_speed = get_buf_avg(&quad_y);
     arr_timer_x->Instance->ARR = calc_arr(quad_x.avg_speed);
     arr_timer_y->Instance->ARR = calc_arr(quad_y.avg_speed);
-    if(this_mouse_event != NULL)
+
+    if(cme_count != 0)
     {
-      if(this_mouse_event->button_left || this_mouse_event->button_right)
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+      if(consolidated_mouse_event.button_left || consolidated_mouse_event.button_right)
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
       else
-        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);
     }
   }
   // every ARR overflow

@@ -60,9 +60,8 @@ typedef struct
 
 typedef struct
 {
-  int16_t movement_x;
-  int16_t movement_y;
-  int16_t scroll_vertical;
+  int32_t movement_x;
+  int32_t movement_y;
   uint8_t button_left;
   uint8_t button_middle;
   uint8_t button_right;
@@ -90,6 +89,9 @@ mouse_event* mouse_buf_peek(mouse_buf *lb);
 void mouse_buf_pop(mouse_buf *lb);
 void mouse_buf_reset(mouse_buf *lb);
 uint8_t mouse_buf_is_empty(mouse_buf *lb);
+uint8_t get_consolidated_mouse_event(mouse_buf* mbuf, mouse_event* cme_result);
+
+extern mouse_event consolidated_mouse_event;
 
 #ifdef __cplusplus
 }

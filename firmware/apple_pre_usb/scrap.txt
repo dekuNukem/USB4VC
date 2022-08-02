@@ -1,3 +1,51 @@
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  // every 10ms
+  if(htim == avg_timer)
+  {
+    mouse_event* this_mouse_event = mouse_buf_peek(mouse_buffer);
+    if(this_mouse_event == NULL)
+    {
+      avg_buf_add(&quad_x, 0);
+      avg_buf_add(&quad_y, 0);
+    }
+    else
+    {
+      avg_buf_add(&quad_x, this_mouse_event->movement_x);
+      avg_buf_add(&quad_y, this_mouse_event->movement_y);
+      mouse_buf_pop(mouse_buffer);
+    }
+    quad_x.avg_speed = get_buf_avg(&quad_x);
+    quad_y.avg_speed = get_buf_avg(&quad_y);
+    arr_timer_x->Instance->ARR = calc_arr(quad_x.avg_speed);
+    arr_timer_y->Instance->ARR = calc_arr(quad_y.avg_speed);
+    if(this_mouse_event != NULL)
+    {
+      if(this_mouse_event->button_left || this_mouse_event->button_right)
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
+      else
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);
+    }
+  }
+  // every ARR overflow
+  if(htim == arr_timer_x && quad_x.avg_speed != 0)
+  {
+    if(quad_x.avg_speed > 0)
+      quad_increment(&quad_x);
+    else
+      quad_decrement(&quad_x);
+  }
+  if(htim == arr_timer_y && quad_y.avg_speed != 0)
+  {
+    if(quad_y.avg_speed > 0)
+      quad_increment(&quad_y);
+    else
+      quad_decrement(&quad_y);
+  }
+}
+
+
     // printf("%d\n", HAL_GPIO_ReadPin(MAC_KB_DATA_GPIO_Port, MAC_KB_DATA_Pin));
     // HAL_Delay(5);
     // HAL_GPIO_TogglePin(MAC_KB_CLK_GPIO_Port, MAC_KB_CLK_Pin);

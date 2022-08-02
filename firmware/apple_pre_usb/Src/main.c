@@ -120,7 +120,6 @@ void parse_spi_buf(uint8_t* spibuf)
   {
     latest_mouse_event.movement_x = byte_to_int16_t(spibuf[4], spibuf[5]);
     latest_mouse_event.movement_y = 1 * byte_to_int16_t(spibuf[6], spibuf[7]);
-    latest_mouse_event.scroll_vertical = -1 * spibuf[8];
     latest_mouse_event.button_left = spibuf[13];
     latest_mouse_event.button_right = spibuf[14];
     latest_mouse_event.button_middle = spibuf[15];
