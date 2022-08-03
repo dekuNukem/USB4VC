@@ -183,7 +183,7 @@ void spi_error_dump_reboot(void)
   NVIC_SystemReset();
 }
 
-const char boot_message[] = "USB4VC Protocol Board\nApple Lisa, Mac & ADB\ndekuNukem 2022";
+const char boot_message[] = "USB4VC Protocol Board\nApple Pre-USB\ndekuNukem 2022";
 
 /*
 
