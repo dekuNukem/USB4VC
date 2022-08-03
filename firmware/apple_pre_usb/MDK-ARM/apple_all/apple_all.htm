@@ -3,7 +3,7 @@
 <title>Static Call Graph - [apple_all\apple_all.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image apple_all\apple_all.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Aug 02 14:35:31 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 03 04:45:18 2022
 <BR><P>
 <H3>Maximum Stack Usage =        228 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -73,7 +73,7 @@ Global Symbols
 <P><STRONG><a name="[28]"></a>__main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry.o(.ARM.Collect$$$$00000000))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(.text)
 </UL>
-<P><STRONG><a name="[a9]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
+<P><STRONG><a name="[ae]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
 
 <P><STRONG><a name="[2f]"></a>_main_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Calls]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
@@ -83,15 +83,15 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[aa]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
+<P><STRONG><a name="[af]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
 
-<P><STRONG><a name="[ab]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
+<P><STRONG><a name="[b0]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
 
-<P><STRONG><a name="[ac]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
+<P><STRONG><a name="[b1]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
 
-<P><STRONG><a name="[ad]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
+<P><STRONG><a name="[b2]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
 
-<P><STRONG><a name="[ae]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
+<P><STRONG><a name="[b3]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
 
 <P><STRONG><a name="[0]"></a>Reset_Handler</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, startup_stm32f072xb.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(RESET)
@@ -184,7 +184,7 @@ Global Symbols
 <P><STRONG><a name="[6]"></a>WWDG_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_stm32f072xb.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(RESET)
 </UL>
-<P><STRONG><a name="[af]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
+<P><STRONG><a name="[b4]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
 
 <P><STRONG><a name="[3b]"></a>__aeabi_uidivmod</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, uidiv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = __aeabi_uidivmod
@@ -201,24 +201,24 @@ Global Symbols
 <LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 
-<P><STRONG><a name="[b0]"></a>__aeabi_memset4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[b5]"></a>__aeabi_memset4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
-<P><STRONG><a name="[b1]"></a>__aeabi_memset8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[b6]"></a>__aeabi_memset8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
 <P><STRONG><a name="[31]"></a>__aeabi_memclr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, memseta.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_reset
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_reset
+<BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_reset
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_reset
 </UL>
 
-<P><STRONG><a name="[9e]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
+<P><STRONG><a name="[a3]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_spi_buf
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
 </UL>
 
-<P><STRONG><a name="[b2]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[b7]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
 <P><STRONG><a name="[33]"></a>_memset$wrapper</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, memseta.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
@@ -230,7 +230,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_main_scatterload
 </UL>
 
-<P><STRONG><a name="[b3]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+<P><STRONG><a name="[b8]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
 <P><STRONG><a name="[44]"></a>HAL_DMA_Abort_IT</STRONG> (Thumb, 72 bytes, Stack size 16 bytes, stm32f0xx_hal_dma.o(i.HAL_DMA_Abort_IT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_DMA_Abort_IT
@@ -243,7 +243,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 </UL>
 
 <P><STRONG><a name="[48]"></a>HAL_GPIO_Init</STRONG> (Thumb, 314 bytes, Stack size 24 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_Init))
@@ -254,24 +254,25 @@ Global Symbols
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 </UL>
 
-<P><STRONG><a name="[95]"></a>HAL_GPIO_ReadPin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_ReadPin))
+<P><STRONG><a name="[99]"></a>HAL_GPIO_ReadPin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_ReadPin))
 <BR><BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_get_line_status
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_get_line_status
 </UL>
 
-<P><STRONG><a name="[a8]"></a>HAL_GPIO_TogglePin</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_TogglePin))
-<BR><BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<P><STRONG><a name="[ad]"></a>HAL_GPIO_TogglePin</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_TogglePin))
+<BR><BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 </UL>
 
 <P><STRONG><a name="[4b]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
-<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
+<LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_disable
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
@@ -281,10 +282,10 @@ Global Symbols
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_get_line_status
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_get_line_status
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitFlagStateUntilTimeout
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitFifoStateUntilTimeout
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
@@ -431,7 +432,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4a]"></a>HAL_SPI_TxRxCpltCallback</STRONG> (Thumb, 76 bytes, Stack size 16 bytes, main.o(i.HAL_SPI_TxRxCpltCallback))
-<BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; mouse_buf_add
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_spi_buf
@@ -503,8 +504,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us_init
 </UL>
 
-<P><STRONG><a name="[a7]"></a>HAL_TIM_Base_Start_IT</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_Base_Start_IT))
-<BR><BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
+<P><STRONG><a name="[ac]"></a>HAL_TIM_Base_Start_IT</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_Base_Start_IT))
+<BR><BR>[Called By]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
 </UL>
 
 <P><STRONG><a name="[54]"></a>HAL_TIM_ConfigClockSource</STRONG> (Thumb, 238 bytes, Stack size 24 bytes, stm32f0xx_hal_tim.o(i.HAL_TIM_ConfigClockSource))
@@ -546,7 +547,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
 
-<P><STRONG><a name="[5d]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 186 bytes, Stack size 24 bytes, quad_encoder.o(i.HAL_TIM_PeriodElapsedCallback))
+<P><STRONG><a name="[5d]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 192 bytes, Stack size 24 bytes, quad_encoder.o(i.HAL_TIM_PeriodElapsedCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = HAL_TIM_PeriodElapsedCallback &rArr; quad_increment &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_consolidated_mouse_event
@@ -712,26 +713,32 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
-<P><STRONG><a name="[b4]"></a>__1printf$3</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3), UNUSED)
+<P><STRONG><a name="[b9]"></a>__1printf$3</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3), UNUSED)
 
-<P><STRONG><a name="[9c]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
+<P><STRONG><a name="[a0]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[b5]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[85]"></a>__ARM_common_switch8</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, main.o(i.__ARM_common_switch8))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __ARM_common_switch8
+</UL>
+<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
+</UL>
 
-<P><STRONG><a name="[b6]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[ba]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[b7]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[bb]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+
+<P><STRONG><a name="[bc]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[62]"></a>avg_buf_add</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, quad_encoder.o(i.avg_buf_add))
 <BR><BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
-<P><STRONG><a name="[a4]"></a>byte_to_int16_t</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, main.o(i.byte_to_int16_t))
+<P><STRONG><a name="[a9]"></a>byte_to_int16_t</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, main.o(i.byte_to_int16_t))
 <BR><BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_spi_buf
 </UL>
 
@@ -748,8 +755,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
+<BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
 </UL>
 
 <P><STRONG><a name="[7f]"></a>delay_us_init</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, delay_us.o(i.delay_us_init))
@@ -783,208 +790,219 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
-<P><STRONG><a name="[84]"></a>kb_buf_add</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_add))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = kb_buf_add
+<P><STRONG><a name="[84]"></a>handle_protocol_switch</STRONG> (Thumb, 90 bytes, Stack size 16 bytes, main.o(i.handle_protocol_switch))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_is_full
+<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_enable
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_disable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_spi_buf
 </UL>
 
-<P><STRONG><a name="[86]"></a>kb_buf_init</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_init))
+<P><STRONG><a name="[88]"></a>kb_buf_add</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_add))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = kb_buf_add
+</UL>
+<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_is_full
+</UL>
+<BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_spi_buf
+</UL>
+
+<P><STRONG><a name="[8a]"></a>kb_buf_init</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = kb_buf_init &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_reset
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_reset
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[85]"></a>kb_buf_is_full</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, helpers.o(i.kb_buf_is_full))
-<BR><BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_add
+<P><STRONG><a name="[89]"></a>kb_buf_is_full</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, helpers.o(i.kb_buf_is_full))
+<BR><BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_add
 </UL>
 
-<P><STRONG><a name="[8c]"></a>kb_buf_peek</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_peek))
+<P><STRONG><a name="[90]"></a>kb_buf_peek</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_peek))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = kb_buf_peek
 </UL>
-<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
 </UL>
 
-<P><STRONG><a name="[90]"></a>kb_buf_pop</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, helpers.o(i.kb_buf_pop))
-<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<P><STRONG><a name="[94]"></a>kb_buf_pop</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, helpers.o(i.kb_buf_pop))
+<BR><BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
 </UL>
 
-<P><STRONG><a name="[88]"></a>kb_buf_reset</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_reset))
+<P><STRONG><a name="[8c]"></a>kb_buf_reset</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, helpers.o(i.kb_buf_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = kb_buf_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
-<BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
+<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 </UL>
 
-<P><STRONG><a name="[89]"></a>m0100a_handle_inquiry</STRONG> (Thumb, 120 bytes, Stack size 16 bytes, main.o(i.m0100a_handle_inquiry))
+<P><STRONG><a name="[8d]"></a>m0100a_handle_inquiry</STRONG> (Thumb, 120 bytes, Stack size 16 bytes, main.o(i.m0100a_handle_inquiry))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = m0100a_handle_inquiry &rArr; m0110a_write_1b_from_buf &rArr; m0110a_write &rArr; wait_for_data_idle
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
+<BR>[Calls]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;make_m0110a_scancode
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
-<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_reset
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_is_empty
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
+<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;make_m0110a_scancode
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_reset
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_is_empty
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[91]"></a>m0110a_cmd_buf_add</STRONG> (Thumb, 38 bytes, Stack size 4 bytes, m0110a.o(i.m0110a_cmd_buf_add))
+<P><STRONG><a name="[95]"></a>m0110a_cmd_buf_add</STRONG> (Thumb, 38 bytes, Stack size 4 bytes, m0110a.o(i.m0110a_cmd_buf_add))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = m0110a_cmd_buf_add
 </UL>
-<BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_is_full
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_is_full
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;make_m0110a_scancode
+<BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;make_m0110a_scancode
 </UL>
 
-<P><STRONG><a name="[93]"></a>m0110a_cmd_buf_init</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, m0110a.o(i.m0110a_cmd_buf_init))
+<P><STRONG><a name="[97]"></a>m0110a_cmd_buf_init</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, m0110a.o(i.m0110a_cmd_buf_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = m0110a_cmd_buf_init &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_reset
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
+<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_reset
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8b]"></a>m0110a_cmd_buf_is_empty</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, m0110a.o(i.m0110a_cmd_buf_is_empty))
-<BR><BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<P><STRONG><a name="[8f]"></a>m0110a_cmd_buf_is_empty</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, m0110a.o(i.m0110a_cmd_buf_is_empty))
+<BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
 </UL>
 
-<P><STRONG><a name="[92]"></a>m0110a_cmd_buf_is_full</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, m0110a.o(i.m0110a_cmd_buf_is_full))
-<BR><BR>[Called By]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_add
+<P><STRONG><a name="[96]"></a>m0110a_cmd_buf_is_full</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, m0110a.o(i.m0110a_cmd_buf_is_full))
+<BR><BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_add
 </UL>
 
-<P><STRONG><a name="[9a]"></a>m0110a_cmd_buf_peek</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, m0110a.o(i.m0110a_cmd_buf_peek))
-<BR><BR>[Called By]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
+<P><STRONG><a name="[9e]"></a>m0110a_cmd_buf_peek</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, m0110a.o(i.m0110a_cmd_buf_peek))
+<BR><BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
 </UL>
 
-<P><STRONG><a name="[9b]"></a>m0110a_cmd_buf_pop</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, m0110a.o(i.m0110a_cmd_buf_pop))
-<BR><BR>[Called By]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
+<P><STRONG><a name="[9f]"></a>m0110a_cmd_buf_pop</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, m0110a.o(i.m0110a_cmd_buf_pop))
+<BR><BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
 </UL>
 
-<P><STRONG><a name="[8d]"></a>m0110a_cmd_buf_reset</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, m0110a.o(i.m0110a_cmd_buf_reset))
+<P><STRONG><a name="[91]"></a>m0110a_cmd_buf_reset</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, m0110a.o(i.m0110a_cmd_buf_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = m0110a_cmd_buf_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
-<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_init
+<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_init
 </UL>
 
-<P><STRONG><a name="[94]"></a>m0110a_get_line_status</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, m0110a.o(i.m0110a_get_line_status))
+<P><STRONG><a name="[98]"></a>m0110a_get_line_status</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, m0110a.o(i.m0110a_get_line_status))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = m0110a_get_line_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
+<BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
 </UL>
 
-<P><STRONG><a name="[96]"></a>m0110a_read</STRONG> (Thumb, 76 bytes, Stack size 24 bytes, m0110a.o(i.m0110a_read))
+<P><STRONG><a name="[9a]"></a>m0110a_read</STRONG> (Thumb, 76 bytes, Stack size 24 bytes, m0110a.o(i.m0110a_read))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = m0110a_read &rArr; delay_us
 </UL>
-<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
+<BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 <LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
-<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
+<BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
 </UL>
 
-<P><STRONG><a name="[97]"></a>m0110a_read_host_cmd</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, m0110a.o(i.m0110a_read_host_cmd))
+<P><STRONG><a name="[9b]"></a>m0110a_read_host_cmd</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, m0110a.o(i.m0110a_read_host_cmd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = m0110a_read_host_cmd &rArr; m0110a_read &rArr; delay_us
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
-<LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_get_line_status
+<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_get_line_status
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
 </UL>
 
-<P><STRONG><a name="[99]"></a>m0110a_update</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, main.o(i.m0110a_update))
+<P><STRONG><a name="[9d]"></a>m0110a_update</STRONG> (Thumb, 86 bytes, Stack size 8 bytes, main.o(i.m0110a_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = m0110a_update &rArr; m0110a_write_1b_from_buf &rArr; m0110a_write &rArr; wait_for_data_idle
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
+<BR>[Calls]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_is_empty
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
+<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_is_empty
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8a]"></a>m0110a_write</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, m0110a.o(i.m0110a_write))
+<P><STRONG><a name="[8e]"></a>m0110a_write</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, m0110a.o(i.m0110a_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = m0110a_write &rArr; wait_for_data_idle
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
+<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
 <LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write_1b_from_buf
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
 </UL>
 
-<P><STRONG><a name="[8f]"></a>m0110a_write_1b_from_buf</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, main.o(i.m0110a_write_1b_from_buf))
+<P><STRONG><a name="[93]"></a>m0110a_write_1b_from_buf</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, main.o(i.m0110a_write_1b_from_buf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = m0110a_write_1b_from_buf &rArr; m0110a_write &rArr; wait_for_data_idle
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_pop
-<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_peek
+<BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_pop
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_peek
 </UL>
-<BR>[Called By]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
 </UL>
 
-<P><STRONG><a name="[26]"></a>main</STRONG> (Thumb, 302 bytes, Stack size 32 bytes, main.o(i.main))
+<P><STRONG><a name="[26]"></a>main</STRONG> (Thumb, 306 bytes, Stack size 32 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 228<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 <LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;protocol_status_lookup_init
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM2_Init
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_SPI1_Init
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_init
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_init
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_init
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_init
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 <LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us_init
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
-<P><STRONG><a name="[8e]"></a>make_m0110a_scancode</STRONG> (Thumb, 208 bytes, Stack size 16 bytes, m0110a.o(i.make_m0110a_scancode))
+<P><STRONG><a name="[92]"></a>make_m0110a_scancode</STRONG> (Thumb, 208 bytes, Stack size 16 bytes, m0110a.o(i.make_m0110a_scancode))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = make_m0110a_scancode &rArr; m0110a_cmd_buf_add
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_add
+<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_add
 </UL>
-<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
 </UL>
 
-<P><STRONG><a name="[87]"></a>malloc</STRONG> (Thumb, 92 bytes, Stack size 20 bytes, malloc.o(i.malloc))
+<P><STRONG><a name="[8b]"></a>malloc</STRONG> (Thumb, 92 bytes, Stack size 20 bytes, malloc.o(i.malloc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = malloc
 </UL>
-<BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_init
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_init
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
+<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_init
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_init
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 </UL>
 
 <P><STRONG><a name="[4e]"></a>micros</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, delay_us.o(i.micros))
@@ -993,25 +1011,25 @@ Global Symbols
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 </UL>
 
-<P><STRONG><a name="[a1]"></a>mouse_buf_add</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, helpers.o(i.mouse_buf_add))
+<P><STRONG><a name="[a6]"></a>mouse_buf_add</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, helpers.o(i.mouse_buf_add))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = mouse_buf_add
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
+<BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_full
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_spi_buf
 </UL>
 
-<P><STRONG><a name="[9d]"></a>mouse_buf_init</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_init))
+<P><STRONG><a name="[a2]"></a>mouse_buf_init</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = mouse_buf_init &rArr; malloc
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
+<BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_reset
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[a2]"></a>mouse_buf_is_full</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, helpers.o(i.mouse_buf_is_full))
-<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
+<P><STRONG><a name="[a7]"></a>mouse_buf_is_full</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, helpers.o(i.mouse_buf_is_full))
+<BR><BR>[Called By]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
 </UL>
 
 <P><STRONG><a name="[81]"></a>mouse_buf_peek</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, helpers.o(i.mouse_buf_peek))
@@ -1022,86 +1040,108 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_consolidated_mouse_event
 </UL>
 
-<P><STRONG><a name="[a3]"></a>mouse_buf_reset</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_reset))
+<P><STRONG><a name="[a8]"></a>mouse_buf_reset</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, helpers.o(i.mouse_buf_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = mouse_buf_reset
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_init
+<BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_init
 </UL>
 
-<P><STRONG><a name="[4c]"></a>parse_spi_buf</STRONG> (Thumb, 178 bytes, Stack size 16 bytes, main.o(i.parse_spi_buf))
-<BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = parse_spi_buf &rArr; mouse_buf_add
+<P><STRONG><a name="[4c]"></a>parse_spi_buf</STRONG> (Thumb, 202 bytes, Stack size 16 bytes, main.o(i.parse_spi_buf))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;byte_to_int16_t
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_add
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
+<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;byte_to_int16_t
+<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_add
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_add
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
+</UL>
+
+<P><STRONG><a name="[a1]"></a>protocol_status_lookup_init</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, main.o(i.protocol_status_lookup_init))
+<BR><BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[66]"></a>quad_decrement</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_decrement))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_decrement &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<BR>[Calls]<UL><LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
+</UL>
+
+<P><STRONG><a name="[87]"></a>quad_disable</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_disable))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = quad_disable
+</UL>
+<BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+</UL>
+<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
+</UL>
+
+<P><STRONG><a name="[86]"></a>quad_enable</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_enable))
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = quad_enable &rArr; quad_reset &rArr; quad_write
+</UL>
+<BR>[Calls]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
+</UL>
+<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
 <P><STRONG><a name="[65]"></a>quad_increment</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_increment))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_increment &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<BR>[Calls]<UL><LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
-<P><STRONG><a name="[9f]"></a>quad_init</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, quad_encoder.o(i.quad_init))
+<P><STRONG><a name="[a4]"></a>quad_init</STRONG> (Thumb, 80 bytes, Stack size 24 bytes, quad_encoder.o(i.quad_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = quad_init &rArr; quad_reset &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
-<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
+<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[a6]"></a>quad_reset</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_reset))
+<P><STRONG><a name="[ab]"></a>quad_reset</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, quad_encoder.o(i.quad_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = quad_reset &rArr; quad_write
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
+<BR>[Calls]<UL><LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
+<BR>[Called By]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_init
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_enable
 </UL>
 
-<P><STRONG><a name="[a5]"></a>quad_write</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, quad_encoder.o(i.quad_write))
+<P><STRONG><a name="[aa]"></a>quad_write</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, quad_encoder.o(i.quad_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
+<BR>[Called By]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_reset
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_increment
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_decrement
 </UL>
 
-<P><STRONG><a name="[a0]"></a>spi_error_dump_reboot</STRONG> (Thumb, 72 bytes, Stack size 0 bytes, main.o(i.spi_error_dump_reboot))
+<P><STRONG><a name="[a5]"></a>spi_error_dump_reboot</STRONG> (Thumb, 72 bytes, Stack size 0 bytes, main.o(i.spi_error_dump_reboot))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = spi_error_dump_reboot &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
+<BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[98]"></a>wait_for_data_idle</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, m0110a.o(i.wait_for_data_idle))
+<P><STRONG><a name="[9c]"></a>wait_for_data_idle</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, m0110a.o(i.wait_for_data_idle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = wait_for_data_idle
 </UL>
 <BR>[Calls]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
+<BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
+<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read_host_cmd
 </UL>
 <P>
 <H3>
@@ -1143,35 +1183,35 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[2a]"></a>SPI_2linesRxISR_16BIT</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesRxISR_16BIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = SPI_2linesRxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = SPI_2linesRxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> stm32f0xx_hal_spi.o(i.HAL_SPI_TransmitReceive_IT)
 </UL>
 <P><STRONG><a name="[2c]"></a>SPI_2linesRxISR_8BIT</STRONG> (Thumb, 94 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesRxISR_8BIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = SPI_2linesRxISR_8BIT &rArr; SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = SPI_2linesRxISR_8BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> stm32f0xx_hal_spi.o(i.HAL_SPI_TransmitReceive_IT)
 </UL>
 <P><STRONG><a name="[2b]"></a>SPI_2linesTxISR_16BIT</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesTxISR_16BIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = SPI_2linesTxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = SPI_2linesTxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> stm32f0xx_hal_spi.o(i.HAL_SPI_TransmitReceive_IT)
 </UL>
 <P><STRONG><a name="[2d]"></a>SPI_2linesTxISR_8BIT</STRONG> (Thumb, 72 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesTxISR_8BIT))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = SPI_2linesTxISR_8BIT &rArr; SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = SPI_2linesTxISR_8BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> stm32f0xx_hal_spi.o(i.HAL_SPI_TransmitReceive_IT)
 </UL>
 <P><STRONG><a name="[73]"></a>SPI_CloseRxTx_ISR</STRONG> (Thumb, 82 bytes, Stack size 16 bytes, stm32f0xx_hal_spi.o(i.SPI_CloseRxTx_ISR))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = SPI_CloseRxTx_ISR &rArr; SPI_EndRxTxTransaction &rArr; SPI_WaitFlagStateUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -1179,10 +1219,10 @@ Local Symbols
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_ErrorCallback
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_EndRxTxTransaction
 </UL>
-<BR>[Called By]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesRxISR_16BIT
-<LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesTxISR_8BIT
+<BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesTxISR_8BIT
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesTxISR_16BIT
 <LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesRxISR_8BIT
+<LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesRxISR_16BIT
 </UL>
 
 <P><STRONG><a name="[29]"></a>SPI_DMAAbortOnError</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_DMAAbortOnError))

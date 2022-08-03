@@ -24,6 +24,9 @@ typedef struct
 void quad_init(mouse_buf* mbuf, TIM_HandleTypeDef* avg_tim, TIM_HandleTypeDef* arr_tim_x, TIM_HandleTypeDef* arr_tim_y, GPIO_TypeDef* x1_port, uint16_t x1_pin, GPIO_TypeDef* x2_port, uint16_t x2_pin, GPIO_TypeDef* y1_port, uint16_t y1_pin, GPIO_TypeDef* y2_port, uint16_t y2_pin);
 void quad_increment(quad_output *qo);
 void quad_decrement(quad_output *qo);
+void quad_enable(void);
+void quad_disable(void);
+
 #ifdef __cplusplus
 }
 #endif

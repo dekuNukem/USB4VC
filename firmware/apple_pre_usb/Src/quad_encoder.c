@@ -14,6 +14,8 @@ TIM_HandleTypeDef* arr_timer_y;
 
 mouse_buf* mouse_buffer;
 
+uint8_t quad_mouse_is_enabled;
+
 #define ARR_LOOKUP_SIZE 64
 const uint16_t arr_lookup[ARR_LOOKUP_SIZE] = {
 12217, 10241, 8829, 7700, 6758, 5958, 5347, 4782, 4311, 3888, 3558, 3276, 3041, 2852, 2711, 2570, 2429, 2335, 2241, 2147, 2052, 1958, 1911, 1817, 1770, 1723, 1629, 1582, 1535, 1488, 1441, 1394, 1347, 1300, 1252, 1205, 1158, 1158, 1111, 1064, 1017, 1017, 970, 923, 923, 876, 876, 829, 829, 782, 782, 735, 735, 688, 688, 641, 641, 641, 594, 594, 594, 547, 547, 547
@@ -102,6 +104,7 @@ void quad_init(mouse_buf* mbuf, TIM_HandleTypeDef* avg_tim, TIM_HandleTypeDef* a
   arr_timer_y = arr_tim_y;
   mouse_buffer = mbuf;
   quad_reset(&quad_x);
+  quad_reset(&quad_y);
   HAL_TIM_Base_Start_IT(avg_timer);
   HAL_TIM_Base_Start_IT(arr_timer_x);
   HAL_TIM_Base_Start_IT(arr_timer_y);
@@ -119,6 +122,23 @@ void quad_decrement(quad_output *qo)
   quad_write(qo);
 }
 
+void quad_enable(void)
+{
+  quad_reset(&quad_x);
+  quad_reset(&quad_y);
+  quad_mouse_is_enabled = 1;
+}
+
+void quad_disable(void)
+{
+  quad_mouse_is_enabled = 0;
+  HAL_GPIO_WritePin(quad_x.A_port, quad_x.A_pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(quad_x.B_port, quad_x.B_pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(quad_y.A_port, quad_y.A_pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(quad_y.B_port, quad_y.B_pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);
+}
+
 /*
   this gets called every 10ms, fetches mouse event and put them into a running buffer
   a window average is calculated, used to adjust the timer autoreload register
@@ -127,6 +147,8 @@ void quad_decrement(quad_output *qo)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   uint8_t cme_count;
+  if(quad_mouse_is_enabled == 0)
+    return;
   // every 10ms
   if(htim == avg_timer)
   {
@@ -165,6 +187,4 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       quad_decrement(&quad_y);
   }
 }
-
-// HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
 

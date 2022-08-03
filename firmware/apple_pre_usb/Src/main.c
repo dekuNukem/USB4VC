@@ -114,6 +114,75 @@ int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
   return (int16_t)((msb << 8) | lsb);
 }
 
+void protocol_status_lookup_init(void)
+{
+  memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
+  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_M0100_MOUSE] = PROTOCOL_STATUS_DISABLED;
+  protocol_status_lookup[PROTOCOL_M0110_KB] = PROTOCOL_STATUS_DISABLED;
+  protocol_status_lookup[PROTOCOL_LISA_KB] = PROTOCOL_STATUS_DISABLED;
+}
+
+
+void handle_protocol_switch(uint8_t spi_byte)
+{
+  uint8_t index = spi_byte & 0x7f;
+  uint8_t onoff = spi_byte & 0x80;
+
+  if(index >= PROTOCOL_LOOKUP_SIZE)
+    return;
+  // trying to change a protocol that is not available on this board
+  if(protocol_status_lookup[index] == PROTOCOL_STATUS_NOT_AVAILABLE)
+    return;
+  // switching protocol ON
+  if(onoff && protocol_status_lookup[index] == PROTOCOL_STATUS_DISABLED)
+  {
+    switch(index)
+    {
+      case PROTOCOL_ADB_KB:
+        break;
+
+      case PROTOCOL_ADB_MOUSE:
+        break;
+
+      case PROTOCOL_M0100_MOUSE:
+        quad_enable();
+        break;
+
+      case PROTOCOL_M0110_KB:
+        break;
+
+      case PROTOCOL_LISA_KB:
+        break;
+    }
+    protocol_status_lookup[index] = PROTOCOL_STATUS_ENABLED;
+  }
+  // switching protocol OFF
+  else if((onoff == 0) && protocol_status_lookup[index] == PROTOCOL_STATUS_ENABLED)
+  {
+    switch(index)
+    {
+      case PROTOCOL_ADB_KB:
+        break;
+
+      case PROTOCOL_ADB_MOUSE:
+        break;
+
+      case PROTOCOL_M0100_MOUSE:
+        quad_disable();
+        break;
+
+      case PROTOCOL_M0110_KB:
+        break;
+
+      case PROTOCOL_LISA_KB:
+        break;
+    }
+    protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
+  }
+}
+
 void parse_spi_buf(uint8_t* spibuf)
 {
   if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_MOUSE_EVENT)
@@ -152,6 +221,15 @@ void parse_spi_buf(uint8_t* spibuf)
       else if(protocol_status_lookup[i] == PROTOCOL_STATUS_ENABLED)
         spi_transmit_buf[curr_index] = i | 0x80;
       curr_index++;
+    }
+  }
+  else if(spibuf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
+  {
+    for (int i = 3; i < SPI_BUF_SIZE; ++i)
+    {
+      if(spibuf[i] == 0)
+        break;
+      handle_protocol_switch(spibuf[i]);
     }
   }
 }
@@ -307,6 +385,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
+  protocol_status_lookup_init();
+
   m0110a_cmd_buf_init(&my_m0110a_buf);
   kb_buf_init(&my_kb_buf);
   mouse_buf_init(&my_mouse_buf);
