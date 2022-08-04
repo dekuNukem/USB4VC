@@ -410,9 +410,9 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
+    // m0110 keyboard loop
     if(HAL_GPIO_ReadPin(M0110_CLK_GPIO_Port, M0110_CLK_Pin) == GPIO_PIN_RESET)
       continue;
-
     m0110a_update();
     m0100a_handle_inquiry();
   }
