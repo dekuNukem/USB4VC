@@ -1,2 +1,10 @@
 pt1:
 initial prototype
+note slave requst is PF1 instead of PC13
+
+
+TODO:
+
+add keyboard LEDs
+device presense detect?
+double check 5V pullups
