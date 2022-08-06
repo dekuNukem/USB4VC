@@ -671,6 +671,14 @@
 <rectangle x1="23.876" y1="1.016" x2="24.384" y2="1.524" layer="51"/>
 <rectangle x1="23.876" y1="-1.524" x2="24.384" y2="-1.016" layer="51"/>
 </package>
+<package name="1X02">
+<pad name="1" x="-1.27" y="0" drill="1.016" diameter="1.6764" rot="R90"/>
+<pad name="2" x="1.27" y="0" drill="1.016" diameter="1.6764" rot="R90"/>
+<text x="-2.6162" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.81" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="1.016" y1="-0.254" x2="1.524" y2="0.254" layer="51"/>
+<rectangle x1="-1.524" y1="-0.254" x2="-1.016" y2="0.254" layer="51"/>
+</package>
 </packages>
 <symbols>
 <symbol name="PINH2X20">
@@ -720,6 +728,16 @@
 <pin name="38" x="5.08" y="-22.86" visible="pad" length="short" direction="pas" function="dot" rot="R180"/>
 <pin name="39" x="-2.54" y="-25.4" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="40" x="5.08" y="-25.4" visible="pad" length="short" direction="pas" function="dot" rot="R180"/>
+</symbol>
+<symbol name="PINHD2">
+<wire x1="-6.35" y1="-2.54" x2="1.27" y2="-2.54" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="-2.54" x2="1.27" y2="5.08" width="0.4064" layer="94"/>
+<wire x1="1.27" y1="5.08" x2="-6.35" y2="5.08" width="0.4064" layer="94"/>
+<wire x1="-6.35" y1="5.08" x2="-6.35" y2="-2.54" width="0.4064" layer="94"/>
+<text x="-6.35" y="5.715" size="1.778" layer="95">&gt;NAME</text>
+<text x="-6.35" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="1" x="-2.54" y="2.54" visible="pad" length="short" direction="pas" function="dot"/>
+<pin name="2" x="-2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -818,6 +836,22 @@
 <connect gate="A" pin="7" pad="7"/>
 <connect gate="A" pin="8" pad="8"/>
 <connect gate="A" pin="9" pad="9"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="PINHD1X2">
+<gates>
+<gate name="1" symbol="PINHD2" x="5.08" y="0"/>
+</gates>
+<devices>
+<device name="" package="1X02">
+<connects>
+<connect gate="1" pin="1" pad="1"/>
+<connect gate="1" pin="2" pad="2"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -5121,6 +5155,7 @@ by exp-lbrs.ulp</description>
 <part name="R22" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
 <part name="LED6" library="adafruit" deviceset="LED" device="CHIP-LED0805"/>
 <part name="R23" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
+<part name="U$1" library="adafruit_changed" deviceset="PINHD1X2" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -5428,6 +5463,10 @@ by exp-lbrs.ulp</description>
 <instance part="R23" gate="G$1" x="284.48" y="-81.28" smashed="yes" rot="R180">
 <attribute name="NAME" x="288.29" y="-82.7786" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="288.29" y="-77.978" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="U$1" gate="1" x="53.34" y="25.4" smashed="yes">
+<attribute name="NAME" x="46.99" y="31.115" size="1.778" layer="95"/>
+<attribute name="VALUE" x="46.99" y="20.32" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -6486,6 +6525,20 @@ by exp-lbrs.ulp</description>
 <wire x1="-43.18" y1="-25.4" x2="-43.18" y2="-231.14" width="0.1524" layer="91"/>
 <wire x1="-43.18" y1="-231.14" x2="15.24" y2="-231.14" width="0.1524" layer="91"/>
 <junction x="15.24" y="-231.14"/>
+</segment>
+</net>
+<net name="N$24" class="0">
+<segment>
+<pinref part="IC1" gate="PORTA_L" pin="PA0"/>
+<pinref part="U$1" gate="1" pin="1"/>
+<wire x1="43.18" y1="27.94" x2="50.8" y2="27.94" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$31" class="0">
+<segment>
+<pinref part="U$1" gate="1" pin="2"/>
+<pinref part="IC1" gate="PORTA_L" pin="PA1"/>
+<wire x1="50.8" y1="25.4" x2="43.18" y2="25.4" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
