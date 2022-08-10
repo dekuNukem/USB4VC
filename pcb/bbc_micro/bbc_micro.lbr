@@ -228,6 +228,15 @@ by exp-lbrs.ulp</description>
 <pad name="G1" x="-16.66" y="0" drill="3.302" diameter="5.08"/>
 <pad name="G2" x="16.67" y="0" drill="3.302" diameter="5.08"/>
 </package>
+<package name="3386P">
+<pad name="A" x="2.5" y="0" drill="0.65"/>
+<pad name="B" x="7.58" y="0" drill="0.65"/>
+<pad name="W" x="5.04" y="-2.54" drill="0.65"/>
+<wire x1="0" y1="5" x2="10" y2="5" width="0.1524" layer="21"/>
+<wire x1="10" y1="5" x2="10" y2="-5" width="0.1524" layer="21"/>
+<wire x1="10" y1="-5" x2="0" y2="-5" width="0.1524" layer="21"/>
+<wire x1="0" y1="-5" x2="0" y2="5" width="0.1524" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="GAMEPORT_SYM">
@@ -271,6 +280,15 @@ by exp-lbrs.ulp</description>
 <pin name="11_VREF" x="-17.78" y="-17.78" length="middle"/>
 <pin name="6_0V" x="-17.78" y="7.62" length="middle"/>
 <pin name="13_PB0" x="-17.78" y="-27.94" length="middle"/>
+</symbol>
+<symbol name="3386P">
+<wire x1="-5.08" y1="2.54" x2="10.16" y2="2.54" width="0.1524" layer="94"/>
+<wire x1="10.16" y1="2.54" x2="10.16" y2="-2.54" width="0.1524" layer="94"/>
+<wire x1="10.16" y1="-2.54" x2="-5.08" y2="-2.54" width="0.1524" layer="94"/>
+<wire x1="-5.08" y1="-2.54" x2="-5.08" y2="2.54" width="0.1524" layer="94"/>
+<pin name="A" x="-10.16" y="0" length="middle"/>
+<pin name="B" x="15.24" y="0" length="middle" rot="R180"/>
+<pin name="W" x="2.54" y="-7.62" length="middle" rot="R90"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -325,6 +343,23 @@ by exp-lbrs.ulp</description>
 <connect gate="G$1" pin="7_CH1" pad="7"/>
 <connect gate="G$1" pin="8_AGND" pad="8"/>
 <connect gate="G$1" pin="9_LPSTB" pad="9"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="3386P">
+<gates>
+<gate name="G$1" symbol="3386P" x="-2.54" y="0"/>
+</gates>
+<devices>
+<device name="" package="3386P">
+<connects>
+<connect gate="G$1" pin="A" pad="A"/>
+<connect gate="G$1" pin="B" pad="B"/>
+<connect gate="G$1" pin="W" pad="W"/>
 </connects>
 <technologies>
 <technology name=""/>
