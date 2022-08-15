@@ -5156,8 +5156,6 @@ by exp-lbrs.ulp</description>
 <part name="LED6" library="adafruit" deviceset="LED" device="CHIP-LED0805"/>
 <part name="R23" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
 <part name="U$1" library="adafruit_changed" deviceset="PINHD1X2" device=""/>
-<part name="R24" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
-<part name="R25" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="2K"/>
 </parts>
 <sheets>
 <sheet>
@@ -5341,9 +5339,9 @@ by exp-lbrs.ulp</description>
 <instance part="+3V13" gate="G$1" x="-73.66" y="-48.26" smashed="yes">
 <attribute name="VALUE" x="-76.2" y="-53.34" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SW3" gate="G$1" x="309.88" y="-17.78" smashed="yes" rot="MR270"/>
-<instance part="GND13" gate="1" x="312.42" y="-38.1" smashed="yes">
-<attribute name="VALUE" x="309.88" y="-40.64" size="1.778" layer="96"/>
+<instance part="SW3" gate="G$1" x="281.94" y="-17.78" smashed="yes" rot="MR270"/>
+<instance part="GND13" gate="1" x="284.48" y="-38.1" smashed="yes">
+<attribute name="VALUE" x="281.94" y="-40.64" size="1.778" layer="96"/>
 </instance>
 <instance part="JP7" gate="A" x="-58.42" y="-48.26" smashed="yes">
 <attribute name="NAME" x="-64.77" y="-37.465" size="1.778" layer="95"/>
@@ -5469,14 +5467,6 @@ by exp-lbrs.ulp</description>
 <instance part="U$1" gate="1" x="53.34" y="25.4" smashed="yes">
 <attribute name="NAME" x="46.99" y="31.115" size="1.778" layer="95"/>
 <attribute name="VALUE" x="46.99" y="20.32" size="1.778" layer="96"/>
-</instance>
-<instance part="R24" gate="G$1" x="287.02" y="-33.02" smashed="yes" rot="R270">
-<attribute name="NAME" x="288.5186" y="-29.21" size="1.778" layer="95" rot="R270"/>
-<attribute name="VALUE" x="283.718" y="-29.21" size="1.778" layer="96" rot="R270"/>
-</instance>
-<instance part="R25" gate="G$1" x="279.4" y="-38.1" smashed="yes" rot="R270">
-<attribute name="NAME" x="280.8986" y="-34.29" size="1.778" layer="95" rot="R270"/>
-<attribute name="VALUE" x="276.098" y="-34.29" size="1.778" layer="96" rot="R270"/>
 </instance>
 </instances>
 <busses>
@@ -5687,10 +5677,10 @@ by exp-lbrs.ulp</description>
 <segment>
 <pinref part="SW3" gate="G$1" pin="1"/>
 <pinref part="SW3" gate="G$1" pin="4"/>
-<wire x1="312.42" y1="-2.54" x2="312.42" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="284.48" y1="-2.54" x2="284.48" y2="-33.02" width="0.1524" layer="91"/>
 <pinref part="GND13" gate="1" pin="GND"/>
-<wire x1="312.42" y1="-35.56" x2="312.42" y2="-33.02" width="0.1524" layer="91"/>
-<junction x="312.42" y="-33.02"/>
+<wire x1="284.48" y1="-35.56" x2="284.48" y2="-33.02" width="0.1524" layer="91"/>
+<junction x="284.48" y="-33.02"/>
 </segment>
 <segment>
 <pinref part="JP3" gate="A" pin="4"/>
@@ -6046,10 +6036,10 @@ by exp-lbrs.ulp</description>
 <wire x1="193.04" y1="55.88" x2="193.04" y2="-2.54" width="0.1524" layer="91"/>
 <pinref part="SW3" gate="G$1" pin="3"/>
 <pinref part="SW3" gate="G$1" pin="2"/>
-<wire x1="304.8" y1="-2.54" x2="304.8" y2="-33.02" width="0.1524" layer="91"/>
-<wire x1="254" y1="-2.54" x2="304.8" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="276.86" y1="-2.54" x2="276.86" y2="-33.02" width="0.1524" layer="91"/>
+<wire x1="254" y1="-2.54" x2="276.86" y2="-2.54" width="0.1524" layer="91"/>
 <junction x="254" y="-2.54"/>
-<junction x="304.8" y="-2.54"/>
+<junction x="276.86" y="-2.54"/>
 </segment>
 </net>
 <net name="CLK" class="0">
@@ -6161,11 +6151,10 @@ by exp-lbrs.ulp</description>
 <wire x1="246.38" y1="-27.94" x2="254" y2="-27.94" width="0.1524" layer="91"/>
 <junction x="246.38" y="-27.94"/>
 <pinref part="IC1" gate="PORTA_H" pin="PA8"/>
-<wire x1="40.64" y1="-38.1" x2="182.88" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="-38.1" x2="144.78" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="149.86" y1="-38.1" x2="144.78" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="149.86" y1="-38.1" x2="182.88" y2="-38.1" width="0.1524" layer="91"/>
 <wire x1="182.88" y1="-38.1" x2="182.88" y2="-27.94" width="0.1524" layer="91"/>
-<pinref part="R24" gate="G$1" pin="1"/>
-<wire x1="254" y1="-27.94" x2="287.02" y2="-27.94" width="0.1524" layer="91"/>
-<junction x="254" y="-27.94"/>
 </segment>
 </net>
 <net name="LED_CASSETTE" class="0">
@@ -6193,9 +6182,6 @@ by exp-lbrs.ulp</description>
 <junction x="246.38" y="-33.02"/>
 <pinref part="IC1" gate="PORTB_H" pin="PB15"/>
 <wire x1="167.64" y1="-27.94" x2="167.64" y2="-33.02" width="0.1524" layer="91"/>
-<pinref part="R25" gate="G$1" pin="1"/>
-<wire x1="254" y1="-33.02" x2="279.4" y2="-33.02" width="0.1524" layer="91"/>
-<junction x="254" y="-33.02"/>
 </segment>
 </net>
 <net name="KB_5V" class="0">
@@ -6209,10 +6195,8 @@ by exp-lbrs.ulp</description>
 <wire x1="254" y1="-35.56" x2="274.32" y2="-35.56" width="0.1524" layer="91"/>
 <junction x="254" y="-35.56"/>
 <wire x1="274.32" y1="-35.56" x2="274.32" y2="-53.34" width="0.1524" layer="91"/>
-<wire x1="274.32" y1="-53.34" x2="279.4" y2="-53.34" width="0.1524" layer="91"/>
+<wire x1="274.32" y1="-53.34" x2="289.56" y2="-53.34" width="0.1524" layer="91"/>
 <pinref part="R21" gate="G$1" pin="1"/>
-<wire x1="279.4" y1="-53.34" x2="287.02" y2="-53.34" width="0.1524" layer="91"/>
-<wire x1="287.02" y1="-53.34" x2="289.56" y2="-53.34" width="0.1524" layer="91"/>
 <wire x1="289.56" y1="-53.34" x2="289.56" y2="-60.96" width="0.1524" layer="91"/>
 <pinref part="R22" gate="G$1" pin="1"/>
 <wire x1="289.56" y1="-60.96" x2="289.56" y2="-71.12" width="0.1524" layer="91"/>
@@ -6220,12 +6204,6 @@ by exp-lbrs.ulp</description>
 <pinref part="R23" gate="G$1" pin="1"/>
 <wire x1="289.56" y1="-71.12" x2="289.56" y2="-81.28" width="0.1524" layer="91"/>
 <junction x="289.56" y="-71.12"/>
-<pinref part="R24" gate="G$1" pin="2"/>
-<wire x1="287.02" y1="-38.1" x2="287.02" y2="-53.34" width="0.1524" layer="91"/>
-<junction x="287.02" y="-53.34"/>
-<pinref part="R25" gate="G$1" pin="2"/>
-<wire x1="279.4" y1="-43.18" x2="279.4" y2="-53.34" width="0.1524" layer="91"/>
-<junction x="279.4" y="-53.34"/>
 </segment>
 </net>
 <net name="LED_SHIFTLOCK" class="0">

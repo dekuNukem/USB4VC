@@ -1638,12 +1638,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="NAME" x="29.845" y="34.0995" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="U$1" library="adafruit_changed" package="1X02" value="PINHD1X2" x="15.367" y="35.687" smashed="yes" rot="R270"/>
-<element name="R24" library="SparkFun-Passives" package="0805" value="2K" x="-1.524" y="-4.445" smashed="yes">
-<attribute name="NAME" x="-2.286" y="-3.6195" size="0.8128" layer="25"/>
-</element>
-<element name="R25" library="SparkFun-Passives" package="0805" value="2K" x="-4.572" y="-4.445" smashed="yes">
-<attribute name="NAME" x="-5.334" y="-3.6195" size="0.8128" layer="25"/>
-</element>
 </elements>
 <signals>
 <signal name="GND">
@@ -2253,8 +2247,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="41.612" y1="42.12" x2="42.418" y2="42.12" width="0.2032" layer="1"/>
 <wire x1="37.742" y1="38.25" x2="41.612" y2="42.12" width="0.2032" layer="1"/>
 <wire x1="42.418" y1="42.12" x2="44.958" y2="42.12" width="0.2032" layer="16"/>
-<contactref element="R24" pad="1"/>
-<wire x1="-2.424" y1="-4.445" x2="26.5" y2="38.25" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="LED_CASSETTE">
 <contactref element="JP4" pad="10"/>
@@ -2279,8 +2271,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="42.97" y1="47.2" x2="42.418" y2="47.2" width="0.2032" layer="1"/>
 <wire x1="43.307" y1="40.894" x2="43.7134" y2="41.3004" width="0.2032" layer="1"/>
 <wire x1="42.418" y1="47.2" x2="44.958" y2="47.2" width="0.2032" layer="16"/>
-<contactref element="R25" pad="1"/>
-<wire x1="-5.472" y1="-4.445" x2="26.5" y2="37.75" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="KB_5V">
 <contactref element="JP4" pad="6"/>
@@ -2298,10 +2288,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="30.723" y1="29.718" x2="30.723" y2="28.321" width="0.2032" layer="1"/>
 <wire x1="33.528" y1="29.718" x2="30.723" y2="29.718" width="0.2032" layer="1"/>
 <wire x1="42.418" y1="49.74" x2="44.958" y2="49.74" width="0.2032" layer="16"/>
-<contactref element="R24" pad="2"/>
-<contactref element="R25" pad="2"/>
-<wire x1="-0.624" y1="-4.445" x2="30.723" y2="28.321" width="0" layer="19" extent="1-1"/>
-<wire x1="-3.672" y1="-4.445" x2="-0.624" y2="-4.445" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="LED_SHIFTLOCK">
 <contactref element="JP4" pad="4"/>

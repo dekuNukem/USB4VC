@@ -1,10 +1,12 @@
-pt1:
+pt0:
 initial prototype
 note slave requst is PF1 instead of PC13
+
+pt1:
+added 5v pull up on CA2 and W line
 
 
 TODO:
 
-add keyboard LEDs
 device presense detect?
-double check 5V pullups
+remove right angle silkscreen
