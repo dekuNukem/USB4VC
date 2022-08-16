@@ -55,6 +55,7 @@
 #define KB_BREAK_GPIO_Port GPIOB
 #define KB_EN_Pin GPIO_PIN_2
 #define KB_EN_GPIO_Port GPIOB
+#define KB_EN_EXTI_IRQn EXTI2_3_IRQn
 #define KB_ROW_C_Pin GPIO_PIN_10
 #define KB_ROW_C_GPIO_Port GPIOB
 #define KB_COL_A_Pin GPIO_PIN_11
