@@ -132,6 +132,23 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
 }
 
+#define ACTIVE_KEYS_BUF_SIZE 256
+uint8_t active_keys[ACTIVE_KEYS_BUF_SIZE];
+
+uint8_t has_active_keys(void)
+{
+  for(int i = 0; i < ACTIVE_KEYS_BUF_SIZE; ++i)
+    if(active_keys[i])
+      return 1;
+  return 0;
+}
+
+void idle_kb_line(void)
+{
+  HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -200,11 +217,20 @@ int main(void)
 
   while (1)
   {
+    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      if(buffered_value)
+        active_keys[buffered_code] = 1;
+      else
+        active_keys[buffered_code] = 0;
+      kb_buf_pop(&my_kb_buf);
+    }
+
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
 
-    if(kb_en_active && HAL_GetTick() < 5000)
+    if(kb_en_active == 1 && has_active_keys())
     {
       // bit 0-2: ROW A-C
       // bit 3-6: COL A-D
@@ -226,15 +252,24 @@ int main(void)
       }
       else
       {
-        HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+        idle_kb_line();
       }
     }
-    else
+    else if((kb_en_active == 1) && (has_active_keys() == 0))
     {
-      HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+      idle_kb_line();
     }
+    else if((kb_en_active == 0) && (has_active_keys() == 0))
+    {
+      idle_kb_line();
+    }
+    else if((kb_en_active == 0) && has_active_keys())
+    {
+      HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
+      delay_us(1);
+      idle_kb_line();
+    }
+
   }
   /* USER CODE END 3 */
 
