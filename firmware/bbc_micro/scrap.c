@@ -118,3 +118,65 @@ if(kb_row == 0 && kb_col == 7)
   }
 
   -=----------------
+
+
+    if(kb_en_active == 1 && has_active_keys())
+    {
+      // bit 0-2: ROW A-C
+      // bit 3-6: COL A-D
+      /*
+        7   6   5   4   3   2   1   0
+            CD  CC  CB  CA  RC  RB  RA
+      */
+      kb_data = (GPIOB->IDR >> 8) & 0x7f;
+      kb_row = kb_data & 0x7;
+      kb_col = (kb_data >> 3) & 0xf;
+
+      if(kb_col == 4)
+      {
+        HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
+        if(kb_row == 2)
+          HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_SET);
+        else
+          HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+      }
+      else
+      {
+        idle_kb_line();
+      }
+    }
+    else if((kb_en_active == 1) && (has_active_keys() == 0))
+    {
+      idle_kb_line();
+    }
+    else if((kb_en_active == 0) && (has_active_keys() == 0))
+    {
+      idle_kb_line();
+    }
+    else if((kb_en_active == 0) && has_active_keys())
+    {
+      HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
+      delay_us(1);
+      idle_kb_line();
+    }
+
+
+--------------
+
+
+void handle_kb_request(void)
+{
+  if(!kb_en_active)
+    return;
+  while(HAL_GPIO_ReadPin(KB_EN_GPIO_Port, KB_EN_Pin) == GPIO_PIN_RESET)
+    handle_kb_en();
+  kb_en_active = 0;
+}
+
+HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, has_active_keys());
+  if(!has_active_keys())
+  {
+    idle_kb_line();
+    return;
+  }
+  HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, has_active_keys);

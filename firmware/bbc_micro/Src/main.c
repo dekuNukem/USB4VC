@@ -71,7 +71,9 @@ mouse_buf my_mouse_buf;
 gamepad_buf my_gamepad_buf;
 uint8_t spi_error_occured;
 uint8_t buffered_code, buffered_value;
-
+uint32_t kb_data;
+uint8_t kb_row, kb_col;
+uint8_t has_active_keys;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -115,27 +117,10 @@ int fputc(int ch, FILE *f)
   return ch;
 }
 
-volatile uint8_t kb_en_active;
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-  // falling edge, becoming active
-  if(HAL_GPIO_ReadPin(KB_EN_GPIO_Port, KB_EN_Pin) == GPIO_PIN_RESET)
-  {
-    kb_en_active = 1;
-  }
-  // rising edge, becoming inactive
-  else
-  {
-    kb_en_active = 0;
-    // no data out
-    HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
-  }
-}
-
 #define ACTIVE_KEYS_BUF_SIZE 256
-uint8_t active_keys[ACTIVE_KEYS_BUF_SIZE];
+volatile uint8_t active_keys[ACTIVE_KEYS_BUF_SIZE];
 
-uint8_t has_active_keys(void)
+uint8_t check_active_keys(void)
 {
   for(int i = 0; i < ACTIVE_KEYS_BUF_SIZE; ++i)
     if(active_keys[i])
@@ -146,7 +131,43 @@ uint8_t has_active_keys(void)
 void idle_kb_line(void)
 {
   HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
+  // HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+}
+
+#define DEBUG_HI() HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_SET)
+#define DEBUG_LOW() HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_RESET)
+
+void handle_kb_en(void)
+{
+  kb_data = (GPIOB->IDR >> 8) & 0x7f;
+  kb_row = kb_data & 0x7;
+  kb_col = (kb_data >> 3) & 0xf;
+
+  if(kb_col == 1)
+  {
+    HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
+    if(kb_row == 4)
+      HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_SET);
+    // else
+    //   HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+  }
+  else
+  {
+    idle_kb_line();
+  }
+}
+
+// falling edge, KB_EN is low
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  // if(has_active_keys == 0)
+  //   return;
+
+  HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+  while(HAL_GPIO_ReadPin(KB_EN_GPIO_Port, KB_EN_Pin) == GPIO_PIN_RESET)
+    handle_kb_en();
+  idle_kb_line();
 }
 
 /* USER CODE END 0 */
@@ -168,9 +189,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  uint32_t kb_data = 0;
-  uint8_t kb_row, kb_col;
-
+  
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -230,46 +249,18 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-    if(kb_en_active == 1 && has_active_keys())
+    if(check_active_keys())
     {
-      // bit 0-2: ROW A-C
-      // bit 3-6: COL A-D
-      /*
-        7   6   5   4   3   2   1   0
-            CD  CC  CB  CA  RC  RB  RA
-      */
-      kb_data = (GPIOB->IDR >> 8) & 0x7f;
-      kb_row = kb_data & 0x7;
-      kb_col = (kb_data >> 3) & 0xf;
-
-      if(kb_col == 4)
-      {
-        HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
-        if(kb_row == 2)
-          HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_SET);
-        else
-          HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
-      }
-      else
-      {
-        idle_kb_line();
-      }
-    }
-    else if((kb_en_active == 1) && (has_active_keys() == 0))
-    {
-      idle_kb_line();
-    }
-    else if((kb_en_active == 0) && (has_active_keys() == 0))
-    {
-      idle_kb_line();
-    }
-    else if((kb_en_active == 0) && has_active_keys())
-    {
+      has_active_keys = 1;
       HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
       delay_us(1);
-      idle_kb_line();
+      HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
     }
-
+    else
+    {
+      has_active_keys = 0;
+      HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
+    }
   }
   /* USER CODE END 3 */
 
@@ -431,10 +422,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, W_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : SLAVE_REQ_Pin */
   GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
@@ -453,7 +441,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : KB_EN_Pin */
   GPIO_InitStruct.Pin = KB_EN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(KB_EN_GPIO_Port, &GPIO_InitStruct);
 
@@ -471,8 +459,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(W_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ERR_LED_Pin ACT_LED_Pin */
-  GPIO_InitStruct.Pin = ERR_LED_Pin|ACT_LED_Pin;
+  /*Configure GPIO pins : DEBUG_Pin ERR_LED_Pin ACT_LED_Pin */
+  GPIO_InitStruct.Pin = DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
