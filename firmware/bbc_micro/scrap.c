@@ -271,3 +271,55 @@ void handle_kb_en(void)
 -------
 
       // HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, kb_row == 4);
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  while(1)
+  {
+    kb_data = (GPIOB->IDR >> 8) & 0x7f;
+    kb_row = kb_data & 0x7;
+    kb_col = (kb_data >> 3) & 0xf;
+
+    if(kb_col == 1)
+    {
+      CA2_SET();
+      if(kb_row == 4)
+        W_SET();
+      else
+        W_RESET();
+    }
+    else
+    {
+      CA2_RESET();
+      W_RESET();
+    }
+  }
+}
+
+-----------
+
+// falling edge, KB_EN is low
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  while(1)
+  {
+    // kb_data = (GPIOB->IDR >> 8) & 0x7f;
+    // kb_row = kb_data & 0x7;
+    // kb_col = (kb_data >> 3) & 0xf;
+
+    uint32_t kb_data = GPIOB->IDR & 0x7f00;
+    printf("%x\n", kb_data);
+    if(kb_data & 0x7800 == 0x800) // kb_col == 1
+    {
+      CA2_SET();
+      if(kb_data & 0x700 == 0x400) // kb_row == 4
+        W_SET();
+      else
+        W_RESET();
+    }
+    else
+    {
+      CA2_RESET();
+      W_RESET();
+    }
+  }
+}

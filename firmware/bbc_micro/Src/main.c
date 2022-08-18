@@ -166,6 +166,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       CA2_RESET();
       W_RESET();
     }
+    if(GPIOB->IDR & 0x4) // KB_EN high
+      break;
   }
 }
 
