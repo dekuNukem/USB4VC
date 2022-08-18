@@ -126,21 +126,19 @@ uint8_t check_active_keys(void)
   return 0;
 }
 
-void idle_kb_line(void)
-{
-  HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
-}
-
 #define DEBUG_HI() HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_SET)
 #define DEBUG_LOW() HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_RESET)
 
-#define CA2_SET() (GPIOB->BSRR = 0x00008000)
-#define CA2_RESET() (GPIOB->BSRR = 0x80000000)
-#define W_SET() (GPIOA->BSRR = 0x00000100)
-#define W_RESET() (GPIOA->BSRR = 0x01000000)
+#define CA2_HI() (GPIOB->BSRR = 0x00008000)
+#define CA2_LOW() (GPIOB->BSRR = 0x80000000)
+#define W_HI() (GPIOA->BSRR = 0x00000100)
+#define W_LOW() (GPIOA->BSRR = 0x01000000)
+#define IS_KB_EN_HI() (GPIOB->IDR & 0x4)
 
-uint32_t event_start;
+#define COL_SIZE 16
+#define ROW_SIZE 8
+uint8_t col_status[COL_SIZE];
+uint8_t row_status[ROW_SIZE];
 
 // falling edge, KB_EN is low
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -151,20 +149,20 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     uint8_t kb_row = kb_data & 0x7;
     uint8_t kb_col = (kb_data >> 3) & 0xf;
 
-    if(kb_col == 1)
+    if(col_status[kb_col]) // kb_col == 1
     {
-      CA2_SET();
-      if(kb_row == 4)
-        W_SET();
+      CA2_HI();
+      if(row_status[kb_row]) // kb_row == 4
+        W_HI();
       else
-        W_RESET();
+        W_LOW();
     }
     else
     {
-      CA2_RESET();
-      W_RESET();
+      CA2_LOW();
+      W_LOW();
     }
-    if(GPIOB->IDR & 0x4) // KB_EN high
+    if(IS_KB_EN_HI())
       break;
   }
 }
@@ -213,7 +211,8 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  idle_kb_line();
+  CA2_LOW();
+  W_LOW();
 
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -238,12 +237,17 @@ int main(void)
     {
       if(buffered_value == 1)
       {
-        // event_start = HAL_GetTick();
-        HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
+        col_status[1] = 1;
+        row_status[4] = 1;
+        CA2_HI();
         delay_us(1);
-        HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
-        // DEBUG_HI();
       }
+      if(buffered_value == 0)
+      {
+        col_status[1] = 0;
+        row_status[4] = 0;
+      }
+      CA2_LOW();
       kb_buf_pop(&my_kb_buf);
     }
   /* USER CODE END WHILE */
