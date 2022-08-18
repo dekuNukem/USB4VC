@@ -335,3 +335,44 @@ uint8_t check_active_keys(void)
       return 1;
   return 0;
 }
+
+when T and H are pressed together:
+
+T: col 3 row 2
+H: col 4 row 5
+
+7: col 4 row 2
+
+col_status
+0: 0
+1: 0
+2: 0
+3: 1
+4: 1
+5: 0
+6: 0
+7: 0
+8: 0
+9: 0
+10: 0
+11: 0
+12: 0
+13: 0
+14: 0
+15: 0
+
+row_status:
+0: 0
+1: 0
+2: 1
+3: 0
+4: 0
+5: 1
+6: 0
+7: 0
+
+use a multidimensional array? faster lookup
+
+
+each active key needs to be acklowdged by bbc micro before being cleared from
+releasing

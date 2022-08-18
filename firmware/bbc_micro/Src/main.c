@@ -126,11 +126,13 @@ int fputc(int ch, FILE *f)
 #define COL_SIZE 16
 #define ROW_SIZE 8
 uint8_t col_status[COL_SIZE];
-uint8_t row_status[ROW_SIZE];
+uint8_t matrix_status[COL_SIZE][ROW_SIZE];
 
 // falling edge, KB_EN is low
+// this ISR has to be as fast as possible to beat the clock
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+  CA2_LOW();
   while(1)
   {
     uint32_t kb_data = (GPIOB->IDR >> 8) & 0x7f;
@@ -140,7 +142,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     if(col_status[kb_col])
     {
       CA2_HI();
-      if(row_status[kb_row])
+      if(matrix_status[kb_col][kb_row])
         W_HI();
       else
         W_LOW();
@@ -159,8 +161,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 uint8_t has_active_keys(void)
 {
-  for(int i = 0; i < ROW_SIZE; ++i)
-    if(row_status[i])
+  for(int i = 0; i < COL_SIZE; ++i)
+    if(col_status[i])
       return 1;
   return 0;
 }
@@ -370,6 +372,8 @@ int main(void)
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
   uint8_t this_col, this_row;
+  memset(matrix_status, 0, COL_SIZE * ROW_SIZE);
+  memset(col_status, 0, COL_SIZE);
   /*
   the IC3 is a BCD decoder that takes 3 bits input and select one of the 10 lines
   the output ACTIVE LOW, meaning selected line is LOW while others are high
@@ -392,16 +396,16 @@ int main(void)
       if(buffered_value == 1)
       {
         col_status[this_col] = 1;
-        row_status[this_row] = 1;
+        matrix_status[this_col][this_row] = 1;
         DEBUG_HI();
         DEBUG_LOW();
       }
       if(buffered_value == 0)
       {
         col_status[this_col] = 0;
-        row_status[this_row] = 0;
-        DEBUG_HI();
-        DEBUG_LOW();
+        matrix_status[this_col][this_row] = 0;
+        // DEBUG_HI();
+        // DEBUG_LOW();
       }
       kb_buf_pop(&my_kb_buf);
     }
