@@ -436,3 +436,56 @@ if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
         kb_buf_pop(&my_kb_buf);
       }
     }
+
+
+
+    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      get_bbc_code(buffered_code, &this_col, &this_row);
+      if(buffered_value)
+      {
+        col_status[this_col] = 1;
+        matrix_status[this_col][this_row] = 1;
+        DEBUG_HI();
+        CA2_HI();
+        delay_us(1);
+        CA2_LOW();
+        last_ca2 = micros_now;
+        HAL_Delay(20);
+        DEBUG_LOW();
+        kb_buf_pop(&my_kb_buf);
+      }
+      else
+      {
+        col_status[this_col] = 0;
+        matrix_status[this_col][this_row] = 0;
+        // DEBUG_HI();
+        // HAL_Delay(20);
+        // DEBUG_LOW();
+        kb_buf_pop(&my_kb_buf);
+      }
+    }
+////
+
+    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      get_bbc_code(buffered_code, &this_col, &this_row);
+      if(buffered_value)
+      {
+        col_status[this_col] = 1;
+        matrix_status[this_col][this_row] = 1;
+        kb_buf_pop(&my_kb_buf);
+        DEBUG_HI();
+        delay_us(1);
+        DEBUG_LOW();
+      }
+      else
+      {
+        col_status[this_col] = 0;
+        matrix_status[this_col][this_row] = 0;
+        kb_buf_pop(&my_kb_buf);
+        DEBUG_HI();
+        delay_us(5);
+        DEBUG_LOW();
+      }
+    }

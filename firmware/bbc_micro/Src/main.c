@@ -374,7 +374,6 @@ int main(void)
   uint8_t this_col, this_row;
   memset(matrix_status, 0, COL_SIZE * ROW_SIZE);
   memset(col_status, 0, COL_SIZE);
-  uint32_t last_keypress_pop = HAL_GetTick();
   /*
   the IC3 is a BCD decoder that takes 3 bits input and select one of the 10 lines
   the output ACTIVE LOW, meaning selected line is LOW while others are high
@@ -391,33 +390,26 @@ int main(void)
 
   while (1)
   {
+    uint32_t micros_now = micros();
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
-      uint32_t ms_now = HAL_GetTick();
       get_bbc_code(buffered_code, &this_col, &this_row);
       if(buffered_value)
       {
         col_status[this_col] = 1;
         matrix_status[this_col][this_row] = 1;
-        DEBUG_HI();
-        HAL_Delay(20);
-        DEBUG_LOW();
         kb_buf_pop(&my_kb_buf);
       }
       else
       {
         col_status[this_col] = 0;
         matrix_status[this_col][this_row] = 0;
-        DEBUG_HI();
-        HAL_Delay(20);
-        DEBUG_LOW();
         kb_buf_pop(&my_kb_buf);
       }
     }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    uint32_t micros_now = micros();
     if(has_active_keys() && micros_now - last_ca2 > 20)
     {
       CA2_HI();
