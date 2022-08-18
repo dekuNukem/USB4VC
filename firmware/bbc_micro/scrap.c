@@ -376,3 +376,63 @@ use a multidimensional array? faster lookup
 
 each active key needs to be acklowdged by bbc micro before being cleared from
 releasing
+
+////
+uint8_t has_unprocessed_keys(void)
+{
+  for (uint8_t this_col = 0; this_col < COL_SIZE; ++this_col)
+    for (uint8_t this_row = 0; this_row < ROW_SIZE; ++this_row)
+      if(matrix_status[this_col][this_row] == 1)
+        return 1;
+  return 0;
+}
+else if(buffered_value == 2 || has_unprocessed_keys() == 0)
+      {
+        kb_buf_pop(&my_kb_buf);
+      }
+
+
+if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      uint32_t ms_now = HAL_GetTick();
+      get_bbc_code(buffered_code, &this_col, &this_row);
+      if(buffered_value)
+      {
+        col_status[this_col] = 1;
+        matrix_status[this_col][this_row] = 1;
+        DEBUG_HI();
+        if(ms_now - last_keypress_pop > 40)
+        {
+          DEBUG_LOW();
+          kb_buf_pop(&my_kb_buf);
+          last_keypress_pop = ms_now;
+        }
+      }
+      else
+      {
+        col_status[this_col] = 0;
+        matrix_status[this_col][this_row] = 0;
+        kb_buf_pop(&my_kb_buf);
+      }
+    }
+
+if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      uint32_t ms_now = HAL_GetTick();
+      get_bbc_code(buffered_code, &this_col, &this_row);
+      if(buffered_value)
+      {
+        col_status[this_col] = 1;
+        matrix_status[this_col][this_row] = 1;
+        DEBUG_HI();
+        HAL_Delay(20);
+        DEBUG_LOW();
+        kb_buf_pop(&my_kb_buf);
+      }
+      else
+      {
+        col_status[this_col] = 0;
+        matrix_status[this_col][this_row] = 0;
+        kb_buf_pop(&my_kb_buf);
+      }
+    }

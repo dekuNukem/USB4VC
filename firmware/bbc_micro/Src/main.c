@@ -100,7 +100,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   {
     spi_error_occured = 1;
   }
-  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT)
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT && backup_spi1_recv_buf[6] <= 1)
   {
     kb_buf_add(&my_kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
   }
@@ -374,6 +374,7 @@ int main(void)
   uint8_t this_col, this_row;
   memset(matrix_status, 0, COL_SIZE * ROW_SIZE);
   memset(col_status, 0, COL_SIZE);
+  uint32_t last_keypress_pop = HAL_GetTick();
   /*
   the IC3 is a BCD decoder that takes 3 bits input and select one of the 10 lines
   the output ACTIVE LOW, meaning selected line is LOW while others are high
@@ -392,22 +393,26 @@ int main(void)
   {
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
+      uint32_t ms_now = HAL_GetTick();
       get_bbc_code(buffered_code, &this_col, &this_row);
-      if(buffered_value == 1)
+      if(buffered_value)
       {
         col_status[this_col] = 1;
         matrix_status[this_col][this_row] = 1;
         DEBUG_HI();
+        HAL_Delay(20);
         DEBUG_LOW();
+        kb_buf_pop(&my_kb_buf);
       }
-      if(buffered_value == 0)
+      else
       {
         col_status[this_col] = 0;
         matrix_status[this_col][this_row] = 0;
-        // DEBUG_HI();
-        // DEBUG_LOW();
+        DEBUG_HI();
+        HAL_Delay(20);
+        DEBUG_LOW();
+        kb_buf_pop(&my_kb_buf);
       }
-      kb_buf_pop(&my_kb_buf);
     }
   /* USER CODE END WHILE */
 
