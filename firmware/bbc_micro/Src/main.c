@@ -71,8 +71,6 @@ mouse_buf my_mouse_buf;
 gamepad_buf my_gamepad_buf;
 uint8_t spi_error_occured;
 uint8_t buffered_code, buffered_value;
-uint32_t kb_data;
-uint8_t kb_row, kb_col;
 uint8_t has_active_keys;
 /* USER CODE END PV */
 
@@ -149,9 +147,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   while(1)
   {
-    kb_data = (GPIOB->IDR >> 8) & 0x7f;
-    kb_row = kb_data & 0x7;
-    kb_col = (kb_data >> 3) & 0xf;
+    uint32_t kb_data = (GPIOB->IDR >> 8) & 0x7f;
+    uint8_t kb_row = kb_data & 0x7;
+    uint8_t kb_col = (kb_data >> 3) & 0xf;
 
     if(kb_col == 1)
     {
