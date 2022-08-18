@@ -71,7 +71,6 @@ mouse_buf my_mouse_buf;
 gamepad_buf my_gamepad_buf;
 uint8_t spi_error_occured;
 uint8_t buffered_code, buffered_value;
-uint8_t has_active_keys;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -164,6 +163,8 @@ uint8_t has_active_keys(void)
   return 0;
 }
 
+uint32_t last_ca2;
+
 /* USER CODE END 0 */
 
 /**
@@ -238,22 +239,29 @@ int main(void)
       {
         col_status[1] = 1;
         row_status[4] = 1;
-        CA2_HI();
-        delay_us(1);
       }
       if(buffered_value == 0)
       {
         col_status[1] = 0;
         row_status[4] = 0;
       }
-      CA2_LOW();
       kb_buf_pop(&my_kb_buf);
     }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+
+    uint32_t micros_now = micros();
+    if(has_active_keys() && micros_now - last_ca2 > 20)
+    {
+      CA2_HI();
+      delay_us(1);
+      CA2_LOW();
+      last_ca2 = micros_now;
+    }
   }
   /* USER CODE END 3 */
+
 }
 
 /**
@@ -346,7 +354,7 @@ static void MX_TIM2_Init(void)
   TIM_MasterConfigTypeDef sMasterConfig;
 
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 47;
+  htim2.Init.Prescaler = 63;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 4294967295;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
