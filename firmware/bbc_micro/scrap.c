@@ -323,3 +323,15 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     }
   }
 }
+
+#define ACTIVE_KEYS_BUF_SIZE 256
+volatile uint8_t active_keys[ACTIVE_KEYS_BUF_SIZE];
+
+
+uint8_t check_active_keys(void)
+{
+  for(int i = 0; i < ACTIVE_KEYS_BUF_SIZE; ++i)
+    if(active_keys[i])
+      return 1;
+  return 0;
+}

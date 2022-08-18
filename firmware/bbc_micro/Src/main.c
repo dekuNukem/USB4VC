@@ -115,17 +115,6 @@ int fputc(int ch, FILE *f)
   return ch;
 }
 
-#define ACTIVE_KEYS_BUF_SIZE 256
-volatile uint8_t active_keys[ACTIVE_KEYS_BUF_SIZE];
-
-uint8_t check_active_keys(void)
-{
-  for(int i = 0; i < ACTIVE_KEYS_BUF_SIZE; ++i)
-    if(active_keys[i])
-      return 1;
-  return 0;
-}
-
 #define DEBUG_HI() HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_SET)
 #define DEBUG_LOW() HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_RESET)
 
@@ -165,6 +154,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     if(IS_KB_EN_HI())
       break;
   }
+}
+
+uint8_t has_active_keys(void)
+{
+  for(int i = 0; i < ROW_SIZE; ++i)
+    if(row_status[i])
+      return 1;
+  return 0;
 }
 
 /* USER CODE END 0 */
@@ -257,7 +254,6 @@ int main(void)
   /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
-
 }
 
 /**
