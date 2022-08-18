@@ -180,3 +180,94 @@ HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, has_active_keys());
     return;
   }
   HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, has_active_keys);
+------------
+
+
+  while (1)
+  {
+    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      if(buffered_value)
+        active_keys[buffered_code] = 1;
+      else
+        active_keys[buffered_code] = 0;
+      kb_buf_pop(&my_kb_buf);
+    }
+
+  /* USER CODE END WHILE */
+
+  /* USER CODE BEGIN 3 */
+
+    if(check_active_keys())
+    {
+      has_active_keys = 1;
+      HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
+      delay_us(1);
+      HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
+    }
+    else
+    {
+      has_active_keys = 0;
+      HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
+    }
+  }
+
+------------
+
+
+  if(kb_col == 1)
+  {
+    HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
+    if(kb_row == 3)
+    {
+      delay_us(10);
+      HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_SET);
+    }
+    else if(kb_row == 4)
+    {
+      HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_SET);
+    }
+    else
+    {
+      HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+    }
+    // HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, kb_row == 4);
+  }
+
+-----------
+
+
+void handle_kb_en(void)
+{
+  // if(HAL_GetTick() - event_start > 20)
+  // {
+  //   DEBUG_LOW();
+  //   return;
+  // }
+
+  // bit 0-2: ROW A-C
+  // bit 3-6: COL A-D
+  /*
+    7   6   5   4   3   2   1   0
+        CD  CC  CB  CA  RC  RB  RA
+  */
+
+  kb_data = (GPIOB->IDR >> 8) & 0x7f;
+  kb_row = kb_data & 0x7;
+  kb_col = (kb_data >> 3) & 0xf;
+
+  if(kb_col == 1)
+  {
+    HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, kb_row == 4);
+  }
+  else
+  {
+    HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, GPIO_PIN_RESET);
+  }
+}
+
+-------
+
+      // HAL_GPIO_WritePin(W_GPIO_Port, W_Pin, kb_row == 4);
