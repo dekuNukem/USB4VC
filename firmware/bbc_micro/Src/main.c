@@ -137,10 +137,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     uint8_t kb_row = kb_data & 0x7;
     uint8_t kb_col = (kb_data >> 3) & 0xf;
 
-    if(col_status[kb_col]) // kb_col == 1
+    if(col_status[kb_col])
     {
       CA2_HI();
-      if(row_status[kb_row]) // kb_row == 4
+      if(row_status[kb_row])
         W_HI();
       else
         W_LOW();
@@ -153,6 +153,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     if(IS_KB_EN_HI())
       break;
   }
+  CA2_LOW();
+  W_LOW();
 }
 
 uint8_t has_active_keys(void)
@@ -164,6 +166,156 @@ uint8_t has_active_keys(void)
 }
 
 uint32_t last_ca2;
+
+#define CODE_UNUSED 0
+#define CODE_SPECIAL 0xff
+// top 4 bits column, lower 4 bits row
+#define LINUX_KEYCODE_TO_BBC_SIZE 128
+const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] = 
+{
+  CODE_UNUSED, // KEY_RESERVED    0
+  0x07, // KEY_ESC    1
+  0x03, // KEY_1    2
+  0x13, // KEY_2    3
+  0x11, // KEY_3    4
+  0x21, // KEY_4    5
+  0x31, // KEY_5    6
+  0x43, // KEY_6    7
+  0x42, // KEY_7    8
+  0x51, // KEY_8    9
+  0x62, // KEY_9    10
+  0x72, // KEY_0    11
+  CODE_UNUSED, // KEY_MINUS    12
+  CODE_UNUSED, // KEY_EQUAL    13
+  0x95, // KEY_BACKSPACE    14
+  0x06, // KEY_TAB    15
+  0x01, // KEY_Q    16
+  0x12, // KEY_W    17
+  0x22, // KEY_E    18
+  0x33, // KEY_R    19
+  0x32, // KEY_T    20
+  0x44, // KEY_Y    21
+  0x53, // KEY_U    22
+  0x52, // KEY_I    23
+  0x63, // KEY_O    24
+  0x73, // KEY_P    25
+  0x83, // KEY_LEFTBRACE    26
+  0x85, // KEY_RIGHTBRACE    27
+  0x94, // KEY_ENTER    28
+  0x10, // KEY_LEFTCTRL    29
+  0x14, // KEY_A    30
+  0x15, // KEY_S    31
+  0x23, // KEY_D    32
+  0x34, // KEY_F    33
+  0x35, // KEY_G    34
+  0x45, // KEY_H    35
+  0x54, // KEY_J    36
+  0x64, // KEY_K    37
+  0x65, // KEY_L    38
+  0X84, // KEY_SEMICOLON    39
+  CODE_UNUSED, // KEY_APOSTROPHE    40
+  CODE_UNUSED, // KEY_GRAVE    41
+  0x00, // KEY_LEFTSHIFT    42
+  0x87, // KEY_BACKSLASH    43
+  0x16, // KEY_Z    44
+  0x24, // KEY_X    45
+  0x25, // KEY_C    46
+  0x36, // KEY_V    47
+  0x46, // KEY_B    48
+  0x55, // KEY_N    49
+  0x56, // KEY_M    50
+  0x66, // KEY_COMMA    51
+  0x76, // KEY_DOT    52
+  0x86, // KEY_SLASH    53
+  0x00, // KEY_RIGHTSHIFT    54
+  CODE_UNUSED, // KEY_KPASTERISK    55
+  CODE_UNUSED, // KEY_LEFTALT    56
+  0x26, // KEY_SPACE    57
+  0x04, // KEY_CAPSLOCK    58
+  0x17, // KEY_F1    59
+  0x27, // KEY_F2    60
+  0x37, // KEY_F3    61
+  0x41, // KEY_F4    62
+  0x47, // KEY_F5    63
+  0x57, // KEY_F6    64
+  0x61, // KEY_F7    65
+  0x67, // KEY_F8    66
+  0x77, // KEY_F9    67
+  0x02, // KEY_F10    68
+  CODE_UNUSED, // KEY_NUMLOCK    69
+  CODE_UNUSED, // KEY_SCROLLLOCK    70
+  CODE_UNUSED, // KEY_KP7    71
+  CODE_UNUSED, // KEY_KP8    72
+  CODE_UNUSED, // KEY_KP9    73
+  CODE_UNUSED, // KEY_KPMINUS    74
+  CODE_UNUSED, // KEY_KP4    75
+  CODE_UNUSED, // KEY_KP5    76
+  CODE_UNUSED, // KEY_KP6    77
+  CODE_UNUSED, // KEY_KPPLUS    78
+  CODE_UNUSED, // KEY_KP1    79
+  CODE_UNUSED, // KEY_KP2    80
+  CODE_UNUSED, // KEY_KP3    81
+  CODE_UNUSED, // KEY_KP0    82
+  CODE_UNUSED, // KEY_KPDOT    83
+  CODE_UNUSED, // KEY_UNUSED    84
+  CODE_UNUSED, // KEY_ZENKAKUHANKAKU    85
+  CODE_UNUSED, // KEY_102ND    86
+  CODE_UNUSED, // KEY_F11    87
+  CODE_UNUSED, // KEY_F12    88
+  CODE_UNUSED, // KEY_RO    89
+  CODE_UNUSED, // KEY_KATAKANA    90
+  CODE_UNUSED, // KEY_HIRAGANA    91
+  CODE_UNUSED, // KEY_HENKAN    92
+  CODE_UNUSED, // KEY_KATAKANAHIRAGANA    93
+  CODE_UNUSED, // KEY_MUHENKAN    94
+  CODE_UNUSED, // KEY_KPJPCOMMA    95
+  CODE_UNUSED, // KEY_KPENTER    96
+  0x10, // KEY_RIGHTCTRL    97
+  CODE_UNUSED, // KEY_KPSLASH    98
+  CODE_UNUSED, // KEY_SYSRQ    99
+  CODE_UNUSED, // KEY_RIGHTALT    100
+  CODE_UNUSED, // KEY_LINEFEED    101
+  CODE_UNUSED, // KEY_HOME    102
+  0x93, // KEY_UP    103
+  CODE_UNUSED, // KEY_PAGEUP    104
+  0x91, // KEY_LEFT    105
+  0x97, // KEY_RIGHT    106
+  CODE_UNUSED, // KEY_END    107
+  0x92, // KEY_DOWN    108
+  CODE_UNUSED, // KEY_PAGEDOWN    109
+  CODE_UNUSED, // KEY_INSERT    110
+  CODE_UNUSED, // KEY_DELETE    111
+  CODE_UNUSED, // KEY_MACRO    112
+  CODE_UNUSED, // KEY_MUTE    113
+  CODE_UNUSED, // KEY_VOLUMEDOWN    114
+  CODE_UNUSED, // KEY_VOLUMEUP    115
+  CODE_UNUSED, // KEY_POWER    116
+  CODE_UNUSED, // KEY_KPEQUAL    117
+  CODE_UNUSED, // KEY_KPPLUSMINUS    118
+  CODE_UNUSED, // KEY_PAUSE    119
+  CODE_UNUSED, // KEY_SCALE    120
+  CODE_UNUSED, // KEY_KPCOMMA    121
+  CODE_UNUSED, // KEY_HANGEUL    122
+  CODE_UNUSED, // KEY_HANJA    123
+  CODE_UNUSED, // KEY_YEN    124
+  CODE_UNUSED, // KEY_LEFTMETA    125
+  CODE_UNUSED, // KEY_RIGHTMETA    126
+  CODE_UNUSED, // KEY_COMPOSE    127
+};
+
+void get_bbc_code(uint8_t linux_code, uint8_t* bbc_col, uint8_t* bbc_row)
+{
+  *bbc_col = 0;
+  *bbc_row = 0;
+  if(linux_code >= LINUX_KEYCODE_TO_BBC_SIZE)
+    return;
+  *bbc_col = linux_keycode_to_bbc_matrix_lookup[linux_code] >> 4;
+  *bbc_row = linux_keycode_to_bbc_matrix_lookup[linux_code] & 0xf;
+  if(*bbc_col >= COL_SIZE)
+    *bbc_col = 0;
+  if(*bbc_row >= ROW_SIZE)
+    *bbc_row = 0;
+}
 
 /* USER CODE END 0 */
 
@@ -217,6 +369,7 @@ int main(void)
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
+  uint8_t this_col, this_row;
   /*
   the IC3 is a BCD decoder that takes 3 bits input and select one of the 10 lines
   the output ACTIVE LOW, meaning selected line is LOW while others are high
@@ -235,22 +388,26 @@ int main(void)
   {
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
+      get_bbc_code(buffered_code, &this_col, &this_row);
       if(buffered_value == 1)
       {
-        col_status[1] = 1;
-        row_status[4] = 1;
+        col_status[this_col] = 1;
+        row_status[this_row] = 1;
+        DEBUG_HI();
+        DEBUG_LOW();
       }
       if(buffered_value == 0)
       {
-        col_status[1] = 0;
-        row_status[4] = 0;
+        col_status[this_col] = 0;
+        row_status[this_row] = 0;
+        DEBUG_HI();
+        DEBUG_LOW();
       }
       kb_buf_pop(&my_kb_buf);
     }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
     uint32_t micros_now = micros();
     if(has_active_keys() && micros_now - last_ca2 > 20)
     {
