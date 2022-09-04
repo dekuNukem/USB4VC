@@ -5,7 +5,7 @@
 #include "main.h"
 
 extern SPI_HandleTypeDef hspi1;
-extern I2C_HandleTypeDef hi2c2;
+extern I2C_HandleTypeDef hi2c1;
 
 
 #endif

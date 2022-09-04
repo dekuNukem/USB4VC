@@ -45,10 +45,14 @@
 #include "shared.h"
 #include "helpers.h"
 #include <string.h>
+#include "mcp4451.h"
+
 // #include "mcp4451.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c1;
+
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
@@ -61,7 +65,7 @@ const uint8_t board_id = 4;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 0;
 const uint8_t version_patch = 1;
-uint8_t hw_revision;
+const char boot_message[] = "USB4VC Protocol Board\nBBC Micro/Master\ndekuNukem 2022";
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t backup_spi1_recv_buf[SPI_BUF_SIZE];
@@ -71,6 +75,8 @@ mouse_buf my_mouse_buf;
 gamepad_buf my_gamepad_buf;
 uint8_t spi_error_occured;
 uint8_t buffered_code, buffered_value;
+gamepad_event latest_gamepad_event;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -79,6 +85,7 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_I2C1_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -103,6 +110,40 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_KEYBOARD_EVENT && backup_spi1_recv_buf[6] <= 1)
   {
     kb_buf_add(&my_kb_buf, backup_spi1_recv_buf[4], backup_spi1_recv_buf[6]);
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_GAMEPAD_EVENT_RAW_SUPPORTED)
+  {
+    latest_gamepad_event.button_1 = (backup_spi1_recv_buf[8] & 0x1) != 0;
+    latest_gamepad_event.button_2 = (backup_spi1_recv_buf[8] & 0x2) != 0;
+    latest_gamepad_event.button_3 = (backup_spi1_recv_buf[8] & 0x4) != 0;
+    latest_gamepad_event.button_4 = (backup_spi1_recv_buf[8] & 0x8) != 0;
+    latest_gamepad_event.axis_x = backup_spi1_recv_buf[10];
+    latest_gamepad_event.axis_y = backup_spi1_recv_buf[11];
+    latest_gamepad_event.axis_rx = backup_spi1_recv_buf[12];
+    latest_gamepad_event.axis_ry = backup_spi1_recv_buf[13];
+    gamepad_buf_add(&my_gamepad_buf, &latest_gamepad_event);
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
+  {
+    memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+    spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+    spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_INFO_REQUEST;
+    spi_transmit_buf[3] = board_id;
+    // spi_transmit_buf[4] = hw_revision;
+    spi_transmit_buf[5] = version_major;
+    spi_transmit_buf[6] = version_minor;
+    spi_transmit_buf[7] = version_patch;
+    // uint8_t curr_index = 8;
+    // for (int i = 0; i < PROTOCOL_LOOKUP_SIZE; i++)
+    // {
+    //   if(protocol_status_lookup[i] == PROTOCOL_STATUS_NOT_AVAILABLE)
+    //     continue;
+    //   else if(protocol_status_lookup[i] == PROTOCOL_STATUS_DISABLED)
+    //     spi_transmit_buf[curr_index] = i;
+    //   else if(protocol_status_lookup[i] == PROTOCOL_STATUS_ENABLED)
+    //     spi_transmit_buf[curr_index] = i | 0x80;
+    //   curr_index++;
+    // }
   }
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
@@ -319,6 +360,30 @@ void get_bbc_code(uint8_t linux_code, uint8_t* bbc_col, uint8_t* bbc_row)
     *bbc_row = 0;
 }
 
+void gamepad_update(void)
+{
+  gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
+  if(this_gamepad_event != NULL)
+  {
+    // printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
+    /*
+    Joystick 1 = CH0 and CH1
+    Joystick 2 = CH2 and CH3
+    Wiper 0 = CH3 Joystick 2
+    Wiper 1 = CH0 Joystick 1
+    Wiper 2 = CH2 Joystick 2
+    Wiper 3 = CH1 Joystick 1
+    */
+    HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
+    HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
+    mcp4451_write_wiper(1, 255-this_gamepad_event->axis_x);
+    mcp4451_write_wiper(3, 255-this_gamepad_event->axis_y);
+    mcp4451_write_wiper(0, 255-this_gamepad_event->axis_rx);
+    mcp4451_write_wiper(2, 255-this_gamepad_event->axis_ry);
+    gamepad_buf_pop(&my_gamepad_buf);
+  }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -353,9 +418,11 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
   kb_buf_init(&my_kb_buf);
+  gamepad_buf_init(&my_gamepad_buf);
   delay_us_init(&htim2);
 
   /* USER CODE END 2 */
@@ -363,10 +430,12 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  printf("hello\n");
+  printf("%s\nv%d.%d.%d\n", boot_message, version_major, version_minor, version_patch);
 
   CA2_LOW();
   W_LOW();
+
+  mcp4451_reset();
 
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -417,6 +486,7 @@ int main(void)
       CA2_LOW();
       last_ca2 = micros_now;
     }
+    gamepad_update();
   }
   /* USER CODE END 3 */
 
@@ -460,8 +530,9 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_I2C1;
   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_SYSCLK;
+  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_SYSCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
@@ -477,6 +548,40 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/* I2C1 init function */
+static void MX_I2C1_Init(void)
+{
+
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.Timing = 0x10707DBC;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**Configure Analogue filter 
+    */
+  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**Configure Digital filter 
+    */
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
 }
 
 /* SPI1 init function */
@@ -579,7 +684,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, JS_PB0_Pin|JS_PB1_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|KB_CA2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, W_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
@@ -590,6 +698,20 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : JS_PB0_Pin JS_PB1_Pin W_Pin */
+  GPIO_InitStruct.Pin = JS_PB0_Pin|JS_PB1_Pin|W_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : POT_RESET_Pin */
+  GPIO_InitStruct.Pin = POT_RESET_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(POT_RESET_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : KB_BREAK_Pin KB_ROW_C_Pin KB_COL_A_Pin KB_COL_B_Pin 
                            KB_COL_C_Pin KB_COL_D_Pin KB_ROW_A_Pin KB_ROW_B_Pin */
@@ -611,13 +733,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(KB_CA2_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : W_Pin */
-  GPIO_InitStruct.Pin = W_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(W_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DEBUG_Pin ERR_LED_Pin ACT_LED_Pin */
   GPIO_InitStruct.Pin = DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin;

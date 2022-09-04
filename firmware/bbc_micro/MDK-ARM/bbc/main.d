@@ -36,3 +36,4 @@ bbc\main.o: ../Inc/delay_us.h
 bbc\main.o: ../Inc/shared.h
 bbc\main.o: ../Inc/helpers.h
 bbc\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+bbc\main.o: ../Inc/mcp4451.h

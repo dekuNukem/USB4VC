@@ -166,6 +166,7 @@ def make_mouse_spi_packet(mouse_dict, mouse_id):
 
 PID_PROTOCOL_OFF = 0
 PID_GENERIC_GAMEPORT_GAMEPAD = 7
+PID_BBC_MICRO_JOYSTICK = 14
 PID_RAW_USB_GAMEPAD = 127
 
 def get_range_max_and_midpoint(axes_dict, axis_key):
@@ -665,7 +666,8 @@ def make_gamepad_spi_packet(gp_status_dict, this_device_info):
     try:
         if current_protocol['pid'] in [PID_GENERIC_GAMEPORT_GAMEPAD, PID_PROTOCOL_OFF]:
             return make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, current_protocol)
-        elif current_protocol['pid'] == PID_RAW_USB_GAMEPAD:
+        # elif current_protocol['pid'] == PID_RAW_USB_GAMEPAD:
+        else:
             if this_device_info['gamepad_type'] == usb4vc_gamepads.GAMEPAD_TYPE_UNKNOWN: 
                 return make_unknown_raw_gamepad_spi_packet(gp_status_dict, this_device_info)
             else:
@@ -830,7 +832,7 @@ def raw_input_event_worker():
                             this_gp_dict[axis_code] = 127
                     gamepad_output = make_gamepad_spi_packet(gamepad_status_dict, this_device)
                     if gamepad_output != last_gamepad_msg:
-                        # print(gamepad_output)
+                        print(gamepad_output)
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
                         pcard_spi.xfer(list(gp_to_transfer))
                         if kb_to_transfer is not None:

@@ -51,6 +51,12 @@
 
 #define SLAVE_REQ_Pin GPIO_PIN_1
 #define SLAVE_REQ_GPIO_Port GPIOF
+#define JS_PB0_Pin GPIO_PIN_2
+#define JS_PB0_GPIO_Port GPIOA
+#define JS_PB1_Pin GPIO_PIN_3
+#define JS_PB1_GPIO_Port GPIOA
+#define POT_RESET_Pin GPIO_PIN_0
+#define POT_RESET_GPIO_Port GPIOB
 #define KB_BREAK_Pin GPIO_PIN_1
 #define KB_BREAK_GPIO_Port GPIOB
 #define KB_EN_Pin GPIO_PIN_2

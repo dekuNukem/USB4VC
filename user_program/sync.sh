@@ -1,4 +1,3 @@
-# 169.254.194.124
 # scp ./* pi@192.168.1.60:~/usb4vc/rpi_app
 
 # sh sync.sh; ssh -t pi@192.168.1.60 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_main.py"
