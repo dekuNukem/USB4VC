@@ -1638,11 +1638,11 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="NAME" x="29.845" y="34.0995" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="U$1" library="adafruit_changed" package="1X02" value="PINHD1X2" x="15.367" y="35.687" smashed="yes" rot="R270"/>
-<element name="R24" library="SparkFun-Passives" package="0805" value="2K" x="-1.524" y="-4.445" smashed="yes">
-<attribute name="NAME" x="-2.286" y="-3.6195" size="0.8128" layer="25"/>
+<element name="R24" library="SparkFun-Passives" package="0805" value="2K" x="53.975" y="57.15" smashed="yes" rot="R180">
+<attribute name="NAME" x="54.737" y="56.3245" size="0.8128" layer="25" rot="R180"/>
 </element>
-<element name="R25" library="SparkFun-Passives" package="0805" value="2K" x="-4.572" y="-4.445" smashed="yes">
-<attribute name="NAME" x="-5.334" y="-3.6195" size="0.8128" layer="25"/>
+<element name="R25" library="SparkFun-Passives" package="0805" value="2K" x="50.8" y="57.15" smashed="yes">
+<attribute name="NAME" x="50.038" y="57.9755" size="0.8128" layer="25"/>
 </element>
 </elements>
 <signals>
@@ -2254,7 +2254,9 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="37.742" y1="38.25" x2="41.612" y2="42.12" width="0.2032" layer="1"/>
 <wire x1="42.418" y1="42.12" x2="44.958" y2="42.12" width="0.2032" layer="16"/>
 <contactref element="R24" pad="1"/>
-<wire x1="-2.424" y1="-4.445" x2="26.5" y2="38.25" width="0" layer="19" extent="1-1"/>
+<wire x1="54.875" y1="57.15" x2="54.875" y2="51.065" width="0.2032" layer="1"/>
+<wire x1="45.93" y1="42.12" x2="44.958" y2="42.12" width="0.2032" layer="1"/>
+<wire x1="54.875" y1="51.065" x2="45.93" y2="42.12" width="0.2032" layer="1"/>
 </signal>
 <signal name="LED_CASSETTE">
 <contactref element="JP4" pad="10"/>
@@ -2280,7 +2282,13 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="43.307" y1="40.894" x2="43.7134" y2="41.3004" width="0.2032" layer="1"/>
 <wire x1="42.418" y1="47.2" x2="44.958" y2="47.2" width="0.2032" layer="16"/>
 <contactref element="R25" pad="1"/>
-<wire x1="-5.472" y1="-4.445" x2="26.5" y2="37.75" width="0" layer="19" extent="1-1"/>
+<wire x1="49.9" y1="57.15" x2="49.9" y2="51.932" width="0.2032" layer="1"/>
+<wire x1="49.9" y1="51.932" x2="49.022" y2="51.054" width="0.2032" layer="1"/>
+<wire x1="49.022" y1="51.054" x2="44.196" y2="51.054" width="0.2032" layer="1"/>
+<wire x1="44.196" y1="51.054" x2="43.688" y2="50.546" width="0.2032" layer="1"/>
+<wire x1="43.688" y1="50.546" x2="43.688" y2="48.006" width="0.2032" layer="1"/>
+<wire x1="43.688" y1="48.006" x2="44.494" y2="47.2" width="0.2032" layer="1"/>
+<wire x1="44.494" y1="47.2" x2="44.958" y2="47.2" width="0.2032" layer="1"/>
 </signal>
 <signal name="KB_5V">
 <contactref element="JP4" pad="6"/>
@@ -2300,8 +2308,10 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="42.418" y1="49.74" x2="44.958" y2="49.74" width="0.2032" layer="16"/>
 <contactref element="R24" pad="2"/>
 <contactref element="R25" pad="2"/>
-<wire x1="-0.624" y1="-4.445" x2="30.723" y2="28.321" width="0" layer="19" extent="1-1"/>
-<wire x1="-3.672" y1="-4.445" x2="-0.624" y2="-4.445" width="0" layer="19" extent="1-1"/>
+<wire x1="44.958" y1="49.74" x2="49.359" y2="49.74" width="0.2032" layer="1"/>
+<wire x1="51.7" y1="52.081" x2="51.7" y2="57.15" width="0.2032" layer="1"/>
+<wire x1="49.359" y1="49.74" x2="51.7" y2="52.081" width="0.2032" layer="1"/>
+<wire x1="51.7" y1="57.15" x2="53.075" y2="57.15" width="0.2032" layer="1"/>
 </signal>
 <signal name="LED_SHIFTLOCK">
 <contactref element="JP4" pad="4"/>
