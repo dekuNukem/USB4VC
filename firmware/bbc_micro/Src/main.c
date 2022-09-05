@@ -365,7 +365,7 @@ void gamepad_update(void)
   gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
   if(this_gamepad_event != NULL)
   {
-    // printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
+    printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
     /*
     Joystick 1 = CH0 and CH1
     Joystick 2 = CH2 and CH3

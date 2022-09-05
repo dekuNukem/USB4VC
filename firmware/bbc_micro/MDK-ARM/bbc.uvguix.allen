@@ -1851,8 +1851,8 @@
       </ToolBar>
       <ControlBarsSummary>
         <Bars>0</Bars>
-        <ScreenCX>1920</ScreenCX>
-        <ScreenCY>1080</ScreenCY>
+        <ScreenCX>1536</ScreenCX>
+        <ScreenCY>864</ScreenCY>
       </ControlBarsSummary>
     </ViewEx>
     <ViewEx>

@@ -5,6 +5,13 @@ note slave requst is PF1 instead of PC13
 pt1:
 added 5v pull up on CA2 and W line
 
+pt2 2022-09-25
+
+moved mouse middle and right button to PF0 and PA0
+moved SPI CS to PA15, SPI SCK to PB3
+freed up two DAC pins
+moved 15pin connector down a bit
+DAC connected to joystick 0, digital control connected to joystick 1
 
 TODO:
 
