@@ -3,7 +3,7 @@
 <title>Static Call Graph - [bbc\bbc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image bbc\bbc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Sep 04 15:08:50 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Sep 12 15:39:07 2022
 <BR><P>
 <H3>Maximum Stack Usage =        216 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -257,7 +257,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_IRQHandler
 </UL>
 
-<P><STRONG><a name="[36]"></a>HAL_GPIO_EXTI_Callback</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, main.o(i.HAL_GPIO_EXTI_Callback))
+<P><STRONG><a name="[36]"></a>HAL_GPIO_EXTI_Callback</STRONG> (Thumb, 94 bytes, Stack size 16 bytes, main.o(i.HAL_GPIO_EXTI_Callback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = HAL_GPIO_EXTI_Callback
 </UL>
 <BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_EXTI_IRQHandler
@@ -745,7 +745,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[26]"></a>main</STRONG> (Thumb, 954 bytes, Stack size 96 bytes, main.o(i.main))
+<P><STRONG><a name="[26]"></a>main</STRONG> (Thumb, 972 bytes, Stack size 96 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = main &rArr; mcp4451_write_wiper &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_ConfigClockSource

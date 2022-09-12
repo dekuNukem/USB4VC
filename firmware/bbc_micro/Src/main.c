@@ -197,7 +197,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       break;
   }
   CA2_LOW();
-  W_LOW();
+  W_HI();
 }
 
 uint8_t has_active_keys(void)
@@ -433,7 +433,7 @@ int main(void)
   printf("%s\nv%d.%d.%d\n", boot_message, version_major, version_minor, version_patch);
 
   CA2_LOW();
-  W_LOW();
+  W_HI();
 
   mcp4451_reset();
 
@@ -684,13 +684,13 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, JS_PB0_Pin|JS_PB1_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, JS_PB0_Pin|JS_PB1_Pin|W_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|KB_CA2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, W_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : SLAVE_REQ_Pin */
   GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
