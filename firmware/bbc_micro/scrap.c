@@ -1,3 +1,11 @@
+  while(1)
+  {
+    DEBUG_HI();
+    delay_us(10);
+    DEBUG_LOW();
+    delay_us(10);
+  }
+
 printf("%x:%x\n", kb_col, kb_row);
     continue;
 

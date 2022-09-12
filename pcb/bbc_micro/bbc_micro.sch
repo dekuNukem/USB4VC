@@ -5103,6 +5103,8 @@ by exp-lbrs.ulp</description>
 <sheet>
 <plain>
 <text x="243.84" y="5.08" size="3.81" layer="95">PIN 1</text>
+<text x="205.74" y="0" size="5.08" layer="95">1</text>
+<text x="203.2" y="-45.72" size="5.08" layer="95">17</text>
 </plain>
 <instances>
 <instance part="U$2" gate="G$1" x="289.56" y="160.02" smashed="yes"/>
@@ -5289,8 +5291,8 @@ by exp-lbrs.ulp</description>
 <attribute name="NAME" x="-64.77" y="-37.465" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-64.77" y="-58.42" size="1.778" layer="96"/>
 </instance>
-<instance part="GND7" gate="1" x="228.6" y="7.62" smashed="yes" rot="MR180">
-<attribute name="VALUE" x="226.06" y="10.16" size="1.778" layer="96" rot="MR180"/>
+<instance part="GND7" gate="1" x="198.12" y="5.08" smashed="yes" rot="MR180">
+<attribute name="VALUE" x="195.58" y="7.62" size="1.778" layer="96" rot="MR180"/>
 </instance>
 <instance part="JP4" gate="G$1" x="251.46" y="-20.32" smashed="yes" rot="R180">
 <attribute name="NAME" x="257.81" y="-43.815" size="1.778" layer="95" rot="R180"/>
@@ -5615,12 +5617,13 @@ by exp-lbrs.ulp</description>
 </segment>
 <segment>
 <pinref part="GND7" gate="1" pin="GND"/>
-<wire x1="228.6" y1="0" x2="228.6" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="0" x2="198.12" y2="2.54" width="0.1524" layer="91"/>
 <pinref part="JP4" gate="G$1" pin="34"/>
-<wire x1="228.6" y1="0" x2="246.38" y2="0" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="0" x2="246.38" y2="0" width="0.1524" layer="91"/>
 <pinref part="JP4" gate="G$1" pin="33"/>
 <wire x1="246.38" y1="0" x2="254" y2="0" width="0.1524" layer="91"/>
 <junction x="246.38" y="0"/>
+<label x="200.66" y="0" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="JP2" gate="A" pin="19"/>

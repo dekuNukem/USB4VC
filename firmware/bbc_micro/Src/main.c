@@ -45,14 +45,10 @@
 #include "shared.h"
 #include "helpers.h"
 #include <string.h>
-#include "mcp4451.h"
 
-// #include "mcp4451.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c1;
-
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
@@ -85,7 +81,6 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM2_Init(void);
-static void MX_I2C1_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -155,8 +150,8 @@ int fputc(int ch, FILE *f)
   return ch;
 }
 
-#define DEBUG_HI() HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_SET)
-#define DEBUG_LOW() HAL_GPIO_WritePin(DEBUG_GPIO_Port, DEBUG_Pin, GPIO_PIN_RESET)
+#define DEBUG_HI() (GPIOA->BSRR = 0x00000400)
+#define DEBUG_LOW() (GPIOA->BSRR = 0x04000000)
 
 #define CA2_HI() (GPIOB->BSRR = 0x00008000)
 #define CA2_LOW() (GPIOB->BSRR = 0x80000000)
@@ -360,29 +355,29 @@ void get_bbc_code(uint8_t linux_code, uint8_t* bbc_col, uint8_t* bbc_row)
     *bbc_row = 0;
 }
 
-void gamepad_update(void)
-{
-  gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
-  if(this_gamepad_event != NULL)
-  {
-    printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
-    /*
-    Joystick 1 = CH0 and CH1
-    Joystick 2 = CH2 and CH3
-    Wiper 0 = CH3 Joystick 2
-    Wiper 1 = CH0 Joystick 1
-    Wiper 2 = CH2 Joystick 2
-    Wiper 3 = CH1 Joystick 1
-    */
-    HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
-    HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
-    mcp4451_write_wiper(1, 255-this_gamepad_event->axis_x);
-    mcp4451_write_wiper(3, 255-this_gamepad_event->axis_y);
-    mcp4451_write_wiper(0, 255-this_gamepad_event->axis_rx);
-    mcp4451_write_wiper(2, 255-this_gamepad_event->axis_ry);
-    gamepad_buf_pop(&my_gamepad_buf);
-  }
-}
+// void gamepad_update(void)
+// {
+//   gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
+//   if(this_gamepad_event != NULL)
+//   {
+//     printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
+    
+//     Joystick 1 = CH0 and CH1
+//     Joystick 2 = CH2 and CH3
+//     Wiper 0 = CH3 Joystick 2
+//     Wiper 1 = CH0 Joystick 1
+//     Wiper 2 = CH2 Joystick 2
+//     Wiper 3 = CH1 Joystick 1
+    
+//     HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
+//     HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
+//     mcp4451_write_wiper(1, 255-this_gamepad_event->axis_x);
+//     mcp4451_write_wiper(3, 255-this_gamepad_event->axis_y);
+//     mcp4451_write_wiper(0, 255-this_gamepad_event->axis_rx);
+//     mcp4451_write_wiper(2, 255-this_gamepad_event->axis_ry);
+//     gamepad_buf_pop(&my_gamepad_buf);
+//   }
+// }
 
 /* USER CODE END 0 */
 
@@ -418,7 +413,6 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
-  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
   kb_buf_init(&my_kb_buf);
@@ -434,8 +428,6 @@ int main(void)
 
   CA2_LOW();
   W_HI();
-
-  mcp4451_reset();
 
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
@@ -486,7 +478,7 @@ int main(void)
       CA2_LOW();
       last_ca2 = micros_now;
     }
-    gamepad_update();
+    // gamepad_update();
   }
   /* USER CODE END 3 */
 
@@ -530,9 +522,8 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_I2C1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_SYSCLK;
-  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_SYSCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
@@ -548,40 +539,6 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-}
-
-/* I2C1 init function */
-static void MX_I2C1_Init(void)
-{
-
-  hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x10707DBC;
-  hi2c1.Init.OwnAddress1 = 0;
-  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c1.Init.OwnAddress2 = 0;
-  hi2c1.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
-  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-    /**Configure Analogue filter 
-    */
-  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-    /**Configure Digital filter 
-    */
-  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
 }
 
 /* SPI1 init function */
