@@ -373,7 +373,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       else
       {
         W_LOW();
-        key_upstroke.duration++;
       }
     }
     else
@@ -386,6 +385,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
   CA2_LOW();
   W_HI();
+
+  if(key_upstroke.is_underway)
+    key_upstroke.duration = HAL_GetTick();
 }
 
 
@@ -467,22 +469,22 @@ int main(void)
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
       get_bbc_code(buffered_code, &this_col, &this_row);
-      if(buffered_value && key_downstroke.is_underway == 0)
+      if(buffered_value && key_downstroke.is_underway == 0 && key_upstroke.is_underway == 0)
       {
         col_status[this_col] = 1;
         matrix_status[this_col][this_row] = 1;
         key_downstroke.duration = 0;
         key_downstroke.is_underway = 1;
         kb_buf_pop(&my_kb_buf);
-        DEBUG_HI();
       }
-      else if(buffered_value == 0 && key_downstroke.is_underway == 0)
+      else if(buffered_value == 0 && key_downstroke.is_underway == 0 && key_upstroke.is_underway == 0)
       {
         col_status[this_col] = 0;
         matrix_status[this_col][this_row] = 0;
-        // key_upstroke.duration = 0;
-        // key_upstroke.is_underway = 1;
+        key_upstroke.duration = HAL_GetTick();
+        key_upstroke.is_underway = 1;
         kb_buf_pop(&my_kb_buf);
+        DEBUG_HI();
       }
     }
   /* USER CODE END WHILE */
@@ -492,14 +494,13 @@ int main(void)
     if(key_downstroke.is_underway && key_downstroke.duration > 0x1000)
     {
       key_downstroke.is_underway = 0;
-      DEBUG_LOW();
     }
 
-    // if(key_upstroke.is_underway && key_upstroke.duration > 0x2)
-    // {
-    //   key_upstroke.is_underway = 0;
-    //   DEBUG_LOW();
-    // }
+    if(key_upstroke.is_underway && HAL_GetTick() - key_upstroke.duration > 30)
+    {
+      key_upstroke.is_underway = 0;
+      DEBUG_LOW();
+    }
 
     if(has_active_keys() && micros_now - last_ca2 > 20)
     {
