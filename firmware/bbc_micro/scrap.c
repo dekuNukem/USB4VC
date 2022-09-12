@@ -1,3 +1,12 @@
+ // maybe dont pop it here, wait until conformation that W has been active for more than 10ms?
+
+    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      get_bbc_code(buffered_code, &this_col, &this_row);
+      if(buffered_value && read_duration > 0x400)
+        kb_buf_pop(&my_kb_buf); // maybe dont pop it here, wait until conformation that W has been active for more than 10ms?
+    }
+
   while(1)
   {
     DEBUG_HI();

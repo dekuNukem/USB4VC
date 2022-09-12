@@ -92,6 +92,12 @@ typedef struct
   gamepad_event* gamepad_events;
 } gamepad_buf;
 
+typedef struct
+{
+  uint32_t duration;
+  uint8_t is_underway;
+} keyboard_event;
+
 void kb_buf_init(kb_buf *lb);
 uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value);
 uint8_t kb_buf_peek(kb_buf *lb, uint8_t* code, uint8_t* value);

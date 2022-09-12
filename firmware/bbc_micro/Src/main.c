@@ -348,8 +348,8 @@ void get_bbc_code(uint8_t linux_code, uint8_t* bbc_col, uint8_t* bbc_row)
 //   }
 // }
 
-uint8_t is_brand_new_press;
-uint32_t read_duration;
+volatile keyboard_event key_downstroke;
+volatile keyboard_event key_upstroke;
 
 // falling edge, KB_EN is low
 // this ISR has to be as fast as possible to beat the clock
@@ -368,11 +368,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       if(matrix_status[kb_col][kb_row])
       {
         W_HI();
-        read_duration++;
+        key_downstroke.duration++;
       }
       else
       {
         W_LOW();
+        key_upstroke.duration++;
       }
     }
     else
@@ -466,17 +467,21 @@ int main(void)
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
       get_bbc_code(buffered_code, &this_col, &this_row);
-      if(buffered_value)
+      if(buffered_value && key_downstroke.is_underway == 0)
       {
         col_status[this_col] = 1;
         matrix_status[this_col][this_row] = 1;
-        read_duration = 0;
-        kb_buf_pop(&my_kb_buf); // maybe dont pop it here, wait until conformation that W has been active for more than 10ms?
+        key_downstroke.duration = 0;
+        key_downstroke.is_underway = 1;
+        kb_buf_pop(&my_kb_buf);
+        DEBUG_HI();
       }
-      else
+      else if(buffered_value == 0 && key_downstroke.is_underway == 0)
       {
         col_status[this_col] = 0;
         matrix_status[this_col][this_row] = 0;
+        // key_upstroke.duration = 0;
+        // key_upstroke.is_underway = 1;
         kb_buf_pop(&my_kb_buf);
       }
     }
@@ -484,12 +489,17 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    if(key_downstroke.is_underway && key_downstroke.duration > 0x1000)
     {
-      get_bbc_code(buffered_code, &this_col, &this_row);
-      if(buffered_value && read_duration > 0x400)
-        kb_buf_pop(&my_kb_buf); // maybe dont pop it here, wait until conformation that W has been active for more than 10ms?
+      key_downstroke.is_underway = 0;
+      DEBUG_LOW();
     }
+
+    // if(key_upstroke.is_underway && key_upstroke.duration > 0x2)
+    // {
+    //   key_upstroke.is_underway = 0;
+    //   DEBUG_LOW();
+    // }
 
     if(has_active_keys() && micros_now - last_ca2 > 20)
     {
