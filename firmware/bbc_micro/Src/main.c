@@ -164,37 +164,6 @@ int fputc(int ch, FILE *f)
 uint8_t col_status[COL_SIZE];
 uint8_t matrix_status[COL_SIZE][ROW_SIZE];
 
-// falling edge, KB_EN is low
-// this ISR has to be as fast as possible to beat the clock
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-  CA2_LOW();
-  while(1)
-  {
-    uint32_t kb_data = (GPIOB->IDR >> 8) & 0x7f;
-    uint8_t kb_row = kb_data & 0x7;
-    uint8_t kb_col = (kb_data >> 3) & 0xf;
-
-    if(col_status[kb_col])
-    {
-      CA2_HI();
-      if(matrix_status[kb_col][kb_row])
-        W_HI();
-      else
-        W_LOW();
-    }
-    else
-    {
-      CA2_LOW();
-      W_LOW();
-    }
-    if(IS_KB_EN_HI())
-      break;
-  }
-  CA2_LOW();
-  W_HI();
-}
-
 uint8_t has_active_keys(void)
 {
   for(int i = 0; i < COL_SIZE; ++i)
@@ -379,6 +348,46 @@ void get_bbc_code(uint8_t linux_code, uint8_t* bbc_col, uint8_t* bbc_row)
 //   }
 // }
 
+uint8_t is_brand_new_press;
+uint32_t read_duration;
+
+// falling edge, KB_EN is low
+// this ISR has to be as fast as possible to beat the clock
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  CA2_LOW();
+  while(1)
+  {
+    uint32_t kb_data = (GPIOB->IDR >> 8) & 0x7f;
+    uint8_t kb_row = kb_data & 0x7;
+    uint8_t kb_col = (kb_data >> 3) & 0xf;
+
+    if(col_status[kb_col])
+    {
+      CA2_HI();
+      if(matrix_status[kb_col][kb_row])
+      {
+        W_HI();
+        read_duration++;
+      }
+      else
+      {
+        W_LOW();
+      }
+    }
+    else
+    {
+      CA2_LOW();
+      W_LOW();
+    }
+    if(IS_KB_EN_HI())
+      break;
+  }
+  CA2_LOW();
+  W_HI();
+}
+
+
 /* USER CODE END 0 */
 
 /**
@@ -447,6 +456,8 @@ int main(void)
 
   once column is known, bbc will then start scanning rows
 
+  read_duration valid above 0x400
+
   */
 
   while (1)
@@ -459,7 +470,8 @@ int main(void)
       {
         col_status[this_col] = 1;
         matrix_status[this_col][this_row] = 1;
-        kb_buf_pop(&my_kb_buf);
+        read_duration = 0;
+        kb_buf_pop(&my_kb_buf); // maybe dont pop it here, wait until conformation that W has been active for more than 10ms?
       }
       else
       {
@@ -471,6 +483,14 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+
+    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      get_bbc_code(buffered_code, &this_col, &this_row);
+      if(buffered_value && read_duration > 0x400)
+        kb_buf_pop(&my_kb_buf); // maybe dont pop it here, wait until conformation that W has been active for more than 10ms?
+    }
+
     if(has_active_keys() && micros_now - last_ca2 > 20)
     {
       CA2_HI();
