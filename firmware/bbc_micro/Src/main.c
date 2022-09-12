@@ -53,8 +53,6 @@ SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
 
-UART_HandleTypeDef huart1;
-
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 const uint8_t board_id = 4;
@@ -79,7 +77,6 @@ gamepad_event latest_gamepad_event;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_TIM2_Init(void);
 
 /* USER CODE BEGIN PFP */
@@ -146,12 +143,15 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 
 int fputc(int ch, FILE *f)
 {
-  HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
+  // HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
   return ch;
 }
 
 #define DEBUG_HI() (GPIOA->BSRR = 0x00000400)
 #define DEBUG_LOW() (GPIOA->BSRR = 0x04000000)
+
+#define DEBUG2_HI() (GPIOA->BSRR = 0x00000200)
+#define DEBUG2_LOW() (GPIOA->BSRR = 0x02000000)
 
 #define CA2_HI() (GPIOB->BSRR = 0x00008000)
 #define CA2_LOW() (GPIOB->BSRR = 0x80000000)
@@ -386,8 +386,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   CA2_LOW();
   W_HI();
 
-  if(key_upstroke.is_underway)
-    key_upstroke.duration = HAL_GetTick();
+  key_upstroke.duration = micros();
 }
 
 
@@ -423,7 +422,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
-  MX_USART1_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
@@ -476,15 +474,16 @@ int main(void)
         key_downstroke.duration = 0;
         key_downstroke.is_underway = 1;
         kb_buf_pop(&my_kb_buf);
+        DEBUG_HI();
       }
       else if(buffered_value == 0 && key_downstroke.is_underway == 0 && key_upstroke.is_underway == 0)
       {
         col_status[this_col] = 0;
         matrix_status[this_col][this_row] = 0;
-        key_upstroke.duration = HAL_GetTick();
+        key_upstroke.duration = micros();
         key_upstroke.is_underway = 1;
         kb_buf_pop(&my_kb_buf);
-        DEBUG_HI();
+        DEBUG2_HI();
       }
     }
   /* USER CODE END WHILE */
@@ -494,12 +493,13 @@ int main(void)
     if(key_downstroke.is_underway && key_downstroke.duration > 0x1000)
     {
       key_downstroke.is_underway = 0;
+      DEBUG_LOW();
     }
 
-    if(key_upstroke.is_underway && HAL_GetTick() - key_upstroke.duration > 30)
+    if(key_upstroke.is_underway && micros() - key_upstroke.duration > 30000)
     {
       key_upstroke.is_underway = 0;
-      DEBUG_LOW();
+      DEBUG2_LOW();
     }
 
     if(has_active_keys() && micros_now - last_ca2 > 20)
@@ -524,7 +524,6 @@ void SystemClock_Config(void)
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
@@ -549,13 +548,6 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
-  PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_SYSCLK;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
@@ -630,27 +622,6 @@ static void MX_TIM2_Init(void)
 
 }
 
-/* USART1 init function */
-static void MX_USART1_UART_Init(void)
-{
-
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_HalfDuplex_Init(&huart1) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-}
-
 /** Configure pins as 
         * Analog 
         * Input 
@@ -678,7 +649,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|KB_CA2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, DEBUG2_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : SLAVE_REQ_Pin */
   GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
@@ -722,8 +693,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(KB_CA2_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : DEBUG_Pin ERR_LED_Pin ACT_LED_Pin */
-  GPIO_InitStruct.Pin = DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin;
+  /*Configure GPIO pins : DEBUG2_Pin DEBUG_Pin ERR_LED_Pin ACT_LED_Pin */
+  GPIO_InitStruct.Pin = DEBUG2_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

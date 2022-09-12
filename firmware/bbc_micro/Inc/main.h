@@ -76,6 +76,8 @@
 #define KB_CA2_GPIO_Port GPIOB
 #define W_Pin GPIO_PIN_8
 #define W_GPIO_Port GPIOA
+#define DEBUG2_Pin GPIO_PIN_9
+#define DEBUG2_GPIO_Port GPIOA
 #define DEBUG_Pin GPIO_PIN_10
 #define DEBUG_GPIO_Port GPIOA
 #define ERR_LED_Pin GPIO_PIN_11

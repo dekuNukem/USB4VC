@@ -9,8 +9,6 @@
 "bbc\stm32f0xx_hal_spi_ex.o"
 "bbc\stm32f0xx_hal_tim.o"
 "bbc\stm32f0xx_hal_tim_ex.o"
-"bbc\stm32f0xx_hal_uart.o"
-"bbc\stm32f0xx_hal_uart_ex.o"
 "bbc\stm32f0xx_hal_rcc.o"
 "bbc\stm32f0xx_hal_rcc_ex.o"
 "bbc\stm32f0xx_hal.o"
