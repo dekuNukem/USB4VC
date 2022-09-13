@@ -94,6 +94,7 @@ typedef struct
 
 typedef struct
 {
+  uint32_t event_start;
   uint32_t duration;
   uint8_t is_underway;
 } keyboard_event;

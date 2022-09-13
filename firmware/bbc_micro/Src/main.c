@@ -349,7 +349,6 @@ void get_bbc_code(uint8_t linux_code, uint8_t* bbc_col, uint8_t* bbc_row)
 // }
 
 volatile keyboard_event key_downstroke;
-volatile keyboard_event key_upstroke;
 
 // falling edge, KB_EN is low
 // this ISR has to be as fast as possible to beat the clock
@@ -385,8 +384,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
   CA2_LOW();
   W_HI();
-
-  key_upstroke.duration = micros();
 }
 
 
@@ -467,39 +464,34 @@ int main(void)
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
       get_bbc_code(buffered_code, &this_col, &this_row);
-      if(buffered_value && key_downstroke.is_underway == 0 && key_upstroke.is_underway == 0)
+      if(buffered_value && key_downstroke.is_underway == 0)
       {
         col_status[this_col] = 1;
         matrix_status[this_col][this_row] = 1;
         key_downstroke.duration = 0;
         key_downstroke.is_underway = 1;
+        key_downstroke.event_start = micros();
         kb_buf_pop(&my_kb_buf);
         DEBUG_HI();
       }
-      else if(buffered_value == 0 && key_downstroke.is_underway == 0 && key_upstroke.is_underway == 0)
+      else if(buffered_value == 0)
       {
         col_status[this_col] = 0;
         matrix_status[this_col][this_row] = 0;
-        key_upstroke.duration = micros();
-        key_upstroke.is_underway = 1;
         kb_buf_pop(&my_kb_buf);
         DEBUG2_HI();
+        delay_us(10000);
+        DEBUG2_LOW();
       }
     }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
 
-    if(key_downstroke.is_underway && key_downstroke.duration > 0x1000)
+    if(key_downstroke.is_underway && (key_downstroke.duration > 0x300 || micros() - key_downstroke.event_start > 20000))
     {
       key_downstroke.is_underway = 0;
       DEBUG_LOW();
-    }
-
-    if(key_upstroke.is_underway && micros() - key_upstroke.duration > 30000)
-    {
-      key_upstroke.is_underway = 0;
-      DEBUG2_LOW();
     }
 
     if(has_active_keys() && micros_now - last_ca2 > 20)
