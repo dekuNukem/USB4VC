@@ -386,6 +386,16 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   W_HI();
 }
 
+void col_status_update(uint8_t this_col)
+{
+  if(this_col >= COL_SIZE)
+    return;
+  uint8_t is_this_col_active = 0;
+  for (uint8_t i = 0; i < ROW_SIZE; i++)
+    if(matrix_status[this_col][i])
+      is_this_col_active = 1;
+  col_status[this_col] = is_this_col_active;
+}
 
 /* USER CODE END 0 */
 
@@ -476,8 +486,8 @@ int main(void)
       }
       else if(buffered_value == 0)
       {
-        col_status[this_col] = 0;
         matrix_status[this_col][this_row] = 0;
+        col_status_update(this_col);
         kb_buf_pop(&my_kb_buf);
         DEBUG2_HI();
         delay_us(10000);
@@ -488,7 +498,7 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-    if(key_downstroke.is_underway && (key_downstroke.duration > 0x300 || micros() - key_downstroke.event_start > 20000))
+    if(key_downstroke.is_underway && (key_downstroke.duration > 400 || micros() - key_downstroke.event_start > 20000))
     {
       key_downstroke.is_underway = 0;
       DEBUG_LOW();
