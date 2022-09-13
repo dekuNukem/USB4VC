@@ -550,9 +550,10 @@ int main(void)
     {
       if(buffered_code == KEY_RIGHTALT)
       {
-        HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_RESET);
-        HAL_Delay(10);
-        HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_SET);
+        if(buffered_value)
+          HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_RESET);
+        else
+          HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_SET);
       }
       if(buffered_code == KEY_LEFTSHIFT)
           is_left_shift_on = buffered_value;
@@ -744,6 +745,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|KB_CA2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, DEBUG2_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : SLAVE_REQ_Pin */
@@ -767,12 +771,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(POT_RESET_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : KB_BREAK_Pin KB_ROW_C_Pin KB_COL_A_Pin KB_COL_B_Pin 
-                           KB_COL_C_Pin KB_COL_D_Pin KB_ROW_A_Pin KB_ROW_B_Pin */
-  GPIO_InitStruct.Pin = KB_BREAK_Pin|KB_ROW_C_Pin|KB_COL_A_Pin|KB_COL_B_Pin 
-                          |KB_COL_C_Pin|KB_COL_D_Pin|KB_ROW_A_Pin|KB_ROW_B_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pins : KB_BREAK_Pin KB_CA2_Pin */
+  GPIO_InitStruct.Pin = KB_BREAK_Pin|KB_CA2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : KB_EN_Pin */
@@ -781,12 +784,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(KB_EN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : KB_CA2_Pin */
-  GPIO_InitStruct.Pin = KB_CA2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  /*Configure GPIO pins : KB_ROW_C_Pin KB_COL_A_Pin KB_COL_B_Pin KB_COL_C_Pin 
+                           KB_COL_D_Pin KB_ROW_A_Pin KB_ROW_B_Pin */
+  GPIO_InitStruct.Pin = KB_ROW_C_Pin|KB_COL_A_Pin|KB_COL_B_Pin|KB_COL_C_Pin 
+                          |KB_COL_D_Pin|KB_ROW_A_Pin|KB_ROW_B_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(KB_CA2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DEBUG2_Pin DEBUG_Pin ERR_LED_Pin ACT_LED_Pin */
   GPIO_InitStruct.Pin = DEBUG2_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin;
