@@ -192,7 +192,7 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
   0x51, // KEY_8    9
   0x62, // KEY_9    10
   0x72, // KEY_0    11
-  CODE_UNUSED, // KEY_MINUS    12
+  0x71, // KEY_MINUS    12
   CODE_UNUSED, // KEY_EQUAL    13
   0x95, // KEY_BACKSPACE    14
   0x06, // KEY_TAB    15
@@ -219,7 +219,7 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
   0x54, // KEY_J    36
   0x64, // KEY_K    37
   0x65, // KEY_L    38
-  0X84, // KEY_SEMICOLON    39
+  0X75, // KEY_SEMICOLON    39
   CODE_UNUSED, // KEY_APOSTROPHE    40
   CODE_UNUSED, // KEY_GRAVE    41
   0x00, // KEY_LEFTSHIFT    42
@@ -277,7 +277,7 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
   CODE_UNUSED, // KEY_MUHENKAN    94
   CODE_UNUSED, // KEY_KPJPCOMMA    95
   CODE_UNUSED, // KEY_KPENTER    96
-  0x10, // KEY_RIGHTCTRL    97
+  0x96, // KEY_RIGHTCTRL    97
   CODE_UNUSED, // KEY_KPSLASH    98
   CODE_UNUSED, // KEY_SYSRQ    99
   CODE_UNUSED, // KEY_RIGHTALT    100
@@ -291,7 +291,7 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
   0x92, // KEY_DOWN    108
   CODE_UNUSED, // KEY_PAGEDOWN    109
   CODE_UNUSED, // KEY_INSERT    110
-  CODE_UNUSED, // KEY_DELETE    111
+  0x95, // KEY_DELETE    111
   CODE_UNUSED, // KEY_MACRO    112
   CODE_UNUSED, // KEY_MUTE    113
   CODE_UNUSED, // KEY_VOLUMEDOWN    114
@@ -310,10 +310,31 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
   CODE_UNUSED, // KEY_COMPOSE    127
 };
 
-void get_bbc_code(uint8_t linux_code, uint8_t* bbc_col, uint8_t* bbc_row)
+
+
+#define BBC_SHIFT_OFF 0
+#define BBC_SHIFT_ON 1
+#define BBC_SHIFT_SAME_AS_BEFORE 2
+
+#define KEY_2     3
+#define KEY_6     7
+#define KEY_7     8
+#define KEY_8     9
+#define KEY_9     10
+#define KEY_0     11
+#define KEY_MINUS 12
+#define KEY_GRAVE   41
+#define KEY_EQUAL   13
+#define KEY_SEMICOLON   39
+#define KEY_APOSTROPHE    40
+#define KEY_SYSRQ   99
+
+void get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_t* bbc_row, uint8_t *bbc_shift)
 {
   *bbc_col = 0;
   *bbc_row = 0;
+  *bbc_shift = BBC_SHIFT_SAME_AS_BEFORE;
+
   if(linux_code >= LINUX_KEYCODE_TO_BBC_SIZE)
     return;
   *bbc_col = linux_keycode_to_bbc_matrix_lookup[linux_code] >> 4;
@@ -322,31 +343,86 @@ void get_bbc_code(uint8_t linux_code, uint8_t* bbc_col, uint8_t* bbc_row)
     *bbc_col = 0;
   if(*bbc_row >= ROW_SIZE)
     *bbc_row = 0;
-}
 
-// void gamepad_update(void)
-// {
-//   gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
-//   if(this_gamepad_event != NULL)
-//   {
-//     printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
-    
-//     Joystick 1 = CH0 and CH1
-//     Joystick 2 = CH2 and CH3
-//     Wiper 0 = CH3 Joystick 2
-//     Wiper 1 = CH0 Joystick 1
-//     Wiper 2 = CH2 Joystick 2
-//     Wiper 3 = CH1 Joystick 1
-    
-//     HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
-//     HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
-//     mcp4451_write_wiper(1, 255-this_gamepad_event->axis_x);
-//     mcp4451_write_wiper(3, 255-this_gamepad_event->axis_y);
-//     mcp4451_write_wiper(0, 255-this_gamepad_event->axis_rx);
-//     mcp4451_write_wiper(2, 255-this_gamepad_event->axis_ry);
-//     gamepad_buf_pop(&my_gamepad_buf);
-//   }
-// }
+  if(linux_code == KEY_2 && is_shift)
+  {
+    *bbc_col = 7;
+    *bbc_row = 4;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_6 && is_shift)
+  {
+    *bbc_col = 8;
+    *bbc_row = 1;
+    *bbc_shift = BBC_SHIFT_OFF;
+  }
+  if(linux_code == KEY_GRAVE && is_shift)
+  {
+    *bbc_col = 8;
+    *bbc_row = 1;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_7 && is_shift)
+  {
+    *bbc_col = 4;
+    *bbc_row = 3;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_8 && is_shift)
+  {
+    *bbc_col = 8;
+    *bbc_row = 4;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_8 && is_shift)
+  {
+    *bbc_col = 8;
+    *bbc_row = 4;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_9 && is_shift)
+  {
+    *bbc_col = 5;
+    *bbc_row = 1;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_0 && is_shift)
+  {
+    *bbc_col = 6;
+    *bbc_row = 2;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_MINUS && is_shift)
+  {
+    *bbc_col = 8;
+    *bbc_row = 2;
+    *bbc_shift = BBC_SHIFT_OFF;
+  }
+  if(linux_code == KEY_EQUAL && is_shift)
+  {
+    *bbc_col = 7;
+    *bbc_row = 5;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_EQUAL && (is_shift == 0))
+  {
+    *bbc_col = 7;
+    *bbc_row = 1;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  if(linux_code == KEY_SEMICOLON && is_shift)
+  {
+    *bbc_col = 8;
+    *bbc_row = 4;
+    *bbc_shift = BBC_SHIFT_OFF;
+  }
+  if(linux_code == KEY_APOSTROPHE && is_shift)
+  {
+    *bbc_col = 1;
+    *bbc_row = 3;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+}
 
 volatile keyboard_event key_downstroke;
 
@@ -391,11 +467,16 @@ void col_status_update(uint8_t this_col)
   if(this_col >= COL_SIZE)
     return;
   uint8_t is_this_col_active = 0;
-  for (uint8_t i = 0; i < ROW_SIZE; i++)
+  for(uint8_t i = 0; i < ROW_SIZE; i++)
     if(matrix_status[this_col][i])
       is_this_col_active = 1;
   col_status[this_col] = is_this_col_active;
 }
+
+#define KEY_LEFTSHIFT   42
+#define KEY_RIGHTSHIFT    54
+
+uint8_t is_left_shift_on, is_right_shift_on;
 
 /* USER CODE END 0 */
 
@@ -449,7 +530,7 @@ int main(void)
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
-  uint8_t this_col, this_row;
+  uint8_t this_col, this_row, this_shift;
   memset(matrix_status, 0, COL_SIZE * ROW_SIZE);
   memset(col_status, 0, COL_SIZE);
   /*
@@ -473,36 +554,58 @@ int main(void)
     uint32_t micros_now = micros();
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
-      get_bbc_code(buffered_code, &this_col, &this_row);
+      if(buffered_code == KEY_SYSRQ)
+        ; // reset here!
+      if(buffered_code == KEY_LEFTSHIFT)
+          is_left_shift_on = buffered_value;
+      if(buffered_code == KEY_RIGHTSHIFT)
+          is_right_shift_on = buffered_value;
+      get_bbc_code(buffered_code, is_right_shift_on | is_left_shift_on, &this_col, &this_row, &this_shift);
       if(buffered_value && key_downstroke.is_underway == 0)
       {
         col_status[this_col] = 1;
         matrix_status[this_col][this_row] = 1;
+
+        if(this_shift == BBC_SHIFT_OFF)
+        {
+          matrix_status[0][0] = 0;
+          col_status_update(0);
+        }
+        if(this_shift == BBC_SHIFT_ON)
+        {
+          matrix_status[0][0] = 1;
+          col_status[0] = 1;
+        }
+
         key_downstroke.duration = 0;
         key_downstroke.is_underway = 1;
         key_downstroke.event_start = micros();
         kb_buf_pop(&my_kb_buf);
-        DEBUG_HI();
       }
       else if(buffered_value == 0)
       {
         matrix_status[this_col][this_row] = 0;
         col_status_update(this_col);
+        if(this_shift == BBC_SHIFT_OFF && (is_right_shift_on | is_left_shift_on))
+        {
+          col_status[0] = 1;
+          matrix_status[0][0] = 1;
+        }
         kb_buf_pop(&my_kb_buf);
-        DEBUG2_HI();
         delay_us(10000);
-        DEBUG2_LOW();
       }
     }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
-    if(key_downstroke.is_underway && (key_downstroke.duration > 400 || micros() - key_downstroke.event_start > 20000))
-    {
+    // duration: 780 is around 60ms at 64MHz clock
+    if(key_downstroke.is_underway && (key_downstroke.duration > 400 || micros() - key_downstroke.event_start > 10000))
       key_downstroke.is_underway = 0;
+
+    if(is_right_shift_on | is_left_shift_on)
+      DEBUG_HI();
+    else
       DEBUG_LOW();
-    }
 
     if(has_active_keys() && micros_now - last_ca2 > 20)
     {

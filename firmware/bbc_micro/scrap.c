@@ -1,3 +1,28 @@
+// void gamepad_update(void)
+// {
+//   gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
+//   if(this_gamepad_event != NULL)
+//   {
+//     printf("%d %d %d %d %d %d %d %d\n---\n", this_gamepad_event->button_1, this_gamepad_event->button_2, this_gamepad_event->button_3, this_gamepad_event->button_4, this_gamepad_event->axis_x, this_gamepad_event->axis_y, this_gamepad_event->axis_rx, this_gamepad_event->axis_ry);
+    
+//     Joystick 1 = CH0 and CH1
+//     Joystick 2 = CH2 and CH3
+//     Wiper 0 = CH3 Joystick 2
+//     Wiper 1 = CH0 Joystick 1
+//     Wiper 2 = CH2 Joystick 2
+//     Wiper 3 = CH1 Joystick 1
+    
+//     HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
+//     HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
+//     mcp4451_write_wiper(1, 255-this_gamepad_event->axis_x);
+//     mcp4451_write_wiper(3, 255-this_gamepad_event->axis_y);
+//     mcp4451_write_wiper(0, 255-this_gamepad_event->axis_rx);
+//     mcp4451_write_wiper(2, 255-this_gamepad_event->axis_ry);
+//     gamepad_buf_pop(&my_gamepad_buf);
+//   }
+// }
+
+
  // maybe dont pop it here, wait until conformation that W has been active for more than 10ms?
 
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
