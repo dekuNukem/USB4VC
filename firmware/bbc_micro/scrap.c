@@ -22,7 +22,11 @@
 //   }
 // }
 
-
+        if(this_shift == BBC_SHIFT_OFF && (buffered_code == KEY_LEFTSHIFT || buffered_code == KEY_RIGHTSHIFT))
+        {
+          col_status[0] = 1;
+          matrix_status[0][0] = 1;
+        }
  // maybe dont pop it here, wait until conformation that W has been active for more than 10ms?
 
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)

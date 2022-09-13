@@ -328,6 +328,7 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
 #define KEY_SEMICOLON   39
 #define KEY_APOSTROPHE    40
 #define KEY_SYSRQ   99
+#define KEY_RIGHTALT    100
 
 void get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_t* bbc_row, uint8_t *bbc_shift)
 {
@@ -348,83 +349,81 @@ void get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_
   {
     *bbc_col = 7;
     *bbc_row = 4;
-    *bbc_shift = BBC_SHIFT_ON;
+    *bbc_shift = BBC_SHIFT_OFF;
   }
-  if(linux_code == KEY_6 && is_shift)
+  else if(linux_code == KEY_6 && is_shift)
   {
     *bbc_col = 8;
     *bbc_row = 1;
     *bbc_shift = BBC_SHIFT_OFF;
   }
-  if(linux_code == KEY_GRAVE && is_shift)
+  else if(linux_code == KEY_GRAVE && is_shift)
   {
     *bbc_col = 8;
     *bbc_row = 1;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  if(linux_code == KEY_7 && is_shift)
+  else if(linux_code == KEY_7 && is_shift)
   {
     *bbc_col = 4;
     *bbc_row = 3;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  if(linux_code == KEY_8 && is_shift)
+  else if(linux_code == KEY_8 && is_shift)
   {
     *bbc_col = 8;
     *bbc_row = 4;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  if(linux_code == KEY_8 && is_shift)
+  else if(linux_code == KEY_8 && is_shift)
   {
     *bbc_col = 8;
     *bbc_row = 4;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  if(linux_code == KEY_9 && is_shift)
+  else if(linux_code == KEY_9 && is_shift)
   {
     *bbc_col = 5;
     *bbc_row = 1;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  if(linux_code == KEY_0 && is_shift)
+  else if(linux_code == KEY_0 && is_shift)
   {
     *bbc_col = 6;
     *bbc_row = 2;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  if(linux_code == KEY_MINUS && is_shift)
+  else if(linux_code == KEY_MINUS && is_shift)
   {
     *bbc_col = 8;
     *bbc_row = 2;
     *bbc_shift = BBC_SHIFT_OFF;
   }
-  if(linux_code == KEY_EQUAL && is_shift)
+  else if(linux_code == KEY_EQUAL && is_shift)
   {
     *bbc_col = 7;
     *bbc_row = 5;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  if(linux_code == KEY_EQUAL && (is_shift == 0))
+  else if(linux_code == KEY_EQUAL && (is_shift == 0))
   {
     *bbc_col = 7;
     *bbc_row = 1;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  if(linux_code == KEY_SEMICOLON && is_shift)
+  else if(linux_code == KEY_SEMICOLON && is_shift)
   {
     *bbc_col = 8;
     *bbc_row = 4;
     *bbc_shift = BBC_SHIFT_OFF;
   }
-  if(linux_code == KEY_APOSTROPHE && is_shift)
+  else if(linux_code == KEY_APOSTROPHE && is_shift)
   {
     *bbc_col = 1;
     *bbc_row = 3;
     *bbc_shift = BBC_SHIFT_ON;
   }
 }
-
-volatile keyboard_event key_downstroke;
 
 // falling edge, KB_EN is low
 // this ISR has to be as fast as possible to beat the clock
@@ -441,14 +440,9 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     {
       CA2_HI();
       if(matrix_status[kb_col][kb_row])
-      {
         W_HI();
-        key_downstroke.duration++;
-      }
       else
-      {
         W_LOW();
-      }
     }
     else
     {
@@ -476,7 +470,7 @@ void col_status_update(uint8_t this_col)
 #define KEY_LEFTSHIFT   42
 #define KEY_RIGHTSHIFT    54
 
-uint8_t is_left_shift_on, is_right_shift_on;
+uint8_t is_left_shift_on, is_right_shift_on, is_shift_on;
 
 /* USER CODE END 0 */
 
@@ -554,18 +548,20 @@ int main(void)
     uint32_t micros_now = micros();
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
-      if(buffered_code == KEY_SYSRQ)
-        ; // reset here!
+      if(buffered_code == KEY_RIGHTALT)
+      {
+        HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_RESET);
+        HAL_Delay(10);
+        HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_SET);
+      }
       if(buffered_code == KEY_LEFTSHIFT)
           is_left_shift_on = buffered_value;
       if(buffered_code == KEY_RIGHTSHIFT)
           is_right_shift_on = buffered_value;
-      get_bbc_code(buffered_code, is_right_shift_on | is_left_shift_on, &this_col, &this_row, &this_shift);
-      if(buffered_value && key_downstroke.is_underway == 0)
+      is_shift_on = is_right_shift_on | is_left_shift_on;
+      get_bbc_code(buffered_code, is_shift_on, &this_col, &this_row, &this_shift);
+      if(buffered_value)
       {
-        col_status[this_col] = 1;
-        matrix_status[this_col][this_row] = 1;
-
         if(this_shift == BBC_SHIFT_OFF)
         {
           matrix_status[0][0] = 0;
@@ -576,20 +572,18 @@ int main(void)
           matrix_status[0][0] = 1;
           col_status[0] = 1;
         }
-
-        key_downstroke.duration = 0;
-        key_downstroke.is_underway = 1;
-        key_downstroke.event_start = micros();
+        col_status[this_col] = 1;
+        matrix_status[this_col][this_row] = 1;
         kb_buf_pop(&my_kb_buf);
       }
       else if(buffered_value == 0)
       {
         matrix_status[this_col][this_row] = 0;
         col_status_update(this_col);
-        if(this_shift == BBC_SHIFT_OFF && (is_right_shift_on | is_left_shift_on))
+        if(buffered_code == KEY_LEFTSHIFT || buffered_code == KEY_RIGHTSHIFT)
         {
-          col_status[0] = 1;
-          matrix_status[0][0] = 1;
+          memset(matrix_status, 0, COL_SIZE * ROW_SIZE);
+          memset(col_status, 0, COL_SIZE);
         }
         kb_buf_pop(&my_kb_buf);
         delay_us(10000);
@@ -598,10 +592,6 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-    // duration: 780 is around 60ms at 64MHz clock
-    if(key_downstroke.is_underway && (key_downstroke.duration > 400 || micros() - key_downstroke.event_start > 10000))
-      key_downstroke.is_underway = 0;
-
     if(is_right_shift_on | is_left_shift_on)
       DEBUG_HI();
     else
