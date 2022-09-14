@@ -266,7 +266,7 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
   CODE_UNUSED, // KEY_KPDOT    83
   CODE_UNUSED, // KEY_UNUSED    84
   CODE_UNUSED, // KEY_ZENKAKUHANKAKU    85
-  CODE_UNUSED, // KEY_102ND    86
+  0x87, // KEY_102ND    86
   CODE_UNUSED, // KEY_F11    87
   CODE_UNUSED, // KEY_F12    88
   CODE_UNUSED, // KEY_RO    89
@@ -317,6 +317,7 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
 #define BBC_SHIFT_SAME_AS_BEFORE 2
 
 #define KEY_2     3
+#define KEY_3     4
 #define KEY_6     7
 #define KEY_7     8
 #define KEY_8     9
@@ -329,6 +330,12 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
 #define KEY_APOSTROPHE    40
 #define KEY_SYSRQ   99
 #define KEY_RIGHTALT    100
+#define KEY_BACKSLASH   43
+
+#define PC_KB_TYPE_ANSI_US 0
+#define PC_KB_TYPE_ISO_UK 1
+
+uint8_t pc_kb_type = PC_KB_TYPE_ISO_UK;
 
 void get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_t* bbc_row, uint8_t *bbc_shift)
 {
@@ -345,11 +352,17 @@ void get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_
   if(*bbc_row >= ROW_SIZE)
     *bbc_row = 0;
 
-  if(linux_code == KEY_2 && is_shift)
+  if(linux_code == KEY_2 && is_shift && pc_kb_type == PC_KB_TYPE_ANSI_US)
   {
     *bbc_col = 7;
     *bbc_row = 4;
     *bbc_shift = BBC_SHIFT_OFF;
+  }
+  else if(linux_code == KEY_3 && is_shift && pc_kb_type == PC_KB_TYPE_ISO_UK)
+  {
+    *bbc_col = 8;
+    *bbc_row = 2;
+    *bbc_shift = BBC_SHIFT_ON;
   }
   else if(linux_code == KEY_6 && is_shift)
   {
@@ -417,10 +430,28 @@ void get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_
     *bbc_row = 4;
     *bbc_shift = BBC_SHIFT_OFF;
   }
-  else if(linux_code == KEY_APOSTROPHE && is_shift)
+  else if(linux_code == KEY_APOSTROPHE && is_shift && pc_kb_type == PC_KB_TYPE_ANSI_US)
   {
     *bbc_col = 1;
     *bbc_row = 3;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  else if(linux_code == KEY_APOSTROPHE && is_shift && pc_kb_type == PC_KB_TYPE_ISO_UK)
+  {
+    *bbc_col = 7;
+    *bbc_row = 4;
+    *bbc_shift = BBC_SHIFT_OFF;
+  }
+  else if(linux_code == KEY_BACKSLASH && is_shift && pc_kb_type == PC_KB_TYPE_ISO_UK)
+  {
+    *bbc_col = 8;
+    *bbc_row = 1;
+    *bbc_shift = BBC_SHIFT_ON;
+  }
+  else if(linux_code == KEY_BACKSLASH && (is_shift == 0) && pc_kb_type == PC_KB_TYPE_ISO_UK)
+  {
+    *bbc_col = 1;
+    *bbc_row = 1;
     *bbc_shift = BBC_SHIFT_ON;
   }
 }
@@ -548,7 +579,7 @@ int main(void)
     uint32_t micros_now = micros();
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
-      if(buffered_code == KEY_RIGHTALT)
+      if(buffered_code == KEY_RIGHTALT) // break key
       {
         if(buffered_value)
           HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_RESET);
