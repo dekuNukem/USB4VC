@@ -174,8 +174,7 @@ uint8_t has_active_keys(void)
 
 uint32_t last_ca2;
 
-#define CODE_UNUSED 0
-#define CODE_SPECIAL 0xff
+#define CODE_UNUSED 0xff
 // top 4 bits column, lower 4 bits row
 #define LINUX_KEYCODE_TO_BBC_SIZE 128
 const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] = 
@@ -310,11 +309,8 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
   CODE_UNUSED, // KEY_COMPOSE    127
 };
 
-
-
 #define BBC_SHIFT_OFF 0
 #define BBC_SHIFT_ON 1
-#define BBC_SHIFT_SAME_AS_BEFORE 2
 
 #define KEY_2     3
 #define KEY_3     4
@@ -337,14 +333,16 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
 
 uint8_t pc_kb_type = PC_KB_TYPE_ISO_UK;
 
-void get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_t* bbc_row, uint8_t *bbc_shift)
+uint8_t get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_t* bbc_row, uint8_t *bbc_shift)
 {
   *bbc_col = 0;
   *bbc_row = 0;
-  *bbc_shift = BBC_SHIFT_SAME_AS_BEFORE;
+  *bbc_shift = BBC_SHIFT_OFF;
 
   if(linux_code >= LINUX_KEYCODE_TO_BBC_SIZE)
-    return;
+    return 1;
+  if(linux_keycode_to_bbc_matrix_lookup[linux_code] == CODE_UNUSED)
+    return 2;
   *bbc_col = linux_keycode_to_bbc_matrix_lookup[linux_code] >> 4;
   *bbc_row = linux_keycode_to_bbc_matrix_lookup[linux_code] & 0xf;
   if(*bbc_col >= COL_SIZE)
@@ -454,6 +452,7 @@ void get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_
     *bbc_row = 1;
     *bbc_shift = BBC_SHIFT_ON;
   }
+  return 0;
 }
 
 // falling edge, KB_EN is low
@@ -593,7 +592,11 @@ int main(void)
       if(buffered_code == KEY_RIGHTSHIFT)
           is_right_shift_on = buffered_value;
       is_shift_on = is_right_shift_on | is_left_shift_on;
-      get_bbc_code(buffered_code, is_shift_on, &this_col, &this_row, &this_shift);
+      if(get_bbc_code(buffered_code, is_shift_on, &this_col, &this_row, &this_shift)) // unmapped key
+      {
+        kb_buf_pop(&my_kb_buf);
+        continue;
+      }
       if(buffered_value)
       {
         if(this_shift == BBC_SHIFT_OFF)
