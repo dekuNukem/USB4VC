@@ -554,6 +554,8 @@ int main(void)
           HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_RESET);
         else
           HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_SET);
+        kb_buf_pop(&my_kb_buf);
+        continue;
       }
       if(buffered_code == KEY_LEFTSHIFT)
           is_left_shift_on = buffered_value;
