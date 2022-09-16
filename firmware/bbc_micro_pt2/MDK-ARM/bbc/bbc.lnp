@@ -5,6 +5,8 @@
 "bbc\main.o"
 "bbc\stm32f0xx_it.o"
 "bbc\stm32f0xx_hal_msp.o"
+"bbc\stm32f0xx_hal_dac.o"
+"bbc\stm32f0xx_hal_dac_ex.o"
 "bbc\stm32f0xx_hal_spi.o"
 "bbc\stm32f0xx_hal_spi_ex.o"
 "bbc\stm32f0xx_hal_tim.o"

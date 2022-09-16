@@ -49,6 +49,8 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+DAC_HandleTypeDef hdac;
+
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
@@ -78,6 +80,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_DAC_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -86,6 +89,7 @@ static void MX_TIM2_Init(void);
 
 /* USER CODE BEGIN 0 */
 
+uint32_t act_led_timestamp;
 
 /*
   This is called when a new SPI packet is received
@@ -94,6 +98,7 @@ static void MX_TIM2_Init(void);
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_SET);
+  act_led_timestamp = micros();
   memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
   if(backup_spi1_recv_buf[0] != 0xde)
   {
@@ -138,7 +143,6 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     // }
   }
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
 }
 
 int fputc(int ch, FILE *f)
@@ -502,6 +506,22 @@ void col_status_update(uint8_t this_col)
 
 uint8_t is_left_shift_on, is_right_shift_on, is_shift_on;
 
+// 255 = 1.8V, 127 = 0.9V, 0 = 0V
+const uint16_t dac_lookup[256] = {0, 8, 17, 26, 35, 43, 52, 61, 70, 78, 87, 96, 105, 113, 122, 131, 140, 148, 157, 166, 175, 183, 192, 201, 210, 219, 227, 236, 245, 254, 262, 271, 280, 289, 297, 306, 315, 324, 332, 341, 350, 359, 367, 376, 385, 394, 402, 411, 420, 429, 438, 446, 455, 464, 473, 481, 490, 499, 508, 516, 525, 534, 543, 551, 560, 569, 578, 586, 595, 604, 613, 622, 630, 639, 648, 657, 665, 674, 683, 692, 700, 709, 718, 727, 735, 744, 753, 762, 770, 779, 788, 797, 805, 814, 823, 832, 841, 849, 858, 867, 876, 884, 893, 902, 911, 919, 928, 937, 946, 954, 963, 972, 981, 989, 998, 1007, 1016, 1025, 1033, 1042, 1051, 1060, 1068, 1077, 1086, 1095, 1103, 1112, 1121, 1130, 1138, 1147, 1156, 1165, 1173, 1182, 1191, 1200, 1208, 1217, 1226, 1235, 1244, 1252, 1261, 1270, 1279, 1287, 1296, 1305, 1314, 1322, 1331, 1340, 1349, 1357, 1366, 1375, 1384, 1392, 1401, 1410, 1419, 1428, 1436, 1445, 1454, 1463, 1471, 1480, 1489, 1498, 1506, 1515, 1524, 1533, 1541, 1550, 1559, 1568, 1576, 1585, 1594, 1603, 1611, 1620, 1629, 1638, 1647, 1655, 1664, 1673, 1682, 1690, 1699, 1708, 1717, 1725, 1734, 1743, 1752, 1760, 1769, 1778, 1787, 1795, 1804, 1813, 1822, 1831, 1839, 1848, 1857, 1866, 1874, 1883, 1892, 1901, 1909, 1918, 1927, 1936, 1944, 1953, 1962, 1971, 1979, 1988, 1997, 2006, 2014, 2023, 2032, 2041, 2050, 2058, 2067, 2076, 2085, 2093, 2102, 2111, 2120, 2128, 2137, 2146, 2155, 2163, 2172, 2181, 2190, 2198, 2207, 2216, 2225, 2234};
+
+void gamepad_update(void)
+{
+  gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
+  if(this_gamepad_event != NULL)
+  {    
+    HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
+    HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
+    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_lookup[this_gamepad_event->axis_x]);
+    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, dac_lookup[this_gamepad_event->axis_y]);
+    gamepad_buf_pop(&my_gamepad_buf);
+  }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -535,6 +555,7 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_TIM2_Init();
+  MX_DAC_Init();
   /* USER CODE BEGIN 2 */
 
   kb_buf_init(&my_kb_buf);
@@ -572,10 +593,15 @@ int main(void)
   read_duration valid above 0x400
 
   */
+  HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
+  HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
 
   while (1)
   {
     uint32_t micros_now = micros();
+    if(micros_now - act_led_timestamp > 10000)
+      HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
+
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
       if(buffered_code == KEY_RIGHTALT) // break key
@@ -641,7 +667,7 @@ int main(void)
       CA2_LOW();
       last_ca2 = micros_now;
     }
-    // gamepad_update();
+    gamepad_update();
   }
   /* USER CODE END 3 */
 
@@ -694,6 +720,38 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/* DAC init function */
+static void MX_DAC_Init(void)
+{
+
+  DAC_ChannelConfTypeDef sConfig;
+
+    /**DAC Initialization 
+    */
+  hdac.Instance = DAC;
+  if (HAL_DAC_Init(&hdac) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**DAC channel OUT1 config 
+    */
+  sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
+  sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
+  if (HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**DAC channel OUT2 config 
+    */
+  if (HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_2) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
 }
 
 /* SPI1 init function */

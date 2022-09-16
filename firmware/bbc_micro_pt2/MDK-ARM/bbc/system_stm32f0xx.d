@@ -20,6 +20,8 @@ bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_gpio_e
 bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_dma.h
 bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_dma_ex.h
 bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_cortex.h
+bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_dac.h
+bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_dac_ex.h
 bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_flash.h
 bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_flash_ex.h
 bbc\system_stm32f0xx.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c.h

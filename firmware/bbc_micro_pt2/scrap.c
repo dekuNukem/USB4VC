@@ -22,6 +22,15 @@
 //   }
 // }
 
+  // 2234 is 1.8V
+  // 1117 is 0.9V
+  uint8_t test = 0;
+  while(1)
+  {
+    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_lookup[test]);
+    HAL_Delay(10);
+    test++;
+  }
         if(this_shift == BBC_SHIFT_OFF && (buffered_code == KEY_LEFTSHIFT || buffered_code == KEY_RIGHTSHIFT))
         {
           col_status[0] = 1;

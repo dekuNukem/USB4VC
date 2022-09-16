@@ -55,6 +55,10 @@
 #define JS_PB0_GPIO_Port GPIOA
 #define JS_PB1_Pin GPIO_PIN_3
 #define JS_PB1_GPIO_Port GPIOA
+#define DAC_CH0_Pin GPIO_PIN_4
+#define DAC_CH0_GPIO_Port GPIOA
+#define DAC_CH1_Pin GPIO_PIN_5
+#define DAC_CH1_GPIO_Port GPIOA
 #define POT_RESET_Pin GPIO_PIN_0
 #define POT_RESET_GPIO_Port GPIOB
 #define KB_BREAK_Pin GPIO_PIN_1
