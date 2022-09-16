@@ -515,15 +515,43 @@ uint8_t is_left_shift_on, is_right_shift_on, is_shift_on;
 // 255 = 1.8V, 127 = 0.9V, 0 = 0V
 const uint16_t dac_lookup[256] = {0, 8, 17, 26, 35, 43, 52, 61, 70, 78, 87, 96, 105, 113, 122, 131, 140, 148, 157, 166, 175, 183, 192, 201, 210, 219, 227, 236, 245, 254, 262, 271, 280, 289, 297, 306, 315, 324, 332, 341, 350, 359, 367, 376, 385, 394, 402, 411, 420, 429, 438, 446, 455, 464, 473, 481, 490, 499, 508, 516, 525, 534, 543, 551, 560, 569, 578, 586, 595, 604, 613, 622, 630, 639, 648, 657, 665, 674, 683, 692, 700, 709, 718, 727, 735, 744, 753, 762, 770, 779, 788, 797, 805, 814, 823, 832, 841, 849, 858, 867, 876, 884, 893, 902, 911, 919, 928, 937, 946, 954, 963, 972, 981, 989, 998, 1007, 1016, 1025, 1033, 1042, 1051, 1060, 1068, 1077, 1086, 1095, 1103, 1112, 1121, 1130, 1138, 1147, 1156, 1165, 1173, 1182, 1191, 1200, 1208, 1217, 1226, 1235, 1244, 1252, 1261, 1270, 1279, 1287, 1296, 1305, 1314, 1322, 1331, 1340, 1349, 1357, 1366, 1375, 1384, 1392, 1401, 1410, 1419, 1428, 1436, 1445, 1454, 1463, 1471, 1480, 1489, 1498, 1506, 1515, 1524, 1533, 1541, 1550, 1559, 1568, 1576, 1585, 1594, 1603, 1611, 1620, 1629, 1638, 1647, 1655, 1664, 1673, 1682, 1690, 1699, 1708, 1717, 1725, 1734, 1743, 1752, 1760, 1769, 1778, 1787, 1795, 1804, 1813, 1822, 1831, 1839, 1848, 1857, 1866, 1874, 1883, 1892, 1901, 1909, 1918, 1927, 1936, 1944, 1953, 1962, 1971, 1979, 1988, 1997, 2006, 2014, 2023, 2032, 2041, 2050, 2058, 2067, 2076, 2085, 2093, 2102, 2111, 2120, 2128, 2137, 2146, 2155, 2163, 2172, 2181, 2190, 2198, 2207, 2216, 2225, 2234};
 
+
+/*
+uint16_t bbc_ref, stm32_intref;
+  while(1)
+  {
+    HAL_ADC_Start(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    bbc_ref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    stm32_intref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_Stop(&hadc);
+    HAL_Delay(100);
+
+    double eight_bit_step = (double)bbc_ref / 256;
+
+    printf("%d %d %f\n", bbc_ref, stm32_intref, eight_bit_step * 128);
+
+  }
+*/
+
 void gamepad_update(void)
 {
+  uint16_t bbc_ref, stm32_intref;
   gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
   if(this_gamepad_event != NULL)
-  {    
+  {
+    HAL_ADC_Start(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    bbc_ref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    stm32_intref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_Stop(&hadc);
+    double eight_bit_step = (double)bbc_ref / 256;
     HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
     HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
-    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_lookup[this_gamepad_event->axis_x]);
-    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, dac_lookup[this_gamepad_event->axis_y]);
+    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_x));
+    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_y));
     gamepad_buf_pop(&my_gamepad_buf);
   }
 }
@@ -603,17 +631,7 @@ int main(void)
   */
   HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
   HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
-
-  while(1)
-  {
-    HAL_ADC_Start(&hadc);
-    HAL_ADC_PollForConversion(&hadc, 100);
-    uint32_t result = HAL_ADC_GetValue(&hadc);
-    HAL_ADC_Stop(&hadc);
-    printf("%d\n", result);
-    HAL_Delay(100);
-  }
-
+  
   while (1)
   {
     uint32_t micros_now = micros();
@@ -685,7 +703,7 @@ int main(void)
       CA2_LOW();
       last_ca2 = micros_now;
     }
-    gamepad_update();
+    // gamepad_update();
   }
   /* USER CODE END 3 */
 
@@ -782,6 +800,14 @@ static void MX_ADC_Init(void)
   sConfig.Channel = ADC_CHANNEL_9;
   sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
   sConfig.SamplingTime = ADC_SAMPLETIME_71CYCLES_5;
+  if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**Configure for the selected ADC regular channel to be converted. 
+    */
+  sConfig.Channel = ADC_CHANNEL_VREFINT;
   if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
