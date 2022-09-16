@@ -20,6 +20,8 @@ bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_gp
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_dma.h
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_dma_ex.h
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_cortex.h
+bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_adc.h
+bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_adc_ex.h
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_dac.h
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_dac_ex.h
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_flash.h
@@ -32,3 +34,5 @@ bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_sp
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi_ex.h
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim.h
 bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h
+bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h
+bbc\stm32f0xx_hal_rcc_ex.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
