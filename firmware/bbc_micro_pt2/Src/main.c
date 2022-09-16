@@ -547,9 +547,8 @@ void gamepad_update(void)
     HAL_ADC_PollForConversion(&hadc, 1);
     stm32_intref = HAL_ADC_GetValue(&hadc);
     HAL_ADC_Stop(&hadc);
-    double eight_bit_step = (double)bbc_ref / 256;
-    HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
-    HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
+    double eight_bit_step = (double)bbc_ref / 280;
+    HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, 1 - (this_gamepad_event->button_1 || this_gamepad_event->button_2 || this_gamepad_event->button_3 || this_gamepad_event->button_4));
     HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_x));
     HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_y));
     gamepad_buf_pop(&my_gamepad_buf);
@@ -703,7 +702,7 @@ int main(void)
       CA2_LOW();
       last_ca2 = micros_now;
     }
-    // gamepad_update();
+    gamepad_update();
   }
   /* USER CODE END 3 */
 

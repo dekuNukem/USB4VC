@@ -29,16 +29,14 @@ Project File Date:  09/16/2022
 Build target 'bbc'
 compiling main.c...
 ../Src/main.c(551): warning:  #188-D: enumerated type mixed with another type
-      HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, !(this_gamepad_event->button_1));
-../Src/main.c(552): warning:  #188-D: enumerated type mixed with another type
-      HAL_GPIO_WritePin(JS_PB1_GPIO_Port, JS_PB1_Pin, !(this_gamepad_event->button_2));
+      HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, 1 - (this_gamepad_event->button_1 || this_gamepad_event->button_2 || this_gamepad_event->button_3 || this_gamepad_event->button_4));
 ../Src/main.c(540): warning:  #550-D: variable "stm32_intref"  was set but never used
     uint16_t bbc_ref, stm32_intref;
-../Src/main.c: 3 warnings, 0 errors
+../Src/main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=10940 RO-data=432 RW-data=48 ZI-data=2176  
+Program Size: Code=12800 RO-data=432 RW-data=48 ZI-data=2176  
 FromELF: creating hex file...
-"bbc\bbc.axf" - 0 Error(s), 3 Warning(s).
+"bbc\bbc.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
