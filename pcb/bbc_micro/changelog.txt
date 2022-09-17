@@ -17,6 +17,8 @@ DAC connected to joystick 0, digital control connected to joystick 1
 pt3
 
 fixed floating VDDA
+BBC VREF on PB0
+BREAK still on PB1
 
 TODO:
 
