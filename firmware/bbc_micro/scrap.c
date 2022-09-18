@@ -21,7 +21,24 @@ therefore DAC midpoint is should output
 mid point = bbc_ref / 2 = 1130
 
 
+/*
+uint16_t bbc_ref, stm32_intref;
+  while(1)
+  {
+    HAL_ADC_Start(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    bbc_ref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    stm32_intref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_Stop(&hadc);
+    HAL_Delay(100);
 
+    double eight_bit_step = (double)bbc_ref / 256;
+
+    printf("%d %d %f\n", bbc_ref, stm32_intref, eight_bit_step * 128);
+
+  }
+*/
 
 
 */

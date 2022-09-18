@@ -21,20 +21,20 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.7.0
 Dialog DLL:      TARMCM1.DLL V1.14.1.0
  
 <h2>Project:</h2>
-C:\Users\allen\Desktop\repos\USB4VC\firmware\bbc_micro_pt2\MDK-ARM\bbc.uvprojx
+C:\Users\allen\Desktop\repos\USB4VC\firmware\bbc_micro\MDK-ARM\bbc.uvprojx
 Project File Date:  09/16/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'bbc'
 compiling main.c...
-../Src/main.c(551): warning:  #188-D: enumerated type mixed with another type
+../Src/main.c(598): warning:  #188-D: enumerated type mixed with another type
       HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, 1 - (this_gamepad_event->button_1 || this_gamepad_event->button_2 || this_gamepad_event->button_3 || this_gamepad_event->button_4));
-../Src/main.c(540): warning:  #550-D: variable "stm32_intref"  was set but never used
+../Src/main.c(587): warning:  #550-D: variable "stm32_intref"  was set but never used
     uint16_t bbc_ref, stm32_intref;
 ../Src/main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=12800 RO-data=432 RW-data=48 ZI-data=2176  
+Program Size: Code=13060 RO-data=432 RW-data=56 ZI-data=2176  
 FromELF: creating hex file...
 "bbc\bbc.axf" - 0 Error(s), 2 Warning(s).
 
@@ -59,7 +59,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

@@ -158,8 +158,9 @@ PROTOCOL_APPLE_QUAD_MOUSE = {'pid':9, 'display_name':"Lisa/Mac (M0100)"}
 PROTOCOL_M0110_KEYBOARD = {'pid':10, 'display_name':"Mac (M0110)"}
 PROTOCOL_LISA_KEYBOARD = {'pid':11, 'display_name':"Lisa"}
 
-PROTOCOL_BBC_KB = {'pid':12, 'display_name':"BBC Mirco"}
-PROTOCOL_AMX_MOUSE = {'pid':13, 'display_name':"AMX"}
+PROTOCOL_BBC_KB_ISO = {'pid':12, 'display_name':"BBC Mirco (US)"}
+PROTOCOL_BBC_KB_ANSI = {'pid':13, 'display_name':"BBC Mirco (UK)"}
+# PROTOCOL_AMX_MOUSE = {'pid':13, 'display_name':"AMX"}
 PROTOCOL_BBC_MICRO_JOYSTICK = {'pid':14, 'display_name':"BBC Mirco"}
 
 custom_profile_list = []
@@ -321,8 +322,8 @@ apple_all_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_KB, PROTOCOL_M0110_KE
 apple_all_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_MOUSE, PROTOCOL_APPLE_QUAD_MOUSE]
 apple_all_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_USB_GP_TO_MOUSE_KB]
 
-bbc_micro_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_BBC_KB]
-bbc_micro_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_AMX_MOUSE]
+bbc_micro_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_BBC_KB_ISO, PROTOCOL_BBC_KB_ANSI]
+bbc_micro_mouse_protocols = [PROTOCOL_OFF]
 bbc_micro_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_BBC_MICRO_JOYSTICK]
 
 mouse_sensitivity_list = [1, 1.25, 1.5, 1.75, 0.25, 0.5, 0.75]

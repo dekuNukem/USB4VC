@@ -35,9 +35,11 @@
 #define BTN_SIDE    0x113
 #define BTN_EXTRA   0x114
 
-#define PROTOCOL_BBC_MICRO_KB 12
+#define PROTOCOL_BBC_MICRO_KB_ANSI 12
+#define PROTOCOL_BBC_MICRO_KB_ISO 13
+#define PROTOCOL_BBC_MICRO_JOYSTICK 14
 
-#define MOUSE_EVENT_BUFFER_SIZE 16
+#define MOUSE_EVENT_BUFFER_SIZE 8
 #define KEYBOARD_EVENT_BUFFER_SIZE 8
 #define GAMEPAD_EVENT_BUFFER_SIZE 8
 
@@ -75,14 +77,10 @@ typedef struct
   uint8_t button_2;
   uint8_t button_3;
   uint8_t button_4;
-  uint8_t button_lt;
-  uint8_t button_rt;
-  uint8_t button_lt2;
-  uint8_t button_rt2;
   uint8_t axis_x;
   uint8_t axis_y;
-  uint8_t axis_rx;
-  uint8_t axis_ry;
+  uint8_t axis_dpadx;
+  uint8_t axis_dpady;
 } gamepad_event;
 
 typedef struct

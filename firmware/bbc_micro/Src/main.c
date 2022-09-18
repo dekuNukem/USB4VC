@@ -97,6 +97,71 @@ static void MX_USART1_UART_Init(void);
 
 uint32_t act_led_timestamp;
 
+#define PROTOCOL_STATUS_NOT_AVAILABLE 0
+#define PROTOCOL_STATUS_ENABLED 1
+#define PROTOCOL_STATUS_DISABLED 2
+
+#define PROTOCOL_LOOKUP_SIZE 16
+uint8_t protocol_status_lookup[PROTOCOL_LOOKUP_SIZE];
+
+uint8_t is_protocol_enabled(uint8_t this_protocol)
+{
+  if(this_protocol >= PROTOCOL_LOOKUP_SIZE)
+    return 0;
+  return protocol_status_lookup[this_protocol] == PROTOCOL_STATUS_ENABLED;
+}
+
+void protocol_status_lookup_init(void)
+{
+  memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
+  protocol_status_lookup[PROTOCOL_BBC_MICRO_KB_ISO] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_BBC_MICRO_KB_ANSI] = PROTOCOL_STATUS_DISABLED;
+  protocol_status_lookup[PROTOCOL_BBC_MICRO_JOYSTICK] = PROTOCOL_STATUS_ENABLED;
+}
+
+#define BBC_JOYSTICK_CALIBRATION_VALUE 280
+
+void joystick_reset(void)
+{
+  HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, GPIO_PIN_SET);
+  HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 1130);
+  HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, 1130);
+}
+
+void handle_protocol_switch(uint8_t spi_byte)
+{
+  uint8_t index = spi_byte & 0x7f;
+  uint8_t onoff = spi_byte & 0x80;
+
+  if(index >= PROTOCOL_LOOKUP_SIZE)
+    return;
+  // trying to change a protocol that is not available on this board
+  if(protocol_status_lookup[index] == PROTOCOL_STATUS_NOT_AVAILABLE)
+    return;
+  // switching protocol ON
+  if(onoff && protocol_status_lookup[index] == PROTOCOL_STATUS_DISABLED)
+  {
+    switch(index)
+    {
+      case PROTOCOL_BBC_MICRO_KB_ANSI:
+        protocol_status_lookup[PROTOCOL_BBC_MICRO_KB_ISO] = PROTOCOL_STATUS_DISABLED;
+        break;
+
+      case PROTOCOL_BBC_MICRO_KB_ISO:
+        protocol_status_lookup[PROTOCOL_BBC_MICRO_KB_ANSI] = PROTOCOL_STATUS_DISABLED;
+        break;
+    }
+    protocol_status_lookup[index] = PROTOCOL_STATUS_ENABLED;
+  }
+  // switching protocol OFF
+  else if((onoff == 0) && protocol_status_lookup[index] == PROTOCOL_STATUS_ENABLED)
+  {
+    protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
+    if(index == PROTOCOL_BBC_MICRO_JOYSTICK)
+      joystick_reset();
+  }
+}
+
 /*
   This is called when a new SPI packet is received
   This is part of an ISR, so keep it short!
@@ -122,8 +187,8 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     latest_gamepad_event.button_4 = (backup_spi1_recv_buf[8] & 0x8) != 0;
     latest_gamepad_event.axis_x = backup_spi1_recv_buf[10];
     latest_gamepad_event.axis_y = backup_spi1_recv_buf[11];
-    latest_gamepad_event.axis_rx = backup_spi1_recv_buf[12];
-    latest_gamepad_event.axis_ry = backup_spi1_recv_buf[13];
+    latest_gamepad_event.axis_dpadx = backup_spi1_recv_buf[16];
+    latest_gamepad_event.axis_dpady = backup_spi1_recv_buf[17];
     gamepad_buf_add(&my_gamepad_buf, &latest_gamepad_event);
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
@@ -132,21 +197,29 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
     spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_INFO_REQUEST;
     spi_transmit_buf[3] = board_id;
-    // spi_transmit_buf[4] = hw_revision;
     spi_transmit_buf[5] = version_major;
     spi_transmit_buf[6] = version_minor;
     spi_transmit_buf[7] = version_patch;
-    // uint8_t curr_index = 8;
-    // for (int i = 0; i < PROTOCOL_LOOKUP_SIZE; i++)
-    // {
-    //   if(protocol_status_lookup[i] == PROTOCOL_STATUS_NOT_AVAILABLE)
-    //     continue;
-    //   else if(protocol_status_lookup[i] == PROTOCOL_STATUS_DISABLED)
-    //     spi_transmit_buf[curr_index] = i;
-    //   else if(protocol_status_lookup[i] == PROTOCOL_STATUS_ENABLED)
-    //     spi_transmit_buf[curr_index] = i | 0x80;
-    //   curr_index++;
-    // }
+    uint8_t curr_index = 8;
+    for (int i = 0; i < PROTOCOL_LOOKUP_SIZE; i++)
+    {
+      if(protocol_status_lookup[i] == PROTOCOL_STATUS_NOT_AVAILABLE)
+        continue;
+      else if(protocol_status_lookup[i] == PROTOCOL_STATUS_DISABLED)
+        spi_transmit_buf[curr_index] = i;
+      else if(protocol_status_lookup[i] == PROTOCOL_STATUS_ENABLED)
+        spi_transmit_buf[curr_index] = i | 0x80;
+      curr_index++;
+    }
+  }
+  else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_SET_PROTOCOL)
+  {
+    for (int i = 3; i < SPI_BUF_SIZE; ++i)
+    {
+      if(backup_spi1_recv_buf[i] == 0)
+        break;
+      handle_protocol_switch(backup_spi1_recv_buf[i]);
+    }
   }
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 }
@@ -321,6 +394,7 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
 
 #define BBC_SHIFT_OFF 0
 #define BBC_SHIFT_ON 1
+#define BBC_SHIFT_UNCHANGED 2
 
 #define KEY_2     3
 #define KEY_3     4
@@ -338,35 +412,24 @@ const uint8_t linux_keycode_to_bbc_matrix_lookup[LINUX_KEYCODE_TO_BBC_SIZE] =
 #define KEY_RIGHTALT    100
 #define KEY_BACKSLASH   43
 
-#define PC_KB_TYPE_ANSI_US 0
-#define PC_KB_TYPE_ISO_UK 1
-
-uint8_t pc_kb_type = PC_KB_TYPE_ISO_UK;
-
 uint8_t get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uint8_t* bbc_row, uint8_t *bbc_shift)
 {
   *bbc_col = 0;
   *bbc_row = 0;
-  *bbc_shift = BBC_SHIFT_OFF;
+  *bbc_shift = is_shift;
 
   if(linux_code >= LINUX_KEYCODE_TO_BBC_SIZE)
     return 1;
-  if(linux_keycode_to_bbc_matrix_lookup[linux_code] == CODE_UNUSED)
-    return 2;
   *bbc_col = linux_keycode_to_bbc_matrix_lookup[linux_code] >> 4;
   *bbc_row = linux_keycode_to_bbc_matrix_lookup[linux_code] & 0xf;
-  if(*bbc_col >= COL_SIZE)
-    *bbc_col = 0;
-  if(*bbc_row >= ROW_SIZE)
-    *bbc_row = 0;
 
-  if(linux_code == KEY_2 && is_shift && pc_kb_type == PC_KB_TYPE_ANSI_US)
+  if(linux_code == KEY_2 && is_shift && is_protocol_enabled(PROTOCOL_BBC_MICRO_KB_ANSI))
   {
     *bbc_col = 7;
     *bbc_row = 4;
     *bbc_shift = BBC_SHIFT_OFF;
   }
-  else if(linux_code == KEY_3 && is_shift && pc_kb_type == PC_KB_TYPE_ISO_UK)
+  else if(linux_code == KEY_3 && is_shift && is_protocol_enabled(PROTOCOL_BBC_MICRO_KB_ISO))
   {
     *bbc_col = 8;
     *bbc_row = 2;
@@ -438,30 +501,34 @@ uint8_t get_bbc_code(uint8_t linux_code, uint8_t is_shift, uint8_t* bbc_col, uin
     *bbc_row = 4;
     *bbc_shift = BBC_SHIFT_OFF;
   }
-  else if(linux_code == KEY_APOSTROPHE && is_shift && pc_kb_type == PC_KB_TYPE_ANSI_US)
+  else if(linux_code == KEY_APOSTROPHE && is_shift && is_protocol_enabled(PROTOCOL_BBC_MICRO_KB_ANSI))
   {
     *bbc_col = 1;
     *bbc_row = 3;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  else if(linux_code == KEY_APOSTROPHE && is_shift && pc_kb_type == PC_KB_TYPE_ISO_UK)
+  else if(linux_code == KEY_APOSTROPHE && is_shift && is_protocol_enabled(PROTOCOL_BBC_MICRO_KB_ISO))
   {
     *bbc_col = 7;
     *bbc_row = 4;
     *bbc_shift = BBC_SHIFT_OFF;
   }
-  else if(linux_code == KEY_BACKSLASH && is_shift && pc_kb_type == PC_KB_TYPE_ISO_UK)
+  else if(linux_code == KEY_BACKSLASH && is_shift && is_protocol_enabled(PROTOCOL_BBC_MICRO_KB_ISO))
   {
     *bbc_col = 8;
     *bbc_row = 1;
     *bbc_shift = BBC_SHIFT_ON;
   }
-  else if(linux_code == KEY_BACKSLASH && (is_shift == 0) && pc_kb_type == PC_KB_TYPE_ISO_UK)
+  else if(linux_code == KEY_BACKSLASH && (is_shift == 0) && is_protocol_enabled(PROTOCOL_BBC_MICRO_KB_ISO))
   {
     *bbc_col = 1;
     *bbc_row = 1;
     *bbc_shift = BBC_SHIFT_ON;
   }
+
+  if(*bbc_col >= COL_SIZE || *bbc_row >= ROW_SIZE)
+    return 2; // CODE_UNUSED
+
   return 0;
 }
 
@@ -515,26 +582,6 @@ uint8_t is_left_shift_on, is_right_shift_on, is_shift_on;
 // 255 = 1.8V, 127 = 0.9V, 0 = 0V
 const uint16_t dac_lookup[256] = {0, 8, 17, 26, 35, 43, 52, 61, 70, 78, 87, 96, 105, 113, 122, 131, 140, 148, 157, 166, 175, 183, 192, 201, 210, 219, 227, 236, 245, 254, 262, 271, 280, 289, 297, 306, 315, 324, 332, 341, 350, 359, 367, 376, 385, 394, 402, 411, 420, 429, 438, 446, 455, 464, 473, 481, 490, 499, 508, 516, 525, 534, 543, 551, 560, 569, 578, 586, 595, 604, 613, 622, 630, 639, 648, 657, 665, 674, 683, 692, 700, 709, 718, 727, 735, 744, 753, 762, 770, 779, 788, 797, 805, 814, 823, 832, 841, 849, 858, 867, 876, 884, 893, 902, 911, 919, 928, 937, 946, 954, 963, 972, 981, 989, 998, 1007, 1016, 1025, 1033, 1042, 1051, 1060, 1068, 1077, 1086, 1095, 1103, 1112, 1121, 1130, 1138, 1147, 1156, 1165, 1173, 1182, 1191, 1200, 1208, 1217, 1226, 1235, 1244, 1252, 1261, 1270, 1279, 1287, 1296, 1305, 1314, 1322, 1331, 1340, 1349, 1357, 1366, 1375, 1384, 1392, 1401, 1410, 1419, 1428, 1436, 1445, 1454, 1463, 1471, 1480, 1489, 1498, 1506, 1515, 1524, 1533, 1541, 1550, 1559, 1568, 1576, 1585, 1594, 1603, 1611, 1620, 1629, 1638, 1647, 1655, 1664, 1673, 1682, 1690, 1699, 1708, 1717, 1725, 1734, 1743, 1752, 1760, 1769, 1778, 1787, 1795, 1804, 1813, 1822, 1831, 1839, 1848, 1857, 1866, 1874, 1883, 1892, 1901, 1909, 1918, 1927, 1936, 1944, 1953, 1962, 1971, 1979, 1988, 1997, 2006, 2014, 2023, 2032, 2041, 2050, 2058, 2067, 2076, 2085, 2093, 2102, 2111, 2120, 2128, 2137, 2146, 2155, 2163, 2172, 2181, 2190, 2198, 2207, 2216, 2225, 2234};
 
-
-/*
-uint16_t bbc_ref, stm32_intref;
-  while(1)
-  {
-    HAL_ADC_Start(&hadc);
-    HAL_ADC_PollForConversion(&hadc, 1);
-    bbc_ref = HAL_ADC_GetValue(&hadc);
-    HAL_ADC_PollForConversion(&hadc, 1);
-    stm32_intref = HAL_ADC_GetValue(&hadc);
-    HAL_ADC_Stop(&hadc);
-    HAL_Delay(100);
-
-    double eight_bit_step = (double)bbc_ref / 256;
-
-    printf("%d %d %f\n", bbc_ref, stm32_intref, eight_bit_step * 128);
-
-  }
-*/
-
 void gamepad_update(void)
 {
   uint16_t bbc_ref, stm32_intref;
@@ -547,10 +594,18 @@ void gamepad_update(void)
     HAL_ADC_PollForConversion(&hadc, 1);
     stm32_intref = HAL_ADC_GetValue(&hadc);
     HAL_ADC_Stop(&hadc);
-    double eight_bit_step = (double)bbc_ref / 280;
+    double eight_bit_step = (double)bbc_ref / BBC_JOYSTICK_CALIBRATION_VALUE;
     HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, 1 - (this_gamepad_event->button_1 || this_gamepad_event->button_2 || this_gamepad_event->button_3 || this_gamepad_event->button_4));
-    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_x));
-    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_y));
+    
+    if(this_gamepad_event->axis_dpadx != 127)
+      HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_dpadx));
+    else
+      HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_x));
+
+    if(this_gamepad_event->axis_dpady != 127)
+      HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_dpady));
+    else
+      HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_y));
     gamepad_buf_pop(&my_gamepad_buf);
   }
 }
@@ -592,7 +647,7 @@ int main(void)
   MX_ADC_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  protocol_status_lookup_init();
   kb_buf_init(&my_kb_buf);
   gamepad_buf_init(&my_gamepad_buf);
   delay_us_init(&htim2);
@@ -630,7 +685,7 @@ int main(void)
   */
   HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
   HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
-  
+  joystick_reset();
   while (1)
   {
     uint32_t micros_now = micros();
@@ -678,6 +733,11 @@ int main(void)
       {
         matrix_status[this_col][this_row] = 0;
         col_status_update(this_col);
+        // if(this_shift == BBC_SHIFT_ON)
+        // {
+        //   matrix_status[0][0] = 0;
+        //   col_status_update(0);
+        // }
         if(buffered_code == KEY_LEFTSHIFT || buffered_code == KEY_RIGHTSHIFT)
         {
           memset(matrix_status, 0, COL_SIZE * ROW_SIZE);
@@ -702,7 +762,8 @@ int main(void)
       CA2_LOW();
       last_ca2 = micros_now;
     }
-    gamepad_update();
+    if(is_protocol_enabled(PROTOCOL_BBC_MICRO_JOYSTICK))
+      gamepad_update();
   }
   /* USER CODE END 3 */
 
