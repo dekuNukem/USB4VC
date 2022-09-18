@@ -1,3 +1,32 @@
+/*
+2260
+bbc_ref
+
+1458
+stm_ref
+
+first number is BBC micro reference voltage, supposed to be 1.8V but can change from machine to machine
+second number is vrefint 1.23V for STM32F072
+
+1230 / stm_ref = mV per bit
+
+0.8436 mV per bit
+
+0.8436 * 2259 = 1905mV reference
+
+therefore DAC midpoint is should output 
+
+----------
+
+mid point = bbc_ref / 2 = 1130
+
+
+
+
+
+*/
+
+
 // void gamepad_update(void)
 // {
 //   gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
@@ -21,7 +50,26 @@
 //     gamepad_buf_pop(&my_gamepad_buf);
 //   }
 // }
-
+  while(1)
+  {
+    HAL_ADC_Start(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 100);
+    uint32_t result1 = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 100);
+    uint32_t result2 = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_Stop(&hadc);
+    printf("%d %d\n", result1, result2);
+    HAL_Delay(100);
+  }
+  // 2234 is 1.8V
+  // 1117 is 0.9V
+  uint8_t test = 0;
+  while(1)
+  {
+    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, dac_lookup[test]);
+    HAL_Delay(10);
+    test++;
+  }
         if(this_shift == BBC_SHIFT_OFF && (buffered_code == KEY_LEFTSHIFT || buffered_code == KEY_RIGHTSHIFT))
         {
           col_status[0] = 1;

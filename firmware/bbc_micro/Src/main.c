@@ -49,9 +49,15 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc;
+
+DAC_HandleTypeDef hdac;
+
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
+
+UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -78,6 +84,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_DAC_Init(void);
+static void MX_ADC_Init(void);
+static void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -86,6 +95,7 @@ static void MX_TIM2_Init(void);
 
 /* USER CODE BEGIN 0 */
 
+uint32_t act_led_timestamp;
 
 /*
   This is called when a new SPI packet is received
@@ -94,6 +104,7 @@ static void MX_TIM2_Init(void);
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_SET);
+  act_led_timestamp = micros();
   memcpy(backup_spi1_recv_buf, spi_recv_buf, SPI_BUF_SIZE);
   if(backup_spi1_recv_buf[0] != 0xde)
   {
@@ -138,12 +149,11 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     // }
   }
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
 }
 
 int fputc(int ch, FILE *f)
 {
-  // HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
+  HAL_UART_Transmit(&huart1, (unsigned char *)&ch, 1, 100);
   return ch;
 }
 
@@ -502,6 +512,49 @@ void col_status_update(uint8_t this_col)
 
 uint8_t is_left_shift_on, is_right_shift_on, is_shift_on;
 
+// 255 = 1.8V, 127 = 0.9V, 0 = 0V
+const uint16_t dac_lookup[256] = {0, 8, 17, 26, 35, 43, 52, 61, 70, 78, 87, 96, 105, 113, 122, 131, 140, 148, 157, 166, 175, 183, 192, 201, 210, 219, 227, 236, 245, 254, 262, 271, 280, 289, 297, 306, 315, 324, 332, 341, 350, 359, 367, 376, 385, 394, 402, 411, 420, 429, 438, 446, 455, 464, 473, 481, 490, 499, 508, 516, 525, 534, 543, 551, 560, 569, 578, 586, 595, 604, 613, 622, 630, 639, 648, 657, 665, 674, 683, 692, 700, 709, 718, 727, 735, 744, 753, 762, 770, 779, 788, 797, 805, 814, 823, 832, 841, 849, 858, 867, 876, 884, 893, 902, 911, 919, 928, 937, 946, 954, 963, 972, 981, 989, 998, 1007, 1016, 1025, 1033, 1042, 1051, 1060, 1068, 1077, 1086, 1095, 1103, 1112, 1121, 1130, 1138, 1147, 1156, 1165, 1173, 1182, 1191, 1200, 1208, 1217, 1226, 1235, 1244, 1252, 1261, 1270, 1279, 1287, 1296, 1305, 1314, 1322, 1331, 1340, 1349, 1357, 1366, 1375, 1384, 1392, 1401, 1410, 1419, 1428, 1436, 1445, 1454, 1463, 1471, 1480, 1489, 1498, 1506, 1515, 1524, 1533, 1541, 1550, 1559, 1568, 1576, 1585, 1594, 1603, 1611, 1620, 1629, 1638, 1647, 1655, 1664, 1673, 1682, 1690, 1699, 1708, 1717, 1725, 1734, 1743, 1752, 1760, 1769, 1778, 1787, 1795, 1804, 1813, 1822, 1831, 1839, 1848, 1857, 1866, 1874, 1883, 1892, 1901, 1909, 1918, 1927, 1936, 1944, 1953, 1962, 1971, 1979, 1988, 1997, 2006, 2014, 2023, 2032, 2041, 2050, 2058, 2067, 2076, 2085, 2093, 2102, 2111, 2120, 2128, 2137, 2146, 2155, 2163, 2172, 2181, 2190, 2198, 2207, 2216, 2225, 2234};
+
+
+/*
+uint16_t bbc_ref, stm32_intref;
+  while(1)
+  {
+    HAL_ADC_Start(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    bbc_ref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    stm32_intref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_Stop(&hadc);
+    HAL_Delay(100);
+
+    double eight_bit_step = (double)bbc_ref / 256;
+
+    printf("%d %d %f\n", bbc_ref, stm32_intref, eight_bit_step * 128);
+
+  }
+*/
+
+void gamepad_update(void)
+{
+  uint16_t bbc_ref, stm32_intref;
+  gamepad_event* this_gamepad_event = gamepad_buf_peek(&my_gamepad_buf);
+  if(this_gamepad_event != NULL)
+  {
+    HAL_ADC_Start(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    bbc_ref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_PollForConversion(&hadc, 1);
+    stm32_intref = HAL_ADC_GetValue(&hadc);
+    HAL_ADC_Stop(&hadc);
+    double eight_bit_step = (double)bbc_ref / 280;
+    HAL_GPIO_WritePin(JS_PB0_GPIO_Port, JS_PB0_Pin, 1 - (this_gamepad_event->button_1 || this_gamepad_event->button_2 || this_gamepad_event->button_3 || this_gamepad_event->button_4));
+    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_x));
+    HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (uint16_t)(eight_bit_step * this_gamepad_event->axis_y));
+    gamepad_buf_pop(&my_gamepad_buf);
+  }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -535,6 +588,9 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_TIM2_Init();
+  MX_DAC_Init();
+  MX_ADC_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   kb_buf_init(&my_kb_buf);
@@ -572,10 +628,15 @@ int main(void)
   read_duration valid above 0x400
 
   */
-
+  HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
+  HAL_DAC_Start(&hdac, DAC_CHANNEL_2);
+  
   while (1)
   {
     uint32_t micros_now = micros();
+    if(micros_now - act_led_timestamp > 10000)
+      HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
+
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
       if(buffered_code == KEY_RIGHTALT) // break key
@@ -641,7 +702,7 @@ int main(void)
       CA2_LOW();
       last_ca2 = micros_now;
     }
-    // gamepad_update();
+    gamepad_update();
   }
   /* USER CODE END 3 */
 
@@ -656,12 +717,15 @@ void SystemClock_Config(void)
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSI14;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSI14State = RCC_HSI14_ON;
   RCC_OscInitStruct.HSICalibrationValue = 16;
+  RCC_OscInitStruct.HSI14CalibrationValue = 16;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL16;
@@ -684,6 +748,13 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
+  PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_SYSCLK;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
     /**Configure the Systick interrupt time 
     */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
@@ -694,6 +765,85 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/* ADC init function */
+static void MX_ADC_Init(void)
+{
+
+  ADC_ChannelConfTypeDef sConfig;
+
+    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
+    */
+  hadc.Instance = ADC1;
+  hadc.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  hadc.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
+  hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  hadc.Init.LowPowerAutoWait = DISABLE;
+  hadc.Init.LowPowerAutoPowerOff = DISABLE;
+  hadc.Init.ContinuousConvMode = DISABLE;
+  hadc.Init.DiscontinuousConvMode = DISABLE;
+  hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc.Init.DMAContinuousRequests = DISABLE;
+  hadc.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  if (HAL_ADC_Init(&hadc) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**Configure for the selected ADC regular channel to be converted. 
+    */
+  sConfig.Channel = ADC_CHANNEL_9;
+  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
+  sConfig.SamplingTime = ADC_SAMPLETIME_71CYCLES_5;
+  if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**Configure for the selected ADC regular channel to be converted. 
+    */
+  sConfig.Channel = ADC_CHANNEL_VREFINT;
+  if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
+/* DAC init function */
+static void MX_DAC_Init(void)
+{
+
+  DAC_ChannelConfTypeDef sConfig;
+
+    /**DAC Initialization 
+    */
+  hdac.Instance = DAC;
+  if (HAL_DAC_Init(&hdac) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**DAC channel OUT1 config 
+    */
+  sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
+  sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
+  if (HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+    /**DAC channel OUT2 config 
+    */
+  if (HAL_DAC_ConfigChannel(&hdac, &sConfig, DAC_CHANNEL_2) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
 }
 
 /* SPI1 init function */
@@ -754,6 +904,27 @@ static void MX_TIM2_Init(void)
 
 }
 
+/* USART1 init function */
+static void MX_USART1_UART_Init(void)
+{
+
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 115200;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_HalfDuplex_Init(&huart1) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
+}
+
 /** Configure pins as 
         * Analog 
         * Input 
@@ -775,16 +946,13 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, JS_PB0_Pin|JS_PB1_Pin|W_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, JS_PB0_Pin|JS_PB1_Pin|W_Pin|KB_BREAK_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|KB_CA2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(KB_CA2_GPIO_Port, KB_CA2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, DEBUG2_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, DEBUG_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : SLAVE_REQ_Pin */
   GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
@@ -793,26 +961,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : JS_PB0_Pin JS_PB1_Pin W_Pin */
-  GPIO_InitStruct.Pin = JS_PB0_Pin|JS_PB1_Pin|W_Pin;
+  /*Configure GPIO pins : JS_PB0_Pin JS_PB1_Pin W_Pin KB_BREAK_Pin */
+  GPIO_InitStruct.Pin = JS_PB0_Pin|JS_PB1_Pin|W_Pin|KB_BREAK_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : POT_RESET_Pin */
-  GPIO_InitStruct.Pin = POT_RESET_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(POT_RESET_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : KB_BREAK_Pin KB_CA2_Pin */
-  GPIO_InitStruct.Pin = KB_BREAK_Pin|KB_CA2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : KB_EN_Pin */
   GPIO_InitStruct.Pin = KB_EN_Pin;
@@ -828,8 +982,15 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : DEBUG2_Pin DEBUG_Pin ERR_LED_Pin ACT_LED_Pin */
-  GPIO_InitStruct.Pin = DEBUG2_Pin|DEBUG_Pin|ERR_LED_Pin|ACT_LED_Pin;
+  /*Configure GPIO pin : KB_CA2_Pin */
+  GPIO_InitStruct.Pin = KB_CA2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(KB_CA2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : DEBUG_Pin ACT_LED_Pin */
+  GPIO_InitStruct.Pin = DEBUG_Pin|ACT_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
