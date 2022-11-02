@@ -185,10 +185,17 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     latest_gamepad_event.button_2 = (backup_spi1_recv_buf[8] & 0x2) != 0;
     latest_gamepad_event.button_3 = (backup_spi1_recv_buf[8] & 0x4) != 0;
     latest_gamepad_event.button_4 = (backup_spi1_recv_buf[8] & 0x8) != 0;
-    latest_gamepad_event.axis_x = backup_spi1_recv_buf[10];
-    latest_gamepad_event.axis_y = backup_spi1_recv_buf[11];
+    latest_gamepad_event.axis_x = 255 - backup_spi1_recv_buf[10];
+    latest_gamepad_event.axis_y = 255 - backup_spi1_recv_buf[11];
+    
     latest_gamepad_event.axis_dpadx = backup_spi1_recv_buf[16];
+    if(backup_spi1_recv_buf[16] != 127)
+      latest_gamepad_event.axis_dpadx = 255 - backup_spi1_recv_buf[16];
+
     latest_gamepad_event.axis_dpady = backup_spi1_recv_buf[17];
+    if(backup_spi1_recv_buf[17] != 127)
+      latest_gamepad_event.axis_dpady = 255 - backup_spi1_recv_buf[17];
+
     gamepad_buf_add(&my_gamepad_buf, &latest_gamepad_event);
   }
   else if(backup_spi1_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_INFO_REQUEST)
@@ -694,7 +701,7 @@ int main(void)
 
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
-      if(buffered_code == KEY_RIGHTALT) // break key
+      if(buffered_code == KEY_SYSRQ) // print screen key
       {
         if(buffered_value)
           HAL_GPIO_WritePin(KB_BREAK_GPIO_Port, KB_BREAK_Pin, GPIO_PIN_RESET);
