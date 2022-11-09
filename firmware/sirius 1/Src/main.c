@@ -191,6 +191,35 @@ void protocol_status_lookup_init(void)
   protocol_status_lookup[PROTOCOL_SIRIUS1_KB] = PROTOCOL_STATUS_ENABLED;
 }
 
+#define KB_WRITE_SUCCESS 0
+#define KB_WRITE_TIMEOUT 1
+#define KB_WRITE_ERROR 2
+#define SIRIUS_1_KB_BIT_ACK_TIMEOUT_MS 20
+
+uint8_t wait_for_KBACK(void)
+{
+  uint32_t entry_time = HAL_GetTick();
+  while(1)
+  {
+    if(HAL_GPIO_ReadPin(KBACK_GPIO_Port, KBACK_Pin) == GPIO_PIN_SET)
+      return KB_WRITE_SUCCESS;
+    if(HAL_GetTick() - entry_time > SIRIUS_1_KB_BIT_ACK_TIMEOUT_MS)
+      return KB_WRITE_TIMEOUT;
+  }
+  return KB_WRITE_ERROR;
+}
+
+uint8_t SendBit(uint8_t value)
+{
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, value);
+  HAL_GPIO_WritePin(KBRDY_GPIO_Port, KBRDY_Pin, GPIO_PIN_RESET);
+  // while(HAL_GPIO_ReadPin(KBACK_GPIO_Port, KBACK_Pin));
+  delay_us(400);
+  HAL_GPIO_WritePin(KBRDY_GPIO_Port, KBRDY_Pin, GPIO_PIN_SET);
+  // while(!digitalRead(KBACK));
+  delay_us(400);
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -241,10 +270,20 @@ int main(void)
   {
     if(spi_error_occured)
       spi_error_dump_reboot();
+    if(HAL_GetTick() > led_off_after)
+      HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+    {
+      SendBit(1);
+      kb_buf_pop(&my_kb_buf);
+    }
+
+    printf("%d\n", wait_for_KBACK());
+
   }
   /* USER CODE END 3 */
 
