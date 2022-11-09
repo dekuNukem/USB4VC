@@ -204,7 +204,7 @@ Sirius 1 / Victor 9000 Keyboard</text>
 <text x="48.133" y="55.118" size="1.143" layer="25" rot="R180" align="center">CLK</text>
 <text x="12.8016" y="27.9908" size="1.143" layer="25" rot="R90" align="center">POWER</text>
 <text x="11.2776" y="36.3474" size="1.6764" layer="25" rot="R90" align="center">RST</text>
-<text x="24.0538" y="44.5262" size="1.143" layer="25" rot="R180" align="center">ACT</text>
+<text x="24.0538" y="47.9552" size="1.143" layer="25" rot="R180" align="center">ACT</text>
 <text x="48.133" y="50.165" size="1.143" layer="25" rot="R180" align="center">TX</text>
 <text x="11.3284" y="44.4246" size="1.6764" layer="25" rot="R270" align="center">DFU</text>
 <text x="28.508" y="3.873" size="1.778" layer="25" rot="R180" align="center">usb4vc.com
@@ -1414,6 +1414,8 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <contactref element="JP2" pad="6"/>
 <contactref element="JP2" pad="4"/>
 <contactref element="JP2" pad="2"/>
+<contactref element="TP2" pad="TP"/>
+<contactref element="TP1" pad="TP"/>
 </signal>
 <signal name="+3V3">
 <polygon width="0.1524" layer="16" isolate="0.381" rank="2">

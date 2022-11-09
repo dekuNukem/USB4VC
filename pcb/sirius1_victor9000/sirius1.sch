@@ -5542,9 +5542,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <attribute name="NAME" x="-45.72" y="-93.345" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="-40.64" y="-90.17" size="1.778" layer="97"/>
 </instance>
-<instance part="TP2" gate="G$1" x="-50.8" y="-81.28" smashed="yes">
-<attribute name="NAME" x="-53.34" y="-85.725" size="1.778" layer="95"/>
-<attribute name="TP_SIGNAL_NAME" x="-48.26" y="-82.55" size="1.778" layer="97"/>
+<instance part="TP2" gate="G$1" x="-50.8" y="-88.9" smashed="yes">
+<attribute name="NAME" x="-53.34" y="-93.345" size="1.778" layer="95"/>
+<attribute name="TP_SIGNAL_NAME" x="-48.26" y="-90.17" size="1.778" layer="97"/>
 </instance>
 </instances>
 <busses>
@@ -5716,6 +5716,13 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="JP2" gate="A" pin="2"/>
 <wire x1="-86.36" y1="-88.9" x2="-88.9" y2="-88.9" width="0.1524" layer="91"/>
 <junction x="-86.36" y="-88.9"/>
+<pinref part="TP2" gate="G$1" pin="TP"/>
+<pinref part="TP1" gate="G$1" pin="TP"/>
+<wire x1="-50.8" y1="-86.36" x2="-43.18" y2="-86.36" width="0.1524" layer="91"/>
+<wire x1="-50.8" y1="-86.36" x2="-71.12" y2="-86.36" width="0.1524" layer="91"/>
+<wire x1="-71.12" y1="-86.36" x2="-71.12" y2="-88.9" width="0.1524" layer="91"/>
+<junction x="-50.8" y="-86.36"/>
+<junction x="-71.12" y="-88.9"/>
 </segment>
 </net>
 <net name="N$29" class="0">
