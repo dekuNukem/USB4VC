@@ -4981,6 +4981,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="GND11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2"/>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="R11" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 </parts>
 <sheets>
 <sheet>
@@ -5154,6 +5155,10 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </instance>
 <instance part="GND13" gate="1" x="-53.34" y="-142.24" smashed="yes">
 <attribute name="VALUE" x="-55.88" y="-144.78" size="1.778" layer="96"/>
+</instance>
+<instance part="R11" gate="G$1" x="-40.64" y="-96.52" smashed="yes" rot="R180">
+<attribute name="NAME" x="-36.83" y="-98.0186" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="-36.83" y="-93.218" size="1.778" layer="96" rot="R180"/>
 </instance>
 </instances>
 <busses>
@@ -5514,17 +5519,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="137.16" y1="-104.14" x2="119.38" y2="-104.14" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$12" class="0">
-<segment>
-<pinref part="IC3" gate="G$1" pin="PA1"/>
-<wire x1="81.28" y1="-91.44" x2="63.5" y2="-91.44" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="-91.44" x2="63.5" y2="-81.28" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="-81.28" x2="127" y2="-81.28" width="0.1524" layer="91"/>
-<wire x1="127" y1="-81.28" x2="127" y2="-60.96" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="36"/>
-<wire x1="127" y1="-60.96" x2="104.14" y2="-60.96" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$17" class="0">
 <segment>
 <pinref part="LED1" gate="G$1" pin="C"/>
@@ -5599,6 +5593,10 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="-66.04" y1="-114.3" x2="-53.34" y2="-114.3" width="0.1524" layer="91"/>
 <wire x1="-53.34" y1="-114.3" x2="-53.34" y2="-124.46" width="0.1524" layer="91"/>
 <junction x="-66.04" y="-114.3"/>
+<wire x1="-53.34" y1="-114.3" x2="-53.34" y2="-96.52" width="0.1524" layer="91"/>
+<wire x1="-53.34" y1="-96.52" x2="-45.72" y2="-96.52" width="0.1524" layer="91"/>
+<junction x="-53.34" y="-114.3"/>
+<pinref part="R11" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="KBDATA" class="0">
@@ -5632,6 +5630,15 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="22.86" y1="-111.76" x2="22.86" y2="-106.68" width="0.1524" layer="91"/>
 <pinref part="IC3" gate="G$1" pin="PA10/PA12"/>
 <wire x1="81.28" y1="-111.76" x2="22.86" y2="-111.76" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$4" class="0">
+<segment>
+<pinref part="R11" gate="G$1" pin="1"/>
+<wire x1="-35.56" y1="-96.52" x2="-15.24" y2="-96.52" width="0.1524" layer="91"/>
+<pinref part="IC3" gate="G$1" pin="PA1"/>
+<wire x1="81.28" y1="-91.44" x2="-15.24" y2="-91.44" width="0.1524" layer="91"/>
+<wire x1="-15.24" y1="-91.44" x2="-15.24" y2="-96.52" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
