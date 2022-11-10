@@ -292,22 +292,22 @@ const uint8_t linux_ev_to_sirius1_lookup[EV_LOOKUP_SIZE] =
   KEY_UNUSED, // EV93 KEY_KATAKANAHIRAGANA
   KEY_UNUSED, // EV94 KEY_MUHENKAN
   KEY_UNUSED, // EV95 KEY_KPJPCOMMA
-  KEY_UNUSED, // EV96 KEY_KPENTER
-  KEY_UNUSED, // EV97 KEY_RIGHTCTRL
+  0x5d, // EV96 KEY_KPENTER
+  0x61, // EV97 KEY_RIGHTCTRL
   KEY_UNUSED, // EV98 KEY_KPSLASH
   KEY_UNUSED, // EV99 KEY_SYSRQ
-  KEY_UNUSED, // EV100 KEY_RIGHTALT
+  0x5f, // EV100 KEY_RIGHTALT
   KEY_UNUSED, // EV101 KEY_LINEFEED
   KEY_UNUSED, // EV102 KEY_HOME
-  KEY_UNUSED, // EV103 KEY_UP
+  88, // EV103 KEY_UP
   KEY_UNUSED, // EV104 KEY_PAGEUP
-  KEY_UNUSED, // EV105 KEY_LEFT
-  KEY_UNUSED, // EV106 KEY_RIGHT
+  0x62, // EV105 KEY_LEFT
+  99, // EV106 KEY_RIGHT
   KEY_UNUSED, // EV107 KEY_END
-  KEY_UNUSED, // EV108 KEY_DOWN
+  0x59, // EV108 KEY_DOWN
   KEY_UNUSED, // EV109 KEY_PAGEDOWN
-  KEY_UNUSED, // EV110 KEY_INSERT
-  KEY_UNUSED, // EV111 KEY_DELETE
+  47, // EV110 KEY_INSERT
+  27, // EV111 KEY_DELETE
   KEY_UNUSED, // EV112 KEY_MACRO
   KEY_UNUSED, // EV113 KEY_MUTE
   KEY_UNUSED, // EV114 KEY_VOLUMEDOWN
@@ -456,7 +456,7 @@ int main(void)
   /* USER CODE BEGIN 3 */
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
-      if(buffered_code < EV_LOOKUP_SIZE)
+      if(buffered_code < EV_LOOKUP_SIZE && buffered_value != 2)
         send_key(linux_ev_to_sirius1_lookup[buffered_code], buffered_value);
       kb_buf_pop(&my_kb_buf);
     }
