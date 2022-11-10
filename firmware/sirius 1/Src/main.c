@@ -196,12 +196,19 @@ void protocol_status_lookup_init(void)
 #define KB_WRITE_ERROR 2
 #define SIRIUS_1_KB_BIT_ACK_TIMEOUT_MS 20
 
-uint8_t wait_for_KBACK(void)
+void release_kb_line(void)
 {
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(KBRDY_GPIO_Port, KBRDY_Pin, GPIO_PIN_SET);
+}
+
+uint8_t wait_for_KBACK(uint8_t level)
+{
+  return KB_WRITE_SUCCESS;
   uint32_t entry_time = HAL_GetTick();
   while(1)
   {
-    if(HAL_GPIO_ReadPin(KBACK_GPIO_Port, KBACK_Pin) == GPIO_PIN_SET)
+    if(HAL_GPIO_ReadPin(KBACK_GPIO_Port, KBACK_Pin) == level)
       return KB_WRITE_SUCCESS;
     if(HAL_GetTick() - entry_time > SIRIUS_1_KB_BIT_ACK_TIMEOUT_MS)
       return KB_WRITE_TIMEOUT;
@@ -209,15 +216,35 @@ uint8_t wait_for_KBACK(void)
   return KB_WRITE_ERROR;
 }
 
-uint8_t SendBit(uint8_t value)
+uint8_t write_bit(uint8_t bit)
 {
-  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, value);
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, bit);
   HAL_GPIO_WritePin(KBRDY_GPIO_Port, KBRDY_Pin, GPIO_PIN_RESET);
-  // while(HAL_GPIO_ReadPin(KBACK_GPIO_Port, KBACK_Pin));
+  if(wait_for_KBACK(GPIO_PIN_RESET) != KB_WRITE_SUCCESS)
+    return KB_WRITE_TIMEOUT;
   delay_us(400);
   HAL_GPIO_WritePin(KBRDY_GPIO_Port, KBRDY_Pin, GPIO_PIN_SET);
-  // while(!digitalRead(KBACK));
+  if(wait_for_KBACK(GPIO_PIN_SET) != KB_WRITE_SUCCESS)
+    return KB_WRITE_TIMEOUT;
   delay_us(400);
+  return KB_WRITE_SUCCESS;
+}
+
+uint8_t get_bit(uint8_t x, uint8_t n)
+{
+  return (x & (1 << n)) ? 1 : 0;
+}
+
+uint8_t send_key(uint8_t data, uint8_t key_status)
+{
+  data &= 0x7f;
+  if(key_status)
+    data |= 0x80;
+  for (int i = 0; i < 8; ++i)
+    write_bit(get_bit(data, i));
+  write_bit(0); // stop bit
+  release_kb_line();
+  return KB_WRITE_SUCCESS;
 }
 
 /* USER CODE END 0 */
@@ -278,12 +305,9 @@ int main(void)
   /* USER CODE BEGIN 3 */
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
-      SendBit(1);
+      send_key(0x28, buffered_value);
       kb_buf_pop(&my_kb_buf);
     }
-
-    printf("%d\n", wait_for_KBACK());
-
   }
   /* USER CODE END 3 */
 
