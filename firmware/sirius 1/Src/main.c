@@ -204,7 +204,7 @@ void release_kb_line(void)
 
 uint8_t wait_for_KBACK(uint8_t level)
 {
-  return KB_WRITE_SUCCESS;
+  // return KB_WRITE_SUCCESS;
   uint32_t entry_time = HAL_GetTick();
   while(1)
   {
@@ -214,6 +214,20 @@ uint8_t wait_for_KBACK(uint8_t level)
       return KB_WRITE_TIMEOUT;
   }
   return KB_WRITE_ERROR;
+}
+
+uint8_t write_stop_bit()
+{
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(KBRDY_GPIO_Port, KBRDY_Pin, GPIO_PIN_RESET);
+  if(wait_for_KBACK(GPIO_PIN_RESET) != KB_WRITE_SUCCESS)
+    return KB_WRITE_TIMEOUT;
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(KBRDY_GPIO_Port, KBRDY_Pin, GPIO_PIN_SET);
+  HAL_Delay(1);
+  if(wait_for_KBACK(GPIO_PIN_SET) != KB_WRITE_SUCCESS)
+    return KB_WRITE_TIMEOUT;
+  return KB_WRITE_SUCCESS;
 }
 
 uint8_t write_bit(uint8_t bit)
@@ -242,7 +256,7 @@ uint8_t send_key(uint8_t data, uint8_t key_status)
     data |= 0x80;
   for (int i = 0; i < 8; ++i)
     write_bit(get_bit(data, i));
-  write_bit(0); // stop bit
+  write_stop_bit();
   release_kb_line();
   return KB_WRITE_SUCCESS;
 }
