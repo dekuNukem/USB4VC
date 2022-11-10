@@ -191,6 +191,141 @@ void protocol_status_lookup_init(void)
   protocol_status_lookup[PROTOCOL_SIRIUS1_KB] = PROTOCOL_STATUS_ENABLED;
 }
 
+#define EV_LOOKUP_SIZE 128
+#define KEY_UNUSED 126
+
+const uint8_t linux_ev_to_sirius1_lookup[EV_LOOKUP_SIZE] = 
+{
+  KEY_UNUSED, // EV0 KEY_RESERVED
+  0xb, // EV1 KEY_ESC
+  0xd, // EV2 KEY_1
+  0xe, // EV3 KEY_2
+  0xf, // EV4 KEY_3
+  0x10, // EV5 KEY_4
+  0x11, // EV6 KEY_5
+  0x12, // EV7 KEY_6
+  0x13, // EV8 KEY_7
+  0x14, // EV9 KEY_8
+  0x15, // EV10 KEY_9
+  0x16, // EV11 KEY_0
+  0x17, // EV12 KEY_MINUS
+  0x18, // EV13 KEY_EQUAL
+  0x19, // EV14 KEY_BACKSPACE
+  0x21, // EV15 KEY_TAB
+  0x22, // EV16 KEY_Q
+  0x23, // EV17 KEY_W
+  0x24, // EV18 KEY_E
+  0x25, // EV19 KEY_R
+  0x26, // EV20 KEY_T
+  0x27, // EV21 KEY_Y
+  0x28, // EV22 KEY_U
+  0x29, // EV23 KEY_I
+  0x2a, // EV24 KEY_O
+  0x2b, // EV25 KEY_P
+  0x2c, // EV26 KEY_LEFTBRACE
+  0x2d, // EV27 KEY_RIGHTBRACE
+  0x57, // EV28 KEY_ENTER
+  0x61, // EV29 KEY_LEFTCTRL
+  0x37, // EV30 KEY_A
+  0x38, // EV31 KEY_S
+  0x39, // EV32 KEY_D
+  0x3a, // EV33 KEY_F
+  0x3b, // EV34 KEY_G
+  0x3c, // EV35 KEY_H
+  0x3d, // EV36 KEY_J
+  0x3e, // EV37 KEY_K
+  0x3f, // EV38 KEY_L
+  0x40, // EV39 KEY_SEMICOLON
+  0x41, // EV40 KEY_APOSTROPHE
+  KEY_UNUSED, // EV41 KEY_GRAVE
+  0x4a, // EV42 KEY_LEFTSHIFT
+  0x4b, // EV43 KEY_BACKSLASH
+  0x4c, // EV44 KEY_Z
+  0x4d, // EV45 KEY_X
+  0x4e, // EV46 KEY_C
+  0x4f, // EV47 KEY_V
+  0x50, // EV48 KEY_B
+  0x51, // EV49 KEY_N
+  0x52, // EV50 KEY_M
+  0x53, // EV51 KEY_COMMA
+  0x54, // EV52 KEY_DOT
+  0x55, // EV53 KEY_SLASH
+  0x56, // EV54 KEY_RIGHTSHIFT
+  0x1f, // EV55 KEY_KPASTERISK
+  0x5f, // EV56 KEY_LEFTALT
+  0x60, // EV57 KEY_SPACE
+  0x36, // EV58 KEY_CAPSLOCK
+  0x1, // EV59 KEY_F1
+  0x2, // EV60 KEY_F2
+  0x3, // EV61 KEY_F3
+  0x4, // EV62 KEY_F4
+  0x5, // EV63 KEY_F5
+  0x6, // EV64 KEY_F6
+  0x7, // EV65 KEY_F7
+  0x8, // EV66 KEY_F8
+  KEY_UNUSED, // EV67 KEY_F9
+  KEY_UNUSED, // EV68 KEY_F10
+  0x1c, // EV69 KEY_NUMLOCK
+  KEY_UNUSED, // EV70 KEY_SCROLLLOCK
+  0x31, // EV71 KEY_KP7
+  0x32, // EV72 KEY_KP8
+  0x33, // EV73 KEY_KP9
+  0x34, // EV74 KEY_KPMINUS
+  0x45, // EV75 KEY_KP4
+  0x46, // EV76 KEY_KP5
+  0x47, // EV77 KEY_KP6
+  0x48, // EV78 KEY_KPPLUS
+  0x5a, // EV79 KEY_KP1
+  0x5b, // EV80 KEY_KP2
+  0x5c, // EV81 KEY_KP3
+  0x64, // EV82 KEY_KP0
+  0x66, // EV83 KEY_KPDOT
+  KEY_UNUSED, // EV84 UNKNOWN
+  KEY_UNUSED, // EV85 KEY_ZENKAKUHANKAKU
+  KEY_UNUSED, // EV86 KEY_102ND
+  KEY_UNUSED, // EV87 KEY_F11
+  KEY_UNUSED, // EV88 KEY_F12
+  KEY_UNUSED, // EV89 KEY_RO
+  KEY_UNUSED, // EV90 KEY_KATAKANA
+  KEY_UNUSED, // EV91 KEY_HIRAGANA
+  KEY_UNUSED, // EV92 KEY_HENKAN
+  KEY_UNUSED, // EV93 KEY_KATAKANAHIRAGANA
+  KEY_UNUSED, // EV94 KEY_MUHENKAN
+  KEY_UNUSED, // EV95 KEY_KPJPCOMMA
+  KEY_UNUSED, // EV96 KEY_KPENTER
+  KEY_UNUSED, // EV97 KEY_RIGHTCTRL
+  KEY_UNUSED, // EV98 KEY_KPSLASH
+  KEY_UNUSED, // EV99 KEY_SYSRQ
+  KEY_UNUSED, // EV100 KEY_RIGHTALT
+  KEY_UNUSED, // EV101 KEY_LINEFEED
+  KEY_UNUSED, // EV102 KEY_HOME
+  KEY_UNUSED, // EV103 KEY_UP
+  KEY_UNUSED, // EV104 KEY_PAGEUP
+  KEY_UNUSED, // EV105 KEY_LEFT
+  KEY_UNUSED, // EV106 KEY_RIGHT
+  KEY_UNUSED, // EV107 KEY_END
+  KEY_UNUSED, // EV108 KEY_DOWN
+  KEY_UNUSED, // EV109 KEY_PAGEDOWN
+  KEY_UNUSED, // EV110 KEY_INSERT
+  KEY_UNUSED, // EV111 KEY_DELETE
+  KEY_UNUSED, // EV112 KEY_MACRO
+  KEY_UNUSED, // EV113 KEY_MUTE
+  KEY_UNUSED, // EV114 KEY_VOLUMEDOWN
+  KEY_UNUSED, // EV115 KEY_VOLUMEUP
+  KEY_UNUSED, // EV116 KEY_POWER
+  KEY_UNUSED, // EV117 KEY_KPEQUAL
+  KEY_UNUSED, // EV118 KEY_KPPLUSMINUS
+  KEY_UNUSED, // EV119 KEY_PAUSE
+  KEY_UNUSED, // EV120 KEY_SCALE
+  KEY_UNUSED, // EV121 KEY_KPCOMMA
+  KEY_UNUSED, // EV122 KEY_HANGEUL
+  KEY_UNUSED, // EV123 KEY_HANJA
+  KEY_UNUSED, // EV124 KEY_YEN
+  KEY_UNUSED, // EV125 KEY_LEFTMETA
+  KEY_UNUSED, // EV126 KEY_RIGHTMETA
+  KEY_UNUSED, // EV127 KEY_COMPOSE
+};
+
 #define KB_WRITE_SUCCESS 0
 #define KB_WRITE_TIMEOUT 1
 #define KB_WRITE_ERROR 2
@@ -249,13 +384,15 @@ uint8_t get_bit(uint8_t x, uint8_t n)
   return (x & (1 << n)) ? 1 : 0;
 }
 
-uint8_t send_key(uint8_t data, uint8_t key_status)
+uint8_t send_key(uint8_t key_code, uint8_t key_status)
 {
-  data &= 0x7f;
+  if(key_code == KEY_UNUSED)
+    return KB_WRITE_SUCCESS;
+  key_code &= 0x7f;
   if(key_status)
-    data |= 0x80;
+    key_code |= 0x80;
   for (int i = 0; i < 8; ++i)
-    write_bit(get_bit(data, i));
+    write_bit(get_bit(key_code, i));
   write_stop_bit();
   release_kb_line();
   return KB_WRITE_SUCCESS;
@@ -319,7 +456,8 @@ int main(void)
   /* USER CODE BEGIN 3 */
     if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
     {
-      send_key(0x28, buffered_value);
+      if(buffered_code < EV_LOOKUP_SIZE)
+        send_key(linux_ev_to_sirius1_lookup[buffered_code], buffered_value);
       kb_buf_pop(&my_kb_buf);
     }
   }
