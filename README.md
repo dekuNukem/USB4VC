@@ -4,7 +4,7 @@
 
 -----
 
-USB4VC is an **active protocol converter** that let you use **USB keyboard, mouse, and gamepads** on a wide range of retro computers.
+USB4VC is an **active protocol converter** that let you use **USB keyboard, mouse, and gamepads** on many different retro computers.
 
 ![Alt text](photos/header.jpeg)
 
@@ -12,7 +12,7 @@ With a **modular design**, different platforms are supported by swapping out **P
 
 ![Alt text](photos/header.gif)
 
-USB4VC is [now available on Tindie](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/), and two Protocol Cards are available at launch:
+USB4VC is [now available on Tindie](https://www.tindie.com/products/dekuNukem/usb4vc-usb-inputs-on-retro-computers/), with two Protocol Cards:
 
 #### IBM PC Compatible
 
