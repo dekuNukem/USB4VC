@@ -32,15 +32,17 @@ compiling main.c...
     return KB_WRITE_ERROR;
 ../Src/main.c(370): warning:  #188-D: enumerated type mixed with another type
     HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, bit);
-../Src/main.c(451): warning:  #177-D: variable "buffered_code"  was declared but never referenced
+../Src/main.c(409): warning:  #188-D: enumerated type mixed with another type
+    HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, bit);
+../Src/main.c(462): warning:  #177-D: variable "buffered_code"  was declared but never referenced
     uint8_t buffered_code, buffered_value;
-../Src/main.c(451): warning:  #177-D: variable "buffered_value"  was declared but never referenced
+../Src/main.c(462): warning:  #177-D: variable "buffered_value"  was declared but never referenced
     uint8_t buffered_code, buffered_value;
-../Src/main.c: 4 warnings, 0 errors
+../Src/main.c: 5 warnings, 0 errors
 linking...
-Program Size: Code=7564 RO-data=300 RW-data=32 ZI-data=1904  
+Program Size: Code=7690 RO-data=302 RW-data=32 ZI-data=1904  
 FromELF: creating hex file...
-"my_adb\my_adb.axf" - 0 Error(s), 4 Warning(s).
+"my_adb\my_adb.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 

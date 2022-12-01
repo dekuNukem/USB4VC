@@ -331,13 +331,13 @@ const uint8_t linux_ev_to_sirius1_lookup[EV_LOOKUP_SIZE] =
 #define KB_WRITE_ERROR 2
 #define SIRIUS_1_KB_BIT_ACK_TIMEOUT_MS 20
 
-void release_kb_line(void)
+void sirius1_release_kb_line(void)
 {
   HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_SET);
   HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_SET);
 }
 
-uint8_t wait_for_KBACK(uint8_t level)
+uint8_t sirius1_wait_for_KBACK(uint8_t level)
 {
   // return KB_WRITE_SUCCESS;
   uint32_t entry_time = HAL_GetTick();
@@ -351,29 +351,29 @@ uint8_t wait_for_KBACK(uint8_t level)
   return KB_WRITE_ERROR;
 }
 
-uint8_t write_stop_bit()
+uint8_t sirius1_write_stop_bit()
 {
   HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_RESET);
-  if(wait_for_KBACK(GPIO_PIN_RESET) != KB_WRITE_SUCCESS)
+  if(sirius1_wait_for_KBACK(GPIO_PIN_RESET) != KB_WRITE_SUCCESS)
     return KB_WRITE_TIMEOUT;
   HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_SET);
   HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_SET);
   HAL_Delay(1);
-  if(wait_for_KBACK(GPIO_PIN_SET) != KB_WRITE_SUCCESS)
+  if(sirius1_wait_for_KBACK(GPIO_PIN_SET) != KB_WRITE_SUCCESS)
     return KB_WRITE_TIMEOUT;
   return KB_WRITE_SUCCESS;
 }
 
-uint8_t write_bit(uint8_t bit)
+uint8_t sirius1_write_bit(uint8_t bit)
 {
   HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, bit);
   HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_RESET);
-  if(wait_for_KBACK(GPIO_PIN_RESET) != KB_WRITE_SUCCESS)
+  if(sirius1_wait_for_KBACK(GPIO_PIN_RESET) != KB_WRITE_SUCCESS)
     return KB_WRITE_TIMEOUT;
   delay_us(400);
   HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_SET);
-  if(wait_for_KBACK(GPIO_PIN_SET) != KB_WRITE_SUCCESS)
+  if(sirius1_wait_for_KBACK(GPIO_PIN_SET) != KB_WRITE_SUCCESS)
     return KB_WRITE_TIMEOUT;
   delay_us(400);
   return KB_WRITE_SUCCESS;
@@ -392,14 +392,25 @@ uint8_t sirius1_send_key(uint8_t key_code, uint8_t key_status)
   if(key_status)
     key_code |= 0x80;
   for (int i = 0; i < 8; ++i)
-    write_bit(get_bit(key_code, i));
-  write_stop_bit();
-  release_kb_line();
+    sirius1_write_bit(get_bit(key_code, i));
+  sirius1_write_stop_bit();
+  sirius1_release_kb_line();
   return KB_WRITE_SUCCESS;
 }
 
-uint8_t trs80m2_sendkey(uint8_t value)
+void trs80m2_release_kb_line(void)
 {
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_RESET);
+}
+
+uint8_t trs80m2_write_bit(uint8_t bit)
+{
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, bit);
+  delay_us(81);
+  HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_SET);
+  delay_us(108);
+  trs80m2_release_kb_line();
   return KB_WRITE_SUCCESS;
 }
 
@@ -449,12 +460,17 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint8_t buffered_code, buffered_value;
+  trs80m2_release_kb_line();
+
   while (1)
   {
     if(spi_error_occured)
       spi_error_dump_reboot();
     if(HAL_GetTick() > led_off_after)
       HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
+
+    trs80m2_write_bit(0);
+    HAL_Delay(10);
 
   /* USER CODE END WHILE */
 
