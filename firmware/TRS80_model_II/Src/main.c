@@ -409,8 +409,11 @@ uint8_t trs80m2_write_bit(uint8_t bit)
   HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, bit);
   delay_us(81);
   HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_SET);
-  delay_us(108);
-  trs80m2_release_kb_line();
+  delay_us(54);
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_SET);
+  delay_us(54);
+  HAL_GPIO_WritePin(KBRDY_CLK_GPIO_Port, KBRDY_CLK_Pin, GPIO_PIN_RESET);
+  delay_us(200);
   return KB_WRITE_SUCCESS;
 }
 
@@ -470,6 +473,15 @@ int main(void)
       HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
     trs80m2_write_bit(0);
+    trs80m2_write_bit(1);
+    trs80m2_write_bit(0);
+    trs80m2_write_bit(1);
+
+    trs80m2_write_bit(1);
+    trs80m2_write_bit(1);
+    trs80m2_write_bit(1);
+    trs80m2_write_bit(0);
+    
     HAL_Delay(10);
 
   /* USER CODE END WHILE */
