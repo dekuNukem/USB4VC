@@ -417,6 +417,30 @@ uint8_t trs80m2_write_bit(uint8_t bit)
   return KB_WRITE_SUCCESS;
 }
 
+uint8_t trs80m2_write_stop_bit(void)
+{
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_RESET);
+  delay_us(54);
+  HAL_GPIO_WritePin(KBDATA_GPIO_Port, KBDATA_Pin, GPIO_PIN_SET);
+  delay_us(54);
+  return KB_WRITE_SUCCESS;
+}
+
+void write_z(void)
+{
+  trs80m2_write_bit(0);
+  trs80m2_write_bit(1);
+  trs80m2_write_bit(0);
+  trs80m2_write_bit(1);
+
+  trs80m2_write_bit(1);
+  trs80m2_write_bit(1);
+  trs80m2_write_bit(1);
+  trs80m2_write_bit(0);
+
+  trs80m2_write_stop_bit();
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -472,17 +496,10 @@ int main(void)
     if(HAL_GetTick() > led_off_after)
       HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
-    trs80m2_write_bit(0);
-    trs80m2_write_bit(1);
-    trs80m2_write_bit(0);
-    trs80m2_write_bit(1);
+    if(HAL_GPIO_ReadPin(KBACK_BUSY_GPIO_Port, KBACK_BUSY_Pin) == GPIO_PIN_SET)
+      write_z();
 
-    trs80m2_write_bit(1);
-    trs80m2_write_bit(1);
-    trs80m2_write_bit(1);
-    trs80m2_write_bit(0);
-    
-    HAL_Delay(10);
+    HAL_Delay(1000);
 
   /* USER CODE END WHILE */
 
