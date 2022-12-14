@@ -1,0 +1,19 @@
+PT1 2022-11-03
+First prototype
+
+PT2 ????
+Hooked up eithernet port properly
+
+PT3 2022-12-14
+
+Added and hooked up connector for TRS-80 Model II
+
+Although worlds apart in hardware architecture, the keyboard protocol of Sirius 1 and TRS-80 Model II is surprisingly similar.
+
+Both uses keytronics foam and foil keyboard, which is why none of them works today.
+
+Both uses serial communication, with DATA and CLK from KB to computer, and BUSY/ACK from computer to KB.
+
+TRS-80 Model II can't seem to distinguish keydown and keyup events, it only sends data on keydown, and the data is the ASCII code.
+
+Sirius 1 sends on both keyup and keydown, the MSB reflects that.
