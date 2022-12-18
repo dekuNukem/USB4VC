@@ -124,7 +124,6 @@ void protocol_status_lookup_init(void)
   protocol_status_lookup[PROTOCOL_LISA_KB] = PROTOCOL_STATUS_DISABLED;
 }
 
-
 void handle_protocol_switch(uint8_t spi_byte)
 {
   uint8_t index = spi_byte & 0x7f;
@@ -244,7 +243,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  ACT_LED_off_ts = micros() + 13000;
+  ACT_LED_off_ts = micros() + 10000;
 }
 
 void spi_error_dump_reboot(void)

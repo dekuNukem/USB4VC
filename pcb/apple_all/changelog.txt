@@ -11,3 +11,10 @@ added mouse power detect
 moved rj11 socket down slightly
 fixed a mislabeled debug header pin
 updated mouse header labels
+
+pt4:
+2022-12-18
+keyboard GND now connects to GND instead of MCU
+Added a jumper on ADB Power Pin to MCU
+Added a pull up on ADB Power line
+removed left ADB debug header
