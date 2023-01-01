@@ -5206,8 +5206,8 @@ by exp-lbrs.ulp</description>
 <part name="R9" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="R10" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="GND10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="TP1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-20" package3d_urn="urn:adsk.eagle:package:27950/1"/>
-<part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-20" package3d_urn="urn:adsk.eagle:package:27950/1"/>
+<part name="TP1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-17" package3d_urn="urn:adsk.eagle:package:27949/1" value="TPSQPAD1-17"/>
+<part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TPSQ" device="PAD1-17" package3d_urn="urn:adsk.eagle:package:27949/1" value="TPSQPAD1-17"/>
 <part name="GND11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R11" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
