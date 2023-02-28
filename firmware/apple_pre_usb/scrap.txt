@@ -1,3 +1,32 @@
+space down: 11011100
+
+00100011
+
+0100 1100
+
+
+space up: 01011100
+
+inverted 10100011
+
+as appears 0101 1100
+
+
+------
+
+0x80: 1000 0000
+
+flipped: 0111 1111
+
+re-ordered: 1110 1111
+
+0x84: 1000 0100
+
+flipped: 0111 1011
+
+45670123
+
+re-ordered: 1110 1101
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {

@@ -134,11 +134,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4107</DriverSelection>
+            <DriverSelection>4101</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -446,6 +446,16 @@
               <FileName>stm32f0xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f0xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>lisa_kb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lisa_kb.c</FilePath>
+            </File>
+            <File>
+              <FileName>lisa_kb.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\lisa_kb.h</FilePath>
             </File>
           </Files>
         </Group>

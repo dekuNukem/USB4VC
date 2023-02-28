@@ -39,3 +39,4 @@ apple_all\main.o: ../Inc/shared.h
 apple_all\main.o: ../Inc/helpers.h
 apple_all\main.o: ../Inc/quad_encoder.h
 apple_all\main.o: ../Inc/m0110a.h
+apple_all\main.o: ../Inc/lisa_kb.h

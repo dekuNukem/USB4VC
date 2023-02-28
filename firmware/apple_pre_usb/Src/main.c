@@ -48,6 +48,7 @@
 #include "helpers.h"
 #include "quad_encoder.h"
 #include "m0110a.h"
+#include "lisa_kb.h"
 
 #define PROTOCOL_STATUS_NOT_AVAILABLE 0
 #define PROTOCOL_STATUS_ENABLED 1
@@ -410,10 +411,13 @@ int main(void)
   /* USER CODE BEGIN 3 */
 
     // m0110 keyboard loop
-    if(HAL_GPIO_ReadPin(M0110_CLK_GPIO_Port, M0110_CLK_Pin) == GPIO_PIN_RESET)
-      continue;
-    m0110a_update();
-    m0100a_handle_inquiry();
+    if(HAL_GPIO_ReadPin(M0110_CLK_GPIO_Port, M0110_CLK_Pin) != GPIO_PIN_RESET)
+    {
+      m0110a_update();
+      m0100a_handle_inquiry();
+    }
+    HAL_GPIO_TogglePin(LISA_DATA_GPIO_Port, LISA_DATA_Pin);
+    // HAL_Delay(1);
   }
   /* USER CODE END 3 */
 
