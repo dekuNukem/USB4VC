@@ -38,3 +38,4 @@ apple_all\lisa_kb.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
 apple_all\lisa_kb.o: ../Inc/helpers.h
 apple_all\lisa_kb.o: ../Inc/shared.h
 apple_all\lisa_kb.o: ../Inc/delay_us.h
+apple_all\lisa_kb.o: ../Inc/m0110a.h

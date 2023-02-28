@@ -19,6 +19,7 @@ typedef struct
 extern lisa_handle lh;
 
 void lisa_kb_update(void);
+void lisa_buf_reset(void);
 
 #ifdef __cplusplus
 }

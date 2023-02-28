@@ -351,6 +351,7 @@ void lisa_init(lisa_handle* lisa)
   lisa->data_pin = GPIO_PIN_3;
   lisa->pwr_port = GPIOB;
   lisa->pwr_pin = GPIO_PIN_0;
+  lisa_buf_reset();
 }
 
 /* USER CODE END 0 */
