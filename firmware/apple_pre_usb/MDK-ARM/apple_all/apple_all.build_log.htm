@@ -27,12 +27,13 @@ Project File Date:  02/28/2023
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'apple_all'
+compiling lisa_kb.c...
+..\Src\lisa_kb.c(38): warning:  #188-D: enumerated type mixed with another type
+      HAL_GPIO_WritePin(lh.data_port, lh.data_pin, (to_write >> i) & 1);
+..\Src\lisa_kb.c: 1 warning, 0 errors
 compiling main.c...
-../Src/main.c(376): warning:  #188-D: enumerated type mixed with another type
-      HAL_GPIO_WritePin(LISA_DATA_GPIO_Port, LISA_DATA_Pin, (to_write >> i) & 1);
-../Src/main.c: 1 warning, 0 errors
 linking...
-Program Size: Code=9928 RO-data=688 RW-data=76 ZI-data=2188  
+Program Size: Code=10076 RO-data=688 RW-data=76 ZI-data=2204  
 FromELF: creating hex file...
 "apple_all\apple_all.axf" - 0 Error(s), 1 Warning(s).
 
@@ -57,7 +58,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

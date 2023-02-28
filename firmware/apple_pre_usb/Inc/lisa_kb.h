@@ -8,6 +8,17 @@
 #include "stm32f0xx_hal.h"
 #include "helpers.h"
 
+typedef struct
+{
+  GPIO_TypeDef* data_port;
+  uint16_t data_pin;
+  GPIO_TypeDef* pwr_port;
+  uint16_t pwr_pin;
+} lisa_handle;
+
+extern lisa_handle lh;
+
+void lisa_kb_update(void);
 
 #ifdef __cplusplus
 }
