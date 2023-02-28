@@ -19,7 +19,7 @@ as appears 0101 1100
 flipped: 0111 1111
 
 re-ordered: 1110 1111
-
+------
 0x84: 1000 0100
 
 flipped: 0111 1011
@@ -27,6 +27,69 @@ flipped: 0111 1011
 45670123
 
 re-ordered: 1110 1101
+
+
+
+==================
+#include <stdlib.h>   /* malloc */
+#include <stdio.h>    /* printf */
+#include <stdint.h>   /* malloc */
+
+#define SET_BIT(x, pos) (x |= (1U << pos))
+
+/*
+
+45670123
+
+0x84: 1000 0100
+
+flipped: 0111 1011
+
+re-ordered: 1110 1101
+
+*/
+
+uint8_t get_bit(uint8_t data, uint8_t pos)
+{
+    return (data >> pos) & 1;
+}
+
+uint8_t make_lisa_byte(uint8_t data)
+{
+    uint8_t inverted = ~data;
+    uint8_t result = 0;
+    if(get_bit(inverted, 7))
+        SET_BIT(result, 4);
+    if(get_bit(inverted, 6))
+        SET_BIT(result, 5);
+    if(get_bit(inverted, 5))
+        SET_BIT(result, 6);
+    if(get_bit(inverted, 4))
+        SET_BIT(result, 7);
+
+    if(get_bit(inverted, 3))
+        SET_BIT(result, 0);
+    if(get_bit(inverted, 2))
+        SET_BIT(result, 1);
+    if(get_bit(inverted, 1))
+        SET_BIT(result, 2);
+    if(get_bit(inverted, 0))
+        SET_BIT(result, 3);
+    return result;
+}
+
+int main()
+{
+    
+    for (int i = 0; i < 256; ++i)
+    {
+        uint8_t lisabyte = make_lisa_byte(i);
+        // printf("%02x %02x\n", i, lisabyte);
+        printf("0x%02x, ", lisabyte);
+    }
+}
+----------------
+
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
