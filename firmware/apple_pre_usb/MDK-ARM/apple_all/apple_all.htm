@@ -3,7 +3,7 @@
 <title>Static Call Graph - [apple_all\apple_all.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image apple_all\apple_all.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Mar 01 02:39:54 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Mar 01 11:29:32 2023
 <BR><P>
 <H3>Maximum Stack Usage =        228 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -712,7 +712,8 @@ Global Symbols
 <P><STRONG><a name="[8e]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_buf_add
+<BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_kb_update
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_buf_add
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;spi_error_dump_reboot
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -834,7 +835,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 </UL>
 
-<P><STRONG><a name="[8d]"></a>lisa_buf_add</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, lisa_kb.o(i.lisa_buf_add))
+<P><STRONG><a name="[8d]"></a>lisa_buf_add</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, lisa_kb.o(i.lisa_buf_add))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = lisa_buf_add &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_add
@@ -859,7 +860,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[93]"></a>lisa_kb_update</STRONG> (Thumb, 120 bytes, Stack size 16 bytes, lisa_kb.o(i.lisa_kb_update))
+<P><STRONG><a name="[93]"></a>lisa_kb_update</STRONG> (Thumb, 174 bytes, Stack size 16 bytes, lisa_kb.o(i.lisa_kb_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = lisa_kb_update &rArr; wait_until_change
 </UL>
 <BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
@@ -869,9 +870,11 @@ Global Symbols
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_is_empty
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_add
 <LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_write_byte
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_lisa_kb
 </UL>
@@ -965,7 +968,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4e]"></a>micros</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, delay_us.o(i.micros))
-<BR><BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR><BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_kb_update
+<LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
