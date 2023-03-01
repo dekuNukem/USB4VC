@@ -18,6 +18,15 @@ lisa_handle lh;
 #define LISA_READ_DATA_PIN() HAL_GPIO_ReadPin(lh.data_port, lh.data_pin)
 #define LISA_TIMEOUT -1
 
+void lisa_buf_add(uint8_t linux_keycode, uint8_t value)
+{
+  printf("%d %d\n", linux_keycode, value);
+  uint8_t space = 0x59;
+  if(value)
+    space |= 0x80;
+  m0110a_cmd_buf_add(&lisa_buf, space);
+}
+
 void lisa_buf_reset(void)
 {
   m0110a_cmd_buf_init(&lisa_buf);
@@ -53,15 +62,15 @@ void lisa_kb_update(void)
 {
   if(LISA_READ_DATA_PIN() == GPIO_PIN_SET)
     return;
-  int32_t low_duration_ms = wait_until_change(4500);
-  if(low_duration_ms == LISA_TIMEOUT) // soft reset
+  int32_t low_duration_us = wait_until_change(4500);
+  if(low_duration_us == LISA_TIMEOUT) // soft reset
   {
     m0110a_cmd_buf_reset(&lisa_buf);
     m0110a_cmd_buf_add(&lisa_buf, 0x80);
-    m0110a_cmd_buf_add(&lisa_buf, 0xaf);
+    m0110a_cmd_buf_add(&lisa_buf, 0xaf); // UK layout
     return;
   }
-  else if(low_duration_ms <= 10)
+  else if(low_duration_us <= 10)
     return;
 
   if(m0110a_cmd_buf_is_empty(&lisa_buf))
@@ -74,9 +83,9 @@ void lisa_kb_update(void)
   // now line is high
   // HAL_Delay(500);
   // printf("1 %d", this_byte);
-  delay_us(15);
+  delay_us(9);
   LISA_DATA_LOW();
-  delay_us(18); // ACK pulse
+  delay_us(15); // ACK pulse
   lisa_write_byte(this_byte);
   LISA_DATA_HI();
   // printf("2");

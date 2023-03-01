@@ -30,6 +30,20 @@ re-ordered: 1110 1101
 
 
 
+---
+
+letter i down: 1101 0011
+
+flipped: 0010 1100
+
+re-ordered: 0100 0011
+
+
+
+0101 0110
+
+
+
 ==================
 #include <stdlib.h>   /* malloc */
 #include <stdio.h>    /* printf */

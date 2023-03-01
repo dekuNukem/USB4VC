@@ -20,6 +20,7 @@ extern lisa_handle lh;
 
 void lisa_kb_update(void);
 void lisa_buf_reset(void);
+void lisa_buf_add(uint8_t linux_keycode, uint8_t value);
 
 #ifdef __cplusplus
 }

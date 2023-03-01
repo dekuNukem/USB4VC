@@ -354,6 +354,15 @@ void lisa_init(lisa_handle* lisa)
   lisa_buf_reset();
 }
 
+void run_lisa_kb(void)
+{
+  lisa_kb_update();
+  if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) != 0)
+    return;
+  lisa_buf_add(buffered_code, buffered_value);
+  kb_buf_pop(&my_kb_buf);
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -412,10 +421,10 @@ int main(void)
 
 	while (1)
   {
-    // if(spi_error_occured)
-    //   spi_error_dump_reboot();
-    // if(micros() > ACT_LED_off_ts)
-    //   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
+    if(spi_error_occured)
+      spi_error_dump_reboot();
+    if(micros() > ACT_LED_off_ts)
+      HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -426,7 +435,8 @@ int main(void)
     //   m0110a_update();
     //   m0100a_handle_inquiry();
     // }
-    lisa_kb_update();
+
+    run_lisa_kb();
   }
   /* USER CODE END 3 */
 
