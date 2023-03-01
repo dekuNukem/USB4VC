@@ -79,15 +79,10 @@ void lisa_kb_update(void)
   uint8_t this_byte;
   m0110a_cmd_buf_peek(&lisa_buf, &this_byte);
   m0110a_cmd_buf_pop(&lisa_buf);
-
   // now line is high
-  // HAL_Delay(500);
-  // printf("1 %d", this_byte);
   delay_us(9);
   LISA_DATA_LOW();
   delay_us(15); // ACK pulse
   lisa_write_byte(this_byte);
   LISA_DATA_HI();
-  // printf("2");
-  // HAL_Delay(500);
 }
