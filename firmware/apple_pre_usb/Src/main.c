@@ -118,10 +118,10 @@ int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
 void protocol_status_lookup_init(void)
 {
   memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
-  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_ENABLED;
-  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
-  protocol_status_lookup[PROTOCOL_M0100_MOUSE] = PROTOCOL_STATUS_DISABLED;
-  protocol_status_lookup[PROTOCOL_M0110_KB] = PROTOCOL_STATUS_DISABLED;
+  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_DISABLED;
+  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_DISABLED;
+  protocol_status_lookup[PROTOCOL_M0100_MOUSE] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_M0110_KB] = PROTOCOL_STATUS_ENABLED;
   protocol_status_lookup[PROTOCOL_LISA_KB] = PROTOCOL_STATUS_DISABLED;
 }
 
@@ -154,6 +154,7 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_LISA_KB:
+        lisa_kb_reset();
         break;
     }
     protocol_status_lookup[index] = PROTOCOL_STATUS_ENABLED;
@@ -177,6 +178,7 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_LISA_KB:
+        lisa_kb_reset();
         break;
     }
     protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
@@ -257,6 +259,8 @@ const char boot_message[] = "USB4VC Protocol Board\nApple Pre-USB\ndekuNukem 202
 
 REMEMBER TO ENABLE ARR PRELOAD ON TIMER 16
 
+AND DISABLE INTERRUPT DURING TRANSMISION
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -336,7 +340,7 @@ void lisa_init(lisa_handle* lisa)
   lisa->data_pin = GPIO_PIN_3;
   lisa->pwr_port = GPIOB;
   lisa->pwr_pin = GPIO_PIN_0;
-  lisa_buf_reset();
+  lisa_buf_init();
 }
 
 void run_lisa_kb(void)
@@ -397,7 +401,7 @@ int main(void)
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
   quad_init(&my_mouse_buf, &htim17, &htim16, &htim14, GPIOA, GPIO_PIN_8, GPIOB, GPIO_PIN_14, GPIOB, GPIO_PIN_15, GPIOB, GPIO_PIN_12);
-
+  quad_enable();
   lisa_init(&lh);
   /* USER CODE END 2 */
 
@@ -413,6 +417,8 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
+    // protocol_status_lookup[PROTOCOL_M0100_MOUSE] = PROTOCOL_STATUS_ENABLED
+
     // m0110 keyboard loop
     // if(HAL_GPIO_ReadPin(M0110_CLK_GPIO_Port, M0110_CLK_Pin) != GPIO_PIN_RESET)
     // {
@@ -421,8 +427,6 @@ int main(void)
     // }
     run_lisa_kb();
     HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-    // HAL_Delay(100);
-    // HAL_GPIO_TogglePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin);
   }
   /* USER CODE END 3 */
 
