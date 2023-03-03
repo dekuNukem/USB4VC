@@ -6,11 +6,11 @@
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
+  * USER CODE END. Other portions of this file, whether
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2022 STMicroelectronics
+  * COPYRIGHT(c) 2023 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -51,12 +51,12 @@
 
 #define SLAVE_REQ_Pin GPIO_PIN_13
 #define SLAVE_REQ_GPIO_Port GPIOC
+#define PCARD_BUSY_Pin GPIO_PIN_0
+#define PCARD_BUSY_GPIO_Port GPIOA
 #define LISA_DATA_Pin GPIO_PIN_3
 #define LISA_DATA_GPIO_Port GPIOA
 #define LISA_DET_Pin GPIO_PIN_0
 #define LISA_DET_GPIO_Port GPIOB
-#define M0110_GND_Pin GPIO_PIN_1
-#define M0110_GND_GPIO_Port GPIOB
 #define M0110_DATA_Pin GPIO_PIN_2
 #define M0110_DATA_GPIO_Port GPIOB
 #define M0110_CLK_Pin GPIO_PIN_10
@@ -88,7 +88,7 @@
 
 /* ########################## Assert Selection ############################## */
 /**
-  * @brief Uncomment the line below to expanse the "assert_param" macro in the 
+  * @brief Uncomment the line below to expanse the "assert_param" macro in the
   *        HAL drivers code
   */
 /* #define USE_FULL_ASSERT    1U */

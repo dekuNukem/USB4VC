@@ -227,6 +227,7 @@ void lisa_kb_update(void)
 
   m0110a_cmd_buf_pop(&lisa_buf);
   // now line is high
+  PCARD_BUSY_HI();
   __disable_irq();
   delay_us(8);
   LISA_DATA_LOW();
@@ -235,6 +236,7 @@ void lisa_kb_update(void)
   LISA_DATA_HI();
   delay_us(15); // stop bit?
   __enable_irq();
+  PCARD_BUSY_LOW();
   last_send_us = micros();
   printf("s");
 }

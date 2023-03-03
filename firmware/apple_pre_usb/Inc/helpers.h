@@ -72,6 +72,10 @@ typedef struct
   mouse_event* mouse_events;
 } mouse_buf;
 
+#define PCARD_BUSY_HI() HAL_GPIO_WritePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin, GPIO_PIN_SET)
+#define PCARD_BUSY_LOW() HAL_GPIO_WritePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin, GPIO_PIN_RESET)
+
+
 void kb_buf_init(kb_buf *lb);
 uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value);
 uint8_t kb_buf_peek(kb_buf *lb, uint8_t* code, uint8_t* value);

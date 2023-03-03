@@ -6,11 +6,11 @@
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
+  * USER CODE END. Other portions of this file, whether
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2022 STMicroelectronics
+  * COPYRIGHT(c) 2023 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -250,16 +250,15 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 void spi_error_dump_reboot(void)
 {
   printf("SPI ERROR\n");
-  // for (int i = 0; i < SPI_BUF_SIZE; ++i)
-  //   printf("%d ", spi_recv_buf[i]);
-  // printf("\nrebooting...\n");
-  // for (int i = 0; i < 100; ++i)
-  // {
-  //   HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
-  //   HAL_Delay(100);
-  // }
-  // NVIC_SystemReset();
-  spi_error_occured = 0;
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    printf("%d ", spi_recv_buf[i]);
+  printf("\nrebooting...\n");
+  for (int i = 0; i < 100; ++i)
+  {
+    HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
+    HAL_Delay(100);
+  }
+  NVIC_SystemReset();
 }
 
 const char boot_message[] = "USB4VC Protocol Board\nApple Pre-USB\ndekuNukem 2022";
@@ -437,7 +436,7 @@ int main(void)
     //   m0100a_handle_inquiry();
     // }
     run_lisa_kb();
-    HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+    // HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   }
   /* USER CODE END 3 */
 
@@ -454,7 +453,7 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
-    /**Initializes the CPU, AHB and APB busses clocks 
+    /**Initializes the CPU, AHB and APB busses clocks
     */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
@@ -464,7 +463,7 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Initializes the CPU, AHB and APB busses clocks 
+    /**Initializes the CPU, AHB and APB busses clocks
     */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1;
@@ -484,11 +483,11 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Configure the Systick interrupt time 
+    /**Configure the Systick interrupt time
     */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
-    /**Configure the Systick 
+    /**Configure the Systick
     */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
@@ -628,9 +627,9 @@ static void MX_USART1_UART_Init(void)
 
 }
 
-/** Configure pins as 
-        * Analog 
-        * Input 
+/** Configure pins as
+        * Analog
+        * Input
         * Output
         * EVENT_OUT
         * EXTI
@@ -649,17 +648,17 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, PCARD_BUSY_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LISA_DATA_Pin|QMOUSE_X2_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, M0110_GND_Pin|ERR_LED_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, M0110_DATA_Pin|M0110_CLK_Pin|QMOUSE_Y2_Pin|QMOUSE_BUTTON_Pin 
+  HAL_GPIO_WritePin(GPIOB, M0110_DATA_Pin|M0110_CLK_Pin|QMOUSE_Y2_Pin|QMOUSE_BUTTON_Pin
                           |QMOUSE_X1_Pin|QMOUSE_Y1_Pin|ADB_PWR_Pin|ADB_DATA_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : SLAVE_REQ_Pin */
   GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
@@ -667,6 +666,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PCARD_BUSY_Pin ACT_LED_Pin */
+  GPIO_InitStruct.Pin = PCARD_BUSY_Pin|ACT_LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LISA_DATA_Pin QMOUSE_X2_Pin */
   GPIO_InitStruct.Pin = LISA_DATA_Pin|QMOUSE_X2_Pin;
@@ -681,28 +687,21 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : M0110_GND_Pin ERR_LED_Pin */
-  GPIO_InitStruct.Pin = M0110_GND_Pin|ERR_LED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : M0110_DATA_Pin M0110_CLK_Pin QMOUSE_Y2_Pin QMOUSE_BUTTON_Pin 
+  /*Configure GPIO pins : M0110_DATA_Pin M0110_CLK_Pin QMOUSE_Y2_Pin QMOUSE_BUTTON_Pin
                            QMOUSE_X1_Pin QMOUSE_Y1_Pin ADB_PWR_Pin ADB_DATA_Pin */
-  GPIO_InitStruct.Pin = M0110_DATA_Pin|M0110_CLK_Pin|QMOUSE_Y2_Pin|QMOUSE_BUTTON_Pin 
+  GPIO_InitStruct.Pin = M0110_DATA_Pin|M0110_CLK_Pin|QMOUSE_Y2_Pin|QMOUSE_BUTTON_Pin
                           |QMOUSE_X1_Pin|QMOUSE_Y1_Pin|ADB_PWR_Pin|ADB_DATA_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : ACT_LED_Pin */
-  GPIO_InitStruct.Pin = ACT_LED_Pin;
+  /*Configure GPIO pin : ERR_LED_Pin */
+  GPIO_InitStruct.Pin = ERR_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(ACT_LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(ERR_LED_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -735,7 +734,7 @@ void _Error_Handler(char *file, int line)
   * @retval None
   */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

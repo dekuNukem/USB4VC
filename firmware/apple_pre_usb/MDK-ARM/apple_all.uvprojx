@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F072xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;       ../Drivers/STM32F0xx_HAL_Driver/Inc;       ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy;       ../Drivers/CMSIS/Device/ST/STM32F0xx/Include;       ../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Inc;         ../Drivers/STM32F0xx_HAL_Driver/Inc;         ../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy;         ../Drivers/CMSIS/Device/ST/STM32F0xx/Include;         ../Drivers/CMSIS/Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -433,6 +433,16 @@
               <FilePath>..\Src\m0110a.c</FilePath>
             </File>
             <File>
+              <FileName>lisa_kb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\lisa_kb.c</FilePath>
+            </File>
+            <File>
+              <FileName>lisa_kb.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\lisa_kb.h</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/main.c</FilePath>
@@ -446,16 +456,6 @@
               <FileName>stm32f0xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/stm32f0xx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>lisa_kb.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\lisa_kb.c</FilePath>
-            </File>
-            <File>
-              <FileName>lisa_kb.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Inc\lisa_kb.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -471,26 +471,6 @@
               <FileName>stm32f0xx_hal_spi_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_spi_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f0xx_hal_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_tim.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f0xx_hal_tim_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_tim_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f0xx_hal_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f0xx_hal_uart_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_uart_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f0xx_hal_rcc.c</FileName>
@@ -552,6 +532,26 @@
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_flash_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f0xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f0xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_tim_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f0xx_hal_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f0xx_hal_uart_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_uart_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -560,7 +560,7 @@
             <File>
               <FileName>system_stm32f0xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..//Src/system_stm32f0xx.c</FilePath>
+              <FilePath>../Src/system_stm32f0xx.c</FilePath>
             </File>
           </Files>
         </Group>
