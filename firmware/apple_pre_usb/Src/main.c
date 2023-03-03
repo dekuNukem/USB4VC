@@ -250,15 +250,16 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 void spi_error_dump_reboot(void)
 {
   printf("SPI ERROR\n");
-  for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    printf("%d ", spi_recv_buf[i]);
-  printf("\nrebooting...\n");
-  for (int i = 0; i < 100; ++i)
-  {
-    HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
-    HAL_Delay(100);
-  }
-  NVIC_SystemReset();
+  // for (int i = 0; i < SPI_BUF_SIZE; ++i)
+  //   printf("%d ", spi_recv_buf[i]);
+  // printf("\nrebooting...\n");
+  // for (int i = 0; i < 100; ++i)
+  // {
+  //   HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
+  //   HAL_Delay(100);
+  // }
+  // NVIC_SystemReset();
+  spi_error_occured = 0;
 }
 
 const char boot_message[] = "USB4VC Protocol Board\nApple Pre-USB\ndekuNukem 2022";
@@ -435,8 +436,8 @@ int main(void)
     //   m0110a_update();
     //   m0100a_handle_inquiry();
     // }
-
     run_lisa_kb();
+    HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   }
   /* USER CODE END 3 */
 

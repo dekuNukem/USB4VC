@@ -20,7 +20,7 @@ uint32_t micros(void)
 
 void delay_us(uint32_t delay)
 {
-  uint32_t end_time = micros() + delay;
-  while(micros() < end_time);
+  uint32_t end_time = us_timer->Instance->CNT + delay;
+  while(us_timer->Instance->CNT < end_time);
 }
 

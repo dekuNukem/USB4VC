@@ -157,7 +157,7 @@ void lisa_buf_add(uint8_t linux_keycode, uint8_t value)
 {
   if(value == 2)
     return;
-  printf("%d %d", linux_keycode, value);
+  // printf("%d %d", linux_keycode, value);
   // printf("1");
   uint8_t lisa_code = linux_keycode_to_lisa_lookup[linux_keycode];
   if(lisa_code == CODE_UNUSED)
@@ -222,16 +222,19 @@ void lisa_kb_update(void)
   uint8_t this_byte;
   m0110a_cmd_buf_peek(&lisa_buf, &this_byte);
 
-  if(micros() - last_send_us < 75000 && this_byte != LISA_KB_ID0 && this_byte != lisa_kb_id1)
+  if(micros() - last_send_us < 10000 && this_byte != LISA_KB_ID0 && this_byte != lisa_kb_id1)
     return;
 
   m0110a_cmd_buf_pop(&lisa_buf);
   // now line is high
-  delay_us(9);
+  __disable_irq();
+  delay_us(8);
   LISA_DATA_LOW();
   delay_us(15); // ACK pulse
   lisa_write_byte(this_byte);
   LISA_DATA_HI();
+  delay_us(15); // stop bit?
+  __enable_irq();
   last_send_us = micros();
   printf("s");
 }
