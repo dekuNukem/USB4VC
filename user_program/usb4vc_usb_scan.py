@@ -23,10 +23,14 @@ HAVE TO ASSERT BOOT0 THE WHOLE TIME
 
 """
 
+PCARD_BUSY_PIN = 20
 SLAVE_REQ_PIN = 16
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(SLAVE_REQ_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.add_event_detect(SLAVE_REQ_PIN, GPIO.RISING)
+
+GPIO.setup(PCARD_BUSY_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 pcard_spi = spidev.SpiDev(0, 0)
 pcard_spi.max_speed_hz = 2000000
@@ -111,6 +115,11 @@ BTN_EXTRA = 0x114
 BTN_FORWARD = 0x115
 BTN_BACK = 0x116
 BTN_TASK = 0x117
+
+def xfer_when_not_busy(data):
+    while GPIO.input(PCARD_BUSY_PIN):
+        print("BUSY!")
+    return pcard_spi.xfer(data)
 
 def is_gamepad_button(event_code):
     name_result = usb4vc_shared.code_value_to_name_lookup.get(event_code)
@@ -716,7 +725,7 @@ def joystick_hold_update():
                 elif REL_X <= mcode <= 0x08:
                     movement_value = int(curr_mouse_output[mcode] * abs_value_multiplier) & 0xffff
                     mouse_spi_msg[MOUSE_SPI_LOOKUP[mcode]:MOUSE_SPI_LOOKUP[mcode]+2] = list(movement_value.to_bytes(2, byteorder='little'))
-        pcard_spi.xfer(mouse_spi_msg)
+        xfer_when_not_busy(mouse_spi_msg)
 
 def multiply_round_up_0(number, multi):
     new_number = number * multi
@@ -776,7 +785,7 @@ def raw_input_event_worker():
             if data[0] == EV_KEY:
                 # keyboard keys
                 if 0x1 <= event_code <= 248 and event_code not in gamepad_buttons_as_kb_codes:
-                    pcard_spi.xfer(make_keyboard_spi_packet(data, this_id))
+                    xfer_when_not_busy(make_keyboard_spi_packet(data, this_id))
                 # Mouse buttons
                 elif 0x110 <= event_code <= 0x117:
                     mouse_status_dict[event_code] = data[4]
@@ -784,7 +793,7 @@ def raw_input_event_worker():
                     if data[4] != 2:
                         clear_mouse_movement(mouse_status_dict)
                         last_mouse_button_msg = make_mouse_spi_packet(mouse_status_dict, this_id)
-                        pcard_spi.xfer(list(last_mouse_button_msg))
+                        xfer_when_not_busy(list(last_mouse_button_msg))
                 # Gamepad buttons
                 elif is_gamepad_button(event_code) or event_code in gamepad_buttons_as_kb_codes:
                     this_btn_status = data[4]
@@ -820,7 +829,7 @@ def raw_input_event_worker():
                         pass
                     # send spi mouse message if there is moment, or the button is not typematic
                     elif (max(this_mouse_msg[13:18]) != 2 or sum(this_mouse_msg[4:10]) != 0) and (this_mouse_msg[4:] != last_mouse_msg[4:] or sum(this_mouse_msg[4:]) != 0):
-                        pcard_spi.xfer(list(this_mouse_msg))
+                        xfer_when_not_busy(list(this_mouse_msg))
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
                         clear_mouse_movement(mouse_status_dict)
                         last_mouse_msg = list(this_mouse_msg)
@@ -834,23 +843,23 @@ def raw_input_event_worker():
                     if gamepad_output != last_gamepad_msg:
                         # print(gamepad_output)
                         gp_to_transfer, kb_to_transfer, mouse_to_transfer = gamepad_output
-                        pcard_spi.xfer(list(gp_to_transfer))
+                        xfer_when_not_busy(list(gp_to_transfer))
                         if kb_to_transfer is not None:
                             time.sleep(0.001)
-                            pcard_spi.xfer(list(kb_to_transfer))
+                            xfer_when_not_busy(list(kb_to_transfer))
                         if mouse_to_transfer is not None:
                             time.sleep(0.001)
-                            pcard_spi.xfer(list(mouse_to_transfer))
+                            xfer_when_not_busy(list(mouse_to_transfer))
                             next_gamepad_hold_check = now + gamepad_hold_check_interval
                         last_gamepad_msg = gamepad_output
             
         # ----------------- PBOARD INTERRUPT -----------------
         if GPIO.event_detected(SLAVE_REQ_PIN):
             # send out ACK to turn off P-Card interrupt
-            slave_result = pcard_spi.xfer(make_spi_msg_ack())
+            slave_result = xfer_when_not_busy(make_spi_msg_ack())
             time.sleep(0.001)
             # send another to shift response into RPi
-            slave_result = pcard_spi.xfer(make_spi_msg_ack())
+            slave_result = xfer_when_not_busy(make_spi_msg_ack())
             print(int(time.time()), slave_result)
             if slave_result[SPI_BUF_INDEX_MAGIC] == SPI_MISO_MAGIC and slave_result[SPI_BUF_INDEX_MSG_TYPE] == SPI_MISO_MSG_TYPE_KB_LED_REQUEST:
                 try:
@@ -963,16 +972,16 @@ def get_pboard_info():
     this_msg[3] = usb4vc_shared.RPI_APP_VERSION_TUPLE[0]
     this_msg[4] = usb4vc_shared.RPI_APP_VERSION_TUPLE[1]
     this_msg[5] = usb4vc_shared.RPI_APP_VERSION_TUPLE[2]
-    pcard_spi.xfer(this_msg)
+    xfer_when_not_busy(this_msg)
 
     time.sleep(0.05)
     # send an empty message to allow response to be shifted into RPi
-    response = pcard_spi.xfer(list(nop_spi_msg_template))
+    response = xfer_when_not_busy(list(nop_spi_msg_template))
     time.sleep(0.05)
-    response = pcard_spi.xfer(list(nop_spi_msg_template))
+    response = xfer_when_not_busy(list(nop_spi_msg_template))
     return response
 
 def set_protocol(raw_msg):
     time.sleep(0.05)
-    pcard_spi.xfer(list(raw_msg))
+    xfer_when_not_busy(list(raw_msg))
     time.sleep(0.05)

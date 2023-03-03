@@ -74,7 +74,9 @@ typedef struct
 
 #define PCARD_BUSY_HI() HAL_GPIO_WritePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin, GPIO_PIN_SET)
 #define PCARD_BUSY_LOW() HAL_GPIO_WritePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin, GPIO_PIN_RESET)
-
+#define ERR_LED_HI() HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET)
+#define ERR_LED_LOW() HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET)
+#define READ_SPI_CS() HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)
 
 void kb_buf_init(kb_buf *lb);
 uint8_t kb_buf_add(kb_buf *lb, uint8_t code, uint8_t value);

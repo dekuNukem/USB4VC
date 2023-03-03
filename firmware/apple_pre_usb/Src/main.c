@@ -238,27 +238,12 @@ volatile uint32_t ACT_LED_off_ts;
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_SET);
-  if(spi_recv_buf[0] != 0xde)
-    spi_error_occured = 1;
+  spi_error_occured = (spi_recv_buf[0] != SPI_MOSI_MAGIC);
   parse_spi_buf(spi_recv_buf);
   if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   ACT_LED_off_ts = micros() + 10000;
-}
-
-void spi_error_dump_reboot(void)
-{
-  printf("SPI ERROR\n");
-  for (int i = 0; i < SPI_BUF_SIZE; ++i)
-    printf("%d ", spi_recv_buf[i]);
-  printf("\nrebooting...\n");
-  for (int i = 0; i < 100; ++i)
-  {
-    HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
-    HAL_Delay(100);
-  }
-  NVIC_SystemReset();
 }
 
 const char boot_message[] = "USB4VC Protocol Board\nApple Pre-USB\ndekuNukem 2022";
@@ -421,8 +406,7 @@ int main(void)
 
 	while (1)
   {
-    if(spi_error_occured)
-      spi_error_dump_reboot();
+    HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, spi_error_occured);
     if(micros() > ACT_LED_off_ts)
       HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
   /* USER CODE END WHILE */
@@ -436,7 +420,9 @@ int main(void)
     //   m0100a_handle_inquiry();
     // }
     run_lisa_kb();
-    // HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+    HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
+    // HAL_Delay(100);
+    // HAL_GPIO_TogglePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin);
   }
   /* USER CODE END 3 */
 

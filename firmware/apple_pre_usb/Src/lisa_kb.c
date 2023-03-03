@@ -225,6 +225,9 @@ void lisa_kb_update(void)
   if(micros() - last_send_us < 10000 && this_byte != LISA_KB_ID0 && this_byte != lisa_kb_id1)
     return;
 
+  if(READ_SPI_CS() == GPIO_PIN_RESET)
+    return;
+
   m0110a_cmd_buf_pop(&lisa_buf);
   // now line is high
   PCARD_BUSY_HI();
@@ -238,5 +241,5 @@ void lisa_kb_update(void)
   __enable_irq();
   PCARD_BUSY_LOW();
   last_send_us = micros();
-  printf("s");
+  // printf("s");
 }

@@ -1,3 +1,25 @@
+  if(READ_SPI_CS() == GPIO_PIN_RESET)
+  {
+    printf("ddd");
+    HAL_SPI_Abort(&hspi1);
+    HAL_SPIEx_FlushRxFifo(&hspi1);
+  }
+void spi_error_dump_reboot(void)
+{
+  ERR_LED_HI();
+  printf("SPI ERROR\n");
+  for (int i = 0; i < SPI_BUF_SIZE; ++i)
+    printf("%d ", spi_recv_buf[i]);
+  printf("\n");
+  spi_error_occured = 0;
+  // printf("\nrebooting...\n");
+  // for (int i = 0; i < 100; ++i)
+  // {
+  //   HAL_GPIO_TogglePin(ERR_LED_GPIO_Port, ERR_LED_Pin);
+  //   HAL_Delay(100);
+  // }
+  // NVIC_SystemReset();
+}
 space down: 11011100
 
 00100011
