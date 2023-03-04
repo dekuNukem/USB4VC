@@ -457,6 +457,16 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32f0xx_hal_msp.c</FilePath>
             </File>
+            <File>
+              <FileName>adb.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Inc\adb.h</FilePath>
+            </File>
+            <File>
+              <FileName>adb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\adb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

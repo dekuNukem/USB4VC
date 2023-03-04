@@ -8,6 +8,7 @@
 "apple_all\main.o"
 "apple_all\stm32f0xx_it.o"
 "apple_all\stm32f0xx_hal_msp.o"
+"apple_all\adb.o"
 "apple_all\stm32f0xx_hal_spi.o"
 "apple_all\stm32f0xx_hal_spi_ex.o"
 "apple_all\stm32f0xx_hal_rcc.o"

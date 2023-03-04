@@ -299,20 +299,6 @@ void adb_mouse_update(void)
   adb_send_response_16b(response);
 }
 
-#define KEY_DELETE 111
-#define KEY_CAPSLOCK 58
-#define KEY_LEFTCTRL 29
-#define KEY_LEFTSHIFT 42
-#define KEY_LEFTALT 56
-#define KEY_LEFTMETA 125
-#define KEY_NUMLOCK 69
-#define KEY_SCROLLLOCK 70
-
-#define KEY_RIGHTCTRL 97
-#define KEY_RIGHTSHIFT 54
-#define KEY_RIGHTALT 100
-#define KEY_RIGHTMETA 126
-
 uint8_t capslock_counter;
 void adb_keyboard_update(void)
 {
@@ -484,10 +470,10 @@ int main(void)
     if(IS_ADB_HOST_PRESENT() == 0)
       continue;
 
-    kb_enabled = is_protocol_enabled(PROTOCOL_ADB_KB);
-    mouse_enabled = is_protocol_enabled(PROTOCOL_ADB_MOUSE);
+    adb_kb_enabled = is_protocol_enabled(PROTOCOL_ADB_KB);
+    adb_mouse_enabled = is_protocol_enabled(PROTOCOL_ADB_MOUSE);
 
-    if(kb_enabled == 0 && mouse_enabled == 0)
+    if(adb_kb_enabled == 0 && adb_mouse_enabled == 0)
     {
       adb_reset();
       continue;
@@ -512,17 +498,17 @@ int main(void)
       mouse_srq = 0;
     }
 
-    if((kb_srq && kb_enabled) || (mouse_srq && mouse_enabled))
+    if((kb_srq && adb_kb_enabled) || (mouse_srq && adb_mouse_enabled))
       send_srq();
     else
       wait_until_change(ADB_DEFAULT_TIMEOUT_US);
 
     adb_status = parse_adb_cmd(adb_data);
-    if(adb_status == ADB_MOUSE_POLL && mouse_enabled)
+    if(adb_status == ADB_MOUSE_POLL && adb_mouse_enabled)
       adb_mouse_update();
-    else if(adb_status == ADB_KB_POLL && kb_enabled)
+    else if(adb_status == ADB_KB_POLL && adb_kb_enabled)
       adb_keyboard_update();
-    else if(adb_status == ADB_KB_POLL_REG2 && kb_enabled)
+    else if(adb_status == ADB_KB_POLL_REG2 && adb_kb_enabled)
       adb_send_response_16b(adb_kb_reg2);
     else if(adb_status == ADB_KB_CHANGE_LED)
     {

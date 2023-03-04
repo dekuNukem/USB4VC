@@ -49,6 +49,7 @@
 #include "quad_encoder.h"
 #include "m0110a.h"
 #include "lisa_kb.h"
+#include "adb.h"
 
 #define PROTOCOL_STATUS_NOT_AVAILABLE 0
 #define PROTOCOL_STATUS_ENABLED 1
@@ -118,11 +119,18 @@ int16_t byte_to_int16_t(uint8_t lsb, uint8_t msb)
 void protocol_status_lookup_init(void)
 {
   memset(protocol_status_lookup, PROTOCOL_STATUS_NOT_AVAILABLE, PROTOCOL_LOOKUP_SIZE);
-  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_DISABLED;
-  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_DISABLED;
-  protocol_status_lookup[PROTOCOL_M0100_MOUSE] = PROTOCOL_STATUS_ENABLED;
-  protocol_status_lookup[PROTOCOL_M0110_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_ADB_KB] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_ADB_MOUSE] = PROTOCOL_STATUS_ENABLED;
+  protocol_status_lookup[PROTOCOL_M0100_MOUSE] = PROTOCOL_STATUS_DISABLED;
+  protocol_status_lookup[PROTOCOL_M0110_KB] = PROTOCOL_STATUS_DISABLED;
   protocol_status_lookup[PROTOCOL_LISA_KB] = PROTOCOL_STATUS_DISABLED;
+}
+
+uint8_t is_protocol_enabled(uint8_t this_protocol)
+{
+  if(this_protocol >= PROTOCOL_LOOKUP_SIZE)
+    return 0;
+  return protocol_status_lookup[this_protocol] == PROTOCOL_STATUS_ENABLED;
 }
 
 void handle_protocol_switch(uint8_t spi_byte)
@@ -374,6 +382,199 @@ void run_mac_kb(void)
   m0100a_handle_inquiry();
 }
 
+uint8_t int16_to_uint6(int16_t value)
+{
+  if(abs(value) <= 3)
+    return (uint8_t)value;
+  value = value >> 1;
+  if(value >= 63)
+    value = 63;
+  if(value <= -63)
+    value = -63;
+  return (uint8_t)value;
+}
+
+void adb_mouse_update(void)
+{
+  if(mouse_buf_peek(&my_mouse_buf) == NULL)
+    return;
+
+  get_consolidated_mouse_event(&my_mouse_buf, &consolidated_mouse_event);
+  // mouse buffer now empty
+
+  uint16_t response = 0;
+  if(consolidated_mouse_event.button_left == 0)
+    response |= 0x8000;
+  if(consolidated_mouse_event.button_right == 0)
+    response |= 0x80;
+  response |= int16_to_uint6(consolidated_mouse_event.movement_x) & 0x7f;
+  response |= (int16_to_uint6(consolidated_mouse_event.movement_y) & 0x7f) << 8;
+  adb_send_response_16b(response);
+}
+
+uint8_t capslock_counter;
+void adb_keyboard_update(void)
+{
+  uint8_t buffered_code, buffered_value, adb_code;
+  uint16_t response = 0x8080;
+  if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0)
+  {
+    if(buffered_code >= EV_TO_ADB_LOOKUP_SIZE)
+      goto adb_kb_end;
+    adb_code = linux_ev_to_adb_lookup[buffered_code];
+    if(adb_code == ADB_KEY_UNKNOWN)
+      goto adb_kb_end;
+    /*
+    adb mac keyboard capslock key seems to behave differently than PC keyboards
+    On PC: Capslock down then up = Caps lock on, Capslock down then up again = Caps lock off
+    on adb mac: Capslock down = Capslock on, Capslock up = Caps lock off
+    looks like mac keyboard uses a locking capslock, so need to convert the PC code to suit
+    */
+    if(adb_code == ADB_KEY_CAPSLOCK)
+    {
+      if(buffered_value != 1)
+        goto adb_kb_end;
+      capslock_counter++;
+      buffered_value = capslock_counter % 2;
+    }
+    if(buffered_value)
+      response &= 0x7fff;
+    response |= ((uint16_t)adb_code & 0x7f) << 8;
+    adb_send_response_16b(response);
+    adb_kb_end:
+    kb_buf_pop(&my_kb_buf);
+
+    if(buffered_code == KEY_DELETE)
+    {
+      if(buffered_value == 0)
+        adb_kb_reg2 |= 0x4000;
+      else
+        adb_kb_reg2 &= 0xbfff;
+    }
+    if(buffered_code == KEY_CAPSLOCK)
+    {
+      if(buffered_value == 0)
+        adb_kb_reg2 |= 0x2000;
+      else
+        adb_kb_reg2 &= 0xdfff;
+    }
+    if(buffered_code == KEY_LEFTCTRL || buffered_code == KEY_RIGHTCTRL)
+    {
+      if(buffered_value == 0)
+        adb_kb_reg2 |= 0x800;
+      else
+        adb_kb_reg2 &= 0xf7ff;
+    }
+    if(buffered_code == KEY_LEFTSHIFT || buffered_code == KEY_RIGHTSHIFT)
+    {
+      if(buffered_value == 0)
+        adb_kb_reg2 |= 0x400;
+      else
+        adb_kb_reg2 &= 0xfbff;
+    }
+    if(buffered_code == KEY_LEFTALT || buffered_code == KEY_RIGHTALT)
+    {
+      if(buffered_value == 0)
+        adb_kb_reg2 |= 0x200;
+      else
+        adb_kb_reg2 &= 0xfdff;
+    }
+    if(buffered_code == KEY_LEFTMETA || buffered_code == KEY_RIGHTMETA)
+    {
+      if(buffered_value == 0)
+        adb_kb_reg2 |= 0x100;
+      else
+        adb_kb_reg2 &= 0xfeff;
+    }
+    // if(buffered_code == KEY_NUMLOCK)
+    // {
+    //   if(buffered_value == 0)
+    //     adb_kb_reg2 |= 0x80;
+    //   else
+    //     adb_kb_reg2 &= 0xff7f;
+    // }
+    // if(buffered_code == KEY_SCROLLLOCK)
+    // {
+    //   if(buffered_value == 0)
+    //     adb_kb_reg2 |= 0x40;
+    //   else
+    //     adb_kb_reg2 &= 0xffbf;
+    // }
+  }
+}
+
+uint8_t adb_data, adb_status, this_addr, kb_srq, mouse_srq;
+
+void run_adb(void)
+{
+  if(IS_ADB_HOST_PRESENT() == 0)
+    return;
+
+  adb_kb_enabled = is_protocol_enabled(PROTOCOL_ADB_KB);
+  adb_mouse_enabled = is_protocol_enabled(PROTOCOL_ADB_MOUSE);
+
+  if(adb_kb_enabled == 0 && adb_mouse_enabled == 0)
+  {
+    adb_reset();
+    return;
+  }
+
+  adb_status = adb_recv_cmd(&adb_data);
+  adb_rw_in_progress = 0;
+  if(adb_status == ADB_LINE_STATUS_RESET)
+  {
+    adb_reset();
+  }
+  else if(adb_status != ADB_OK)
+  {
+    adb_reset();
+    return;
+  }
+
+  // we are just at the end of a ADB command, check address, assert SRQ if needed
+  this_addr = adb_data >> 4;
+  if(!kb_buf_is_empty(&my_kb_buf))
+  {
+    kb_srq = (this_addr != adb_kb_current_addr);
+  }
+  else if(!mouse_buf_is_empty(&my_mouse_buf))
+  {
+    mouse_srq = (this_addr != adb_mouse_current_addr);
+  }
+  else
+  {
+    kb_srq = 0;
+    mouse_srq = 0;
+  }
+
+  if((kb_srq && adb_kb_enabled) || (mouse_srq && adb_mouse_enabled))
+    send_srq();
+  else
+    adb_wait_until_change(ADB_DEFAULT_TIMEOUT_US);
+
+  adb_status = parse_adb_cmd(adb_data);
+  if(adb_status == ADB_MOUSE_POLL && adb_mouse_enabled)
+    adb_mouse_update();
+  else if(adb_status == ADB_KB_POLL && adb_kb_enabled)
+    adb_keyboard_update();
+  else if(adb_status == ADB_KB_POLL_REG2 && adb_kb_enabled)
+    adb_send_response_16b(adb_kb_reg2);
+  else if(adb_status == ADB_KB_CHANGE_LED)
+  {
+    // kb reg2 top 13 bits is button status, 1 = released 0 = pressed
+    // bottom 3 bits is LED, 1 = off, 0 = on
+    memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
+    spi_transmit_buf[SPI_BUF_INDEX_MAGIC] = SPI_MISO_MAGIC;
+    spi_transmit_buf[SPI_BUF_INDEX_MSG_TYPE] = SPI_MISO_MSG_TYPE_KB_LED_REQUEST;
+    if(!(adb_kb_reg2 & 0x4)) // scroll lock LED
+      spi_transmit_buf[3] = 1;
+    if(!(adb_kb_reg2 & 0x1))  // num lock LED
+      spi_transmit_buf[4] = 1;
+    if(!(adb_kb_reg2 & 0x2))  // caps lock LED
+      spi_transmit_buf[5] = 1;
+  }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -422,9 +623,14 @@ int main(void)
   memset(spi_transmit_buf, 0, SPI_BUF_SIZE);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
 
-  quad_init(&my_mouse_buf, &htim17, &htim16, &htim14, GPIOA, GPIO_PIN_8, GPIOB, GPIO_PIN_14, GPIOB, GPIO_PIN_15, GPIOB, GPIO_PIN_12);
-  quad_enable();
   lisa_init(&lh);
+  adb_init(ADB_DATA_GPIO_Port, ADB_DATA_Pin, ADB_PWR_GPIO_Port, ADB_PWR_Pin);
+  quad_init(&my_mouse_buf, &htim17, &htim16, &htim14, GPIOA, GPIO_PIN_8, GPIOB, GPIO_PIN_14, GPIOB, GPIO_PIN_15, GPIOB, GPIO_PIN_12);
+  if(is_protocol_enabled(PROTOCOL_M0100_MOUSE))
+    quad_enable();
+  else
+    quad_disable();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -438,7 +644,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+    run_adb();
     run_mac_kb();
     run_lisa_kb();
     HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
