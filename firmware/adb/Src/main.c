@@ -470,10 +470,10 @@ int main(void)
     if(IS_ADB_HOST_PRESENT() == 0)
       continue;
 
-    adb_kb_enabled = is_protocol_enabled(PROTOCOL_ADB_KB);
-    adb_mouse_enabled = is_protocol_enabled(PROTOCOL_ADB_MOUSE);
+    kb_enabled = is_protocol_enabled(PROTOCOL_ADB_KB);
+    mouse_enabled = is_protocol_enabled(PROTOCOL_ADB_MOUSE);
 
-    if(adb_kb_enabled == 0 && adb_mouse_enabled == 0)
+    if(kb_enabled == 0 && mouse_enabled == 0)
     {
       adb_reset();
       continue;
@@ -498,17 +498,17 @@ int main(void)
       mouse_srq = 0;
     }
 
-    if((kb_srq && adb_kb_enabled) || (mouse_srq && adb_mouse_enabled))
+    if((kb_srq && kb_enabled) || (mouse_srq && mouse_enabled))
       send_srq();
     else
       wait_until_change(ADB_DEFAULT_TIMEOUT_US);
 
     adb_status = parse_adb_cmd(adb_data);
-    if(adb_status == ADB_MOUSE_POLL && adb_mouse_enabled)
+    if(adb_status == ADB_MOUSE_POLL && mouse_enabled)
       adb_mouse_update();
-    else if(adb_status == ADB_KB_POLL && adb_kb_enabled)
+    else if(adb_status == ADB_KB_POLL && kb_enabled)
       adb_keyboard_update();
-    else if(adb_status == ADB_KB_POLL_REG2 && adb_kb_enabled)
+    else if(adb_status == ADB_KB_POLL_REG2 && kb_enabled)
       adb_send_response_16b(adb_kb_reg2);
     else if(adb_status == ADB_KB_CHANGE_LED)
     {
