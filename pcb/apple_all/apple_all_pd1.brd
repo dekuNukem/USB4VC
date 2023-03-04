@@ -1504,7 +1504,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="LED1" library="adafruit" package="CHIP-LED0805" value="" x="52.451" y="9.906" smashed="yes">
 <attribute name="VALUE" x="54.991" y="8.636" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="R9" library="SparkFun-Passives" package="0805" value="2K" x="49.53" y="9.9822" smashed="yes" rot="R90">
+<element name="R9" library="SparkFun-Passives" package="0805" value="5.1K" x="49.53" y="9.9822" smashed="yes" rot="R90">
 <attribute name="NAME" x="50.3555" y="10.5156" size="0.8128" layer="25" rot="R270"/>
 </element>
 <element name="C1" library="clock" package="0805@1" value="100nF" x="27.3304" y="34.8996" smashed="yes" rot="R180">
@@ -1522,7 +1522,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="LED2" library="adafruit" package="CHIP-LED0805" value="" x="26.543" y="49.022" smashed="yes" rot="R90">
 <attribute name="VALUE" x="27.813" y="51.562" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="R18" library="SparkFun-Passives" package="0805" value="2K" x="26.543" y="46.736" smashed="yes">
+<element name="R18" library="SparkFun-Passives" package="0805" value="5.1K" x="26.543" y="46.736" smashed="yes">
 <attribute name="NAME" x="25.5778" y="44.9707" size="0.8128" layer="25"/>
 </element>
 <element name="IC1" library="clock" package="TQFP48" value="STM32F072C8T6" x="22" y="39" smashed="yes" rot="R270"/>
@@ -1548,7 +1548,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="LED3" library="adafruit" package="CHIP-LED0805" value="" x="30.988" y="49.022" smashed="yes" rot="R270">
 <attribute name="VALUE" x="29.718" y="46.482" size="1.27" layer="27"/>
 </element>
-<element name="R21" library="SparkFun-Passives" package="0805" value="2K" x="30.988" y="46.736" smashed="yes" rot="R180">
+<element name="R21" library="SparkFun-Passives" package="0805" value="5.1K" x="30.988" y="46.736" smashed="yes" rot="R180">
 <attribute name="NAME" x="30.0228" y="44.9199" size="0.8128" layer="25"/>
 </element>
 <element name="U$9" library="adafruit_changed" package="1X04-CLEANBIG" value="PINHD1X4" x="12.954" y="34.29" smashed="yes"/>
@@ -1578,10 +1578,10 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="POPULARITY" value="69" x="34.925" y="31.369" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="31.75" y="37.719" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R7" library="SparkFun-Passives" package="0805" value="200" x="33.909" y="21.971" smashed="yes" rot="R270">
+<element name="R7" library="SparkFun-Passives" package="0805" value="100" x="33.909" y="21.971" smashed="yes" rot="R270">
 <attribute name="NAME" x="34.3535" y="19.05" size="0.8128" layer="25" rot="R90"/>
 </element>
-<element name="R11" library="SparkFun-Passives" package="0805" value="200" x="29.972" y="21.971" smashed="yes" rot="R270">
+<element name="R11" library="SparkFun-Passives" package="0805" value="100" x="29.972" y="21.971" smashed="yes" rot="R270">
 <attribute name="NAME" x="29.6545" y="20.447" size="0.8128" layer="25" rot="R270"/>
 </element>
 <element name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" package="2X02" package3d_urn="urn:adsk.eagle:package:22455/2" value="" x="26.543" y="29.591" smashed="yes" rot="R270">
@@ -1605,7 +1605,7 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="POPULARITY" value="98" x="26.924" y="55.88" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="23.749" y="58.42" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R6" library="SparkFun-Passives" package="0805" value="2K" x="48.006" y="62.611" smashed="yes" rot="R90">
+<element name="R6" library="SparkFun-Passives" package="0805" value="5.1K" x="48.006" y="62.611" smashed="yes" rot="R90">
 <attribute name="NAME" x="48.895" y="64.8335" size="0.8128" layer="25" rot="R180"/>
 </element>
 <element name="R17" library="SparkFun-Passives" package="0805" value="100" x="24.003" y="24.892" smashed="yes" rot="R180">
