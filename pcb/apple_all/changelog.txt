@@ -18,3 +18,9 @@ keyboard GND now connects to GND instead of MCU
 Added a jumper on ADB Power Pin to MCU
 Added a pull up on ADB Power line
 removed left ADB debug header
+
+
+pt5:
+2023-03-02
+removed extra resistors
+added BUSY signal on PC13
