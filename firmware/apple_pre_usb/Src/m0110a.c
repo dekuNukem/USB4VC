@@ -212,6 +212,8 @@ uint8_t m0110a_write(uint8_t data)
 	if(wait_for_data_idle(200) == M0110A_TIMEOUT)
 		return M0110A_TIMEOUT;
 	// clk is high at the start
+  PCARD_BUSY_HI();
+  __disable_irq();
 	for(int i=7; i>=0; i--)
 	{
 		// write data bit on falling edge, host latches on rising edge
@@ -224,6 +226,8 @@ uint8_t m0110a_write(uint8_t data)
 		M0110A_CLK_HI();
 		delay_us(CLK_HIGH_KB_TO_HOST);
 	}
+  __enable_irq();
+  PCARD_BUSY_LOW();
   return M0110A_OK;
 }
 
@@ -376,4 +380,11 @@ void m0110a_cmd_buf_init(m0110a_cmd_buf *lb)
 {
   lb->cmd_buf = malloc(M0110A_KB_TO_PC_CMD_BUF_SIZE);
   m0110a_cmd_buf_reset(lb);
+}
+
+void m0110a_reset(m0110a_cmd_buf *lb)
+{
+  m0110a_cmd_buf_reset(lb);
+  M0110A_CLK_HI();
+  M0110A_DATA_HI();
 }

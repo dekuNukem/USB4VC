@@ -38,7 +38,7 @@ void m0110a_cmd_buf_pop(m0110a_cmd_buf *lb);
 uint8_t m0110a_cmd_buf_is_empty(m0110a_cmd_buf *lb);
 void m0110a_cmd_buf_reset(m0110a_cmd_buf *lb);
 uint8_t make_m0110a_scancode(uint8_t linux_key_code, uint8_t linux_key_value, m0110a_cmd_buf *lb);
-
+void m0110a_reset(m0110a_cmd_buf *lb);
 
 #ifdef __cplusplus
 }

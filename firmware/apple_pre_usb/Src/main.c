@@ -135,6 +135,8 @@ void handle_protocol_switch(uint8_t spi_byte)
   // trying to change a protocol that is not available on this board
   if(protocol_status_lookup[index] == PROTOCOL_STATUS_NOT_AVAILABLE)
     return;
+  kb_buf_reset(&my_kb_buf);
+  mouse_buf_reset(&my_mouse_buf);
   // switching protocol ON
   if(onoff && protocol_status_lookup[index] == PROTOCOL_STATUS_DISABLED)
   {
@@ -151,6 +153,7 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_M0110_KB:
+        m0110a_reset(&my_m0110a_buf);
         break;
 
       case PROTOCOL_LISA_KB:
@@ -175,6 +178,7 @@ void handle_protocol_switch(uint8_t spi_byte)
         break;
 
       case PROTOCOL_M0110_KB:
+        m0110a_reset(&my_m0110a_buf);
         break;
 
       case PROTOCOL_LISA_KB:
@@ -310,6 +314,8 @@ void m0110a_update(void)
 
 void m0100a_handle_inquiry(void)
 {
+  if(READ_SPI_CS() == GPIO_PIN_RESET)
+    return;
   // "If no key transition has occurred after 0.25 seconds
   // the keyboard sends back a Null response to let the computer know it's still there"
   if(m0110a_inquiry_active && HAL_GetTick() - m0110a_last_inquiry > 250)
@@ -345,11 +351,27 @@ void lisa_init(lisa_handle* lisa)
 
 void run_lisa_kb(void)
 {
+  if(protocol_status_lookup[PROTOCOL_LISA_KB] == PROTOCOL_STATUS_DISABLED)
+    return;
+  if(HAL_GPIO_ReadPin(LISA_DET_GPIO_Port, LISA_DET_Pin) == GPIO_PIN_RESET)
+    return;
   lisa_kb_update();
   if(kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) != 0)
     return;
   lisa_buf_add(buffered_code, buffered_value);
   kb_buf_pop(&my_kb_buf);
+}
+
+void run_mac_kb(void)
+{
+  if(protocol_status_lookup[PROTOCOL_M0110_KB] == PROTOCOL_STATUS_DISABLED)
+    return;
+  if(HAL_GPIO_ReadPin(M0110_DET_GPIO_Port, M0110_DET_Pin) == GPIO_PIN_RESET)
+    return;
+  if(HAL_GPIO_ReadPin(M0110_CLK_GPIO_Port, M0110_CLK_Pin) == GPIO_PIN_RESET)
+    return;
+  m0110a_update();
+  m0100a_handle_inquiry();
 }
 
 /* USER CODE END 0 */
@@ -417,14 +439,7 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-    // protocol_status_lookup[PROTOCOL_M0100_MOUSE] = PROTOCOL_STATUS_ENABLED
-
-    // m0110 keyboard loop
-    // if(HAL_GPIO_ReadPin(M0110_CLK_GPIO_Port, M0110_CLK_Pin) != GPIO_PIN_RESET)
-    // {
-    //   m0110a_update();
-    //   m0100a_handle_inquiry();
-    // }
+    run_mac_kb();
     run_lisa_kb();
     HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
   }

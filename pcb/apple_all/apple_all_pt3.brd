@@ -28,14 +28,14 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
@@ -58,8 +58,8 @@
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="1" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="7" fill="1" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -1556,12 +1556,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <element name="R7" library="SparkFun-Passives" package="0805" value="200" x="33.909" y="21.971" smashed="yes" rot="R270">
 <attribute name="NAME" x="34.3535" y="19.05" size="0.8128" layer="25" rot="R90"/>
 </element>
-<element name="R8" library="SparkFun-Passives" package="0805" value="200" x="29.845" y="21.971" smashed="yes" rot="R270">
-<attribute name="NAME" x="30.2895" y="19.05" size="0.8128" layer="25" rot="R90"/>
-</element>
-<element name="R10" library="SparkFun-Passives" package="0805" value="200" x="31.877" y="21.971" smashed="yes" rot="R270">
-<attribute name="NAME" x="32.3215" y="18.415" size="0.8128" layer="25" rot="R90"/>
-</element>
 <element name="R11" library="SparkFun-Passives" package="0805" value="200" x="27.94" y="21.971" smashed="yes" rot="R270">
 <attribute name="NAME" x="27.6225" y="20.447" size="0.8128" layer="25" rot="R270"/>
 </element>
@@ -2250,20 +2244,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="33.909" y1="21.071" x2="33.909" y2="18.912" width="0.2032" layer="1"/>
 <wire x1="37.54" y1="15.48" x2="37.341" y2="15.48" width="0.2032" layer="1"/>
 </signal>
-<signal name="N$10">
-<contactref element="U$8" pad="3"/>
-<contactref element="R8" pad="2"/>
-<wire x1="29.845" y1="21.071" x2="29.845" y2="18.669" width="0.2032" layer="1"/>
-<wire x1="35.574" y1="12.94" x2="36.27" y2="12.94" width="0.2032" layer="1"/>
-<wire x1="29.845" y1="18.669" x2="35.574" y2="12.94" width="0.2032" layer="1"/>
-</signal>
-<signal name="N$20">
-<contactref element="U$8" pad="2"/>
-<contactref element="R10" pad="2"/>
-<wire x1="34.42" y1="15.48" x2="31.877" y2="18.023" width="0.2032" layer="1"/>
-<wire x1="31.877" y1="21.071" x2="31.877" y2="18.023" width="0.2032" layer="1"/>
-<wire x1="34.42" y1="15.48" x2="35" y2="15.48" width="0.2032" layer="1"/>
-</signal>
 <signal name="N$21">
 <contactref element="U$8" pad="1"/>
 <contactref element="R11" pad="2"/>
@@ -2288,26 +2268,30 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <signal name="N$19">
 <contactref element="JP3" pad="4"/>
 <contactref element="IC1" pad="21"/>
-<contactref element="R10" pad="1"/>
-<wire x1="27.813" y1="27.813" x2="31.877" y2="23.749" width="0.2032" layer="1"/>
 <wire x1="27.813" y1="28.321" x2="27.813" y2="27.813" width="0.2032" layer="1"/>
-<wire x1="31.877" y1="23.749" x2="31.877" y2="22.871" width="0.2032" layer="1"/>
 <wire x1="27.813" y1="28.321" x2="26.543" y2="29.591" width="0.2032" layer="1"/>
 <wire x1="26.543" y1="31.75" x2="26.035" y2="32.258" width="0.2032" layer="1"/>
 <wire x1="26.035" y1="32.258" x2="23.749" y2="32.258" width="0.2032" layer="1"/>
 <wire x1="23.25" y1="32.757" x2="23.25" y2="34.5" width="0.2032" layer="1"/>
 <wire x1="26.543" y1="29.591" x2="26.543" y2="31.75" width="0.2032" layer="1"/>
 <wire x1="23.749" y1="32.258" x2="23.25" y2="32.757" width="0.2032" layer="1"/>
+<contactref element="U$8" pad="2"/>
+<wire x1="31.877" y1="18.023" x2="34.42" y2="15.48" width="0.2032" layer="1"/>
+<wire x1="34.42" y1="15.48" x2="35" y2="15.48" width="0.2032" layer="1"/>
+<wire x1="27.813" y1="27.813" x2="31.877" y2="23.749" width="0.2032" layer="1"/>
+<wire x1="31.877" y1="23.749" x2="31.877" y2="18.023" width="0.2032" layer="1"/>
 </signal>
 <signal name="N$25">
-<contactref element="R8" pad="1"/>
 <contactref element="JP3" pad="3"/>
 <contactref element="IC1" pad="20"/>
-<wire x1="25.273" y1="28.321" x2="29.845" y2="23.749" width="0.2032" layer="1"/>
-<wire x1="29.845" y1="23.749" x2="29.845" y2="22.871" width="0.2032" layer="1"/>
 <wire x1="22.75" y1="34.5" x2="22.75" y2="30.336" width="0.2032" layer="1"/>
 <wire x1="24.765" y1="28.321" x2="25.273" y2="28.321" width="0.2032" layer="1"/>
 <wire x1="22.75" y1="30.336" x2="24.765" y2="28.321" width="0.2032" layer="1"/>
+<contactref element="U$8" pad="3"/>
+<wire x1="35.574" y1="12.94" x2="36.27" y2="12.94" width="0.2032" layer="1"/>
+<wire x1="29.845" y1="18.669" x2="35.574" y2="12.94" width="0.2032" layer="1"/>
+<wire x1="25.273" y1="28.321" x2="29.845" y2="23.749" width="0.2032" layer="1"/>
+<wire x1="29.845" y1="23.749" x2="29.845" y2="18.669" width="0.2032" layer="1"/>
 </signal>
 <signal name="N$31">
 <contactref element="IC1" pad="18"/>
