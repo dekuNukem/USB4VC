@@ -182,6 +182,7 @@ void handle_protocol_switch(uint8_t spi_byte)
     protocol_status_lookup[index] = PROTOCOL_STATUS_DISABLED;
 }
 
+volatile uint32_t ACT_LED_off_ts;
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
@@ -241,8 +242,8 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   if(spi_recv_buf[SPI_BUF_INDEX_MSG_TYPE] == SPI_MOSI_MSG_TYPE_REQ_ACK)
     HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(DEBUG2_GPIO_Port, DEBUG2_Pin, GPIO_PIN_SET);
+  ACT_LED_off_ts = micros() + 10000;
 }
 
 void spi_error_dump_reboot(void)
@@ -473,6 +474,9 @@ int main(void)
 
     if(spi_error_occured)
       spi_error_dump_reboot();
+
+    if(micros() > ACT_LED_off_ts)
+      HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
   /* USER CODE END WHILE */
 
