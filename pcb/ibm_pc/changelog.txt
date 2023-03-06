@@ -1,0 +1,4 @@
+20230306
+
+added BUSY pin to A0
+added current limit resistor on digital pot to prevent backfeeding
