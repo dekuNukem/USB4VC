@@ -12,7 +12,7 @@ This document covers a potential solution that improves the stability of USB4VC.
 
 A `BUSY` signal is added, to prevent Raspberry Pi from sending data when Protocol Card is talking to the computer.
 
-This, along with a firmware update, should improve stability and eliminate stuck keys or glitches.
+This, along with a firmware update, should improve stability and reduce stuck keys or glitches.
 
 ## Instructions
 
@@ -26,13 +26,19 @@ Solder a wire between the pins at **`F1` and `second row of right most column`**
 
 Make sure **there are no short circuits**.
 
-### Update RPi Software
+### Software Update
 
-[UNDER CONSTRUCTION]
+Connect RPi to internet. You can [set up WiFi](https://github.com/dekuNukem/USB4VC/blob/master/getting_started.md#optional-set-up-wifi), or plug in an Ethernet cable.
 
-### Update Protocol Card Firmware
+Then simply select Internet Update in main menu. It will update RPi code and P-Card firmware to latest version.
 
-[UNDER CONSTRUCTION]
+![Alt text](photos/update.jpg)
+
+Confirm on the second screen that both PB and RPi version are **above 0.3.0**.
+
+### Try it Out!
+
+Let me know how it goes!
 
 ## Questions or Comments?
 
