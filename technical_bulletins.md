@@ -32,9 +32,9 @@ Then simply select Internet Update in main menu. It will update RPi code and P-C
 
 ![Alt text](photos/internetupdate.jpeg)
 
-![Alt text](photos/newver.jpg)
-
 Confirm on the second screen that both PB and RPi version are **above 0.3.0**.
+
+![Alt text](photos/newver.jpg)
 
 ### Try it Out!
 
