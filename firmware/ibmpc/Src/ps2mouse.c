@@ -153,8 +153,9 @@ uint8_t ps2mouse_read(uint8_t* result, uint8_t timeout_ms)
 
 uint8_t ps2mouse_wait_for_idle(uint8_t timeout_ms)
 {
+  uint32_t ps2mouse_wait_start;
   ps2mouse_idle_check:
-  uint32_t ps2mouse_wait_start = HAL_GetTick();
+  ps2mouse_wait_start = HAL_GetTick();
   while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
   {
     if(HAL_GetTick() - ps2mouse_wait_start >= timeout_ms)

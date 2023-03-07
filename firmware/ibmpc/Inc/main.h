@@ -6,11 +6,11 @@
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
+  * USER CODE END. Other portions of this file, whether
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2022 STMicroelectronics
+  * COPYRIGHT(c) 2023 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -59,6 +59,8 @@
 #define GAMEPAD_B3_GPIO_Port GPIOF
 #define GAMEPAD_B1_Pin GPIO_PIN_1
 #define GAMEPAD_B1_GPIO_Port GPIOF
+#define PCARD_BUSY_Pin GPIO_PIN_0
+#define PCARD_BUSY_GPIO_Port GPIOA
 #define UART3_RTS_Pin GPIO_PIN_1
 #define UART3_RTS_GPIO_Port GPIOB
 #define UART3_RTS_EXTI_IRQn EXTI0_1_IRQn
@@ -83,7 +85,7 @@
 
 /* ########################## Assert Selection ############################## */
 /**
-  * @brief Uncomment the line below to expanse the "assert_param" macro in the 
+  * @brief Uncomment the line below to expanse the "assert_param" macro in the
   *        HAL drivers code
   */
 /* #define USE_FULL_ASSERT    1U */

@@ -1,4 +1,4 @@
-ibmpc\system_stm32f0xx.o: ..//Src/system_stm32f0xx.c
+ibmpc\system_stm32f0xx.o: ../Src/system_stm32f0xx.c
 ibmpc\system_stm32f0xx.o: ../Drivers/CMSIS/Device/ST/STM32F0xx/Include/stm32f0xx.h
 ibmpc\system_stm32f0xx.o: ../Drivers/CMSIS/Device/ST/STM32F0xx/Include/stm32f072xb.h
 ibmpc\system_stm32f0xx.o: ../Drivers/CMSIS/Include/core_cm0.h

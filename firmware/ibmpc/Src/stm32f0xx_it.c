@@ -4,7 +4,7 @@
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2022 STMicroelectronics
+  * COPYRIGHT(c) 2023 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ extern SPI_HandleTypeDef hspi1;
 extern UART_HandleTypeDef huart3;
 
 /******************************************************************************/
-/*            Cortex-M0 Processor Interruption and Exception Handlers         */ 
+/*            Cortex-M0 Processor Interruption and Exception Handlers         */
 /******************************************************************************/
 
 /**

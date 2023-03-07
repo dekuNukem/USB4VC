@@ -6,11 +6,11 @@
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
+  * USER CODE END. Other portions of this file, whether
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2022 STMicroelectronics
+  * COPYRIGHT(c) 2023 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -241,6 +241,7 @@ void handle_protocol_switch(uint8_t spi_byte)
   This is called when a new SPI packet is received
   This is part of an ISR, so keep it short!
 */
+uint32_t ACT_LED_off_ts;
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_SET);
@@ -320,7 +321,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     }
   }
   HAL_SPI_TransmitReceive_IT(&hspi1, spi_transmit_buf, spi_recv_buf, SPI_BUF_SIZE);
-  HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
+  ACT_LED_off_ts = micros() + 10000;
 }
 
 void cap_to_127(int32_t *number)
@@ -404,16 +405,17 @@ void ps2mouse_update(void)
   // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
 }
 
-void ps2kb_update(void)
+uint8_t ps2kb_update(void)
 {
   ps2kb_bus_status = ps2kb_get_bus_status();
   if(ps2kb_bus_status == PS2_BUS_INHIBIT)
   {
     ps2kb_release_lines();
-    return;
+    return 0;
   }
-  else if(ps2kb_bus_status == PS2_BUS_REQ_TO_SEND)
+  if(ps2kb_bus_status == PS2_BUS_REQ_TO_SEND)
   {
+    PCARD_BUSY_HI();
     uint8_t ps2kb_leds = 0xff;
     ps2kb_read(&ps2kb_host_cmd, 10);
     keyboard_reply(ps2kb_host_cmd, &ps2kb_leds);
@@ -434,17 +436,13 @@ void ps2kb_update(void)
   }
   else if(ps2kb_bus_status == PS2_BUS_IDLE && (kb_buf_peek(&my_kb_buf, &buffered_code, &buffered_value) == 0))
   {
+    PCARD_BUSY_HI();
     if(ps2kb_press_key(buffered_code, buffered_value) == PS2_ERROR_HOST_INHIBIT) // host inhibited line during transmission
-    {
-      // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
       HAL_Delay(1);
-      // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
-    }
     else
-    {
       kb_buf_pop(&my_kb_buf);
-    }
   }
+  return 1;
 }
 
 // GPIO external interrupt callback
@@ -690,7 +688,10 @@ int main(void)
 
   while (1)
   {
+    // HAL_GPIO_TogglePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin);
     HAL_IWDG_Refresh(&hiwdg);
+    if(micros() > ACT_LED_off_ts)
+      HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -704,7 +705,10 @@ int main(void)
       mousesystems_serial_mouse_update();
     // If both enabled, PS2 keyboard takes priority
     if(is_protocol_enabled(PROTOCOL_AT_PS2_KB) && IS_KB_PRESENT())
-      ps2kb_update();
+    {
+      if(ps2kb_update())
+        PCARD_BUSY_LOW();
+    }
     else if(is_protocol_enabled(PROTOCOL_XT_KB) && IS_KB_PRESENT())
       xtkb_update();
 
@@ -729,7 +733,7 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
-    /**Initializes the CPU, AHB and APB busses clocks 
+    /**Initializes the CPU, AHB and APB busses clocks
     */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
@@ -740,7 +744,7 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Initializes the CPU, AHB and APB busses clocks 
+    /**Initializes the CPU, AHB and APB busses clocks
     */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1;
@@ -760,11 +764,11 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Configure the Systick interrupt time 
+    /**Configure the Systick interrupt time
     */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
-    /**Configure the Systick 
+    /**Configure the Systick
     */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
@@ -790,14 +794,14 @@ static void MX_I2C2_Init(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Configure Analogue filter 
+    /**Configure Analogue filter
     */
   if (HAL_I2CEx_ConfigAnalogFilter(&hi2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Configure Digital filter 
+    /**Configure Digital filter
     */
   if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
   {
@@ -885,8 +889,6 @@ static void MX_USART1_UART_Init(void)
 
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 115200;
-  if(flash_size != 64)
-    huart1.Init.BaudRate = 195134;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -908,10 +910,7 @@ static void MX_USART3_UART_Init(void)
 
   huart3.Instance = USART3;
   huart3.Init.BaudRate = 1200;
-  if(flash_size != 64)
-    huart3.Init.BaudRate = 2032;
   huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.WordLength = UART_WORDLENGTH_7B;
   huart3.Init.Parity = UART_PARITY_NONE;
   huart3.Init.Mode = UART_MODE_TX_RX;
   huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
@@ -927,9 +926,9 @@ static void MX_USART3_UART_Init(void)
 
 }
 
-/** Configure pins as 
-        * Analog 
-        * Input 
+/** Configure pins as
+        * Analog
+        * Input
         * Output
         * EVENT_OUT
         * EXTI
@@ -955,11 +954,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOF, GAMEPAD_B3_Pin|GAMEPAD_B1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_DATA_Pin 
-                          |PS2KB_CLK_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, PCARD_BUSY_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, POT_RESET_Pin|PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_DATA_Pin
+                          |PS2KB_CLK_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
@@ -985,15 +984,22 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : PCARD_BUSY_Pin ACT_LED_Pin */
+  GPIO_InitStruct.Pin = PCARD_BUSY_Pin|ACT_LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
   /*Configure GPIO pin : UART3_RTS_Pin */
   GPIO_InitStruct.Pin = UART3_RTS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(UART3_RTS_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : POT_RESET_Pin PS2MOUSE_DATA_Pin PS2MOUSE_CLK_Pin PS2KB_DATA_Pin 
+  /*Configure GPIO pins : POT_RESET_Pin PS2MOUSE_DATA_Pin PS2MOUSE_CLK_Pin PS2KB_DATA_Pin
                            PS2KB_CLK_Pin */
-  GPIO_InitStruct.Pin = POT_RESET_Pin|PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_DATA_Pin 
+  GPIO_InitStruct.Pin = POT_RESET_Pin|PS2MOUSE_DATA_Pin|PS2MOUSE_CLK_Pin|PS2KB_DATA_Pin
                           |PS2KB_CLK_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -1011,13 +1017,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(KB_DETECT_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : ACT_LED_Pin */
-  GPIO_InitStruct.Pin = ACT_LED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(ACT_LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ERR_LED_Pin */
   GPIO_InitStruct.Pin = ERR_LED_Pin;
@@ -1061,7 +1060,7 @@ void _Error_Handler(char *file, int line)
   * @retval None
   */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

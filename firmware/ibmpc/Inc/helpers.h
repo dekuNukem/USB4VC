@@ -126,6 +126,9 @@ uint8_t gamepad_buf_add(gamepad_buf *lb, gamepad_event* event);
 gamepad_event* gamepad_buf_peek(gamepad_buf *lb);
 void gamepad_buf_pop(gamepad_buf *lb);
 
+#define PCARD_BUSY_HI() HAL_GPIO_WritePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin, GPIO_PIN_SET)
+#define PCARD_BUSY_LOW() HAL_GPIO_WritePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin, GPIO_PIN_RESET)
+
 #ifdef __cplusplus
 }
 #endif
