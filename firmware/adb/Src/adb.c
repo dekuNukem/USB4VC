@@ -22,9 +22,6 @@ uint8_t kb_enabled, mouse_enabled;
 
 #define ADB_READ_DATA_PIN() HAL_GPIO_ReadPin(adb_data_port, adb_data_pin)
 
-#define PCARD_BUSY_HI() HAL_GPIO_WritePin(BUSY_GPIO_Port, BUSY_Pin, GPIO_PIN_SET)
-#define PCARD_BUSY_LOW() HAL_GPIO_WritePin(BUSY_GPIO_Port, BUSY_Pin, GPIO_PIN_RESET)
-
 const uint8_t linux_ev_to_adb_lookup[EV_TO_ADB_LOOKUP_SIZE] = 
 {
   ADB_KEY_UNKNOWN, // EV0 KEY_RESERVED
@@ -226,6 +223,8 @@ void adb_reset(void)
   adb_kb_current_addr = ADB_KB_DEFAULT_ADDR;
   adb_mouse_current_addr = ADB_MOUSE_DEFAULT_ADDR;
   adb_release_lines();
+  next_busy_off = 0;
+  PCARD_BUSY_LOW();
 }
 
 void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port, uint16_t psw_pin)
@@ -277,6 +276,8 @@ uint8_t adb_read_bit(void)
   return hi_time > lo_time;
 }
 
+volatile uint32_t next_busy_off;
+
 uint8_t adb_recv_cmd(uint8_t* data)
 {
   *data = 0;
@@ -296,7 +297,8 @@ uint8_t adb_recv_cmd(uint8_t* data)
       return ADB_ERROR;
     temp |= this_bit << (7 - i);
   }
-  PCARD_BUSY_LOW();
+  // PCARD_BUSY_LOW();
+  next_busy_off = micros() + 500;
   *data = temp;
   return ADB_OK;
 }
@@ -341,6 +343,7 @@ uint8_t adb_write_16(uint16_t data)
 uint8_t adb_send_response_16b(uint16_t data)
 {
   PCARD_BUSY_HI();
+  next_busy_off = 0;
   adb_rw_in_progress = 1;
   delay_us(200); // stop-to-start time
   ADB_DATA_LOW();
@@ -377,6 +380,7 @@ uint8_t adb_listen_16b(uint16_t* data)
 
   uint16_t temp = 0;
   PCARD_BUSY_HI();
+  next_busy_off = 0;
   for (int i = 0; i < 16; ++i)
   {
     uint8_t this_bit = adb_read_bit();

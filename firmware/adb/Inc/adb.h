@@ -70,6 +70,10 @@ extern uint8_t adb_mouse_current_addr, adb_kb_current_addr, adb_rw_in_progress;
 extern const uint8_t linux_ev_to_adb_lookup[EV_TO_ADB_LOOKUP_SIZE];
 extern uint16_t adb_kb_reg2;
 extern uint8_t kb_enabled, mouse_enabled;
+extern volatile uint32_t next_busy_off;
+
+#define PCARD_BUSY_HI() HAL_GPIO_WritePin(BUSY_GPIO_Port, BUSY_Pin, GPIO_PIN_SET)
+#define PCARD_BUSY_LOW() HAL_GPIO_WritePin(BUSY_GPIO_Port, BUSY_Pin, GPIO_PIN_RESET)
 
 #ifdef __cplusplus
 }
