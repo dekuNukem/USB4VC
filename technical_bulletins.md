@@ -4,9 +4,7 @@
 
 -----
 
-[UNDER CONSTRUCTION] [UNDER CONSTRUCTION] [UNDER CONSTRUCTION] 
-
-This document covers a potential solution that improves the stability of USB4VC.
+This document covers a solution that might improve the stability of USB4VC.
 
 ## Overview
 
@@ -32,7 +30,9 @@ Connect RPi to internet. You can [set up WiFi](https://github.com/dekuNukem/USB4
 
 Then simply select Internet Update in main menu. It will update RPi code and P-Card firmware to latest version.
 
-![Alt text](photos/update.jpg)
+![Alt text](photos/internetupdate.jpeg)
+
+![Alt text](photos/newver.jpg)
 
 Confirm on the second screen that both PB and RPi version are **above 0.3.0**.
 
