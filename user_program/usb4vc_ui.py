@@ -67,8 +67,7 @@ class my_button(object):
 PBOARD_ID_UNKNOWN = 0
 PBOARD_ID_IBMPC = 1
 PBOARD_ID_ADB = 2
-PBOARD_ID_APPLE_ALL = 3
-PBOARD_ID_BBC_MICRO = 4
+PBOARD_ID_APPLE_LISA_MAC_ADB = 3
 
 pboard_info_spi_msg = [0] * 32
 this_pboard_id = PBOARD_ID_UNKNOWN
@@ -154,14 +153,9 @@ PROTOCOL_RAW_KEYBOARD = {'pid':125, 'display_name':"Raw data"}
 PROTOCOL_RAW_MOUSE = {'pid':126, 'display_name':"Raw data"}
 PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 
-PROTOCOL_APPLE_QUAD_MOUSE = {'pid':9, 'display_name':"Lisa/Mac (M0100)"}
-PROTOCOL_M0110_KEYBOARD = {'pid':10, 'display_name':"Mac (M0110)"}
+PROTOCOL_APPLE_QUAD_MOUSE = {'pid':9, 'display_name':"Lisa/EarlyMac"}
+PROTOCOL_M0110_KEYBOARD = {'pid':10, 'display_name':"EarlyMac"}
 PROTOCOL_LISA_KEYBOARD = {'pid':11, 'display_name':"Lisa"}
-
-PROTOCOL_BBC_KB_ISO = {'pid':12, 'display_name':"BBC Mirco (US)"}
-PROTOCOL_BBC_KB_ANSI = {'pid':13, 'display_name':"BBC Mirco (UK)"}
-# PROTOCOL_AMX_MOUSE = {'pid':13, 'display_name':"AMX"}
-PROTOCOL_BBC_MICRO_JOYSTICK = {'pid':14, 'display_name':"BBC Mirco"}
 
 custom_profile_list = []
 
@@ -318,13 +312,9 @@ raw_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_RAW_KEYBOARD]
 raw_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_RAW_MOUSE]
 raw_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_RAW_GAMEPAD]
 
-apple_all_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_KB, PROTOCOL_M0110_KEYBOARD, PROTOCOL_LISA_KEYBOARD]
-apple_all_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_ADB_MOUSE, PROTOCOL_APPLE_QUAD_MOUSE]
-apple_all_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_USB_GP_TO_MOUSE_KB]
-
-bbc_micro_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_BBC_KB_ISO, PROTOCOL_BBC_KB_ANSI]
-bbc_micro_mouse_protocols = [PROTOCOL_OFF]
-bbc_micro_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_BBC_MICRO_JOYSTICK]
+lisa_mac_adb_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_LISA_KEYBOARD, PROTOCOL_M0110_KEYBOARD, PROTOCOL_ADB_KB]
+lisa_mac_adb_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_APPLE_QUAD_MOUSE, PROTOCOL_ADB_MOUSE]
+lisa_mac_adb_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_USB_GP_TO_MOUSE_KB]
 
 mouse_sensitivity_list = [1, 1.25, 1.5, 1.75, 0.25, 0.5, 0.75]
 
@@ -852,8 +842,7 @@ pboard_database = {
     PBOARD_ID_UNKNOWN:{'author':'Unknown', 'fw_ver':(0,0,0), 'full_name':'Unknown', 'hw_rev':0, 'protocol_list_keyboard':raw_keyboard_protocols, 'protocol_list_mouse':raw_mouse_protocols, 'protocol_list_gamepad':raw_gamepad_protocols},
     PBOARD_ID_IBMPC:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'IBM PC Compatible', 'hw_rev':0, 'protocol_list_keyboard':ibmpc_keyboard_protocols, 'protocol_list_mouse':ibmpc_mouse_protocols, 'protocol_list_gamepad':ibmpc_gamepad_protocols},
     PBOARD_ID_ADB:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Desktop Bus', 'hw_rev':0, 'protocol_list_keyboard':adb_keyboard_protocols, 'protocol_list_mouse':adb_mouse_protocols, 'protocol_list_gamepad':adb_gamepad_protocols},
-    PBOARD_ID_APPLE_ALL:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Pre-USB', 'hw_rev':0, 'protocol_list_keyboard':apple_all_keyboard_protocols, 'protocol_list_mouse':apple_all_mouse_protocols, 'protocol_list_gamepad':apple_all_gamepad_protocols},
-    PBOARD_ID_BBC_MICRO:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'BBC Micro', 'hw_rev':0, 'protocol_list_keyboard':bbc_micro_keyboard_protocols, 'protocol_list_mouse':bbc_micro_mouse_protocols, 'protocol_list_gamepad':bbc_micro_gamepad_protocols},
+    PBOARD_ID_APPLE_LISA_MAC_ADB:{'author':'dekuNukem', 'fw_ver':(0,0,0), 'full_name':'Apple Lisa/Mac/ADB', 'hw_rev':0, 'protocol_list_keyboard':lisa_mac_adb_keyboard_protocols, 'protocol_list_mouse':lisa_mac_adb_mouse_protocols, 'protocol_list_gamepad':lisa_mac_adb_gamepad_protocols},
 }
 
 def get_pboard_dict(pid):

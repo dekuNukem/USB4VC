@@ -116,9 +116,13 @@ BTN_FORWARD = 0x115
 BTN_BACK = 0x116
 BTN_TASK = 0x117
 
+SPI_XFER_TIMEOUT = 0.025
 def xfer_when_not_busy(data):
+    start_ts = time.time()
     while GPIO.input(PCARD_BUSY_PIN):
-        print("BUSY!")
+        # print(time.time(), "P-Card is busy!")
+        if time.time() - start_ts > SPI_XFER_TIMEOUT:
+            break
     return pcard_spi.xfer(data)
 
 def is_gamepad_button(event_code):
