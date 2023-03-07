@@ -10,7 +10,7 @@ This document covers a potential solution that improves the stability of USB4VC.
 
 ## Overview
 
-A `BUSY` signal is added, to prevent Raspberry Pi from sending data when Protocol Card is talking to the retro computer.
+A `BUSY` signal is added, to prevent Raspberry Pi from sending data when Protocol Card is talking to the computer.
 
 This, along with a firmware update, should improve stability and eliminate stuck keys or glitches.
 
@@ -18,7 +18,7 @@ This, along with a firmware update, should improve stability and eliminate stuck
 
 ### Solder a New Wire
 
-Solder a wire between `PF1` pin and the pin at **second row right most column**. See photo:
+Solder a wire between the pins at **`F1` and `second row of right most column`**. See photo:
 
 ![Alt text](photos/adb_busy.jpeg)
 
