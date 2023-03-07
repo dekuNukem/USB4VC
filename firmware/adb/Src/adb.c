@@ -22,6 +22,9 @@ uint8_t kb_enabled, mouse_enabled;
 
 #define ADB_READ_DATA_PIN() HAL_GPIO_ReadPin(adb_data_port, adb_data_pin)
 
+#define PCARD_BUSY_HI() HAL_GPIO_WritePin(BUSY_GPIO_Port, BUSY_Pin, GPIO_PIN_SET)
+#define PCARD_BUSY_LOW() HAL_GPIO_WritePin(BUSY_GPIO_Port, BUSY_Pin, GPIO_PIN_RESET)
+
 const uint8_t linux_ev_to_adb_lookup[EV_TO_ADB_LOOKUP_SIZE] = 
 {
   ADB_KEY_UNKNOWN, // EV0 KEY_RESERVED
@@ -285,6 +288,7 @@ uint8_t adb_recv_cmd(uint8_t* data)
     return ADB_ERROR;
   
   uint8_t temp = 0;
+  PCARD_BUSY_HI();
   for (int i = 0; i < 8; ++i)
   {
     uint8_t this_bit = adb_read_bit();
@@ -292,7 +296,7 @@ uint8_t adb_recv_cmd(uint8_t* data)
       return ADB_ERROR;
     temp |= this_bit << (7 - i);
   }
-
+  PCARD_BUSY_LOW();
   *data = temp;
   return ADB_OK;
 }
@@ -336,6 +340,7 @@ uint8_t adb_write_16(uint16_t data)
 // to be called right after a LISTEN command from host
 uint8_t adb_send_response_16b(uint16_t data)
 {
+  PCARD_BUSY_HI();
   adb_rw_in_progress = 1;
   delay_us(200); // stop-to-start time
   ADB_DATA_LOW();
@@ -345,12 +350,14 @@ uint8_t adb_send_response_16b(uint16_t data)
   if(adb_write_16(data) == ADB_LINE_STATUS_COLLISION)
   {
     adb_rw_in_progress = 0;
+    PCARD_BUSY_LOW();
     return ADB_LINE_STATUS_COLLISION;
   }
   ADB_DATA_LOW();
   delay_us(ADB_CLK_65);
   ADB_DATA_HI();
   adb_rw_in_progress = 0;
+  PCARD_BUSY_LOW();
   return ADB_OK;
 }
 
@@ -369,6 +376,7 @@ uint8_t adb_listen_16b(uint16_t* data)
     return ADB_ERROR;
 
   uint16_t temp = 0;
+  PCARD_BUSY_HI();
   for (int i = 0; i < 16; ++i)
   {
     uint8_t this_bit = adb_read_bit();
@@ -376,6 +384,7 @@ uint8_t adb_listen_16b(uint16_t* data)
       return ADB_ERROR;
     temp |= this_bit << (15 - i);
   }
+  PCARD_BUSY_LOW();
   wait_until_change(ADB_DEFAULT_TIMEOUT_US);
   *data = temp;
   return ADB_OK;

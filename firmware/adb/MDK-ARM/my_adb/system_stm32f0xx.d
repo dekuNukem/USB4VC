@@ -1,4 +1,4 @@
-my_adb\system_stm32f0xx.o: ..//Src/system_stm32f0xx.c
+my_adb\system_stm32f0xx.o: ../Src/system_stm32f0xx.c
 my_adb\system_stm32f0xx.o: ../Drivers/CMSIS/Device/ST/STM32F0xx/Include/stm32f0xx.h
 my_adb\system_stm32f0xx.o: ../Drivers/CMSIS/Device/ST/STM32F0xx/Include/stm32f042x6.h
 my_adb\system_stm32f0xx.o: ../Drivers/CMSIS/Include/core_cm0.h

@@ -54,7 +54,7 @@
 #define ADB_CLK_35 34
 #define ADB_CLK_65 64
 #define EV_TO_ADB_LOOKUP_SIZE 186
-#define ADB_DEFAULT_TIMEOUT_US 10000
+#define ADB_DEFAULT_TIMEOUT_US 25000
 #define ADB_KEY_UNKNOWN 255
 #define ADB_KEY_CAPSLOCK 57
 void adb_init(GPIO_TypeDef* data_port, uint16_t data_pin, GPIO_TypeDef* psw_port, uint16_t psw_pin);
