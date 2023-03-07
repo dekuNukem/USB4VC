@@ -36,7 +36,9 @@
 #include "stm32f0xx_it.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "helpers.h"
+#include "adb.h"
+#include "delay_us.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -117,6 +119,12 @@ void SysTick_Handler(void)
   HAL_IncTick();
   HAL_SYSTICK_IRQHandler();
   /* USER CODE BEGIN SysTick_IRQn 1 */
+
+  if(next_busy_off != 0 && micros() > next_busy_off)
+  {
+    PCARD_BUSY_LOW();
+    next_busy_off = 0;
+  }
 
   /* USER CODE END SysTick_IRQn 1 */
 }

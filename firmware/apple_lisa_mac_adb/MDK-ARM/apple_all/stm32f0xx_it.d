@@ -33,3 +33,6 @@ apple_all\stm32f0xx_it.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_
 apple_all\stm32f0xx_it.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h
 apple_all\stm32f0xx_it.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h
 apple_all\stm32f0xx_it.o: ../Inc/stm32f0xx_it.h
+apple_all\stm32f0xx_it.o: ../Inc/helpers.h
+apple_all\stm32f0xx_it.o: ../Inc/adb.h
+apple_all\stm32f0xx_it.o: ../Inc/delay_us.h

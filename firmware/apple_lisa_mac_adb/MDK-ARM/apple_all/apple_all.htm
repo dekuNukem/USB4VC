@@ -3,7 +3,7 @@
 <title>Static Call Graph - [apple_all\apple_all.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image apple_all\apple_all.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Mar 07 17:39:17 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Mar 07 17:45:15 2023
 <BR><P>
 <H3>Maximum Stack Usage =        228 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -295,8 +295,10 @@ Global Symbols
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_byte
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
+<LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_srq
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_reset
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
@@ -641,10 +643,12 @@ Global Symbols
 <P><STRONG><a name="[3]"></a>SVC_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f0xx_it.o(i.SVC_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(RESET)
 </UL>
-<P><STRONG><a name="[5]"></a>SysTick_Handler</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, stm32f0xx_it.o(i.SysTick_Handler))
+<P><STRONG><a name="[5]"></a>SysTick_Handler</STRONG> (Thumb, 46 bytes, Stack size 8 bytes, stm32f0xx_it.o(i.SysTick_Handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SysTick_Handler &rArr; HAL_SYSTICK_IRQHandler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SYSTICK_IRQHandler
+<BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
+<LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SYSTICK_IRQHandler
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_IncTick
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(RESET)
@@ -767,7 +771,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[80]"></a>adb_keyboard_update</STRONG> (Thumb, 278 bytes, Stack size 16 bytes, main.o(i.adb_keyboard_update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = adb_keyboard_update &rArr; adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = adb_keyboard_update &rArr; adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
 </UL>
 <BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
@@ -776,7 +780,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
 </UL>
 
-<P><STRONG><a name="[84]"></a>adb_listen_16b</STRONG> (Thumb, 122 bytes, Stack size 24 bytes, adb.o(i.adb_listen_16b))
+<P><STRONG><a name="[84]"></a>adb_listen_16b</STRONG> (Thumb, 124 bytes, Stack size 24 bytes, adb.o(i.adb_listen_16b))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = adb_listen_16b &rArr; adb_read_bit &rArr; adb_wait_until_change
 </UL>
 <BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
@@ -788,7 +792,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[88]"></a>adb_mouse_update</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, main.o(i.adb_mouse_update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = adb_mouse_update &rArr; adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = adb_mouse_update &rArr; adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_consolidated_mouse_event
@@ -812,6 +816,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = adb_recv_cmd &rArr; look_for_atten &rArr; adb_wait_until_change
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;look_for_atten
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_read_bit
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
@@ -827,17 +832,18 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_reset
 </UL>
 
-<P><STRONG><a name="[7f]"></a>adb_reset</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, adb.o(i.adb_reset))
+<P><STRONG><a name="[7f]"></a>adb_reset</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, adb.o(i.adb_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = adb_reset &rArr; adb_release_lines
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
+<BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_init
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
 </UL>
 
-<P><STRONG><a name="[82]"></a>adb_send_response_16b</STRONG> (Thumb, 132 bytes, Stack size 16 bytes, adb.o(i.adb_send_response_16b))
-<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
+<P><STRONG><a name="[82]"></a>adb_send_response_16b</STRONG> (Thumb, 134 bytes, Stack size 24 bytes, adb.o(i.adb_send_response_16b))
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
@@ -1268,7 +1274,9 @@ Global Symbols
 
 <P><STRONG><a name="[4e]"></a>micros</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, delay_us.o(i.micros))
 <BR><BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
+<LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 </UL>
