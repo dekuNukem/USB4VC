@@ -68,10 +68,16 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+
+/*
+0.3.0 20230307
+Added BUSY signal
+*/
+
 const uint8_t board_id = 2;
 const uint8_t version_major = 0;
-const uint8_t version_minor = 2;
-const uint8_t version_patch = 1;
+const uint8_t version_minor = 3;
+const uint8_t version_patch = 0;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
 uint8_t spi_recv_buf[SPI_BUF_SIZE];
