@@ -7439,6 +7439,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="JP6" gate="G$1" pin="EARTH"/>
 <pinref part="R13" gate="G$1" pin="1"/>
 <wire x1="294.64" y1="20.32" x2="297.18" y2="20.32" width="0.1524" layer="91"/>
+<pinref part="JP6" gate="G$1" pin="EARTH-NORM"/>
+<wire x1="294.64" y1="17.78" x2="294.64" y2="20.32" width="0.1524" layer="91"/>
+<junction x="294.64" y="20.32"/>
 </segment>
 </net>
 <net name="N$11" class="0">
