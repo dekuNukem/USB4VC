@@ -327,24 +327,17 @@ uint8_t adb_write_byte(uint8_t data)
 
 uint8_t adb_write_16(uint16_t data)
 {
-  PCARD_BUSY_HI();
   if(adb_write_byte((uint8_t)(data >> 8)) == ADB_LINE_STATUS_COLLISION) // MSB
-  {
-    PCARD_BUSY_LOW();
     return ADB_LINE_STATUS_COLLISION;
-  }
   if(adb_write_byte((uint8_t)(data & 0xff)) == ADB_LINE_STATUS_COLLISION) // LSB
-  {
-    PCARD_BUSY_LOW();
     return ADB_LINE_STATUS_COLLISION;
-  }
-  PCARD_BUSY_LOW();
   return ADB_OK;
 }
 
 // to be called right after a LISTEN command from host
 uint8_t adb_send_response_16b(uint16_t data)
 {
+  PCARD_BUSY_HI();
   adb_rw_in_progress = 1;
   delay_us(200); // stop-to-start time
   ADB_DATA_LOW();
@@ -354,12 +347,14 @@ uint8_t adb_send_response_16b(uint16_t data)
   if(adb_write_16(data) == ADB_LINE_STATUS_COLLISION)
   {
     adb_rw_in_progress = 0;
+    PCARD_BUSY_LOW();
     return ADB_LINE_STATUS_COLLISION;
   }
   ADB_DATA_LOW();
   delay_us(ADB_CLK_65);
   ADB_DATA_HI();
   adb_rw_in_progress = 0;
+  PCARD_BUSY_LOW();
   return ADB_OK;
 }
 
