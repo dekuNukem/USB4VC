@@ -32,6 +32,9 @@ uint8_t ps2mouse_wait_for_idle(uint8_t timeout_ms);
 #define PS2_ERROR_UNIMPLEMENTED_MODE 6
 #define PS2_ERROR_HOST_INHIBIT 8
 
+#define PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS 20
+
+
 #ifdef __cplusplus
 }
 #endif

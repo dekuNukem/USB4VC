@@ -117,10 +117,12 @@ BTN_BACK = 0x116
 BTN_TASK = 0x117
 
 SPI_XFER_TIMEOUT = 0.025
-def xfer_when_not_busy(data):
+def xfer_when_not_busy(data, drop=False):
     start_ts = time.time()
     while GPIO.input(PCARD_BUSY_PIN):
         # print(time.time(), "P-Card is busy!")
+        if drop:
+            return None
         if time.time() - start_ts > SPI_XFER_TIMEOUT:
             break
     return pcard_spi.xfer(data)
@@ -833,7 +835,7 @@ def raw_input_event_worker():
                         pass
                     # send spi mouse message if there is moment, or the button is not typematic
                     elif (max(this_mouse_msg[13:18]) != 2 or sum(this_mouse_msg[4:10]) != 0) and (this_mouse_msg[4:] != last_mouse_msg[4:] or sum(this_mouse_msg[4:]) != 0):
-                        xfer_when_not_busy(list(this_mouse_msg))
+                        xfer_when_not_busy(list(this_mouse_msg), drop=True)
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
                         clear_mouse_movement(mouse_status_dict)
                         last_mouse_msg = list(this_mouse_msg)

@@ -363,7 +363,6 @@ void get_consolidated_mouse_event(mouse_buf* mbuf, mouse_event* cme_result)
   cap_to_127(&cme_result->movement_y);
 }
 
-uint32_t last_mouse_send;
 void ps2mouse_update(void)
 {
   ps2mouse_bus_status = ps2mouse_get_bus_status();
@@ -374,13 +373,12 @@ void ps2mouse_update(void)
   }
   else if(ps2mouse_bus_status == PS2_BUS_REQ_TO_SEND)
   {
+    PCARD_BUSY_HI();
     ps2mouse_read(&ps2mouse_host_cmd, 10);
     ps2mouse_host_req_reply(ps2mouse_host_cmd, &latest_mouse_event);
+    PCARD_BUSY_LOW();
     return;
   }
-
-  if(micros() - last_mouse_send < 700)
-    return;
 
   if(mouse_buf_peek(&my_mouse_buf) == NULL)
     return;
@@ -391,18 +389,17 @@ void ps2mouse_update(void)
   if(ps2mouse_get_outgoing_data(&consolidated_mouse_event, &my_ps2_outbuf))
     return; // if return value is not 0, no need to send out packets
 
-  // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+  PCARD_BUSY_HI();
   if(ps2mouse_send_update(&my_ps2_outbuf) != PS2_OK)
   {
     uint32_t enter_time = HAL_GetTick();
     while(ps2mouse_get_bus_status() != PS2_BUS_IDLE)
     {
-      if(HAL_GetTick() - enter_time > 20)
+      if(HAL_GetTick() - enter_time > PS2MOUSE_WRITE_DEFAULT_TIMEOUT_MS)
         break;
     }
   }
-  last_mouse_send = micros();
-  // HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
+  PCARD_BUSY_LOW();
 }
 
 uint8_t ps2kb_update(void)
