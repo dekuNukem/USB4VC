@@ -1,0 +1,5 @@
+Protocol card checklist:
+
+100 ohm resistor on power detect line
+hook up BUSY signal
+VDDA needs connection even if no analog is used
