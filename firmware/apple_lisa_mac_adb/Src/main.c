@@ -59,6 +59,8 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+IWDG_HandleTypeDef hiwdg;
+
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim2;
@@ -98,6 +100,7 @@ static void MX_TIM2_Init(void);
 static void MX_TIM16_Init(void);
 static void MX_TIM17_Init(void);
 static void MX_TIM14_Init(void);
+static void MX_IWDG_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -612,7 +615,9 @@ int main(void)
   MX_TIM16_Init();
   MX_TIM17_Init();
   MX_TIM14_Init();
+  // MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
+  // HAL_IWDG_Refresh(&hiwdg);
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
   protocol_status_lookup_init();
@@ -666,8 +671,9 @@ void SystemClock_Config(void)
 
     /**Initializes the CPU, AHB and APB busses clocks
     */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -704,6 +710,21 @@ void SystemClock_Config(void)
 
   /* SysTick_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+}
+
+/* IWDG init function */
+static void MX_IWDG_Init(void)
+{
+
+  hiwdg.Instance = IWDG;
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_16;
+  hiwdg.Init.Window = 4095;
+  hiwdg.Init.Reload = 4095;
+  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
+
 }
 
 /* SPI1 init function */
@@ -856,10 +877,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(SLAVE_REQ_GPIO_Port, SLAVE_REQ_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, PCARD_BUSY_Pin|ACT_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, SLAVE_REQ_Pin|PCARD_BUSY_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LISA_DATA_Pin|QMOUSE_X2_Pin, GPIO_PIN_SET);
@@ -869,21 +887,17 @@ static void MX_GPIO_Init(void)
                           |QMOUSE_X1_Pin|QMOUSE_Y1_Pin|ADB_PWR_Pin|ADB_DATA_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : SLAVE_REQ_Pin */
-  GPIO_InitStruct.Pin = SLAVE_REQ_Pin;
+  /*Configure GPIO pins : SLAVE_REQ_Pin PCARD_BUSY_Pin */
+  GPIO_InitStruct.Pin = SLAVE_REQ_Pin|PCARD_BUSY_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(SLAVE_REQ_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PCARD_BUSY_Pin ACT_LED_Pin */
-  GPIO_InitStruct.Pin = PCARD_BUSY_Pin|ACT_LED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LISA_DATA_Pin QMOUSE_X2_Pin */
   GPIO_InitStruct.Pin = LISA_DATA_Pin|QMOUSE_X2_Pin;
@@ -906,6 +920,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : ACT_LED_Pin */
+  GPIO_InitStruct.Pin = ACT_LED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(ACT_LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ERR_LED_Pin */
   GPIO_InitStruct.Pin = ERR_LED_Pin;

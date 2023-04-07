@@ -3,7 +3,7 @@
 <title>Static Call Graph - [apple_all\apple_all.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image apple_all\apple_all.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Mar 07 17:45:15 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Apr 07 18:39:49 2023
 <BR><P>
 <H3>Maximum Stack Usage =        228 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -192,9 +192,9 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_InitTick
 <LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetSysClockFreq
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
+<LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_SetConfig
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
-<LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
 
 <P><STRONG><a name="[d2]"></a>__aeabi_idiv</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, idiv.o(.text), UNUSED)
@@ -265,16 +265,16 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[85]"></a>HAL_GPIO_ReadPin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_ReadPin))
-<BR><BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
+<BR><BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;look_for_atten
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_byte
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_read_bit
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_kb_update
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
 <LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_get_line_status
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;look_for_atten
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_byte
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_read_bit
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_mac_kb
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_lisa_kb
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
@@ -283,6 +283,13 @@ Global Symbols
 
 <P><STRONG><a name="[4b]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f0xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_srq
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_byte
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_reset
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_write_byte
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_kb_update
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_kb_reset
@@ -292,14 +299,7 @@ Global Symbols
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_write
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_disable
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_byte
-<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
 <LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
-<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_srq
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_reset
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 </UL>
@@ -307,15 +307,15 @@ Global Symbols
 <P><STRONG><a name="[3f]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetTick))
 <BR><BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
 <LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_get_line_status
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitFlagStateUntilTimeout
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitFifoStateUntilTimeout
-<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 <LI><a href="#[42]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
 <LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_update
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0100a_handle_inquiry
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitFlagStateUntilTimeout
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitFifoStateUntilTimeout
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_CheckIdleState
 </UL>
@@ -415,16 +415,16 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[45]"></a>HAL_SPI_ErrorCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f0xx_hal_spi.o(i.HAL_SPI_ErrorCallback))
-<BR><BR>[Called By]<UL><LI><a href="#[29]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_DMAAbortOnError
+<BR><BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_IRQHandler
+<LI><a href="#[29]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_DMAAbortOnError
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseRxTx_ISR
-<LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_IRQHandler
 </UL>
 
 <P><STRONG><a name="[43]"></a>HAL_SPI_IRQHandler</STRONG> (Thumb, 208 bytes, Stack size 24 bytes, stm32f0xx_hal_spi.o(i.HAL_SPI_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = HAL_SPI_IRQHandler &rArr; HAL_DMA_Abort_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_ErrorCallback
-<LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort_IT
+<BR>[Calls]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort_IT
+<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_ErrorCallback
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI1_IRQHandler
 </UL>
@@ -653,7 +653,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f072xb.o(RESET)
 </UL>
-<P><STRONG><a name="[79]"></a>SystemClock_Config</STRONG> (Thumb, 106 bytes, Stack size 112 bytes, main.o(i.SystemClock_Config))
+<P><STRONG><a name="[79]"></a>SystemClock_Config</STRONG> (Thumb, 108 bytes, Stack size 112 bytes, main.o(i.SystemClock_Config))
 <BR><BR>[Stack]<UL><LI>Max Depth = 196<LI>Call Chain = SystemClock_Config &rArr; HAL_RCC_ClockConfig &rArr; HAL_RCC_GetSysClockFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SYSTICK_Config
@@ -773,20 +773,20 @@ Global Symbols
 <P><STRONG><a name="[80]"></a>adb_keyboard_update</STRONG> (Thumb, 278 bytes, Stack size 16 bytes, main.o(i.adb_keyboard_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = adb_keyboard_update &rArr; adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
 </UL>
-<BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
+<BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_pop
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_peek
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
 </UL>
 <BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
 </UL>
 
-<P><STRONG><a name="[84]"></a>adb_listen_16b</STRONG> (Thumb, 124 bytes, Stack size 24 bytes, adb.o(i.adb_listen_16b))
+<P><STRONG><a name="[84]"></a>adb_listen_16b</STRONG> (Thumb, 122 bytes, Stack size 24 bytes, adb.o(i.adb_listen_16b))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = adb_listen_16b &rArr; adb_read_bit &rArr; adb_wait_until_change
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
-<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_read_bit
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_adb_cmd
 </UL>
@@ -794,9 +794,9 @@ Global Symbols
 <P><STRONG><a name="[88]"></a>adb_mouse_update</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, main.o(i.adb_mouse_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = adb_mouse_update &rArr; adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
 </UL>
-<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
+<BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_peek
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_consolidated_mouse_event
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;int16_to_uint6
 </UL>
 <BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
@@ -805,21 +805,21 @@ Global Symbols
 <P><STRONG><a name="[87]"></a>adb_read_bit</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, adb.o(i.adb_read_bit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = adb_read_bit &rArr; adb_wait_until_change
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
 </UL>
 
-<P><STRONG><a name="[8b]"></a>adb_recv_cmd</STRONG> (Thumb, 90 bytes, Stack size 24 bytes, adb.o(i.adb_recv_cmd))
+<P><STRONG><a name="[8b]"></a>adb_recv_cmd</STRONG> (Thumb, 88 bytes, Stack size 24 bytes, adb.o(i.adb_recv_cmd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = adb_recv_cmd &rArr; look_for_atten &rArr; adb_wait_until_change
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;look_for_atten
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_read_bit
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;look_for_atten
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_read_bit
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 </UL>
 <BR>[Called By]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
 </UL>
@@ -835,19 +835,19 @@ Global Symbols
 <P><STRONG><a name="[7f]"></a>adb_reset</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, adb.o(i.adb_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = adb_reset &rArr; adb_release_lines
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
-<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
+<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_release_lines
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_init
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
 </UL>
 
-<P><STRONG><a name="[82]"></a>adb_send_response_16b</STRONG> (Thumb, 134 bytes, Stack size 24 bytes, adb.o(i.adb_send_response_16b))
+<P><STRONG><a name="[82]"></a>adb_send_response_16b</STRONG> (Thumb, 132 bytes, Stack size 24 bytes, adb.o(i.adb_send_response_16b))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = adb_send_response_16b &rArr; adb_write_16 &rArr; adb_write_byte
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_16
+<LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_16
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_adb_cmd
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
@@ -862,9 +862,9 @@ Global Symbols
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;look_for_atten
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_read_bit
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_adb
 </UL>
 
@@ -903,13 +903,13 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[8e]"></a>delay_us</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, delay_us.o(i.delay_us))
-<BR><BR>[Called By]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_write_byte
+<BR><BR>[Called By]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_srq
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_byte
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_write_byte
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_kb_update
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_write
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_read
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_write_byte
-<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_srq
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
 </UL>
 
 <P><STRONG><a name="[91]"></a>delay_us_init</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, delay_us.o(i.delay_us_init))
@@ -1048,8 +1048,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
-<P><STRONG><a name="[a7]"></a>lisa_kb_update</STRONG> (Thumb, 170 bytes, Stack size 16 bytes, lisa_kb.o(i.lisa_kb_update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = lisa_kb_update &rArr; wait_until_change
+<P><STRONG><a name="[a7]"></a>lisa_kb_update</STRONG> (Thumb, 172 bytes, Stack size 24 bytes, lisa_kb.o(i.lisa_kb_update))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = lisa_kb_update &rArr; wait_until_change
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_write_byte
@@ -1077,8 +1077,8 @@ Global Symbols
 <P><STRONG><a name="[8c]"></a>look_for_atten</STRONG> (Thumb, 74 bytes, Stack size 16 bytes, adb.o(i.look_for_atten))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = look_for_atten &rArr; adb_wait_until_change
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
 </UL>
@@ -1201,7 +1201,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run_mac_kb
 </UL>
 
-<P><STRONG><a name="[ae]"></a>m0110a_write</STRONG> (Thumb, 120 bytes, Stack size 24 bytes, m0110a.o(i.m0110a_write))
+<P><STRONG><a name="[ae]"></a>m0110a_write</STRONG> (Thumb, 118 bytes, Stack size 24 bytes, m0110a.o(i.m0110a_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = m0110a_write &rArr; wait_for_data_idle
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_for_data_idle
@@ -1231,6 +1231,7 @@ Global Symbols
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM2_Init
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_SPI1_Init
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_init
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;m0110a_cmd_buf_init
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_init
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
@@ -1240,7 +1241,6 @@ Global Symbols
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;quad_disable
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;micros
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_us_init
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_init
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 <LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TransmitReceive_IT
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
@@ -1251,8 +1251,8 @@ Global Symbols
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_init
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_protocol_enabled
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
@@ -1273,10 +1273,10 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4e]"></a>micros</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, delay_us.o(i.micros))
-<BR><BR>[Called By]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
-<LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
+<BR><BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wait_until_change
+<LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 <LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 </UL>
@@ -1327,8 +1327,8 @@ Global Symbols
 <P><STRONG><a name="[c2]"></a>parse_adb_cmd</STRONG> (Thumb, 240 bytes, Stack size 24 bytes, adb.o(i.parse_adb_cmd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = parse_adb_cmd &rArr; adb_listen_16b &rArr; adb_read_bit &rArr; adb_wait_until_change
 </UL>
-<BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
+<BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_listen_16b
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand
 <LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
@@ -1416,15 +1416,15 @@ Global Symbols
 <P><STRONG><a name="[bd]"></a>run_adb</STRONG> (Thumb, 300 bytes, Stack size 24 bytes, main.o(i.run_adb))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = run_adb &rArr; parse_adb_cmd &rArr; adb_listen_16b &rArr; adb_read_bit &rArr; adb_wait_until_change
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
-<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_empty
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_is_empty
-<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_srq
+<BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_srq
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;parse_adb_cmd
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_wait_until_change
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_send_response_16b
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_reset
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_recv_cmd
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mouse_buf_is_empty
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_is_empty
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;is_protocol_enabled
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_mouse_update
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adb_keyboard_update
@@ -1434,7 +1434,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[bf]"></a>run_lisa_kb</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, main.o(i.run_lisa_kb))
-<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = run_lisa_kb &rArr; lisa_kb_update &rArr; wait_until_change
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = run_lisa_kb &rArr; lisa_kb_update &rArr; wait_until_change
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_kb_update
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lisa_buf_add
@@ -1486,7 +1486,7 @@ Global Symbols
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[6e]"></a>MX_GPIO_Init</STRONG> (Thumb, 228 bytes, Stack size 48 bytes, main.o(i.MX_GPIO_Init))
+<P><STRONG><a name="[6e]"></a>MX_GPIO_Init</STRONG> (Thumb, 226 bytes, Stack size 48 bytes, main.o(i.MX_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = MX_GPIO_Init &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1521,6 +1521,11 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
+<P><STRONG><a name="[3d]"></a>NVIC_SetPriority</STRONG> (Thumb, 60 bytes, Stack size 0 bytes, stm32f0xx_hal_cortex.o(i.NVIC_SetPriority))
+<BR><BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SYSTICK_Config
+<LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
+</UL>
+
 <P><STRONG><a name="[2a]"></a>SPI_2linesRxISR_16BIT</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_2linesRxISR_16BIT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = SPI_2linesRxISR_16BIT &rArr; SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
@@ -1553,10 +1558,10 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = SPI_CloseRxTx_ISR &rArr; HAL_SPI_TxRxCpltCallback &rArr; parse_spi_buf &rArr; handle_protocol_switch &rArr; quad_enable &rArr; quad_reset &rArr; quad_write
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
+<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_RxCpltCallback
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_ErrorCallback
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_EndRxTxTransaction
-<LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesTxISR_8BIT
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesTxISR_16BIT
@@ -1594,11 +1599,6 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_EndRxTxTransaction
-</UL>
-
-<P><STRONG><a name="[3d]"></a>NVIC_SetPriority</STRONG> (Thumb, 60 bytes, Stack size 0 bytes, stm32f0xx_hal_cortex.o(i.NVIC_SetPriority))
-<BR><BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SYSTICK_Config
-<LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 </UL>
 
 <P><STRONG><a name="[58]"></a>TIM_ITRx_SetConfig</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32f0xx_hal_tim.o(i.TIM_ITRx_SetConfig))

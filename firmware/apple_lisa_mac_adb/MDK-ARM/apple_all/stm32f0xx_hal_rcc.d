@@ -24,6 +24,7 @@ apple_all\stm32f0xx_hal_rcc.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal
 apple_all\stm32f0xx_hal_rcc.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_flash_ex.h
 apple_all\stm32f0xx_hal_rcc.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c.h
 apple_all\stm32f0xx_hal_rcc.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_i2c_ex.h
+apple_all\stm32f0xx_hal_rcc.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_iwdg.h
 apple_all\stm32f0xx_hal_rcc.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr.h
 apple_all\stm32f0xx_hal_rcc.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_pwr_ex.h
 apple_all\stm32f0xx_hal_rcc.o: ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_spi.h
