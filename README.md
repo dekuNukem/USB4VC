@@ -27,13 +27,17 @@ USB4VC is [now available on Tindie](https://www.tindie.com/products/dekuNukem/us
 
 From the very first IBM PC in 1981 until the end of PS/2 ports in early 2000s, this Protocol Card covers it all!
 
-#### Apple Desktop Bus (ADB)
+#### Apple Lisa, Early Macintosh, and Apple Desktop Bus (ADB)
 
+* Apple Lisa Keyboard (A6MB101)
+* Apple Lisa Mouse (A9M0050)
+* Macintosh Keyboard (M0110A)
+* Macintosh Mouse (M0100)
 * ADB Keyboard
 * ADB Mouse
-* Mapping USB Gamepad to ADB Mouse/Keyboard
+* Mapping USB gamepad to all above
 
-From Apple IIGS in 1986 to PowerMac G3 in 1999, and everything in-between!
+From Apple Lisa in 1983 to PowerMac G3 in 1999, and everything in-between!
 
 #### More to Come!
 
@@ -89,13 +93,13 @@ With the popularity of retro computing today, it poses several issues:
 
 * After decades of service, many can be **degraded and unreliable** (e.g. foam & foil keyboards), requiring extensive restoration.
 
-* Let's be honest here, most early peripherals simply **does not feel that great**. Mushy membrane keyboards, sticky ball mice, plasticky gamepads, etc. And of course, the good ones gets [*very expensive*](https://www.ebay.com/sch/i.html?_nkw=ibm+model+f&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1).
+* Many early peripherals simply **does not feel that great**. Mushy membrane keyboards, sticky ball mice, plasticky gamepads, etc. And of course, the good ones gets [*very expensive*](https://www.ebay.com/sch/i.html?_nkw=ibm+model+f&_sacat=0&rt=nc&LH_Sold=1&LH_Complete=1).
 
-* On the other hand, high quality USB peripherals can be had for a very reasonable price today with vastly **superior tactility, precision, and ergonomics**.
+* On the other hand, good quality USB peripherals can be had for a very reasonable price today with vastly **superior tactility, precision, and ergonomics**.
 
 * Thus, this project aims to make retro computers simply **more enjoyable to use**.
 
-* I also hope it can **lower the barrier of entry** for certain machines, put more computers **back in action**, help **preserving** existing rare peripherals, and generally **help more people** get into this hobby!
+* I also hope it can **lower the barrier of entry** for certain machines, put more computers **back in action**, help **preserving** existing peripherals, and generally **help more people** get into this hobby!
 
 But of course, one can argue that using period-correct peripherals is simply part of the hobby, but just like HDMI upscalers or floppy emus, it's nice to have the option to enhance the experience.
 
@@ -109,7 +113,7 @@ USB4VC consists of two halves: **Baseboard** and swappable **Protocol Cards**.
 
 Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It processes USB input events, which are sent to Protocol Card.
 
-Each Protocol Card has a dedicated microcontroller and the appropriate circuitry and connectors for a specific platform.
+Each Protocol Card has a dedicated microcontroller and connectors for a specific platform.
 
 By splitting duties, RPi can focus on input parsing, and Protocol Card handles timing critical signal generation, resulting in a flexible architecture and reliable performance.
 
@@ -129,7 +133,7 @@ Current focus is having a smooth project launch. So for the first few months I w
 
 Of course, more Protocol Cards are planned. Not making any guarantees at this moment, but a shortlist include:
 
-* OG Macintosh/128K/512K/Mac Plus
+* ~~OG Macintosh/128K/512K/Mac Plus~~ Done!
 * Olivetti M24 / AT&T PC 6300
 * SUN SPARCstation
 

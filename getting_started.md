@@ -70,17 +70,9 @@ Let's take a quick look:
 
 * DFU button is used for firmware updates.
 
-## Protocol Card Overview: Apple Desktop Bus (ADB)
+## Protocol Card Overview: Apple Lisa, Early Mac, and ADB
 
-![Alt text](photos/adbpc.jpeg)
-
-* A **male to male** 4-Pin mini-DIN cable is needed. S-Video cable works!
-
-* You can use either ADB ports, and the other for daisy-chaining.
-
-* Press the ADB Power button to turn on.
-
-* ADB Power Button can also be activated from the microcontroller.
+![Alt text](photos/applepc.png)
 
 ## Cable Connection
 
@@ -170,7 +162,7 @@ In my testing, gamepad compatibility seems to depends on the RPi models:
 
 * If pairing fails, remove the BT device in the menu, reboot USB4VC, and try again.
 
-* Multiple controllers will work at the same time, although sometime their outputs might compete with each other.
+* Multiple controllers should work, although analog stick might compete with each other.
 
 -----
 
@@ -188,7 +180,7 @@ With **officially supported controllers**, the mapping is:
 
 * Left & Right Analog Triggers to Joystick 2 Y-Axis.
 
-Unsupported USB controllers might still work, but the default mapping might be wonky.
+Unsupported USB controllers should still work, although you might need to make your own mapping (see below).
 
 ## Custom Gamepad Mapping
 
