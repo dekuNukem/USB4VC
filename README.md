@@ -73,13 +73,31 @@ Click to see USB4VC in action!
 
 * Ultra Low Latency (0.5ms)
 
-* OLED Display
-
-* USB-C Powered
-
 * Fully Open-source
 
 * Make-your-own Protocol Card [Instruction Provided](technical_notes.md)
+
+## How it Works
+
+USB4VC consists of two halves: **Baseboard** and swappable **Protocol Cards**.
+
+![Alt text](photos/pcards.jpeg)
+
+Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It processes USB input events, which are sent to Protocol Card.
+
+Each Protocol Card has a dedicated microcontroller and connectors for a specific platform.
+
+By splitting duties, RPi can focus on input parsing, and Protocol Card handles timing critical signal generation, resulting in a flexible architecture and reliable performance.
+
+USB peripherals can be connected via cables, wireless dongles, or Bluetooth.
+
+## Getting Started
+
+[Click me](getting_started.md)
+
+## Technical Details / Make Your Own Protocol Cards
+
+[Click me](technical_notes.md)
 
 ## Why / Project Goals
 
@@ -104,40 +122,6 @@ With the popularity of retro computing today, it poses several issues:
 But of course, one can argue that using period-correct peripherals is simply part of the hobby, but just like HDMI upscalers or floppy emus, it's nice to have the option to enhance the experience.
 
 ![Alt text](photos/duke3d.jpeg)
-
-## How it Works
-
-USB4VC consists of two halves: **Baseboard** and swappable **Protocol Cards**.
-
-![Alt text](photos/pcards.jpeg)
-
-Baseboard contains user buttons, OLED screen, and a Raspberry Pi. It processes USB input events, which are sent to Protocol Card.
-
-Each Protocol Card has a dedicated microcontroller and connectors for a specific platform.
-
-By splitting duties, RPi can focus on input parsing, and Protocol Card handles timing critical signal generation, resulting in a flexible architecture and reliable performance.
-
-USB peripherals can be connected via cables, wireless dongles, or Bluetooth.
-
-## Getting Started
-
-[Click me](getting_started.md)
-
-## Technical Details / Make Your Own Protocol Cards
-
-[Click me](technical_notes.md)
-
-## Roadmap / Future Plans
-
-Current focus is having a smooth project launch. So for the first few months I will mostly be working on maintaining the [Kickstarter campaign](https://www.kickstarter.com/projects/dekunukem/usb4vc-usb-inputs-on-retro-computers), shipping orders, and providing updates and bug fixes for existing Protocol Cards.
-
-Of course, more Protocol Cards are planned. Not making any guarantees at this moment, but a shortlist include:
-
-* ~~OG Macintosh/128K/512K/Mac Plus~~ Done!
-* Olivetti M24 / AT&T PC 6300
-* SUN SPARCstation
-
-Want more? Feel free to [get in touch](#get-one--stay-in-touch) and make suggestions!
 
 ## Q&A
 
