@@ -72,6 +72,12 @@
 
 ## Apple Desktop Bus (ADB) Protocol Card
 
+### 0.3.0
+
+* 7 March 2023
+
+* Added support for BUSY signal
+
 ### 0.2.1
 
 * Released 20 May 2022

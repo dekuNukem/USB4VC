@@ -106,7 +106,7 @@ def get_firmware_list(pcard_id):
     try:
         file_list = json.loads(urllib.request.urlopen(firmware_url).read())
         fw_list = [x['name'] for x in file_list if 'name' in x and 'type' in x and x['type'] == 'file']
-        fw_list = [d for d in fw_list if d.startswith('PBFW') and d.lower() and f"PBID{pcard_id}" in d]
+        fw_list = [d for d in fw_list if d.startswith('PBFW') and f"PBID{pcard_id}" in d]
         fw_list.sort(key=lambda s: list(map(int, s.lower().split('_v')[1].split('.')[0].replace('_', '.').split('.'))), reverse=True)
     except Exception as e:
         print('get_firmware_list:', e)

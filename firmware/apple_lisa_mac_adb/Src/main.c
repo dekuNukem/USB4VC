@@ -73,10 +73,20 @@ UART_HandleTypeDef huart1;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
+/*
+0.0.1
+working beta
+
+0.1.0
+20230416
+initial release
+added watchdog timer
+*/
+
 const uint8_t board_id = 3;
 const uint8_t version_major = 0;
-const uint8_t version_minor = 0;
-const uint8_t version_patch = 1;
+const uint8_t version_minor = 1;
+const uint8_t version_patch = 0;
 uint8_t hw_revision = 0;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -263,7 +273,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   ACT_LED_off_ts = micros() + 10000;
 }
 
-const char boot_message[] = "USB4VC Protocol Board\nApple Pre-USB\ndekuNukem 2022";
+const char boot_message[] = "USB4VC Protocol Card\nApple Lisa, Mac, and ADB\ndekuNukem 2023";
 
 /*
 
@@ -615,9 +625,10 @@ int main(void)
   MX_TIM16_Init();
   MX_TIM17_Init();
   MX_TIM14_Init();
-  // MX_IWDG_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-  // HAL_IWDG_Refresh(&hiwdg);
+  HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_SET);
+  HAL_IWDG_Refresh(&hiwdg);
   printf("%s\nrev%d v%d.%d.%d\n", boot_message, hw_revision, version_major, version_minor, version_patch);
   delay_us_init(&htim2);
   protocol_status_lookup_init();
@@ -640,9 +651,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
+  HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, GPIO_PIN_RESET);
 	while (1)
   {
+    HAL_IWDG_Refresh(&hiwdg);
     HAL_GPIO_WritePin(ERR_LED_GPIO_Port, ERR_LED_Pin, spi_error_occured);
     if(micros() > ACT_LED_off_ts)
       HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
@@ -717,7 +729,7 @@ static void MX_IWDG_Init(void)
 {
 
   hiwdg.Instance = IWDG;
-  hiwdg.Init.Prescaler = IWDG_PRESCALER_16;
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_32;
   hiwdg.Init.Window = 4095;
   hiwdg.Init.Reload = 4095;
   if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
