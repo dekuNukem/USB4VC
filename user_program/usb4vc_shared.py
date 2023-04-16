@@ -5,7 +5,7 @@ config_dir_path = "/home/pi/usb4vc/config"
 firmware_dir_path = "/home/pi/usb4vc/firmware"
 temp_dir_path = "/home/pi/usb4vc/temp"
 
-i2c_bootloader_pbid = [1]
+i2c_bootloader_pbid = [1, 3]
 usb_bootloader_pbid = [2]
 
 def ensure_dir(dir_path):
@@ -18,9 +18,12 @@ def ensure_dir(dir_path):
 20230307
 Added BUSY signal detect
 
+0.3.1
+20230416
+Added Lisa Mac ADB card firmware update support
 """
 
-RPI_APP_VERSION_TUPLE = (0, 3, 0)
+RPI_APP_VERSION_TUPLE = (0, 3, 1)
 
 code_name_to_value_lookup = {
 	'KEY_RESERVED':(0, 'kb_key'),
