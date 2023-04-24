@@ -7,7 +7,7 @@ import evdev
 import threading
 import RPi.GPIO as GPIO
 import usb4vc_ui
-import usb4vc_shared
+from usb4vc_shared import *
 import usb4vc_gamepads
 
 """
@@ -128,11 +128,11 @@ def xfer_when_not_busy(data, drop=False):
     return pcard_spi.xfer(data)
 
 def is_gamepad_button(event_code):
-    name_result = usb4vc_shared.code_value_to_name_lookup.get(event_code)
+    name_result = code_value_to_name_lookup.get(event_code)
     if name_result is None:
         return False
     for item in name_result:
-        if item in usb4vc_shared.gamepad_event_code_name_list:
+        if item in gamepad_event_code_name_list:
             return True
     return False
 
@@ -250,7 +250,7 @@ def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
     elif 'Xbox' in usb_gamepad_type and map_dict_copy.get("MAPPING_TYPE") == "DEFAULT_MOUSE_KB":
         map_dict_copy = usb4vc_gamepads.XBOX_DEFAULT_KB_MOUSE_MAPPING
 
-    source_name = usb4vc_shared.code_value_to_name_lookup.get(source_code)
+    source_name = code_value_to_name_lookup.get(source_code)
     if source_name is None:
         return None, None
     if 'Xbox' in usb_gamepad_type:
@@ -267,7 +267,7 @@ def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
         return None, None
     target_info = dict(target_info) # make a copy so the lookup table itself won't get modified
 
-    lookup_result = usb4vc_shared.code_name_to_value_lookup.get(target_info['code'])
+    lookup_result = code_name_to_value_lookup.get(target_info['code'])
     if lookup_result is None:
         return None, None
     source_type = None
@@ -279,7 +279,7 @@ def find_keycode_in_mapping(source_code, mapping_dict, usb_gamepad_type):
         return None, None
     target_info['code'] = lookup_result[0]
     if 'code_neg' in target_info:
-        target_info['code_neg'] = usb4vc_shared.code_name_to_value_lookup.get(target_info['code_neg'])[0]
+        target_info['code_neg'] = code_name_to_value_lookup.get(target_info['code_neg'])[0]
     target_info['type'] = lookup_result[1]
     return source_type, target_info
 
@@ -424,7 +424,7 @@ def make_15pin_gamepad_spi_packet(gp_status_dict, this_device_info, mapping_info
                 pass
             if abs(movement) <= deadzone_amount:
                 movement = 0
-            joystick_to_mouse_slowdown = 17
+            joystick_to_mouse_slowdown = 10
             curr_mouse_output[target_code] = int(movement / joystick_to_mouse_slowdown)
             curr_mouse_output['is_modified'] = True
 
@@ -519,19 +519,19 @@ def xbname_to_ev_codename(xb_btn):
     ev_name = usb4vc_gamepads.xbox_one_to_linux_ev_code_dict.get(xb_btn)
     if ev_name is None:
         return None
-    return usb4vc_shared.code_name_to_value_lookup[ev_name][0]
+    return code_name_to_value_lookup[ev_name][0]
 
 def ps5name_to_ev_codename(ps5_btn):
     ev_name = usb4vc_gamepads.ps5_to_linux_ev_code_dict.get(ps5_btn)
     if ev_name is None:
         return None
-    return usb4vc_shared.code_name_to_value_lookup[ev_name][0] 
+    return code_name_to_value_lookup[ev_name][0] 
 
 def ps4name_to_ev_codename(ps4_btn):
     ev_name = usb4vc_gamepads.ps4_to_linux_ev_code_dict.get(ps4_btn)
     if ev_name is None:
         return None
-    return usb4vc_shared.code_name_to_value_lookup[ev_name][0]
+    return code_name_to_value_lookup[ev_name][0]
 
 xbox_to_generic_dict = {
     xbname_to_ev_codename('XB_A'):'FACE_BUTTON_SOUTH',
@@ -841,7 +841,7 @@ def raw_input_event_worker():
                         last_mouse_msg = list(this_mouse_msg)
                 if this_device['is_gp']:
                     for axis_name in USB_GAMEPAD_STICK_AXES_NAMES:
-                        axis_code = usb4vc_shared.code_name_to_value_lookup.get(axis_name)[0]
+                        axis_code = code_name_to_value_lookup.get(axis_name)[0]
                         this_gp_dict = gamepad_status_dict[this_device['id']]
                         if axis_code in this_gp_dict and 127 - 10 <= this_gp_dict[axis_code] <= 127 + 10:
                             this_gp_dict[axis_code] = 127
@@ -884,7 +884,7 @@ def check_is_gamepad(capability_dict):
             key_name_set.add(item)
         if isinstance(item, list):
             key_name_set.update(item)
-    for item in usb4vc_shared.gamepad_event_code_name_list:
+    for item in gamepad_event_code_name_list:
         if item in key_name_set:
             return True
     return False
@@ -975,9 +975,9 @@ usb_device_scan_thread = threading.Thread(target=usb_device_scan_worker, daemon=
 def get_pboard_info():
     # send request
     this_msg = list(info_request_spi_msg_template)
-    this_msg[3] = usb4vc_shared.RPI_APP_VERSION_TUPLE[0]
-    this_msg[4] = usb4vc_shared.RPI_APP_VERSION_TUPLE[1]
-    this_msg[5] = usb4vc_shared.RPI_APP_VERSION_TUPLE[2]
+    this_msg[3] = RPI_APP_VERSION_TUPLE[0]
+    this_msg[4] = RPI_APP_VERSION_TUPLE[1]
+    this_msg[5] = RPI_APP_VERSION_TUPLE[2]
     xfer_when_not_busy(this_msg)
 
     time.sleep(0.05)

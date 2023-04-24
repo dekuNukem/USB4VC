@@ -8,20 +8,13 @@ import usb4vc_oled
 from luma.core.render import canvas
 import RPi.GPIO as GPIO
 import usb4vc_usb_scan
-import usb4vc_shared
 import usb4vc_show_ev
 import usb4vc_check_update
 import json
 import subprocess
 from subprocess import Popen, PIPE
 
-from usb4vc_shared import this_app_dir_path
-from usb4vc_shared import config_dir_path
-from usb4vc_shared import firmware_dir_path
-from usb4vc_shared import temp_dir_path
-from usb4vc_shared import ensure_dir
-from usb4vc_shared import i2c_bootloader_pbid
-from usb4vc_shared import usb_bootloader_pbid
+from usb4vc_shared import *
 
 config_file_path = os.path.join(config_dir_path, 'config.json')
 
@@ -63,11 +56,7 @@ class my_button(object):
             result = True
         self.prev_state = current_state
         return result
-        
-PBOARD_ID_UNKNOWN = 0
-PBOARD_ID_IBMPC = 1
-PBOARD_ID_ADB = 2
-PBOARD_ID_APPLE_LISA_MAC_ADB = 3
+
 
 pboard_info_spi_msg = [0] * 32
 this_pboard_id = PBOARD_ID_UNKNOWN
@@ -515,7 +504,7 @@ class usb4vc_menu(object):
                         draw.text((0, 0), f"{self.pb_info['full_name']} PID {this_pboard_id}", font=usb4vc_oled.font_regular, fill="white")
                     else:
                         draw.text((0, 0), f"{self.pb_info['full_name']}", font=usb4vc_oled.font_regular, fill="white")
-                    draw.text((0, 10), f"PB {self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  RPi {usb4vc_shared.RPI_APP_VERSION_TUPLE[0]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[1]}.{usb4vc_shared.RPI_APP_VERSION_TUPLE[2]}", font=usb4vc_oled.font_regular, fill="white")
+                    draw.text((0, 10), f"PB {self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  RPi {RPI_APP_VERSION_TUPLE[0]}.{RPI_APP_VERSION_TUPLE[1]}.{RPI_APP_VERSION_TUPLE[2]}", font=usb4vc_oled.font_regular, fill="white")
                     draw.text((0, 20), f"IP: {get_ip_address()}", font=usb4vc_oled.font_regular, fill="white")
             if page == 2:
                 with canvas(usb4vc_oled.oled_device) as draw:
@@ -863,15 +852,15 @@ def ui_init():
     if this_pboard_id in pboard_database:
         # load custom profile mapping into protocol list
         for item in custom_profile_list:
-            this_mapping_bid = usb4vc_shared.board_id_lookup.get(item['protocol_board'], 0)
+            this_mapping_bid = board_id_lookup.get(item['protocol_board'], 0)
             if this_mapping_bid == this_pboard_id and item['device_type'] in pboard_database[this_pboard_id]:
-                this_mapping_pid = usb4vc_shared.protocol_id_lookup.get(item['protocol_name'])
+                this_mapping_pid = protocol_id_lookup.get(item['protocol_name'])
                 item['pid'] = this_mapping_pid
                 pboard_database[this_pboard_id][item['device_type']].append(item)
         pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
         pboard_database[this_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
     if 'rpi_app_ver' not in configuration_dict:
-        configuration_dict['rpi_app_ver'] = usb4vc_shared.RPI_APP_VERSION_TUPLE
+        configuration_dict['rpi_app_ver'] = RPI_APP_VERSION_TUPLE
     if this_pboard_id not in configuration_dict:
         configuration_dict[this_pboard_id] = {"keyboard_protocol_index":1, "mouse_protocol_index":1, "mouse_sensitivity_index":0, "gamepad_protocol_index":1}
 

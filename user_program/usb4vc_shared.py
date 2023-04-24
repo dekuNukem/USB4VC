@@ -5,13 +5,41 @@ config_dir_path = "/home/pi/usb4vc/config"
 firmware_dir_path = "/home/pi/usb4vc/firmware"
 temp_dir_path = "/home/pi/usb4vc/temp"
 
-i2c_bootloader_pbid = [1, 3]
-usb_bootloader_pbid = [2]
-
 def ensure_dir(dir_path):
     print('ensure_dir', dir_path)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
+
+PBOARD_ID_UNKNOWN = 0
+PBOARD_ID_IBMPC = 1
+PBOARD_ID_ADB = 2
+PBOARD_ID_APPLE_LISA_MAC_ADB = 3
+
+i2c_bootloader_pbid = [PBOARD_ID_IBMPC, PBOARD_ID_APPLE_LISA_MAC_ADB]
+usb_bootloader_pbid = [PBOARD_ID_ADB]
+
+board_id_lookup = {
+	'Unknown':PBOARD_ID_UNKNOWN,
+	'IBMPC':PBOARD_ID_IBMPC,
+	'ADB':PBOARD_ID_ADB,
+	'Lisa/Mac/ADB':PBOARD_ID_APPLE_LISA_MAC_ADB,
+}
+
+protocol_id_lookup = {
+	'OFF':0,
+	'AT_PS2_KB':1,
+	'XT_KB':2,
+	'ADB_KB':3,
+	'PS2_MOUSE':4,
+	'MICROSOFT_SERIAL_MOUSE':5,
+	'ADB_MOUSE':6,
+	'GAMEPORT_15PIN_GAMEPAD':7,
+	'GAMEPORT_GRAVIS_GAMEPAD':8,
+	'GAMEPORT_MICROSOFT_SIDEWINDER':9,
+	'RAW_KEYBOARD':125,
+	'RAW_MOUSE':126,
+	'RAW_GAMEPAD':127,
+}
 
 """
 0.3.0
@@ -21,9 +49,14 @@ Added BUSY signal detect
 0.3.1
 20230416
 Added Lisa Mac ADB card firmware update support
+
+0.3.2
+20230424
+Added lisa mac adb card custom mapping support 
+made USB joystick-to-mouse movement speed faster
 """
 
-RPI_APP_VERSION_TUPLE = (0, 3, 1)
+RPI_APP_VERSION_TUPLE = (0, 3, 2)
 
 code_name_to_value_lookup = {
 	'KEY_RESERVED':(0, 'kb_key'),
@@ -494,28 +527,6 @@ code_value_to_name_lookup = {
 	0x16:{'ABS_HAT3X'},
 	0x17:{'ABS_HAT3Y'},
 	373:{'BTN_MODE'},
-}
-
-board_id_lookup = {
-	'Unknown':0,
-	'IBMPC':1,
-	'ADB':2,
-}
-
-protocol_id_lookup = {
-	'OFF':0,
-	'AT_PS2_KB':1,
-	'XT_KB':2,
-	'ADB_KB':3,
-	'PS2_MOUSE':4,
-	'MICROSOFT_SERIAL_MOUSE':5,
-	'ADB_MOUSE':6,
-	'GAMEPORT_15PIN_GAMEPAD':7,
-	'GAMEPORT_GRAVIS_GAMEPAD':8,
-	'GAMEPORT_MICROSOFT_SIDEWINDER':9,
-	'RAW_KEYBOARD':125,
-	'RAW_MOUSE':126,
-	'RAW_GAMEPAD':127,
 }
 
 gamepad_event_code_name_list = [
