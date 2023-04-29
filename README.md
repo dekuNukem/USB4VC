@@ -49,19 +49,13 @@ USB4VC is now available [on my Tindie store](https://www.tindie.com/products/dek
 
 **Questions or comments?** Ask in [official Discord](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [Twitter DM](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
 
-## Promo Video
-
-Click to see USB4VC in action!
-
-<table>
-  <tr>
-    <td><a href="https://www.youtube.com/watch?v=54sdPELuu4g" title="YouTube" rel="noopener"><img src="https://i.imgur.com/pFqa7sO.png"></a></td>
-  </tr>
-</table>
+## Videos
 
 * [Click me for LGR Review!](https://www.youtube.com/watch?v=tbHr7ULpusM)
 
 * [Click me for Michael MJD Review!](https://www.youtube.com/watch?v=Hv4A9p7Cn2s)
+
+* [Click me for 1Bit Fever Dreams review of Lisa/Mac/ADB card!](https://youtu.be/ALm5LWS0fqU)
 
 ## Highlights
 
