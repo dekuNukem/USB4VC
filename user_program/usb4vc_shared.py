@@ -54,9 +54,13 @@ Added Lisa Mac ADB card firmware update support
 20230424
 Added lisa mac adb card custom mapping support 
 made USB joystick-to-mouse movement speed faster
+
+0.3.3
+20230424
+dropped mouse busy drop
 """
 
-RPI_APP_VERSION_TUPLE = (0, 3, 2)
+RPI_APP_VERSION_TUPLE = (0, 3, 3)
 
 code_name_to_value_lookup = {
 	'KEY_RESERVED':(0, 'kb_key'),

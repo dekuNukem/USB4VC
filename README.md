@@ -51,11 +51,11 @@ USB4VC is now available [on my Tindie store](https://www.tindie.com/products/dek
 
 ## Videos
 
-* [Click me for LGR Review!](https://www.youtube.com/watch?v=tbHr7ULpusM)
+* [LGR Review](https://www.youtube.com/watch?v=tbHr7ULpusM)
 
-* [Click me for Michael MJD Review!](https://www.youtube.com/watch?v=Hv4A9p7Cn2s)
+* [Michael MJD Review](https://www.youtube.com/watch?v=Hv4A9p7Cn2s)
 
-* [Click me for 1Bit Fever Dreams review of Lisa/Mac/ADB card!](https://youtu.be/ALm5LWS0fqU)
+* [1Bit Fever Dreams review of Lisa/Mac/ADB card](https://youtu.be/ALm5LWS0fqU)
 
 ## Highlights
 
