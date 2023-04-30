@@ -835,7 +835,7 @@ def raw_input_event_worker():
                         pass
                     # send spi mouse message if there is moment, or the button is not typematic
                     elif (max(this_mouse_msg[13:18]) != 2 or sum(this_mouse_msg[4:10]) != 0) and (this_mouse_msg[4:] != last_mouse_msg[4:] or sum(this_mouse_msg[4:]) != 0):
-                        xfer_when_not_busy(list(this_mouse_msg), drop=True)
+                        xfer_when_not_busy(list(this_mouse_msg))
                         next_gamepad_hold_check = now + gamepad_hold_check_interval
                         clear_mouse_movement(mouse_status_dict)
                         last_mouse_msg = list(this_mouse_msg)

@@ -66,10 +66,18 @@ UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+
+/*
+0.5.6
+2023 04 30
+Capped PS/2 mouse rate at 200Hz
+
+
+*/
 const uint8_t board_id = 1;
 const uint8_t version_major = 0;
 const uint8_t version_minor = 5;
-const uint8_t version_patch = 5;
+const uint8_t version_patch = 6;
 uint8_t hw_revision;
 
 uint8_t spi_transmit_buf[SPI_BUF_SIZE];
@@ -363,6 +371,7 @@ void get_consolidated_mouse_event(mouse_buf* mbuf, mouse_event* cme_result)
   cap_to_127(&cme_result->movement_y);
 }
 
+uint32_t last_mouse_movement;
 void ps2mouse_update(void)
 {
   ps2mouse_bus_status = ps2mouse_get_bus_status();
@@ -379,6 +388,10 @@ void ps2mouse_update(void)
     PCARD_BUSY_LOW();
     return;
   }
+
+  // 5ms, PS/2 tops out at 200Hz
+  if(micros() - last_mouse_movement <= 5000)
+    return;
 
   if(mouse_buf_peek(&my_mouse_buf) == NULL)
     return;
@@ -399,6 +412,7 @@ void ps2mouse_update(void)
         break;
     }
   }
+  last_mouse_movement = micros();
   PCARD_BUSY_LOW();
 }
 
@@ -685,7 +699,6 @@ int main(void)
 
   while (1)
   {
-    // HAL_GPIO_TogglePin(PCARD_BUSY_GPIO_Port, PCARD_BUSY_Pin);
     HAL_IWDG_Refresh(&hiwdg);
     if(micros() > ACT_LED_off_ts)
       HAL_GPIO_WritePin(ACT_LED_GPIO_Port, ACT_LED_Pin, GPIO_PIN_RESET);
