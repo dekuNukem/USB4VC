@@ -72,6 +72,9 @@ UART_HandleTypeDef huart3;
 2023 04 30
 Capped PS/2 mouse rate at 200Hz
 
+0.5.7
+2023 05 01
+fixed a baud rate bug
 
 */
 const uint8_t board_id = 1;
@@ -899,6 +902,8 @@ static void MX_USART1_UART_Init(void)
 
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 115200;
+  if(flash_size != 64)
+    huart1.Init.BaudRate = 195134;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -920,6 +925,8 @@ static void MX_USART3_UART_Init(void)
 
   huart3.Instance = USART3;
   huart3.Init.BaudRate = 1200;
+  if(flash_size != 64)
+    huart3.Init.BaudRate = 2032;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
   huart3.Init.Mode = UART_MODE_TX_RX;
