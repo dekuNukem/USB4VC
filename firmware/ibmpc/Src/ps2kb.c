@@ -18,6 +18,8 @@
 #define LINUX_KEYCODE_TO_PS2_SCANCODE_SET2_SPECIAL_SIZE 32
 #define LINUX_KEYCODE_TO_PS2_SCANCODE_SET3_SIZE 195
 
+uint8_t is_BAT_done;
+
 const uint8_t linux_keycode_to_ps3_scancode_lookup_codeset3[LINUX_KEYCODE_TO_PS2_SCANCODE_SET3_SIZE] = 
 {
   CODE_UNUSED, // KEY_RESERVED    0
@@ -533,6 +535,7 @@ void ps2kb_reset(void)
 {
   ps2kb_current_scancode_set = 2;
   ps2kb_data_reporting_enabled = 1;
+  is_BAT_done = 0;
   memcpy(scancode_set3_current_status, scancode_set3_default_status, SET3_STATUS_LOOKUP_SIZE);
 }
 
@@ -619,7 +622,7 @@ uint8_t ps2kb_write_nowait(uint8_t data)
   delay_us(CLKFULL);
   PS2KB_CLK_HI();
   delay_us(CLKHALF);
-  if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
+  if(is_BAT_done && PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
   {
     ps2kb_release_lines();
     return PS2_ERROR_HOST_INHIBIT;
@@ -637,7 +640,7 @@ uint8_t ps2kb_write_nowait(uint8_t data)
     delay_us(CLKFULL);
     PS2KB_CLK_HI();
     delay_us(CLKHALF);
-    if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
+    if(is_BAT_done && PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
     {
       ps2kb_release_lines();
       return PS2_ERROR_HOST_INHIBIT;
@@ -658,7 +661,7 @@ uint8_t ps2kb_write_nowait(uint8_t data)
   delay_us(CLKFULL);
   PS2KB_CLK_HI();
   delay_us(CLKHALF);
-  if(PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
+  if(is_BAT_done && PS2KB_READ_CLK_PIN() == GPIO_PIN_RESET)
   {
     ps2kb_release_lines();
     return PS2_ERROR_HOST_INHIBIT;
@@ -687,6 +690,9 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
   		return PS2_ERROR_TIMEOUT;
   }
 
+  if(is_BAT_done == 0)
+    goto nowait;
+
   ps2kb_wait_start = micros();
   // make sure idle is more than 50us, some PC will actually spike clock line briefly during inhibition in certain DOS games
   while(micros() - ps2kb_wait_start < 60)
@@ -695,6 +701,7 @@ uint8_t ps2kb_write(uint8_t data, uint8_t delay_start, uint8_t timeout_ms)
       goto ps2kb_write_idle_check;
   }
 
+  nowait:
   // if responding to host, wait a little while for it to get ready
   if(delay_start)
     delay_us(BYTEWAIT);
@@ -749,6 +756,7 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
       ps2kb_reset();
       HAL_Delay(333); // probably unnecessary, but that's what most keyboards do
 	    ps2kb_write(0xAA, 0, 250);
+      is_BAT_done = 1;
       // IBM battlecruiser 1394324 sends two extra keyboard ID bytes after reset
       // ps2kb_write(0xBF, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
       // ps2kb_write(0xAC, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS);
