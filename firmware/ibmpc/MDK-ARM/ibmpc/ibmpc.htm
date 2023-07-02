@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ibmpc\ibmpc.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ibmpc\ibmpc.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Jul 02 17:26:39 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon May 01 18:53:28 2023
 <BR><P>
 <H3>Maximum Stack Usage =        212 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1047,7 +1047,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kb_buf_init
 </UL>
 
-<P><STRONG><a name="[b3]"></a>keyboard_reply</STRONG> (Thumb, 348 bytes, Stack size 32 bytes, ps2kb.o(i.keyboard_reply))
+<P><STRONG><a name="[b3]"></a>keyboard_reply</STRONG> (Thumb, 342 bytes, Stack size 32 bytes, ps2kb.o(i.keyboard_reply))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = keyboard_reply &rArr; ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
@@ -1310,7 +1310,7 @@ Global Symbols
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;handle_protocol_switch
 </UL>
 
-<P><STRONG><a name="[ac]"></a>ps2kb_reset</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_reset))
+<P><STRONG><a name="[ac]"></a>ps2kb_reset</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, ps2kb.o(i.ps2kb_reset))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = ps2kb_reset
 </UL>
 <BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
@@ -1337,7 +1337,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[b5]"></a>ps2kb_write</STRONG> (Thumb, 96 bytes, Stack size 24 bytes, ps2kb.o(i.ps2kb_write))
+<P><STRONG><a name="[b5]"></a>ps2kb_write</STRONG> (Thumb, 90 bytes, Stack size 24 bytes, ps2kb.o(i.ps2kb_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = ps2kb_write &rArr; ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -1352,7 +1352,7 @@ Global Symbols
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keyboard_reply
 </UL>
 
-<P><STRONG><a name="[cf]"></a>ps2kb_write_nowait</STRONG> (Thumb, 304 bytes, Stack size 24 bytes, ps2kb.o(i.ps2kb_write_nowait))
+<P><STRONG><a name="[cf]"></a>ps2kb_write_nowait</STRONG> (Thumb, 286 bytes, Stack size 24 bytes, ps2kb.o(i.ps2kb_write_nowait))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = ps2kb_write_nowait &rArr; ps2kb_release_lines
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
@@ -1770,10 +1770,10 @@ Local Symbols
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_ErrorCallback
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_EndRxTxTransaction
 </UL>
-<BR>[Called By]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesRxISR_16BIT
+<BR>[Called By]<UL><LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesRxISR_8BIT
+<LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesRxISR_16BIT
 <LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesTxISR_8BIT
 <LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesTxISR_16BIT
-<LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_2linesRxISR_8BIT
 </UL>
 
 <P><STRONG><a name="[29]"></a>SPI_DMAAbortOnError</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, stm32f0xx_hal_spi.o(i.SPI_DMAAbortOnError))
