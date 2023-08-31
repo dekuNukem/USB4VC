@@ -502,6 +502,27 @@ const uint8_t linux_keycode_to_ps2_scancode_lookup_special_codeset2[LINUX_KEYCOD
   0x2F, // KEY_COMPOSE    127
 };
 
+
+const uint8_t linux_keycode_to_ps2_scancode_lookup_special_codeset1[] =
+{
+  LINUX_KEYCODE_ENTER, // KPENTER    96
+  LINUX_KEYCODE_CTRL, // KEY_RIGHTCTRL    97
+  LINUX_KEYCODE_SLASH, // KEY_KPSLASH    98
+  CODE_UNUSED, // 99
+  LINUX_KEYCODE_ALT, // KEY_RIGHTALT   100
+  CODE_UNUSED, // 101
+  LINUX_KEYCODE_KP7, // KEY_HOME   102
+  LINUX_KEYCODE_KP8, // KEY_UP     103
+  LINUX_KEYCODE_KP9, // KEY_PAGEUP   104
+  LINUX_KEYCODE_KP4, // KEY_LEFT   105
+  LINUX_KEYCODE_KP6, // KEY_RIGHT    106
+  LINUX_KEYCODE_KP1, // KEY_END      107
+  LINUX_KEYCODE_KP2, // KEY_DOWN   108
+  LINUX_KEYCODE_KP3, // KEY_PAGEDOWN   109
+  LINUX_KEYCODE_KP0, // KEY_INSERT   110
+  LINUX_KEYCODE_KPDOT // KEY_DELETE   111
+};
+
 GPIO_TypeDef* ps2kb_clk_port;
 uint16_t ps2kb_clk_pin;
 
@@ -838,13 +859,24 @@ void keyboard_reply(uint8_t cmd, uint8_t *leds)
   }
 }
 
-#define LINUX_KEYCODE_F11 87
-#define LINUX_KEYCODE_F12 88
+
 uint8_t ps2kb_press_key_scancode_1(uint8_t linux_keycode, uint8_t linux_keyvalue)
 {
+  uint8_t flag_extended = 0;
+  if(linux_keycode>=LINUX_KEYCODE_KPENTER && linux_keycode<=LINUX_KEYCODE_DELETE) {
+    uint8_t lookup_result = linux_keycode_to_ps2_scancode_lookup_special_codeset1[linux_keycode-LINUX_KEYCODE_KPENTER];
+    if (lookup_result!=CODE_UNUSED) {
+      linux_keycode = lookup_result;
+      flag_extended =1;
+    }
+  }
   // XT codes
   if(linux_keycode <= 83 || linux_keycode == LINUX_KEYCODE_F11 || linux_keycode == LINUX_KEYCODE_F12)
   {
+    if(flag_extended) {
+      if(ps2kb_write(0xe0, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS))
+        return PS2_ERROR_HOST_INHIBIT;
+    }
     if(linux_keyvalue)
     {
       if(ps2kb_write(linux_keycode, 0, PS2KB_WRITE_DEFAULT_TIMEOUT_MS))
