@@ -7,16 +7,18 @@ import requests
 import zipfile
 import shutil
 
-from usb4vc_shared import RPI_APP_VERSION_TUPLE
-from usb4vc_shared import this_app_dir_path
-from usb4vc_shared import config_dir_path
-from usb4vc_shared import firmware_dir_path
-from usb4vc_shared import temp_dir_path
-from usb4vc_shared import ensure_dir
-from usb4vc_shared import i2c_bootloader_pbid
-from usb4vc_shared import usb_bootloader_pbid
+from usb4vc_shared import (
+    RPI_APP_VERSION_TUPLE,
+    this_app_dir_path,
+    firmware_dir_path,
+    usb4vc_releases_url,
+    firmware_releases_url,
+    firmware_download_url_template,
+    usb_bootloader_pbid,
+    temp_dir_path,
+    ensure_dir
+)
 
-usb4vc_release_url = "https://api.github.com/repos/dekuNukem/usb4vc/releases/latest"
 
 def is_internet_available():
     try:
@@ -33,7 +35,7 @@ def get_remote_tag_version():
     try:
         if is_internet_available() is False:
             return 1, 'Internet Unavailable'
-        result_dict = json.loads(urllib.request.urlopen(usb4vc_release_url).read())
+        result_dict = json.loads(urllib.request.urlopen(usb4vc_releases_url).read())
         return 0, versiontuple(result_dict['tag_name'])
     except Exception as e:
         return 2, f'exception: {e}'
@@ -47,7 +49,7 @@ def download_latest_usb4vc_release(save_path):
     try:
         if is_internet_available() is False:
             return 1, 'Internet Unavailable'
-        result_dict = json.loads(urllib.request.urlopen(usb4vc_release_url).read())
+        result_dict = json.loads(urllib.request.urlopen(usb4vc_releases_url).read())
         header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36',}
         for item in result_dict['assets']:
             if item['name'].lower().startswith('usb4vc_src') and item['name'].lower().endswith('.zip'):
@@ -93,18 +95,20 @@ def update(temp_path):
             return 4, 'Too few files'
     except Exception as e:
         return 5, f'Unknown error: {e}'
+    
+    current_dir_owner = os.stat(this_app_dir_path)
     os.system(f'rm -rfv {os.path.join(this_app_dir_path, "*")}')
     os.system(f'cp -fv {os.path.join(src_code_path, "*")} {this_app_dir_path}')
-    os.system(f'chown pi {os.path.join(this_app_dir_path, "*")}') # change owner from root back to pi for easy editing
-    return 0, 'Success'
 
-firmware_url = 'https://api.github.com/repos/dekuNukem/USB4VC/contents/firmware/releases?ref=master'
+    # change owner from root back to original user for easy editing
+    os.system(f'chown {current_dir_owner.st_uid}:{current_dir_owner.st_gid} {os.path.join(this_app_dir_path, "*")}')
+    return 0, 'Success'
 
 # version number most recent to least recent
 # dont forget to check extension
 def get_firmware_list(pcard_id):
     try:
-        file_list = json.loads(urllib.request.urlopen(firmware_url).read())
+        file_list = json.loads(urllib.request.urlopen(firmware_releases_url).read())
         fw_list = [x['name'] for x in file_list if 'name' in x and 'type' in x and x['type'] == 'file']
         fw_list = [d for d in fw_list if d.startswith('PBFW') and f"PBID{pcard_id}" in d]
         fw_list.sort(key=lambda s: list(map(int, s.lower().split('_v')[1].split('.')[0].replace('_', '.').split('.'))), reverse=True)
@@ -122,7 +126,7 @@ def download_latest_firmware(pcard_id):
     if len(fw_list) == 0:
         return 1
     fw_filename = fw_list[0]
-    fw_download_url = f"https://github.com/dekuNukem/USB4VC/raw/master/firmware/releases/{fw_filename}"
+    fw_download_url = firmware_download_url_template.format(fw_filename = fw_filename)
     ensure_dir(firmware_dir_path)
     os.system(f'rm -rfv {os.path.join(firmware_dir_path, "*")}')
     print("downloading", fw_download_url)

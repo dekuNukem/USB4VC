@@ -4,6 +4,7 @@ import time
 import math
 import spidev
 import evdev
+import struct
 import threading
 import RPi.GPIO as GPIO
 import usb4vc_ui
@@ -753,6 +754,12 @@ def raw_input_event_worker():
     last_gamepad_msg = None
     in_deadzone_list = []
     last_mouse_button_msg = None
+
+    # should be 16 bytes total on a 32bit system, 24 on a 64bit
+    input_event_time_size = struct.calcsize("PP") # 64bit kernel uses 64bit longs for timestamps
+    input_event_data_size = struct.calcsize("HHi")
+    input_event_size = input_event_time_size + input_event_data_size
+
     print("raw_input_event_worker started")
     while 1:
         now = time.time()
@@ -769,7 +776,7 @@ def raw_input_event_worker():
             this_device = opened_device_dict[key]
             this_id = this_device['id']
             try:
-                data = this_device['file'].read(16)
+                data = this_device['file'].read(input_event_size)
             except OSError:
                 print("Device disappeared:", this_device['name'])
                 this_device['file'].close()
@@ -784,7 +791,11 @@ def raw_input_event_worker():
             if this_device['is_gp'] and this_id not in gamepad_status_dict:
                 gamepad_status_dict[this_id] = {}
 
-            data = list(data[8:])
+            data = list(data[input_event_time_size:])
+            if len(data) < input_event_data_size:
+                print("unexpected event data length")
+                continue
+
             event_code = data[3] * 256 + data[2]
 
             # event is a key press

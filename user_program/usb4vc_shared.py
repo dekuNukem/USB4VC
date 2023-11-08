@@ -1,9 +1,25 @@
 import os
 
-this_app_dir_path = "/home/pi/usb4vc/rpi_app"
-config_dir_path = "/home/pi/usb4vc/config"
-firmware_dir_path = "/home/pi/usb4vc/firmware"
-temp_dir_path = "/home/pi/usb4vc/temp"
+# allow overriding some paths with environment
+xpadneo_source_path = os.getenv("XPADNEO_SOURCE_PATH", "/home/pi/xpadneo")
+base_install_path = os.getenv("USB4VC_INSTALL_PATH", "/home/pi/usb4vc")
+github_repo_name = os.getenv("USB4VC_REPO", "dekuNukem/USB4VC")
+firmware_branch_ref = os.getenv("USB4VC_FIRMWARE_BRANCH_REF", "master")
+running_in_systemd = os.getenv("USB4VC_IS_SYSTEMD", "0") == "1"
+
+usb4vc_releases_url = f"https://api.github.com/repos/{github_repo_name}/releases/latest"
+firmware_releases_url = f"https://api.github.com/repos/{github_repo_name}/contents/firmware/releases?ref={firmware_branch_ref}"
+firmware_download_url_template = f"https://github.com/{github_repo_name}/raw/{firmware_branch_ref}/firmware/releases/{{fw_filename}}"
+
+rpi_model_save_file_name = "rpi_model.txt"
+config_file_name = "config.json"
+
+this_app_dir_path = os.path.join(base_install_path, "rpi_app")
+config_dir_path = os.path.join(base_install_path, "config")
+firmware_dir_path = os.path.join(base_install_path, "firmware")
+temp_dir_path = os.path.join(base_install_path, "temp")
+rpi_model_save_file_path = os.path.join(base_install_path, rpi_model_save_file_name)
+config_file_path = os.path.join(config_dir_path, config_file_name)
 
 def ensure_dir(dir_path):
     print('ensure_dir', dir_path)
@@ -60,7 +76,7 @@ made USB joystick-to-mouse movement speed faster
 dropped mouse busy drop
 """
 
-RPI_APP_VERSION_TUPLE = (0, 3, 3)
+RPI_APP_VERSION_TUPLE = (0, 3, 4)
 
 code_name_to_value_lookup = {
 	'KEY_RESERVED':(0, 'kb_key'),
