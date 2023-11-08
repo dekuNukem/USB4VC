@@ -1,0 +1,19 @@
+[Unit]
+Description=usb4vc background service
+After=multi-user.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/usb4vc/rpi_app
+Environment=USB4VC_IS_SYSTEMD=1
+Environment=USB4VC_INSTALL_PATH=/opt/usb4vc
+Environment=XPADNEO_SOURCE_PATH=/opt/xpadneo
+ExecStart=/opt/usb4vc/venv/bin/python3 -u usb4vc_main.py
+Restart=always
+RestartSec=1
+
+# 169 << 8 ? (from keep_alive.py)
+RestartPreventExitStatus=43264
+
+[Install]
+WantedBy=multi-user.target

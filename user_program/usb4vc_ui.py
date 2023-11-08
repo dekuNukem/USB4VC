@@ -16,8 +16,6 @@ from subprocess import Popen, PIPE
 
 from usb4vc_shared import *
 
-config_file_path = os.path.join(config_dir_path, 'config.json')
-
 ensure_dir(this_app_dir_path)
 ensure_dir(config_dir_path)
 ensure_dir(firmware_dir_path)
@@ -161,7 +159,7 @@ except Exception as e:
 def get_list_of_usb_drive():
     usb_drive_set = set()
     try:
-        usb_drive_path = subprocess.getoutput(f"timeout 2 df -h | grep -i usb").replace('\r', '').split('\n')
+        usb_drive_path = subprocess.getoutput(f"(timeout 2 df -h | grep -e '/media/*') 2>/dev/null").replace('\r', '').split('\n')
         for item in [x for x in usb_drive_path if len(x) > 2]:
             usb_drive_set.add(os.path.join(item.split(' ')[-1], 'usb4vc'))
     except Exception as e:
@@ -175,7 +173,11 @@ def copy_debug_log():
     for this_path in usb_drive_set:
         if os.path.isdir(this_path):
             print('copying debug log to', this_path)
-            os.system(f'sudo cp -v /home/pi/usb4vc/usb4vc_debug_log.txt {this_path}')
+            if running_in_systemd:
+                dest_log_path = os.path.join(this_path, "usb4vc_debug_log.txt")
+                os.system(f'sudo journalctl -u usb4vc > {dest_log_path}')
+            else:
+                os.system(f'sudo cp -v {base_install_path}/usb4vc_debug_log.txt {this_path}')
     return True
 
 def check_usb_drive():
@@ -281,13 +283,16 @@ def update_pboard_firmware(this_pid):
                 return True
     return False
 
+# copy configuration from usb, but preserve config.json
 def update_from_usb(usb_config_path):
     if usb_config_path is not None:
-        os.system(f'cp -v /home/pi/usb4vc/config/config.json {usb_config_path}')
-        os.system('mv -v /home/pi/usb4vc/config/config.json /home/pi/usb4vc/config.json')
-        os.system('rm -rfv /home/pi/usb4vc/config/*')
-        os.system(f"cp -v {os.path.join(usb_config_path, '*')} /home/pi/usb4vc/config")
-        os.system("mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
+        config_temp_backup_path = os.path.join(base_install_path, config_file_name)
+
+        os.system(f'cp -v {config_file_path} {usb_config_path}')
+        os.system(f'mv -v {config_file_path} {config_temp_backup_path}')
+        os.system(f"rm -rfv {os.path.join(config_dir_path, '*')}")
+        os.system(f"cp -v {os.path.join(usb_config_path, '*')} {config_dir_path}")
+        os.system(f"mv -v {config_temp_backup_path} {config_file_path}")
 
 ibmpc_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
 ibmpc_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE_NORMAL, PROTOCOL_MICROSOFT_SERIAL_MOUSE, PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE]
@@ -399,6 +404,12 @@ def get_paired_devices():
 
 def load_config():
     global configuration_dict
+
+    # save default config if a file doesn't exist
+    if not os.path.exists(config_file_path):
+        save_config()
+        return
+    
     try:
         with open(config_file_path) as json_file:
             temp_dict = json.load(json_file)

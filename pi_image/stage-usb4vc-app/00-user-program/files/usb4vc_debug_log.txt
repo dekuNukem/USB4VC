@@ -1,0 +1,6 @@
+Looking for the debug log after a base pi image update?
+The usb4vc service has moved to systemd and its install directory to /opt/usb4vc
+
+Use journalctl to get logs:
+sudo journalctl -u usb4vc (-f can be added to follow the log)
+

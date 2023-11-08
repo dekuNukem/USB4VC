@@ -1,6 +1,7 @@
 import os
 import time
 
+# original keep_alive for compatibility with existing image rc.local
 while 1:
     exit_code = os.system("cd /home/pi/usb4vc/rpi_app; python3 -u usb4vc_main.py") >> 8
     print("App died! Exit code:", exit_code)

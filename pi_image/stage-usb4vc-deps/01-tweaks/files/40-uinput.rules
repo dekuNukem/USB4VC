@@ -1,0 +1,2 @@
+# allow input group access to uinput
+SUBSYSTEM=="misc", KERNEL=="uinput", MODE="0660", GROUP="input"
