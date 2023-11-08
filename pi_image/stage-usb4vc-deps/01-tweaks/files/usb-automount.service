@@ -1,0 +1,12 @@
+[Unit]
+Description=udev monitor for USB auto mount
+After=multi-user.target
+
+[Service]
+User=root
+ExecStart=/opt/udev_usb_monitor.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,15 @@
+IMG_NAME=raspios-bookworm
+FIRST_USER_NAME=pi
+FIRST_USER_PASS=usb4vc
+TARGET_HOSTNAME=usb4vc
+KEYBOARD_KEYMAP=us
+KEYBOARD_LAYOUT="English (US)"
+TIMEZONE_DEFAULT="Etc/UTC"
+LOCALE_DEFAULT="en_US.UTF-8"
+ENABLE_SSH=1
+DISABLE_FIRST_BOOT_USER_RENAME=1
+STAGE_LIST="stage0 stage1 stage2 stage-usb4vc-deps stage-usb4vc-app"
+
+# optional
+# APT_PROXY=http://172.17.0.1:3142
+

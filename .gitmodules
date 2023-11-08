@@ -1,0 +1,23 @@
+[submodule "pi_image/pi-gen"]
+	path = pi_image/pi-gen
+	url = https://github.com/RPi-Distro/pi-gen.git
+	branch = master
+	shallow = true
+[submodule "pi_image/pi-gen-arm64"]
+	path = pi_image/pi-gen-arm64
+	url = https://github.com/RPi-Distro/pi-gen.git
+	branch = arm64
+	shallow = true
+[submodule "pi_image/stage-usb4vc-deps/00-dependencies/files/xpadneo"]
+	path = pi_image/stage-usb4vc-deps/00-dependencies/files/xpadneo
+	url = https://github.com/atar-axis/xpadneo.git
+	branch = release/v0.9
+	shallow = true
+[submodule "pi_image/stage-usb4vc-deps/00-dependencies/files/dkms-hid-nintendo"]
+	path = pi_image/stage-usb4vc-deps/00-dependencies/files/dkms-hid-nintendo
+	url = https://github.com/nicman23/dkms-hid-nintendo.git
+	shallow = true
+[submodule "pi_image/stage-usb4vc-deps/00-dependencies/files/joycond"]
+	path = pi_image/stage-usb4vc-deps/00-dependencies/files/joycond
+	url = https://github.com/DanielOgorchock/joycond.git
+	shallow = true

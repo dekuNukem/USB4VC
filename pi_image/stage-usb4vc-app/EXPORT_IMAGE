@@ -1,0 +1,7 @@
+IMG_SUFFIX="-usb4vc"
+if [ "${IS_PIGEN_ARM64}" = "1" ]; then
+	export IMG_SUFFIX="${IMG_SUFFIX}-arm64"
+fi
+if [ "${USE_QEMU}" = "1" ]; then
+	export IMG_SUFFIX="${IMG_SUFFIX}-qemu"
+fi
