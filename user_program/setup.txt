@@ -31,7 +31,16 @@ sudo dfu-util --device ,0483:df11 -a 0 -D ~/usb4vc/firmware/PBFW_ADB_PBID2_V0_1_
 
 -----
 sudo apt install evtest
+
+sudo apt remove python3-rpi.gpio
+sudo pip3 install --break-system-packages rpi-lgpio
+
+cd ~
+git clone https://github.com/atar-axis/xpadneo.git
 --------------
+
+sudo mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old
+-----
 
 Luma OLED driver
 

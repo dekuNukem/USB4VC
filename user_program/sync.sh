@@ -2,7 +2,7 @@
 
 # sh sync.sh; ssh -t pi@192.168.1.62 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_main.py"
 
-scp ./* pi@192.168.1.62:~/usb4vc/rpi_app
+scp ./* pi@192.168.1.98:~/usb4vc/rpi_app
 # ssh -t pi@192.168.1.60 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_main.py"
 # ssh -t pi@192.168.1.60 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_check_update.py"
 
