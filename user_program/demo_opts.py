@@ -1,21 +1,5 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2014-18 Richard Hull and contributors
-# See LICENSE.rst for details.
-
 import sys
-import logging
-
 from luma.core import cmdline, error
-
-
-# logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)-15s - %(message)s'
-)
-# ignore PIL debug messages
-logging.getLogger('PIL').setLevel(logging.ERROR)
-
 
 def display_settings(device, args):
     """

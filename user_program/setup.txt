@@ -32,11 +32,15 @@ sudo dfu-util --device ,0483:df11 -a 0 -D ~/usb4vc/firmware/PBFW_ADB_PBID2_V0_1_
 -----
 sudo apt install evtest
 
+raspberry pi 5 uses a different GPIO chip, this is a compatibility package
 sudo apt remove python3-rpi.gpio
 sudo pip3 install --break-system-packages rpi-lgpio
 
 cd ~
 git clone https://github.com/atar-axis/xpadneo.git
+sudo apt-get install dkms raspberrypi-kernel-headers 
+
+https://github.com/atar-axis/xpadneo
 --------------
 
 sudo mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old
@@ -84,11 +88,11 @@ echo 'options bluetooth disable_ertm=Y' | sudo tee -a /etc/modprobe.d/bluetooth.
 ------------
 boot speedup:
 
-sudo nano /boot/config.txt
+sudo nano /boot/firmware/config.txt
 disable_splash=1
 boot_delay=0
 
-sudo nano /boot/cmdline.txt
+sudo nano /boot/firmware/cmdline.txt
 
 Add quiet after rootwait
 

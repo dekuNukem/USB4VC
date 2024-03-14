@@ -83,7 +83,7 @@ while 1:
             if ertm_status != 'Y':
                 # print('ertm_status:', ertm_status)
                 # print("Disabling ERTM....")
-                subprocess.call('echo 1 > /sys/module/bluetooth/parameters/disable_ertm')
+                subprocess.call('echo Y > /sys/module/bluetooth/parameters/disable_ertm')
                 # print("DONE")
         except Exception:
             continue

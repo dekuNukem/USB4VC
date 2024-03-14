@@ -384,7 +384,7 @@ def pair_device(mac_addr):
 def get_paired_devices():
     dev_set = set()
     try:
-        device_str = subprocess.getoutput(f"timeout 5 bluetoothctl --agent NoInputNoOutput paired-devices")
+        device_str = subprocess.getoutput(f"timeout 5 bluetoothctl --agent NoInputNoOutput devices Paired")
         for line in device_str.replace('\r', '').split('\n'):
             if 'device' not in line.lower():
                 continue
