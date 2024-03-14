@@ -131,7 +131,28 @@ usb4vc_data
 		config and mapping files
 
 
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx NO LONGER NEEDED xxxxxxxxxxxxxxxxxxxxxxxx
+--------------
+
+Raspberry Pi 5 Controller test:
+
+WIRED
+
+Xbox 360 wired: cant find the controller
+Xbox One: OK
+Xbox Series X: OK
+PS4: ok
+PS5: ok
+Swich Pro: OK
+
+BLUETOOTH
+
+Xbox One: NO
+Xbox Series X: NO
+PS4: OK
+PS5: 
+Swich Pro: 
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx NO LONGER NEEDED xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 raspberry pi 3
 before speedup:
