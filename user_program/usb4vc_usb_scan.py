@@ -56,6 +56,22 @@ EV_KEY = 1
 EV_REL = 2
 EV_ABS = 3
 
+MOD_CTRL = 1
+MOD_SHIFT = 2
+MOD_ALT = 4
+MOD_SUPER = 8
+
+MODIFIERS = {
+    evdev.ecodes.KEY_LEFTALT: MOD_ALT,
+    evdev.ecodes.KEY_RIGHTALT: MOD_ALT,
+    evdev.ecodes.KEY_LEFTCTRL: MOD_CTRL,
+    evdev.ecodes.KEY_RIGHTCTRL: MOD_CTRL,
+    evdev.ecodes.KEY_LEFTSHIFT: MOD_SHIFT,
+    evdev.ecodes.KEY_RIGHTSHIFT: MOD_SHIFT,
+    evdev.ecodes.KEY_LEFTMETA: MOD_SUPER,
+    evdev.ecodes.KEY_RIGHTMETA: MOD_SUPER,
+}
+
 SYN_REPORT = 0
 
 REL_X = 0x00
@@ -752,6 +768,7 @@ def raw_input_event_worker():
     last_mouse_msg = []
     last_gamepad_msg = None
     in_deadzone_list = []
+    modifier_states = {MODIFIERS[x]: False for x in MODIFIERS}
     last_mouse_button_msg = None
     print("raw_input_event_worker started")
     while 1:
@@ -789,8 +806,26 @@ def raw_input_event_worker():
 
             # event is a key press
             if data[0] == EV_KEY:
+                # Keep track of modifiers for use by "power off" shortcut
+                if event_code in MODIFIERS:
+                    modifier_states[MODIFIERS[event_code]] = bool(data[4])
+
+                # Like the Mac OS "fast shutdown" shortcut, but using
+                # Scroll Lock/F14 instead of the power button since it's
+                # probably the most unused key in existence.
+                #
+                # NOTE: Do NOT change to `elif`. The previous `if` should not
+                # prevent keycodes from being passed through.
+                if (modifier_states[MOD_CTRL]
+                        and modifier_states[MOD_SUPER]
+                        and modifier_states[MOD_ALT]
+                        and event_code == evdev.ecodes.KEY_SCROLLLOCK):
+                    print("Keyboard-triggered shutdown initiated...")
+                    usb4vc_ui.my_menu.goto_level(5)
+                    usb4vc_ui.my_menu.action(5, 0)
+
                 # keyboard keys
-                if 0x1 <= event_code <= 248 and event_code not in gamepad_buttons_as_kb_codes:
+                elif 0x1 <= event_code <= 248 and event_code not in gamepad_buttons_as_kb_codes:
                     xfer_when_not_busy(make_keyboard_spi_packet(data, this_id))
                 # Mouse buttons
                 elif 0x110 <= event_code <= 0x117:
