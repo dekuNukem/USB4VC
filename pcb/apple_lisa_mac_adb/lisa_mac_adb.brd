@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.1">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -23,19 +23,19 @@
 <layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
 <layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
 <layer number="15" name="Route15" color="23" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
@@ -47,19 +47,19 @@
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
-<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
-<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="1" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="7" fill="1" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -1629,9 +1629,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <attribute name="POPULARITY" value="98" x="26.924" y="55.88" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="23.749" y="58.42" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R6" library="SparkFun-Passives" package="0805" value="5.1K" x="47.371" y="61.849" smashed="yes" rot="R90">
-<attribute name="NAME" x="48.26" y="64.0715" size="0.8128" layer="25" rot="R180"/>
-</element>
 <element name="R17" library="SparkFun-Passives" package="0805" value="100" x="26.797" y="23.749" smashed="yes" rot="R90">
 <attribute name="NAME" x="28.5115" y="22.86" size="0.8128" layer="25" rot="R90"/>
 </element>
@@ -2122,10 +2119,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="33.684" y1="54.7" x2="34.192" y2="54.192" width="0.2032" layer="16"/>
 <wire x1="34.192" y1="54.192" x2="34.192" y2="50.6728" width="0.2032" layer="16"/>
 <wire x1="34.29" y1="50.5748" x2="34.192" y2="50.6728" width="0.2032" layer="16"/>
-<contactref element="R6" pad="2"/>
-<wire x1="47.371" y1="62.749" x2="42.937" y2="62.749" width="0.2032" layer="1"/>
-<wire x1="34.888" y1="54.7" x2="33.684" y2="54.7" width="0.2032" layer="1"/>
-<wire x1="42.937" y1="62.749" x2="34.888" y2="54.7" width="0.2032" layer="1"/>
 <contactref element="R10" pad="2"/>
 <wire x1="13.384" y1="50.606" x2="13.07" y2="50.292" width="0.2032" layer="1"/>
 <wire x1="13.384" y1="54.7" x2="13.384" y2="50.606" width="0.2032" layer="1"/>
@@ -2248,9 +2241,6 @@ These rules have been curated by SparkFuns DFM commitee. After doing much resear
 <wire x1="26.924" y1="57.15" x2="30.226" y2="57.15" width="0.2032" layer="16"/>
 <wire x1="30.226" y1="57.15" x2="31.242" y2="57.15" width="0.2032" layer="16"/>
 <wire x1="33.02" y1="58.928" x2="31.242" y2="57.15" width="0.2032" layer="16"/>
-<contactref element="R6" pad="1"/>
-<wire x1="47.371" y1="60.949" x2="47.498" y2="60.822" width="0.2032" layer="1"/>
-<wire x1="47.498" y1="60.822" x2="47.498" y2="58.42" width="0.2032" layer="1"/>
 <wire x1="38.862" y1="57.2" x2="38.862" y2="51.0828" width="0.2032" layer="16"/>
 <wire x1="39.37" y1="50.5748" x2="38.862" y2="51.0828" width="0.2032" layer="16"/>
 <wire x1="26.924" y1="57.15" x2="20.234" y2="57.15" width="0.2032" layer="16"/>

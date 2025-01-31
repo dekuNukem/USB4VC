@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.1">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -6430,7 +6430,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="SUPPLY1" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="+7V" device=""/>
 <part name="GND19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
-<part name="R6" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="5.1K"/>
 <part name="R17" library="SparkFun-Passives" deviceset="RESISTOR" device="0805-RES" value="100"/>
 <part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP14R" package3d_urn="urn:adsk.eagle:package:27966/1"/>
 <part name="TP1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="PTR1" device="TP14R" package3d_urn="urn:adsk.eagle:package:27966/1"/>
@@ -6756,10 +6755,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="JP2" gate="G$1" x="68.58" y="91.44" smashed="yes">
 <attribute name="NAME" x="62.23" y="97.155" size="1.778" layer="95"/>
 <attribute name="VALUE" x="62.23" y="86.36" size="1.778" layer="96"/>
-</instance>
-<instance part="R6" gate="G$1" x="-27.94" y="132.08" smashed="yes" rot="MR90">
-<attribute name="NAME" x="-26.4414" y="128.27" size="1.778" layer="95" rot="MR90"/>
-<attribute name="VALUE" x="-31.242" y="128.27" size="1.778" layer="96" rot="MR90"/>
 </instance>
 <instance part="R17" gate="G$1" x="342.9" y="12.7" smashed="yes">
 <attribute name="NAME" x="339.09" y="14.1986" size="1.778" layer="95"/>
@@ -7335,10 +7330,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="60.96" y1="134.62" x2="91.44" y2="134.62" width="0.1524" layer="91"/>
 <junction x="60.96" y="134.62"/>
 <wire x1="91.44" y1="134.62" x2="91.44" y2="180.34" width="0.1524" layer="91"/>
-<pinref part="R6" gate="G$1" pin="2"/>
-<wire x1="-7.62" y1="134.62" x2="-7.62" y2="137.16" width="0.1524" layer="91"/>
-<wire x1="-7.62" y1="137.16" x2="-27.94" y2="137.16" width="0.1524" layer="91"/>
-<junction x="-7.62" y="134.62"/>
 <wire x1="91.44" y1="180.34" x2="73.66" y2="180.34" width="0.1524" layer="91"/>
 <pinref part="R10" gate="G$1" pin="2"/>
 </segment>
@@ -7464,13 +7455,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <junction x="152.4" y="129.54"/>
 <wire x1="66.04" y1="93.98" x2="66.04" y2="99.06" width="0.1524" layer="91"/>
 <pinref part="JP2" gate="G$1" pin="1"/>
-<pinref part="R6" gate="G$1" pin="1"/>
-<wire x1="66.04" y1="101.6" x2="66.04" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="-7.62" y1="127" x2="-27.94" y2="127" width="0.1524" layer="91"/>
-<junction x="-7.62" y="127"/>
+<wire x1="66.04" y1="99.06" x2="66.04" y2="111.76" width="0.1524" layer="91"/>
 <pinref part="JP9" gate="G$1" pin="2"/>
 <wire x1="78.74" y1="99.06" x2="66.04" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="99.06" x2="66.04" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="+7V" class="0">
