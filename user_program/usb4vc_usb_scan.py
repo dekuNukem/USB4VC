@@ -751,7 +751,6 @@ def raw_input_event_worker():
     next_gamepad_hold_check = time.time() + gamepad_hold_check_interval
     last_mouse_msg = []
     last_gamepad_msg = None
-    in_deadzone_list = []
     last_mouse_button_msg = None
     print("raw_input_event_worker started")
     while 1:
