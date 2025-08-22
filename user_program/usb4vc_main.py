@@ -69,12 +69,12 @@ try:
     boot_config = os.popen(f'cat {cmdline_path}').read()
     if "usbhid.mousepoll".lower() not in boot_config.lower():
         print(f"@@@@@@@@@@@@ writing usbhid.mousepoll to {cmdline_path} @@@@@@@@@@@@")
-        new_config = boot_config.replace('\r', '').replace('\n', '').strip() + ' usbhid.mousepoll=4\n'
+        new_config = boot_config.replace('\r', '').replace('\n', '').strip() + ' usbhid.mousepoll=8\n'
         with open(cmdline_path, 'w') as ffff:
             ffff.write(new_config)
     elif "usbhid.mousepoll=0" in boot_config:
         print(f"@@@@@@@@@@@@ writing usbhid.mousepoll to {cmdline_path} @@@@@@@@@@@@")
-        new_config = boot_config.replace('\r', '').replace('\n', '').strip().replace("usbhid.mousepoll=0", "usbhid.mousepoll=4")
+        new_config = boot_config.replace('\r', '').replace('\n', '').strip().replace("usbhid.mousepoll=0", "usbhid.mousepoll=8")
         with open(cmdline_path, 'w') as ffff:
             ffff.write(new_config)
 except Exception as e:
