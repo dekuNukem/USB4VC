@@ -1,14 +1,14 @@
-# scp ./* pi@192.168.1.98:~/usb4vc/rpi_app
+# scp ./* pi@192.168.1.74:~/usb4vc/rpi_app
 
-# sh sync.sh; ssh -t pi@192.168.1.62 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_main.py"
+# sh sync.sh; ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_main.py"
 
-scp ./* pi@192.168.1.98:~/usb4vc/rpi_app
-# ssh -t pi@192.168.1.98 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_main.py"
-# ssh -t pi@192.168.1.98 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_check_update.py"
+scp ./* pi@192.168.1.74:~/usb4vc/rpi_app
+# ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_main.py"
+# ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_check_update.py"
 
-# ssh -t pi@192.168.1.98 "pkill python3;cd ~/usb4vc/rpi_app;python3 firmware_flasher.py /home/pi/usb4vc/firmware/PBFW_IBMPC_PBID1_V0_1_5.hex /home/pi/usb4vc/firmware/ibmpc_test.hex"
-# ssh -t pi@192.168.1.98 "pkill python3;cd ~/usb4vc/rpi_app;python3 bb_tester.py"
+# ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 firmware_flasher.py /home/pi/usb4vc/firmware/PBFW_IBMPC_PBID1_V0_1_5.hex /home/pi/usb4vc/firmware/ibmpc_test.hex"
+# ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 bb_tester.py"
 
-# pi@169.254.245.21 bb_tester
+# ssh pi@192.168.1.74
 
-ssh -t pi@192.168.1.98 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_evdev_test.py"
+ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_evdev_test.py"

@@ -13,7 +13,7 @@ import asyncio
 
 hid_device_info_dict = {}
 
-POLL_INTERVAL_SEC = 1.0  # how often we rescan for devices
+POLL_INTERVAL_SEC = 1  # how often we rescan for devices
 
 def hid_info_dict_add(dev_path):
     if dev_path in hid_device_info_dict:
@@ -30,34 +30,37 @@ def hid_info_dict_add(dev_path):
             'is_mouse':False,
             'is_gp':False,
         }
+    
+    this_cap = this_device.capabilities(verbose=True)
+    cap_str = str(this_cap)
+    if 'BTN_LEFT' in cap_str and "EV_REL" in cap_str:
+        info_dict['is_mouse'] = True
+    if 'KEY_ENTER' in cap_str and "KEY_Y" in cap_str:
+        info_dict['is_kb'] = True
+
+    print(this_cap)
+
     hid_device_info_dict[dev_path] = info_dict
 
 def hid_info_dict_remove(dev_path):
     hid_device_info_dict.pop(dev_path, None)
 
 async def read_device_events(path: str):
-    """
-    Open a single device and print its events until it goes away
-    (or this task is cancelled).
-    """
     dev = None
     try:
         dev = evdev.InputDevice(path)
-        # Announce the device
         print(f"[attach] {path} name='{dev.name}'")
         hid_info_dict_add(path)
 
         # Async loop over input events
         async for event in dev.async_read_loop():
-            # Skip non-value events if you want; here we show everything
             print(f"!!!!!!!!!!!!!!! {path}: {evdev.categorize(event)}")
+            pcard_spi.xfer([0,0,0,0,0,0,0,0])
 
     except (FileNotFoundError, OSError) as e:
-        # Common when the device is unplugged (e.g. [Errno 19] No such device)
         print(f"[disconnect] {path}: {e}")
         hid_info_dict_remove(path)
     except asyncio.CancelledError:
-        # We were asked to stop (e.g. device disappeared or program exiting)
         raise
     finally:
         if dev is not None:
@@ -87,7 +90,6 @@ async def watch_all_devices():
         try:
             current_paths = set([x for x in evdev.list_devices() if is_ignored_device(x) is False])
         except Exception as e:
-            # Very rare, but if listing fails, keep previous state and retry
             print(f"[warn] list_devices failed: {e}")
             current_paths = known_paths
 
