@@ -20,7 +20,7 @@ Thank you very much for getting USB4VC! Here is a short guide on getting started
 
 You need a Micro SD card **at least 4GB** in size. A fast card will reduce boot time.
 
-[Download the latest boot image here](https://github.com/dekuNukem/USB4VC/releases/latest), expand the zip file.
+[Download the latest boot image here](https://github.com/dekuNukem/USB4VC/releases/latest), use [7zip](https://www.7-zip.org/) to unzip.
 
 Burn the image to your SD card. I use [Rufus](https://rufus.ie/en/), which is free and open-source. [Etcher](https://www.balena.io/etcher/) is another cross-platform option.
 
