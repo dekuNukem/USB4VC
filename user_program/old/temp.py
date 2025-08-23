@@ -1,3 +1,9 @@
+        # print(this_device.name)
+        # print(this_cap)
+        # print(check_is_gamepad(this_cap))
+        # print("!!!!!!!!!!!!!!!!!!!!!!")
+
+
 ABS_Z = 0x02
 ABS_RX = 0x03
 ABS_RY = 0x04

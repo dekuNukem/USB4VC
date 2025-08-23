@@ -911,10 +911,6 @@ def get_input_devices():
             dev_dict['is_mouse'] = True
         if 'KEY_ENTER' in cap_str and "KEY_Y" in cap_str:
             dev_dict['is_kb'] = True
-        # print(this_device.name)
-        # print(this_cap)
-        # print(check_is_gamepad(this_cap))
-        # print("!!!!!!!!!!!!!!!!!!!!!!")
         if check_is_gamepad(this_cap):
             dev_dict['is_gp'] = True
             try:

@@ -32,7 +32,6 @@ SPI_MISO_MSG_TYPE_KB_LED_REQUEST = 129
 SPI_MOSI_MAGIC = 0xde
 SPI_MISO_MAGIC = 0xcd
 
-
 PCARD_BUSY_PIN = 20
 SLAVE_REQ_PIN = 16
 
@@ -109,5 +108,25 @@ PID_GENERIC_GAMEPORT_GAMEPAD = 7
 PID_BBC_MICRO_JOYSTICK = 14
 PID_RAW_USB_GAMEPAD = 127
 
+devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
 
-print("hello world!")
+for device in devices:
+    print(device.path, device.name, device.phys)
+
+# import asyncio, evdev
+
+# mouse = evdev.InputDevice('/dev/input/event0')
+# keybd = evdev.InputDevice('/dev/input/event6')
+
+
+# async def print_events(device):
+#     async for event in device.async_read_loop():
+#         empty = list(keyboard_event_spi_msg_template)
+#         xfer_when_not_busy(empty)
+#         print(device.path, evdev.categorize(event), sep=': ')
+
+# for device in mouse, keybd:
+#     asyncio.ensure_future(print_events(device))
+
+# loop = asyncio.get_event_loop()
+# loop.run_forever()
