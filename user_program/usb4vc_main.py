@@ -84,7 +84,7 @@ usb4vc_ui.ui_init()
 usb4vc_ui.ui_thread.start()
 
 usb4vc_usb_scan.usb_device_scan_thread.start()
-usb4vc_usb_scan.raw_input_event_parser_thread.start()
+# usb4vc_usb_scan.raw_input_event_parser_thread.start()
 
 while 1:
     time.sleep(2)
