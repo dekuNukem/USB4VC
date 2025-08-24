@@ -4,6 +4,7 @@ import time
 import math
 import spidev
 import evdev
+from evdev import ecodes
 import threading
 import RPi.GPIO as GPIO
 import usb4vc_ui
@@ -22,9 +23,9 @@ def get_device_count():
     for key in hid_device_info_dict:
         if hid_device_info_dict[key]['is_mouse']:
             mouse_count += 1
-        elif hid_device_info_dict[key]['is_kb']:
+        if hid_device_info_dict[key]['is_kb']:
             kb_count += 1
-        elif hid_device_info_dict[key]['is_gp']:
+        if hid_device_info_dict[key]['is_gp']:
             gp_count += 1
     return (mouse_count, kb_count, gp_count)
 
@@ -65,14 +66,25 @@ def hid_info_dict_add(dev_path):
 def hid_info_dict_remove(dev_path):
     hid_device_info_dict.pop(dev_path, None)
 
+def handle_EV_KEY(myev, devpath):
+    print(f"EV_KEY!!! code: {myev.code}, state:{myev.value}")
+    # myev.value: 0 up, 1 down, 2 hold
+    # myev.value == myev.key_up etc
+    if ecodes.KEY_ESC <= myev.code <= ecodes.KEY_MICMUTE:
+        print("yep thats a keyboard key")
+    elif ecodes.BTN_MOUSE <= myev.code <= ecodes.BTN_TASK:
+        print("looks like a mouse to me!")
+
 def handle_input_event(myev, devpath):
     if devpath not in hid_device_info_dict:
         return
-    # hid_device_info_dict[devpath] # Info dict for the device generated this event
-    cat = evdev.categorize(myev)
-    print(dir(myev))
-    print(dir(cat))
-    print(myev.type)
+    usb4vc_ui.my_oled.kick()
+    # this_dev_info = hid_device_info_dict[devpath] # Info dict for the device generated this event
+    print(evdev.categorize(myev))
+
+    if myev.type == ecodes.EV_KEY:
+        handle_EV_KEY(myev, devpath)
+
     print("-----------")
 
 async def read_device_events(path: str):
