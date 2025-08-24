@@ -11,6 +11,9 @@ find . -type f -name "*.DS_Store*" -exec rm -f {} \;
 find . -name "__pycache__" -exec rm -rf {} \;
 rm -rfv ./user_program/rpi_app
 
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
 git add --all
 git commit -m "$@"
-git push origin master
+git push origin "$current_branch"
