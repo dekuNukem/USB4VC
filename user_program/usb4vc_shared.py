@@ -625,3 +625,19 @@ gamepad_event_code_name_list = [
 	'BTN_TRIGGER_HAPPY38',
 	'BTN_TRIGGER_HAPPY39',
 	'BTN_TRIGGER_HAPPY40',]
+
+
+def check_is_gamepad(capability_dict):
+    keys_and_buttons = capability_dict.get(('EV_KEY', 1))
+    if keys_and_buttons is None:
+        return False
+    key_name_set = set()
+    for item in [x[0] for x in keys_and_buttons]:
+        if isinstance(item, str):
+            key_name_set.add(item)
+        if isinstance(item, list):
+            key_name_set.update(item)
+    for item in gamepad_event_code_name_list:
+        if item in key_name_set:
+            return True
+    return False

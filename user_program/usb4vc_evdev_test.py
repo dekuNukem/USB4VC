@@ -24,8 +24,6 @@ def hid_info_dict_add(dev_path):
             'name':this_device.name,
             'vendor_id':this_device.info.vendor,
             'product_id':this_device.info.product,
-            'axes_info':{},
-            'gamepad_type':'Generic',
             'is_kb':False,
             'is_mouse':False,
             'is_gp':False,
@@ -37,10 +35,11 @@ def hid_info_dict_add(dev_path):
         info_dict['is_mouse'] = True
     if 'KEY_ENTER' in cap_str and "KEY_Y" in cap_str:
         info_dict['is_kb'] = True
-
-    print(this_cap)
-
+    if check_is_gamepad(this_cap):
+        info_dict['is_gp'] = True
     hid_device_info_dict[dev_path] = info_dict
+
+    print("=======", info_dict)
 
 def hid_info_dict_remove(dev_path):
     hid_device_info_dict.pop(dev_path, None)
@@ -54,8 +53,7 @@ async def read_device_events(path: str):
 
         # Async loop over input events
         async for event in dev.async_read_loop():
-            print(f"!!!!!!!!!!!!!!! {path}: {evdev.categorize(event)}")
-            pcard_spi.xfer([0,0,0,0,0,0,0,0])
+            print(f"!!!!!!{path}: {evdev.categorize(event)}")
 
     except (FileNotFoundError, OSError) as e:
         print(f"[disconnect] {path}: {e}")
@@ -69,12 +67,14 @@ async def read_device_events(path: str):
             except Exception:
                 pass
 
-ignored_hid_device_name = ['pwr_button', 'hdmi', 'motion']
+ignored_hid_device_name = ['pwr_button', 'hdmi', 'motion', 'imu', 'touch']
 
 def is_ignored_device(dev_path):
-    dev_name = evdev.InputDevice(dev_path).name.lower()
+    dev_name = evdev.InputDevice(dev_path).name
+    if "IMU" in dev_name:
+        return True
     for item in ignored_hid_device_name:
-        if item.lower() in dev_name:
+        if item.lower() in dev_name.lower():
             return True
     return False
 
