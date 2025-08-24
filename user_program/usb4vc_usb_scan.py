@@ -66,26 +66,25 @@ def hid_info_dict_add(dev_path):
 def hid_info_dict_remove(dev_path):
     hid_device_info_dict.pop(dev_path, None)
 
-def handle_EV_KEY(myev, devpath):
-    print(f"EV_KEY!!! code: {myev.code}, state:{myev.value}")
+def handle_digital_button_press(myev, devpath):
+    print(f"DBP!!! code: {myev.code}, state:{myev.value}")
     # myev.value: 0 up, 1 down, 2 hold
     # myev.value == myev.key_up etc
     if ecodes.KEY_ESC <= myev.code <= ecodes.KEY_MICMUTE:
         print("yep thats a keyboard key")
     elif ecodes.BTN_MOUSE <= myev.code <= ecodes.BTN_TASK:
-        print("looks like a mouse to me!")
-    else:
-        print(f"Hmm... {evdev.resolve_ecodes(ecodes.BTN, [myev.code])}")
+        print("looks like a mouse button!")
+    elif myev.code in gamepad_event_codes_set:
+        print("That's gamepad button!")
 
 def handle_input_event(myev, devpath):
     if devpath not in hid_device_info_dict:
         return
     usb4vc_ui.my_oled.kick()
-    # this_dev_info = hid_device_info_dict[devpath] # Info dict for the device generated this event
     print(evdev.categorize(myev))
 
     if myev.type == ecodes.EV_KEY:
-        handle_EV_KEY(myev, devpath)
+        handle_digital_button_press(myev, devpath)
 
     print("-----------")
 

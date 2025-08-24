@@ -4,7 +4,8 @@ remove opened_device_dict
 temp disabled raw_input_event_parser_thread
 
 # ---------------------
-
+# this_dev_info = hid_device_info_dict[devpath] # Info dict for the device generated this event
+# print(f"Hmm... {evdev.resolve_ecodes(ecodes.BTN, [myev.code])}")
 
 def update_from_usb(usb_config_path):
     if usb_config_path is not None:
