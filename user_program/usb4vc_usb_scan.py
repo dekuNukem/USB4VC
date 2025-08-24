@@ -15,6 +15,29 @@ hid_device_info_dict = {}
 
 POLL_INTERVAL_SEC = 1  # how often we rescan for devices
 
+def get_device_count():
+    mouse_count = 0
+    kb_count = 0
+    gp_count = 0
+    for key in hid_device_info_dict:
+        if hid_device_info_dict[key]['is_mouse']:
+            mouse_count += 1
+        elif hid_device_info_dict[key]['is_kb']:
+            kb_count += 1
+        elif hid_device_info_dict[key]['is_gp']:
+            gp_count += 1
+    return (mouse_count, kb_count, gp_count)
+
+def get_pboard_info():
+    return [0] * 32
+
+def set_protocol(raw_msg):
+    # time.sleep(0.05)
+    # xfer_when_not_busy(list(raw_msg))
+    # time.sleep(0.05)
+    return
+
+
 def hid_info_dict_add(dev_path):
     if dev_path in hid_device_info_dict:
         return
