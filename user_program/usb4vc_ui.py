@@ -11,6 +11,7 @@ import usb4vc_check_update
 import json
 import subprocess
 from subprocess import Popen, PIPE
+import usb4vc_spi
 
 from usb4vc_shared import *
 
@@ -53,7 +54,7 @@ class my_button(object):
 
 
 pboard_info_spi_msg = [0] * 32
-this_pboard_id = PBOARD_ID_UNKNOWN
+current_pboard_id = PBOARD_ID_UNKNOWN
 
 USBGP_BTN_SOUTH = 0x130
 USBGP_BTN_EAST = 0x131
@@ -355,7 +356,7 @@ def load_config():
                 else:
                     configuration_dict[key] = temp_dict[key]
     except Exception as e:
-        print("exception config load failed!", e)
+        print("Config load exception:", e)
 
 def get_ip_address():
     ip_str = subprocess.getoutput("timeout 1 hostname -I")
@@ -425,7 +426,7 @@ class usb4vc_menu(object):
             if page == 1:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     if 'Unknown' in self.pb_info['full_name']:
-                        draw.text((0, 0), f"{self.pb_info['full_name']} PID {this_pboard_id}", font=usb4vc_oled.font_regular, fill="white")
+                        draw.text((0, 0), f"{self.pb_info['full_name']} PID {current_pboard_id}", font=usb4vc_oled.font_regular, fill="white")
                     else:
                         draw.text((0, 0), f"{self.pb_info['full_name']}", font=usb4vc_oled.font_regular, fill="white")
                     draw.text((0, 10), f"PB {self.pb_info['fw_ver'][0]}.{self.pb_info['fw_ver'][1]}.{self.pb_info['fw_ver'][2]}  RPi {RPI_APP_VERSION_TUPLE[0]}.{RPI_APP_VERSION_TUPLE[1]}.{RPI_APP_VERSION_TUPLE[2]}", font=usb4vc_oled.font_regular, fill="white")
@@ -566,7 +567,7 @@ class usb4vc_menu(object):
             else:
                 protocol_bytes.append(key)
 
-        this_msg = list(set_protocl_spi_msg_template)
+        this_msg = list(usb4vc_spi.set_protocl_spi_msg_template)
         this_msg[3:3+len(protocol_bytes)] = protocol_bytes
 
         self.current_keyboard_protocol = self.kb_protocol_list[self.current_keyboard_protocol_index]
@@ -577,8 +578,10 @@ class usb4vc_menu(object):
             print("SPI: no need to send")
             return
         print("set_protocol:", [hex(x) for x in this_msg])
-        usb4vc_usb_scan.set_protocol(this_msg)
-        print('new status:', [hex(x) for x in usb4vc_usb_scan.get_pboard_info()])
+        time.sleep(0.05)
+        usb4vc_spi.xfer_when_not_busy(this_msg)
+        time.sleep(0.05)
+        print('new status:', [hex(x) for x in usb4vc_spi.get_pboard_info()])
         self.last_spi_message = list(this_msg)
 
     def action(self, level, page):
@@ -586,12 +589,12 @@ class usb4vc_menu(object):
             if page == 2:
                 with canvas(usb4vc_oled.oled_device) as draw:
                     usb4vc_oled.oled_print_centered("Updating...", usb4vc_oled.font_medium, 10, draw)
-                fffff = usb4vc_check_update.download_latest_firmware(this_pboard_id)
+                fffff = usb4vc_check_update.download_latest_firmware(current_pboard_id)
                 if fffff != 0:
                     with canvas(usb4vc_oled.oled_device) as draw:
                         usb4vc_oled.oled_print_centered("Unable to download", usb4vc_oled.font_medium, 0, draw)
                         usb4vc_oled.oled_print_centered(f"firmware: {fffff}", usb4vc_oled.font_medium, 16, draw)
-                elif update_pboard_firmware(this_pboard_id):
+                elif update_pboard_firmware(current_pboard_id):
                         with canvas(usb4vc_oled.oled_device) as draw:
                             usb4vc_oled.oled_print_centered("Firmware updated!", usb4vc_oled.font_medium, 10, draw)
                 else:
@@ -638,10 +641,10 @@ class usb4vc_menu(object):
             if page == 3:
                 self.current_mouse_sensitivity_offset_index = (self.current_mouse_sensitivity_offset_index + 1) % len(mouse_sensitivity_list)
             if page == 4:
-                configuration_dict[this_pboard_id]["keyboard_protocol_index"] = self.current_keyboard_protocol_index
-                configuration_dict[this_pboard_id]["mouse_protocol_index"] = self.current_mouse_protocol_index
-                configuration_dict[this_pboard_id]["mouse_sensitivity_index"] = self.current_mouse_sensitivity_offset_index
-                configuration_dict[this_pboard_id]["gamepad_protocol_index"] = self.current_gamepad_protocol_index
+                configuration_dict[current_pboard_id]["keyboard_protocol_index"] = self.current_keyboard_protocol_index
+                configuration_dict[current_pboard_id]["mouse_protocol_index"] = self.current_mouse_protocol_index
+                configuration_dict[current_pboard_id]["mouse_sensitivity_index"] = self.current_mouse_sensitivity_offset_index
+                configuration_dict[current_pboard_id]["gamepad_protocol_index"] = self.current_gamepad_protocol_index
                 save_config()
                 self.send_protocol_set_spi_msg()
                 self.goto_level(0)
@@ -728,22 +731,22 @@ def get_pboard_dict(pid):
     return pboard_database[pid]
 
 def get_mouse_sensitivity():
-    return mouse_sensitivity_list[configuration_dict[this_pboard_id]["mouse_sensitivity_index"]]
+    return mouse_sensitivity_list[configuration_dict[current_pboard_id]["mouse_sensitivity_index"]]
 
 def ui_init():
     global pboard_info_spi_msg
-    global this_pboard_id
+    global current_pboard_id
     load_config()
-    pboard_info_spi_msg = usb4vc_usb_scan.get_pboard_info()
+    pboard_info_spi_msg = usb4vc_spi.get_pboard_info()
     print("PB INFO:", pboard_info_spi_msg)
-    this_pboard_id = pboard_info_spi_msg[3]
-    if this_pboard_id in pboard_database:
-        pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
-        pboard_database[this_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
+    current_pboard_id = pboard_info_spi_msg[3]
+    if current_pboard_id in pboard_database:
+        pboard_database[current_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
+        pboard_database[current_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
     if 'rpi_app_ver' not in configuration_dict:
         configuration_dict['rpi_app_ver'] = RPI_APP_VERSION_TUPLE
-    if this_pboard_id not in configuration_dict:
-        configuration_dict[this_pboard_id] = {"keyboard_protocol_index":1, "mouse_protocol_index":1, "mouse_sensitivity_index":0, "gamepad_protocol_index":1}
+    if current_pboard_id not in configuration_dict:
+        configuration_dict[current_pboard_id] = {"keyboard_protocol_index":1, "mouse_protocol_index":1, "mouse_sensitivity_index":0, "gamepad_protocol_index":1}
 
 plus_button = my_button(PLUS_BUTTON_PIN)
 minus_button = my_button(MINUS_BUTTON_PIN)
@@ -787,7 +790,7 @@ def ui_worker():
     global my_menu
     print(configuration_dict)
     print("ui_worker started")
-    my_menu = usb4vc_menu(get_pboard_dict(this_pboard_id), configuration_dict[this_pboard_id])
+    my_menu = usb4vc_menu(get_pboard_dict(current_pboard_id), configuration_dict[current_pboard_id])
     my_menu.display_page(0, 0)
     for x in range(2):
         GPIO.output(SLEEP_LED_PIN, GPIO.HIGH)

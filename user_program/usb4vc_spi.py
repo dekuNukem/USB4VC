@@ -75,9 +75,3 @@ def get_pboard_info():
     time.sleep(0.05)
     response = xfer_when_not_busy(list(nop_spi_msg_template))
     return response
-
-def set_protocol(raw_msg):
-    # time.sleep(0.05)
-    # xfer_when_not_busy(list(raw_msg))
-    # time.sleep(0.05)
-    return

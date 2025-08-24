@@ -28,15 +28,6 @@ def get_device_count():
             gp_count += 1
     return (mouse_count, kb_count, gp_count)
 
-def get_pboard_info():
-    return [0] * 32
-
-def set_protocol(raw_msg):
-    # time.sleep(0.05)
-    # xfer_when_not_busy(list(raw_msg))
-    # time.sleep(0.05)
-    return
-
 def hid_info_dict_add(dev_path):
     if dev_path in hid_device_info_dict:
         return
