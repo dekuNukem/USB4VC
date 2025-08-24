@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 import usb4vc_usb_scan
 import usb4vc_ui
 import subprocess 
+import asyncio
 
 # usb4vc_ui.reset_pboard()
 
@@ -85,6 +86,8 @@ usb4vc_ui.ui_thread.start()
 
 # usb4vc_usb_scan.usb_device_scan_thread.start()
 # usb4vc_usb_scan.raw_input_event_parser_thread.start()
+
+asyncio.run(usb4vc_usb_scan.hid_watch_start())
 
 while 1:
     time.sleep(2)

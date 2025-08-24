@@ -130,7 +130,7 @@ async def watch_all_devices():
         known_paths = current_paths
         await asyncio.sleep(POLL_INTERVAL_SEC)
 
-async def main():
+async def hid_watch_start():
     # Kick off the watcher; it will create per-device reader tasks
     watcher = asyncio.create_task(watch_all_devices())
     try:
@@ -140,6 +140,6 @@ async def main():
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        asyncio.run(hid_watch_start())
     except KeyboardInterrupt:
         print("\n[exit] keyboard interrupt")

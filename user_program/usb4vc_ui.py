@@ -1,5 +1,3 @@
-# https://luma-oled.readthedocs.io/en/latest/software.html
-
 import os
 import sys
 import time
@@ -145,54 +143,6 @@ PROTOCOL_RAW_GAMEPAD = {'pid':127, 'display_name':"Raw data"}
 PROTOCOL_APPLE_QUAD_MOUSE = {'pid':9, 'display_name':"Lisa/EarlyMac"}
 PROTOCOL_M0110_KEYBOARD = {'pid':10, 'display_name':"EarlyMac"}
 PROTOCOL_LISA_KEYBOARD = {'pid':11, 'display_name':"Lisa"}
-
-custom_profile_list = []
-
-try:
-    onlyfiles = [f for f in os.listdir(config_dir_path) if os.path.isfile(os.path.join(config_dir_path, f))]
-    json_map_files = [os.path.join(config_dir_path, x) for x in onlyfiles if x.lower().startswith('usb4vc_map') and x.lower().endswith(".json")]
-    for item in json_map_files:
-        print('loading json file:', item)
-        with open(item) as json_file:
-            custom_profile_list.append(json.load(json_file))
-except Exception as e:
-    print('exception json load:', e)
-
-def get_list_of_usb_drive():
-    usb_drive_set = set()
-    try:
-        usb_drive_path = subprocess.getoutput(f"timeout 2 df -h | grep -i usb").replace('\r', '').split('\n')
-        for item in [x for x in usb_drive_path if len(x) > 2]:
-            usb_drive_set.add(os.path.join(item.split(' ')[-1], 'usb4vc'))
-    except Exception as e:
-        print("exception get_list_of_usb_drive:", e)
-    return usb_drive_set
-
-def copy_debug_log():
-    usb_drive_set = get_list_of_usb_drive()
-    if len(usb_drive_set) == 0:
-        return False
-    for this_path in usb_drive_set:
-        if os.path.isdir(this_path):
-            print('copying debug log to', this_path)
-            os.system(f'sudo cp -v /home/pi/usb4vc/usb4vc_debug_log.txt {this_path}')
-    return True
-
-def check_usb_drive():
-    usb_drive_set = get_list_of_usb_drive()
-
-    if len(usb_drive_set) == 0:
-        return False, 'USB Drive Not Found'
-
-    for this_path in usb_drive_set:
-        usb_config_path = os.path.join(this_path, 'config')
-        if not os.path.isdir(usb_config_path):
-            usb_config_path = None
-
-        if usb_config_path is not None:
-            return True, usb_config_path
-
-    return False, 'No Update Data Found'
 
 def get_pbid_and_version(dfu_file_name):
     pbid = None
@@ -430,6 +380,7 @@ class usb4vc_menu(object):
         if index >= list_size:
             return 0
         return index
+    
     def __init__(self, pboard, conf_dict):
         super(usb4vc_menu, self).__init__()
         self.current_level = 0
@@ -791,13 +742,6 @@ def ui_init():
     print("PB INFO:", pboard_info_spi_msg)
     this_pboard_id = pboard_info_spi_msg[3]
     if this_pboard_id in pboard_database:
-        # load custom profile mapping into protocol list
-        for item in custom_profile_list:
-            this_mapping_bid = board_id_lookup.get(item['protocol_board'], 0)
-            if this_mapping_bid == this_pboard_id and item['device_type'] in pboard_database[this_pboard_id]:
-                this_mapping_pid = protocol_id_lookup.get(item['protocol_name'])
-                item['pid'] = this_mapping_pid
-                pboard_database[this_pboard_id][item['device_type']].append(item)
         pboard_database[this_pboard_id]['hw_rev'] = pboard_info_spi_msg[4]
         pboard_database[this_pboard_id]['fw_ver'] = (pboard_info_spi_msg[5], pboard_info_spi_msg[6], pboard_info_spi_msg[7])
     if 'rpi_app_ver' not in configuration_dict:
