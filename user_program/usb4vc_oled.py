@@ -39,9 +39,12 @@ font_large = ImageFont.truetype("ProggyTiny.ttf", 32)
 max_char_per_line = {font_regular:21, font_medium:17, font_large:11}
 width_per_char = {font_regular:6, font_medium:7, font_large:12}
 
-def oled_print_centered(text, font, y, this_canvas):
+def oled_print_centered(text, font, y, this_canvas, arrows=False):
     text = text.strip()[:max_char_per_line[font]]
     start_x = int((OLED_WIDTH - (len(text) * width_per_char[font]))/2)
     if start_x < 0:
         start_x = 0
     this_canvas.text((start_x, y), text, font=font, fill="white")
+    if arrows:
+        this_canvas.text((0, 10), "<", font=font_medium, fill="white")
+        this_canvas.text((121, 10), ">", font=font_medium, fill="white")

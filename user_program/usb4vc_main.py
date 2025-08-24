@@ -83,10 +83,6 @@ except Exception as e:
 
 usb4vc_ui.ui_init()
 usb4vc_ui.ui_thread.start()
-
-# usb4vc_usb_scan.usb_device_scan_thread.start()
-# usb4vc_usb_scan.raw_input_event_parser_thread.start()
-
 asyncio.run(usb4vc_usb_scan.hid_watch_start())
 
 while 1:

@@ -524,19 +524,19 @@ class usb4vc_menu(object):
         if level == 5:
             if page == 0:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Power Down", usb4vc_oled.font_medium, 10, draw)
+                    usb4vc_oled.oled_print_centered("Power Down", usb4vc_oled.font_medium, 10, draw, arrows=True)
             if page == 1:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Relaunch", usb4vc_oled.font_medium, 10, draw)
+                    usb4vc_oled.oled_print_centered("Relaunch", usb4vc_oled.font_medium, 10, draw, arrows=True)
             if page == 2:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Reboot", usb4vc_oled.font_medium, 10, draw)
+                    usb4vc_oled.oled_print_centered("Reboot", usb4vc_oled.font_medium, 10, draw, arrows=True)
             if page == 3:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Exit to Linux", usb4vc_oled.font_medium, 10, draw)
+                    usb4vc_oled.oled_print_centered("Exit to Linux", usb4vc_oled.font_medium, 10, draw, arrows=True)
             if page == 4:
                 with canvas(usb4vc_oled.oled_device) as draw:
-                    usb4vc_oled.oled_print_centered("Cancel", usb4vc_oled.font_medium, 10, draw)
+                    usb4vc_oled.oled_print_centered("Cancel", usb4vc_oled.font_medium, 10, draw, arrows=True)
 
     def send_protocol_set_spi_msg(self):
         status_dict = {}
