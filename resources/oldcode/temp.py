@@ -4,6 +4,15 @@ remove opened_device_dict
 temp disabled raw_input_event_parser_thread
 
 # ---------------------
+
+
+def update_from_usb(usb_config_path):
+    if usb_config_path is not None:
+        os.system(f'cp -v /home/pi/usb4vc/config/config.json {usb_config_path}')
+        os.system('mv -v /home/pi/usb4vc/config/config.json /home/pi/usb4vc/config.json')
+        os.system('rm -rfv /home/pi/usb4vc/config/*')
+        os.system(f"cp -v {os.path.join(usb_config_path, '*')} /home/pi/usb4vc/config")
+        os.system("mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
 def ui_init():
     global pboard_info_spi_msg
     global this_pboard_id

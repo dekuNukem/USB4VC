@@ -228,14 +228,6 @@ def update_pboard_firmware(this_pid):
                 return True
     return False
 
-def update_from_usb(usb_config_path):
-    if usb_config_path is not None:
-        os.system(f'cp -v /home/pi/usb4vc/config/config.json {usb_config_path}')
-        os.system('mv -v /home/pi/usb4vc/config/config.json /home/pi/usb4vc/config.json')
-        os.system('rm -rfv /home/pi/usb4vc/config/*')
-        os.system(f"cp -v {os.path.join(usb_config_path, '*')} /home/pi/usb4vc/config")
-        os.system("mv -v /home/pi/usb4vc/config.json /home/pi/usb4vc/config/config.json")
-
 ibmpc_keyboard_protocols = [PROTOCOL_OFF, PROTOCOL_AT_PS2_KB, PROTOCOL_XT_KB]
 ibmpc_mouse_protocols = [PROTOCOL_OFF, PROTOCOL_PS2_MOUSE_NORMAL, PROTOCOL_MICROSOFT_SERIAL_MOUSE, PROTOCOL_MOUSESYSTEMS_SERIAL_MOUSE]
 ibmpc_gamepad_protocols = [PROTOCOL_OFF, PROTOCOL_15PIN_GAMEPORT_GAMEPAD, PROTOCOL_USB_GP_TO_MOUSE_KB]
@@ -835,9 +827,6 @@ def ui_worker():
                 my_menu.goto_level(5)
                 my_menu.display_curent_page()
         my_oled.check_sleep()
-
-def get_gamepad_protocol():
-    return my_menu.current_gamepad_protocol
 
 def oled_print_model_changed():
     with canvas(usb4vc_oled.oled_device) as draw:

@@ -5,6 +5,7 @@ import usb4vc_usb_scan
 import usb4vc_ui
 import subprocess 
 import usb4vc_spi
+import asyncio
 
 # usb4vc_ui.reset_pboard()
 
@@ -80,11 +81,10 @@ except Exception as e:
     print('usbhid.mousepoll exception:', e)
 
 usb4vc_spi.spi_init()
-# print(usb4vc_spi.get_pboard_info())
 
 usb4vc_ui.ui_init()
 usb4vc_ui.ui_thread.start()
-# asyncio.run(usb4vc_usb_scan.hid_watch_start())
+asyncio.run(usb4vc_usb_scan.hid_watch_start())
 
 while 1:
     time.sleep(2)
