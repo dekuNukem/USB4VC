@@ -74,6 +74,8 @@ def handle_EV_KEY(myev, devpath):
         print("yep thats a keyboard key")
     elif ecodes.BTN_MOUSE <= myev.code <= ecodes.BTN_TASK:
         print("looks like a mouse to me!")
+    else:
+        print(f"Hmm... {evdev.resolve_ecodes(ecodes.BTN, [myev.code])}")
 
 def handle_input_event(myev, devpath):
     if devpath not in hid_device_info_dict:

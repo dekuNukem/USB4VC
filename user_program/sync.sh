@@ -10,5 +10,3 @@ ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_main.py
 # ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 bb_tester.py"
 
 # ssh pi@192.168.1.74
-
-# ssh -t pi@192.168.1.74 "pkill python3;cd ~/usb4vc/rpi_app;python3 usb4vc_evdev_test.py"
