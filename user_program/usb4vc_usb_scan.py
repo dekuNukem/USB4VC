@@ -67,8 +67,7 @@ async def read_device_events(path: str):
             except Exception:
                 pass
 
-ignored_hid_device_name = ['pwr_button', 'hdmi', 'motion', 'imu', 'touch']
-
+ignored_hid_device_name = ['pwr_button', 'hdmi', 'motion', 'touch']
 def is_ignored_device(dev_path):
     dev_name = evdev.InputDevice(dev_path).name
     if "IMU" in dev_name:
