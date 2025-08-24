@@ -28,12 +28,20 @@ def get_device_count():
             gp_count += 1
     return (mouse_count, kb_count, gp_count)
 
+def get_event_file_number(dev_path):
+    try:
+        return int(dev_path.split("event")[-1])
+    except Exception as e:
+        print("get_event_file_number exception:", e)
+        return 255
+
 def hid_info_dict_add(dev_path):
     if dev_path in hid_device_info_dict:
         return
     this_device = evdev.InputDevice(dev_path)
     info_dict = {
             'path':this_device.path,
+            'ev_fnum':get_event_file_number(dev_path),
             'name':this_device.name,
             'vendor_id':this_device.info.vendor,
             'product_id':this_device.info.product,
@@ -52,10 +60,20 @@ def hid_info_dict_add(dev_path):
         info_dict['is_gp'] = True
     hid_device_info_dict[dev_path] = info_dict
 
-    print("=======", info_dict)
+    print("[hid_info_dict_add]:", info_dict)
 
 def hid_info_dict_remove(dev_path):
     hid_device_info_dict.pop(dev_path, None)
+
+def handle_input_event(myev, devpath):
+    if devpath not in hid_device_info_dict:
+        return
+    # hid_device_info_dict[devpath] # Info dict for the device generated this event
+    cat = evdev.categorize(myev)
+    print(dir(myev))
+    print(dir(cat))
+    print(myev.type)
+    print("-----------")
 
 async def read_device_events(path: str):
     dev = None
@@ -63,10 +81,9 @@ async def read_device_events(path: str):
         dev = evdev.InputDevice(path)
         print(f"[attach] {path} name='{dev.name}'")
         hid_info_dict_add(path)
-
         # Async loop over input events
         async for event in dev.async_read_loop():
-            print(f"!!!!!!{path}: {evdev.categorize(event)}")
+            handle_input_event(event, path)
 
     except (FileNotFoundError, OSError) as e:
         print(f"[disconnect] {path}: {e}")
