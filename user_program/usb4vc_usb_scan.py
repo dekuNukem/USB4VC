@@ -37,7 +37,6 @@ def set_protocol(raw_msg):
     # time.sleep(0.05)
     return
 
-
 def hid_info_dict_add(dev_path):
     if dev_path in hid_device_info_dict:
         return
