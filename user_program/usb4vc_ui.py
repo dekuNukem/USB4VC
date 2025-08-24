@@ -36,10 +36,6 @@ GPIO.setup(PBOARD_BOOT0_PIN, GPIO.IN)
 GPIO.setup(SLEEP_LED_PIN, GPIO.OUT)
 GPIO.output(SLEEP_LED_PIN, GPIO.LOW)
 
-SPI_MOSI_MAGIC = 0xde
-SPI_MOSI_MSG_TYPE_SET_PROTOCOL = 2
-set_protocl_spi_msg_template = [SPI_MOSI_MAGIC, 0, SPI_MOSI_MSG_TYPE_SET_PROTOCOL] + [0]*29
-
 class my_button(object):
     def __init__(self, bcm_pin):
         super(my_button, self).__init__()
