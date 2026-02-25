@@ -513,6 +513,12 @@ void send_srq(void)
   ADB_DATA_HI();
 }
 
+void adb_psw_assert(void)
+{
+  ADB_PSW_LOW();
+}
 
-
-
+void adb_psw_release(void)
+{
+  ADB_PSW_HI();
+}

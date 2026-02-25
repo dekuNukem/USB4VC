@@ -233,6 +233,15 @@ void parse_spi_buf(uint8_t* spibuf)
     uint8_t keycode = spibuf[4];
     uint8_t keyvalue = spibuf[6];
     kb_buf_add(&my_kb_buf, keycode, keyvalue);
+
+    if(keycode == KEY_POWER && is_protocol_enabled(PROTOCOL_ADB_KB))
+    {
+      // For power-on to work, close JP2 or JP9 and remove R6.
+      if(keyvalue)
+        adb_psw_assert();
+      else
+        adb_psw_release();
+    }
     if(keycode < EV_TO_ADB_LOOKUP_SIZE)
       key_state[keycode] = (keyvalue != 0);
   }

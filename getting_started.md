@@ -230,6 +230,18 @@ Want to design a custom case? [Click me](pcb/plates) for dimension drawings.
 
 * Not a high-priority bug, might work on it when I have time.
 
+#### ADB Soft-Power-On doesn't work out-of-box
+
+* To power on a Mac that supports soft-power-on via the keyboard, you will need to modify your Lisa/Mac/ADB protocol card.
+
+* 🚨 **ONLY ATTEMPT THIS IF YOU KNOW WHAT YOU ARE DOING** 🚨 Soldering and desoldering components is a good way to break something.
+
+* You must close either JP2 (pin header between the two ADB ports) or JP9 (solder jumper in same place on back of board) so the signal can reach the ADB port.
+
+* You must also remove R6 which should not be installed. It was removed from the design files but may still exist on shipping boards.
+
+* You must also [map a key](https://github.com/dekuNukem/usb4vc-configurator?tab=readme-ov-file#keyboard-mappings) to act as KEY_POWER, if your USB keyboard does not have a power key (which it probably doesn't).
+
 ## Questions or Comments?
 
 Feel free to ask in official [Discord Chatroom](https://discord.gg/HAuuh3pAmB), raise a [Github issue](https://github.com/dekuNukem/USB4VC/issues), [DM on Twitter](https://twitter.com/dekuNukem_), or email `dekunukem` `gmail.com`!
