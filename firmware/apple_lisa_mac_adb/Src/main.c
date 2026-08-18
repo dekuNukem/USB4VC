@@ -81,11 +81,16 @@ working beta
 20230416
 initial release
 added watchdog timer
+
+0.2.0
+20260818
+ADB collisionn and IIGS fix by rharke
+
 */
 
 const uint8_t board_id = 3;
 const uint8_t version_major = 0;
-const uint8_t version_minor = 1;
+const uint8_t version_minor = 2;
 const uint8_t version_patch = 0;
 uint8_t hw_revision = 0;
 
